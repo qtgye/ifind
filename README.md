@@ -1,2 +1,0 @@
-# ifind
-Project ifundilu
