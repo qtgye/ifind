@@ -2,9 +2,9 @@
     "configurations": [
         {
             "type": "pwa-chrome",
-            "name": "http://ifindilu.com/",
+            "name": "http://localhost:4200//",
             "request": "launch",
-            "url": "http://ifindilu.com/"
+            "url": "http://localhost:4200/"
         }
     ]
 }
