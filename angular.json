@@ -82,7 +82,7 @@
               "browserTarget": "ifind-app:build:production"
             }
           },
-          "disableHostCheck": true
+       
           
         },
         "extract-i18n": {
