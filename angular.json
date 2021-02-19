@@ -81,8 +81,8 @@
             "production": {
               "browserTarget": "ifind-app:build:production"
             }
-          },
-       
+          }
+          
           
         },
         "extract-i18n": {
