@@ -8,3 +8,14 @@
 
     padding-left: 40px !important;
 }
+.home-section {
+    padding-top: 20px;
+}
+.sidebar {
+
+    width: 80px !important;
+    border-right: 1px solid;
+}
+.main-cont{
+    margin-left: 100px !important;
+}
