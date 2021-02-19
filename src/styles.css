@@ -1,1 +1,10 @@
-/* You can add global styles to this file, and also import other style files */
+.navbar-nav {
+   
+    padding-left: 130px !important;
+   
+}
+
+.navbar-dark .navbar-brand {
+
+    padding-left: 40px !important;
+}
