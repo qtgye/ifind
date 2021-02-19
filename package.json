@@ -10,7 +10,7 @@
     "e2e": "ng e2e"
   },
   "private": true,
-  "dependencies": {2
+  "dependencies": {
     "@angular/animations": "~11.2.0",
     "@angular/common": "~11.2.0",
     "@angular/compiler": "~11.2.0",
