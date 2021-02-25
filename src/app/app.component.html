@@ -157,10 +157,10 @@
                 <div class="navbar-collapse">
                   <div class="nav-inner">
                     <ul class="nav main-menu menu navbar-nav">
-                      <li class="active"><a href="#">Home</a></li>
-                      <li><a href="#">Product Comparison</a></li>
-                      <li><a href="#">Findtube</a></li>
-                      <li><a href="#">Blog<i class="ti-angle-down"></i></a>
+                      <li class="active"><a [routerLink]="['/home']" routerLinkActive="router-link-active">Home</a></li>
+                      <li><a [routerLink]="['/productcomparison']" routerLinkActive="router-link-active">Product Comparison</a></li>
+                      <li><a [routerLink]="['/findtube']" routerLinkActive="router-link-active">Findtube</a></li>
+                      <li><a [routerLink]="['/blog']" routerLinkActive="router-link-active">Blog<i class="ti-angle-down"></i></a>
                         <ul class="dropdown">
                           <li><a href="blog-single-sidebar.html">Blog Single Sidebar</a></li>
                         </ul>
@@ -179,6 +179,12 @@
   </div>
   <!--/ End Header Inner -->
 </header>
+
+<!--/ Content -->
+  <li>
+    <router-outlet></router-outlet>
+  </li>
+
 <!-- Slider Area -->
 <section class="hero-slider">
 
@@ -226,10 +232,11 @@
           <div class="single-footer links">
             <h4>Information</h4>
             <ul>
+              
               <li><a href="#">About Us</a></li>
-              <li><a href="#" data-toggle="modal" data-target="#agbmodal">AGB</a></li>
-              <li><a href="#" data-toggle="modal" data-target="#datamodal">Data Protection</a></li>
-              <li><a href="#" data-toggle="modal" data-target="#impressummodal">Impressum</a></li>
+              <li><a [routerLink]="['/agb']" routerLinkActive="router-link-active">AGB</a></li>
+              <li><a [routerLink]="['/impressum']" routerLinkActive="router-link-active">Impressum</a></li>
+              <li><a [routerLink]="['/data-protection']" routerLinkActive="router-link-active">Data Protection</a></li>
 
             </ul>
           </div>
