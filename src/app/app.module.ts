@@ -10,12 +10,13 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { ProductComparisonComponent } from './product-comparison/product-comparison.component';
 import { FindtubeComponent } from './findtube/findtube.component';
+import { NavComponent } from './nav/nav.component';
 
 
 const myRoutes: Routes = [
   {path: 'agb', component: AGBComponent},
   {path: 'data-protection', component: DataProtectionComponent},
-  {path: 'home', component: HomeComponent},
+  {path: '', component: HomeComponent},
   {path: 'impressum', component: ImpressumComponent},
   {path: 'findtube', component: FindtubeComponent},
   {path: 'productcomparison', component: ProductComparisonComponent}
@@ -29,7 +30,8 @@ const myRoutes: Routes = [
     DataProtectionComponent,
     HomeComponent,
     ProductComparisonComponent,
-    FindtubeComponent
+    FindtubeComponent,
+    NavComponent
   ],
   imports: [
     RouterModule.forRoot(myRoutes),

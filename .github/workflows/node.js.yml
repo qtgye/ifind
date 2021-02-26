@@ -11,9 +11,10 @@ on:
 
 jobs:
   build:
-
+   # it will build on any host- we can do self-hosted
    runs-on: ubuntu-latest
 
+ # this will check connection and runa command to transfer the commited files
    steps:
     - uses: actions/checkout@v2
 
@@ -27,7 +28,7 @@ jobs:
       with:
         source: "."
         target: "/var/www/html"
-
+   
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
@@ -36,3 +37,7 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: ls
+     # Thiss will install dependencies, build dependencies, and run automatic testing
+    
+      
+      

@@ -194,6 +194,7 @@
 	background-color: #fff;
 	border-bottom: 1px solid #e2e2e2;
 	padding: 15px 0;
+	
 }
 /* Logo */
 .header .logo {
@@ -573,6 +574,7 @@
 .header.shop .topbar {
 	background-color: #fff;
 	border: none;
+
 }
 .header.shop.v3 .topbar{
 	padding:0;
@@ -1102,6 +1104,7 @@
 .header .header-inner{
 	width:100%;
 	z-index:999;
+	
 }
 
 .header.sticky .all-category h3{
