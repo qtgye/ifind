@@ -36,8 +36,8 @@ jobs:
         USERNAME: ${{ secrets.SSH_USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
-        script: npm install
-        script: npm start
+        script: npm "install", "start"
+      
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
     
