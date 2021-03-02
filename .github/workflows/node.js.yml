@@ -39,5 +39,5 @@ jobs:
         script: ls
      # Thiss will install dependencies, build dependencies, and run automatic testing
     
-      
+        run: npm start
       
