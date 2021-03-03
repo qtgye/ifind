@@ -289,5 +289,16 @@
 	//After 2s, the no-scroll class of the body will be removed
 	$('body').removeClass('no-scroll');
 	}, 2000); //Here you can change preloader time
+
+
 	 
 })(jQuery);
+
+var scrollSpy = new bootstrap.ScrollSpy(document.body, {
+	target: '#navbar-example'
+  })
+  $('.grid').masonry({
+	itemSelector: '.grid-item',
+	columnWidth: 160,
+	gutter: 20
+  });
