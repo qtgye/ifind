@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [ react ]
   pull_request:
-    branches: [ main ]
+    branches: [ react ]
 
 jobs:
   build:
@@ -36,7 +36,7 @@ jobs:
         USERNAME: ${{ secrets.SSH_USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
-        script: npm install
+        script: npm install && npm run serve:fe
       
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
