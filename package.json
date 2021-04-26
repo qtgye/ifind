@@ -73,7 +73,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "serve:fe": "http-server ./build -p 80"
+    "serve-fe": "http-server ./build -p 80"
   },
   "eslintConfig": {
     "extends": [
