@@ -43,7 +43,7 @@ jobs:
           cd /var/www/html
           npm install
           npm run build
-          pm2 restart ifind-fe
+          sudo systemctl restart nginx
       
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
