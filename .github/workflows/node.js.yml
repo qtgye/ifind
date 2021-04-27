@@ -39,6 +39,7 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: |
+          git branch
           npm install
           npm run build
           pm2 restart ifind-fe
