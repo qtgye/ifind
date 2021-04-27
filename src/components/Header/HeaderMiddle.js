@@ -19,7 +19,7 @@ const HeaderMiddle = () => {
                             </div>
                         </div>
                         <div className="mobile-nav">
-                            <div className="slicknav_menu"><a href="#" aria-haspopup="true" role="button" tabindex="0"
+                            <div className="slicknav_menu"><a href="#" aria-haspopup="true" role="button" tabIndex="0"
                                     className="slicknav_btn slicknav_collapsed" style={{outline: 'none'}}><span
                                         className="slicknav_menutxt"></span><span className="slicknav_icon slicknav_no-text"><span
                                             className="slicknav_icon-bar"></span><span className="slicknav_icon-bar"></span><span
@@ -28,20 +28,20 @@ const HeaderMiddle = () => {
                                     aria-hidden="true" role="menu">
                                     <li><a routerlinkactive="active current"
                                             ng-reflect-router-link-active="active current" ng-reflect-router-link="/"
-                                            href="/" className="active current" role="menuitem" tabindex="-1">Home</a></li>
+                                            href="/" className="active current" role="menuitem" tabIndex="-1">Home</a></li>
                                     <li><a routerlinkactive="active"
                                             ng-reflect-router-link-active="active"
                                             ng-reflect-router-link="/productcomparison" href="/productcomparison"
-                                            role="menuitem" tabindex="-1">Product Comparison</a></li>
+                                            role="menuitem" tabIndex="-1">Product Comparison</a></li>
                                     <li><a routerlinkactive="active"
                                             ng-reflect-router-link-active="active" ng-reflect-router-link="/findtube"
-                                            href="/findtube" role="menuitem" tabindex="-1">Findtube</a></li>
+                                            href="/findtube" role="menuitem" tabIndex="-1">Findtube</a></li>
                                     <li><a routerlinkactive="active"
                                             ng-reflect-router-link-active="active" ng-reflect-router-link="/blog"
-                                            href="/blog" role="menuitem" tabindex="-1">Blog</a></li>
+                                            href="/blog" role="menuitem" tabIndex="-1">Blog</a></li>
                                     <li><a routerlinkactive="active"
                                             ng-reflect-router-link-active="active" ng-reflect-router-link="/contact"
-                                            href="/contact" role="menuitem" tabindex="-1">Contact Us</a></li>
+                                            href="/contact" role="menuitem" tabIndex="-1">Contact Us</a></li>
                                 </ul>
                             </div>
                         </div>

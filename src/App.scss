@@ -5,8 +5,9 @@
 
 */
 
-@import "bootstrap/dist/css/bootstrap.min.css";
-
+@import 'bootstrap';
+@import 'font-awesome';
+@import 'base/global';
 
 .color-plate {
 	position: fixed;
