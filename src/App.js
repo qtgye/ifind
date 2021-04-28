@@ -14,22 +14,18 @@ import './App.scss';
 
 function App() {
   return (
-    <>
-      <Router>
-        <Header />
-      </Router>
+    <Router>
+      <Header />
       <main className="main">
-        <Router>
           <Switch>
-            {routes.map(({ path, component }) => (
-              <Route key={path} path={path} component={component} />
+            {routes.map(({ path, component, exact = false }) => (
+              <Route key={path} path={path} component={component} exact={exact} />
             ))}
           </Switch>
           <NewsLetter />
-        </Router> 
         <Footer />
       </main>
-    </>
+    </Router>
   );
 }
 

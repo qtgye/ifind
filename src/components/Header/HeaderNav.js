@@ -1,8 +1,12 @@
-import routes from '@config/routes';
+import { Link, useLocation } from 'react-router-dom';
+import routes, { navigationRoutes } from '@config/routes';
 
 import HeaderSideNav from './HeaderSideNav';
 
+const navigationItems = navigationRoutes.map(path => routes.find(route => route.path === path ));
+
 const HeaderNav = () => {
+    const { pathname } = useLocation();
 
     return (
         <div className="header-inner">
@@ -17,26 +21,13 @@ const HeaderNav = () => {
                                     <div className="navbar-collapse">
                                         <div className="nav-inner">
                                             <ul className="nav main-menu menu navbar-nav">
-                                                <li><a
-                                                        routerlinkactive="active current"
-                                                        ng-reflect-router-link-active="active current"
-                                                        ng-reflect-router-link="/" href="/" className="active current">Home</a>
-                                                </li>
-                                                <li><a routerlinkactive="active"
-                                                        ng-reflect-router-link-active="active"
-                                                        ng-reflect-router-link="/productcomparison"
-                                                        href="/productcomparison">Product Comparison</a></li>
-                                                <li><a routerlinkactive="active"
-                                                        ng-reflect-router-link-active="active"
-                                                        ng-reflect-router-link="/findtube" href="/findtube">Findtube</a>
-                                                </li>
-                                                <li><a routerlinkactive="active"
-                                                        ng-reflect-router-link-active="active"
-                                                        ng-reflect-router-link="/blog" href="/blog">Blog</a></li>
-                                                <li><a routerlinkactive="active"
-                                                        ng-reflect-router-link-active="active"
-                                                        ng-reflect-router-link="/contact" href="/contact">Contact Us</a>
-                                                </li>
+                                                { navigationItems.map(({ path, label }) => (
+                                                    <li key={path}>
+                                                        <Link to={path} className={ pathname === path ? 'active current' : '' }>
+                                                            {label}
+                                                        </Link>
+                                                    </li>
+                                                ))}
                                             </ul>
                                         </div>
                                     </div>

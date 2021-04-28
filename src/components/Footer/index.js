@@ -1,4 +1,10 @@
+import { Link } from 'react-router-dom';
+
 import logo from '@assets/images/logo.png';
+import routes from '@config/routes';
+
+const informationPaths = [ '/about-us', '/agb', '/impressum', '/data-protection' ];
+const informationLinks = informationPaths.map( path => routes.find(routeItem => routeItem.path === path));
 
 const Footer = () => (
 
@@ -23,14 +29,11 @@ const Footer = () => (
                         <div className="single-footer links">
                             <h4>Information</h4>
                             <ul>
-
-                                <li><a href="/about-us">About Us</a></li>
-                                <li><a href='/agb'>AGB</a></li>
-                                <li><a href='/impressum'>Impressum</a>
-                                </li>
-                                <li><a href='/data-protection'>Data
-                                        Protection</a></li>
-
+                                {informationLinks.map(infoRoute => (
+                                    infoRoute && <li key={infoRoute.path}>
+                                        <Link to={infoRoute.path}>{infoRoute.label}</Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>

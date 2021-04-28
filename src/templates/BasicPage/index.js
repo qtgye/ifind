@@ -1,4 +1,12 @@
+import { useEffect } from 'react';
+
 const BasicPage = ({ title, children }) => {
+
+    // Scroll to top of page on mount
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    });
+
     return (
         <section className="shop-home-list section">
             <div className="container">

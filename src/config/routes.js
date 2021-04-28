@@ -14,28 +14,31 @@ const routes =  [
      * Routes visible in Header Navigation
      */
     {
+        path: '/',
+        component: Home,
+        label: 'Home',
+        withSideNav: true,
+        exact: true,
+    },
+    {
         path: '/productcomparison',
         component: ProductComparison,
         label: 'Product Comparison',
-        showInNav: true,
     },
     {   
         path: '/findtube', 
         component: Findtube,
         label: 'Findtube',
-        showInNav: true,
     },
     {   
         path: '/blog', 
         component: Blog,
         label: 'Blog',
-        showInNav: true,
     },
     {   
         path: '/contact', 
         component: Contact,
         label: 'Contact',
-        showInNav: true,
     },
 
     /**
@@ -45,25 +48,21 @@ const routes =  [
         path: '/about-us', 
         component: AboutUs,
         label: 'About Us',
-        showInFooter: true,
     },
     {   
         path: '/agb', 
         component: AGB,
         label: 'AGB',
-        showInFooter: true,
     },
     {   
         path: '/impressum', 
         component: Impressum,
         label: 'Impressum',
-        showInFooter: true,
     },
     {   
         path: '/data-protection', 
         component: DataProtection,
         label: 'Data Protection',
-        showInFooter: true,
     },
     // {path: 'agb', component: AGBComponent},
     // {path: 'data-protection', component: DataProtectionComponent},
@@ -71,13 +70,8 @@ const routes =  [
     // {path: 'impressum', component: ImpressumComponent},
     // {path: 'blog', component: BlogComponent},
     // {path: 'contact', component: ContactComponent},
-    {
-        path: '/',
-        component: Home,
-        label: 'Home',
-        showInNav: true,
-        withSideNav: true,
-    },
 ];
 
+export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];
+export const footerRoutes = [ '/about-us', '/agb', '/impressum', '/data-protection' ];
 export default routes;
