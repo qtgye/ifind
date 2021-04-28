@@ -70,9 +70,11 @@ module.exports = {
   publicUrlOrPath,
   webpackAliases: {
     '@components': resolveApp('src/components'),
+    '@templates': resolveApp('src/templates'),
     '@pages': resolveApp('src/pages'),
     '@assets': resolveApp('src/assets'),
     '@config': resolveApp('src/config'),
+    '@mocks': resolveApp('src/mocks'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
   }
 };

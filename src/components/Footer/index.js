@@ -24,11 +24,11 @@ const Footer = () => (
                             <h4>Information</h4>
                             <ul>
 
-                                <li><a href="#">About Us</a></li>
-                                <li><a href='/agb' routerLinkActive="router-link-active">AGB</a></li>
-                                <li><a href='/impressum' routerLinkActive="router-link-active">Impressum</a>
+                                <li><a href="/about-us">About Us</a></li>
+                                <li><a href='/agb'>AGB</a></li>
+                                <li><a href='/impressum'>Impressum</a>
                                 </li>
-                                <li><a href='/data-protection' routerLinkActive="router-link-active">Data
+                                <li><a href='/data-protection'>Data
                                         Protection</a></li>
 
                             </ul>
