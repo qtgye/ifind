@@ -2,6 +2,8 @@ import { useLocation } from 'react-router-dom';
 import { find } from 'lodash';
 import routes from '@config/routes';
 
+import './header-side-nav.scss';
+
 const HeaderSideNav = () => {
     const { pathname } = useLocation();
 
@@ -10,27 +12,25 @@ const HeaderSideNav = () => {
 
     return  withSideNav ?
     (
-        <div className="col-lg-3">
-            <div className="all-category">
-                <h3 className="cat-heading"><i aria-hidden="true"
-                        className="fa fa-bars"></i>CATEGORIES</h3>
-                <ul className="main-category">
-                    <li><a href="#">New Arrivals <i
-                                aria-hidden="true" className="fa fa-angle-right"></i></a>
-                    </li>
-                    <li className="main-mega"><a href="#">best
-                            selling <i aria-hidden="true"
-                                className="fa fa-angle-right"></i></a></li>
-                    <li><a href="#">accessories</a></li>
-                    <li><a href="#">top 100 offer</a></li>
-                    <li><a href="#">sunglass</a></li>
-                    <li><a href="#">watch</a></li>
-                    <li><a href="#">man’s product</a></li>
-                    <li><a href="#">ladies</a></li>
-                    <li><a href="#">western dress</a></li>
-                    <li><a href="#">denim </a></li>
-                </ul>
-            </div>
+        <div className="header-side-nav">
+            <h3 className="header-side-nav__heading"><i aria-hidden="true"
+                    className="fa fa-bars"></i>CATEGORIES</h3>
+            <ul className="header-side-nav__list">
+                <li>
+                    <a href="#">New Arrivals <i aria-hidden="true" className="fa fa-angle-right"></i></a>
+                </li>
+                <li>
+                    <a href="#">Best Selling <i aria-hidden="true" className="fa fa-angle-right"></i></a>
+                </li>
+                <li><a href="#">Accessories</a></li>
+                <li><a href="#">Top 100 Offer</a></li>
+                <li><a href="#">Sunglass</a></li>
+                <li><a href="#">Watch</a></li>
+                <li><a href="#">Man’s Product</a></li>
+                <li><a href="#">Ladies</a></li>
+                <li><a href="#">Western Dress</a></li>
+                <li><a href="#">Denim </a></li>
+            </ul>
         </div>
     ) : null;
 };

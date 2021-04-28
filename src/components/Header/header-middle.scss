@@ -1,0 +1,114 @@
+@import 'base/scss';
+
+.header-middle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid $gray-200;
+    height: 90px;
+
+    &__container {
+        @include bootstrap(container);
+    }
+
+    &__row {
+        @include bootstrap(row);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__left {
+        @include bootstrap(col-lg-2 col-md-2 col-12);
+        flex-shrink: 0;
+    }
+
+    &__search {
+        @include bootstrap(col-lg-8 col-md-7 col-12);
+        flex-shrink: 0;
+    }
+
+    &__right {
+        @include bootstrap(col-lg-2 col-md-3 col-12);
+        flex-shrink: 0;
+    }
+
+    .logo {
+        margin-top: 0;
+    }
+
+    .search-top {
+        display: none;
+    }
+
+    .search-bar-top {
+    	text-align: center;
+    }
+
+    .search-bar {
+    	width: 535px;
+    	height: 50px;
+    	display: inline-flex;
+        justify-content: center;
+    	background: $white;
+    	position: relative;
+    	margin: 0;
+    	line-height: 45px;
+    	border-radius: 5px;
+    	border: 1px solid $gray-300;
+
+        form {
+            width: 100%;
+        }
+
+        input {
+            height: 48px;
+            background: transparent;
+            color: $gray-900;
+            border-radius: 0;
+            border: none;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 0 25px 0 20px;
+            width: 328px;
+            text-align: left;
+        }
+
+        .btn {
+            position: absolute;
+            right: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            line-height: 53px;
+            width: 62px;
+            text-align: center;
+            font-size: 18px;
+            color: $white;
+            background: $gray-900;
+            position: absolute;
+            right: -2px;
+            top: -1px;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            transition: all 0.4s ease;
+        }
+    }
+
+    .right-bar {
+        display: flex;
+        align-items: center;
+    }
+
+    .single-bar {
+        &:not(:first-child) {
+            margin-left: 25px;
+        }
+    }
+
+    .single-icon {
+        color: $gray-800;
+        font-size: 20px;
+    }
+}

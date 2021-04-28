@@ -1,31 +1,37 @@
-import './HeaderTop.scss';
+import './header-top.scss';
+import TiIcon from '@components/TiIcon';
 
 const HeaderTop = () => {
     return (
-        <div className="topbar">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-5 col-md-12 col-12">
-                        <div className="top-left">
-                            <ul className="list-main">
-                                <li><i className="ti-headphone-alt"></i> +123 (456)
-                                    789-102</li>
-                                <li><i className="ti-email"></i>
-                                    support@ifindilu.com</li>
-                            </ul>
-                        </div>
+        <div className="header-top">
+            <div className="header-top__container">
+                <div className="header-top__content">
+                    <div className="header-top__left">
+                        <ul className="list-main">
+                            <li>
+                                <TiIcon icon='headphone-alt' />
+                                 +123 (456)
+                                789-102</li>
+                            <li>
+                                <TiIcon icon='email' />
+                                support@ifindilu.com</li>
+                        </ul>
                     </div>
-                    <div className="col-lg-7 col-md-12 col-12">
-                        <div className="right-content">
-                            <ul className="list-main">
-                                <li><i className="ti-alarm-clock"></i><a
-                                        href="#">Daily deal</a></li>
-                                <li><i className="ti-user"></i><a
-                                        href="#">My account</a></li>
-                                <li><i className="ti-power-off"></i><a
-                                        href="login.html#">Login</a></li>
-                            </ul>
-                        </div>
+                    <div className="header-top__right">
+                        <ul className="list-main">
+                            <li>
+                                <TiIcon icon='alarm-clock' />
+                                <a
+                                    href="#">Daily deal</a></li>
+                            <li>
+                                <TiIcon icon='user' />
+                                <a
+                                    href="#">My account</a></li>
+                            <li>
+                                <TiIcon icon='power-off' />
+                                <a
+                                    href="login.html#">Login</a></li>
+                        </ul>
                     </div>
                 </div>
             </div>

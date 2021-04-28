@@ -1,18 +1,43 @@
+import { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
 import logo from '@assets/images/logo.png';
 
-const HeaderMiddle = () => {
+import './header-middle.scss';
+
+const HeaderMiddle = ({ onInterSect }) => {
     const { pathname } = useLocation();
+
+    const headerMiddleRef = useRef(null);
+    const observer = useRef(null);
+
+    /**
+     * Apply intersection observer so we can track whether the header
+     * is in sticky state or not
+     */
+    useEffect(() => {
+        if ( observer.current ) observer.current.disconnect();
+
+        observer.current = new window.IntersectionObserver(([ intersection ]) => {
+            onInterSect(intersection.isIntersecting);
+        });
+
+        if ( headerMiddleRef.current ) {
+            observer.current.observe(headerMiddleRef.current);            
+        }
+
+        return () => observer.current.disconnect();
+
+    }, [ headerMiddleRef.current, onInterSect ]);
 
     // Get current route from config
     const currentRoute = routes.find(({ path }) => path === pathname);
 
     return (
-        <div className="middle-inner">
-            <div className="container">
-                <div className="row">
-                    <div className="col-lg-2 col-md-2 col-12">
+        <div className="header-middle" ref={headerMiddleRef}>
+            <div className="header-middle__container">
+            <div className="header-middle__row">
+                    <div className="header-middle__left">
                         <div className="logo"><a href="/"><img
                                     src={logo} alt="logo" /></a></div>
                         <div className="search-top">
@@ -53,26 +78,26 @@ const HeaderMiddle = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-8 col-md-7 col-12">
+                    <div className="header-middle__search">
                         <div className="search-bar-top">
                             <div className="search-bar">
                                 <form><input name="search"
                                         placeholder="Search Products Here....." type="search" /><button
-                                        className="btnn"><i className="ti-search"></i></button></form>
+                                        className="btn"><i className="ti-search"></i></button></form>
                             </div>
                         </div>
                     </div>
-                    <div className="col-lg-2 col-md-3 col-12">
+                    <div className="header-middle__right">
                         <div className="right-bar">
                             {
                                 /* Show user-heart only if noUserHeart is false from routes config */
                                 !currentRoute.noUserHeart && (
-                                    <div className="sinlge-bar"><a href="#"
+                                    <div className="single-bar"><a href="#"
                                         className="single-icon"><i aria-hidden="true"
                                             className="fa fa-heart-o"></i></a></div>
                                 )
                             }
-                            <div className="sinlge-bar"><a href="#"
+                            <div className="single-bar"><a href="#"
                                     className="single-icon"><i aria-hidden="true"
                                         className="fa fa-user-circle-o"></i></a></div>
                         </div>
