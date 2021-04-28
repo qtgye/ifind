@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
-import logo from '@assets/images/logo.png';
+import logo from '@assets/images/logo.jpeg';
 
 import './header-middle.scss';
 
