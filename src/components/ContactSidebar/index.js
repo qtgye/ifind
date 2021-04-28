@@ -14,7 +14,6 @@ const ContactSidebar = () => (
                 <h4 className="title">Email:</h4>
                 <ul>
                     <li><a href="mailto:info@yourwebsite.com">info@ifindilu.com</a></li>
-                    <li><a href="mailto:info@yourwebsite.com">support@ifindilu.com</a></li>
                 </ul>
             </div>
             <div className="single-info">
