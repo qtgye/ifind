@@ -1,6 +1,13 @@
+import { useLocation } from 'react-router-dom';
+import routes from '@config/routes';
 import logo from '@assets/images/logo.png';
 
 const HeaderMiddle = () => {
+    const { pathname } = useLocation();
+
+    // Get current route from config
+    const currentRoute = routes.find(({ path }) => path === pathname);
+
     return (
         <div className="middle-inner">
             <div className="container">
@@ -57,6 +64,14 @@ const HeaderMiddle = () => {
                     </div>
                     <div className="col-lg-2 col-md-3 col-12">
                         <div className="right-bar">
+                            {
+                                /* Show user-heart only if noUserHeart is false from routes config */
+                                !currentRoute.noUserHeart && (
+                                    <div className="sinlge-bar"><a href="#"
+                                        className="single-icon"><i aria-hidden="true"
+                                            className="fa fa-heart-o"></i></a></div>
+                                )
+                            }
                             <div className="sinlge-bar"><a href="#"
                                     className="single-icon"><i aria-hidden="true"
                                         className="fa fa-user-circle-o"></i></a></div>

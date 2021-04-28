@@ -19,6 +19,7 @@ const routes =  [
         label: 'Home',
         withSideNav: true,
         exact: true,
+        noUserHeart: true, // TODO: Verify Implementation
     },
     {
         path: '/productcomparison',
@@ -45,22 +46,22 @@ const routes =  [
      * Routes visible in the Footer
      */
      {   
-        path: '/about-us', 
+        path: '/about-us',
         component: AboutUs,
         label: 'About Us',
     },
     {   
-        path: '/agb', 
+        path: '/agb',
         component: AGB,
         label: 'AGB',
     },
     {   
-        path: '/impressum', 
+        path: '/impressum',
         component: Impressum,
         label: 'Impressum',
     },
     {   
-        path: '/data-protection', 
+        path: '/data-protection',
         component: DataProtection,
         label: 'Data Protection',
     },
