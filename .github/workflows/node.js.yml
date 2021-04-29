@@ -40,7 +40,18 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         script: |
           cd /var/www/html
-          scripts/deploy.sh
+          
+          echo "/=============================/" && \
+          echo "/==== INSTALLING PACKAGES ====/" && \
+          npm install && \
+
+          echo "/=============================/" && \
+          echo "/==== RUNNING TESTS ====/" && \
+          CI=true npm run test -- --coverage && \
+
+          echo "/=============================/" && \
+          echo "/==== BUILDING SITE ====/" && \
+          CI=true npm run build
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
  
