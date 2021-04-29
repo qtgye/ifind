@@ -39,11 +39,14 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: |
-          pwd
           cd /var/www/html
           npm install
-          npm run build
-          sudo systemctl restart nginx
+
+          echo "Running test cases..."
+          CI=true npm run test -- --coverage
+
+          echo "Building site..."
+          CI=true npm run build
       
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
