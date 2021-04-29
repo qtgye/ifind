@@ -1,4 +1,4 @@
-export default `
+const content = `
 <p>
     ifindilu.com ist eine unabhängige Informationsplattform für den Tarif- und Preisvergleich
     nachstehend aufgelisteter
@@ -61,4 +61,6 @@ export default `
 <p>
     Es gilt das Recht der Bundesrepublik Deutschland. Sofern der Nutzer Kaufmann ist, ist Gerichtsstand Heilbronn.
 </p>
-`
+`;
+
+export default content;

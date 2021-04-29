@@ -15,7 +15,7 @@ const Footer = () => (
                     <div className="col-lg-5 col-md-6 col-12">
                         <div className="single-footer about">
                             <div className="logo">
-                                <a href="index.html"><img src={logo} alt="#" /></a>
+                                <a href="index.html"><img src={logo} alt="/" /></a>
                             </div>
                             <p className="text">Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
                                 magna eros eu erat.
@@ -54,10 +54,10 @@ const Footer = () => (
                                 </ul>
                             </div>
                             <ul>
-                                <li><a href="#"><i className="ti-facebook"></i></a></li>
-                                <li><a href="#"><i className="ti-twitter"></i></a></li>
-                                <li><a href="#"><i className="ti-flickr"></i></a></li>
-                                <li><a href="#"><i className="ti-instagram"></i></a></li>
+                                <li><a href="/"><i className="ti-facebook"></i></a></li>
+                                <li><a href="/"><i className="ti-twitter"></i></a></li>
+                                <li><a href="/"><i className="ti-flickr"></i></a></li>
+                                <li><a href="/"><i className="ti-instagram"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -71,7 +71,7 @@ const Footer = () => (
                     <div className="row">
                         <div className="col-lg-6 col-12">
                             <div className="left">
-                                <p>Copyright © 2021 <a href="http://www.ifindilu.com" target="_blank">iFINDilu</a> -
+                                <p>Copyright © 2021 <a href="http://www.ifindilu.com" target="_blank" rel="noreferrer">iFINDilu</a> -
                                     All Rights Reserved.
                                 </p>
                             </div>

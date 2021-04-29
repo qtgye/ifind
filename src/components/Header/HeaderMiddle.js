@@ -28,7 +28,7 @@ const HeaderMiddle = ({ onInterSect }) => {
 
         return () => observer.current.disconnect();
 
-    }, [ headerMiddleRef.current, onInterSect ]);
+    }, [ onInterSect ]);
 
     // Get current route from config
     const currentRoute = routes.find(({ path }) => path === pathname);
@@ -41,7 +41,7 @@ const HeaderMiddle = ({ onInterSect }) => {
                         <div className="logo"><a href="/"><img
                                     src={logo} alt="logo" /></a></div>
                         <div className="search-top">
-                            <div className="top-search"><a href="#0"><i
+                            <div className="top-search"><a href="/"><i
                                         className="ti-search"></i></a></div>
                             <div className="search-top">
                                 <form className="search-form"><input type="text"
@@ -51,7 +51,7 @@ const HeaderMiddle = ({ onInterSect }) => {
                             </div>
                         </div>
                         <div className="mobile-nav">
-                            <div className="slicknav_menu"><a href="#" aria-haspopup="true" role="button" tabIndex="0"
+                            <div className="slicknav_menu"><a href="/" aria-haspopup="true" role="button" tabIndex="0"
                                     className="slicknav_btn slicknav_collapsed" style={{outline: 'none'}}><span
                                         className="slicknav_menutxt"></span><span className="slicknav_icon slicknav_no-text"><span
                                             className="slicknav_icon-bar"></span><span className="slicknav_icon-bar"></span><span
@@ -92,14 +92,14 @@ const HeaderMiddle = ({ onInterSect }) => {
                             {
                                 /* Show user-heart only if noUserHeart is false from routes config */
                                 !currentRoute.noUserHeart && (
-                                    <div className="single-bar"><a href="#"
+                                    <div className="single-bar"><a href="/"
                                         className="single-icon"><i aria-hidden="true"
-                                            className="fa fa-heart-o"></i></a></div>
+                                            className="fa fa-heart-o"></i>&nbsp;</a></div>
                                 )
                             }
-                            <div className="single-bar"><a href="#"
+                            <div className="single-bar"><a href="/"
                                     className="single-icon"><i aria-hidden="true"
-                                        className="fa fa-user-circle-o"></i></a></div>
+                                        className="fa fa-user-circle-o"></i>&nbsp;</a></div>
                         </div>
                     </div>
                 </div>

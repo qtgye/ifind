@@ -1,4 +1,4 @@
-export default `
+const content = `
 <p>Angaben gemäß § 5 TMG</p>
                         <p>Kirill Kramer<br /> Liebigstrase 15 <br /> 74074 Heilbronn <br /></p>
                         <p><strong>Vertreten durch: </strong>
@@ -90,4 +90,6 @@ export default `
                             sämtliche Funktionen dieser Website voll umfänglich nutzen können. Durch die Nutzung dieser
                             Website erklären Sie sich mit der Bearbeitung der über Sie erhobenen Daten durch Google in
                             der zuvor beschriebenen Art und Weise und zu dem zuvor benannten Zweck einverstanden.</p>
-`
+`;
+
+export default content;

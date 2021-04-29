@@ -22,15 +22,15 @@ const HeaderTop = () => {
                             <li>
                                 <TiIcon icon='alarm-clock' />
                                 <a
-                                    href="#">Daily deal</a></li>
+                                    href="/">Daily deal</a></li>
                             <li>
                                 <TiIcon icon='user' />
                                 <a
-                                    href="#">My account</a></li>
+                                    href="/">My account</a></li>
                             <li>
                                 <TiIcon icon='power-off' />
                                 <a
-                                    href="login.html#">Login</a></li>
+                                    href="/login">Login</a></li>
                         </ul>
                     </div>
                 </div>

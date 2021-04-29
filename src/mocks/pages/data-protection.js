@@ -1,4 +1,4 @@
-export default `
+const content = `
 <p>Wir freuen uns sehr über Ihr Interesse an unserem Unternehmen. Datenschutz hat einen besonders hohen
     Stellenwert für die Betreiber dieser Webseite. Eine Nutzung dieser Internetseiten ist grundsätzlich ohne
     jede Angabe personenbezogener Daten möglich. Sofern eine betroffene Person besondere Services unseres
@@ -529,4 +529,6 @@ export default `
     Sie das Opt-Out auf allen genutzten Systemen durchführen. Wenn Sie hier klicken, wird das Opt-Out-Cookie
     gesetzt: <a href="javascript:gaOptout()"><strong>Google Analytics deaktivieren</strong></a>
 </p>
-`
+`;
+
+export default content;

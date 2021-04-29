@@ -16,7 +16,7 @@ const Header = () => {
      */
     const handleHeaderIntersection = useCallback(isInterSected => {
         setIsSticky(!isInterSected);
-    });
+    }, []);
 
     // Apply necessary classnames for sticky state
     useEffect(() => {
