@@ -40,10 +40,12 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         script: |
           cd /var/www/html
+
+          echo "Installing packages..."
           npm install
 
           echo "Running test cases..."
-          CI=true npm run test -- --coverage
+          npm run test -- --watchAll=false --coverage
 
           echo "Building site..."
           CI=true npm run build
