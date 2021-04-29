@@ -44,11 +44,8 @@ jobs:
           echo "Installing packages..."
           npm install
 
-          echo "Running test cases..."
-          npm run test -- --watchAll=false --coverage
-
-          echo "Building site..."
-          CI=true npm run build
+          echo "Building..."
+          npm run test -- --watchAll=false --coverage && CI=true npm run build
       
         
      # Thiss will install dependencies, build dependencies, and run automatic testing
