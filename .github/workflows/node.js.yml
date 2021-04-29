@@ -40,7 +40,9 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         script: |
           cd /var/www/html
-          ls src
+          
+          # Ensure old untracked files are removed
+          git clean . -f
           
           echo "/=============================/" && \
           echo "/==== INSTALLING PACKAGES ====/" && \
