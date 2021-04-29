@@ -1,10 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import { render, screen } from '@testing-library/react'
 import HeaderTop from '../HeaderTop';
 
 describe('HeaderTop Component', () => {
   it('Renders without crashing', () => {
-    const div = document.createElement('div');
-    ReactDOM.render(<HeaderTop />, div);
+    render(<HeaderTop />);
+    
+    const element = document.querySelector('.header-top');
+    
+    expect(element).not.toBe(null);
   });
 });
