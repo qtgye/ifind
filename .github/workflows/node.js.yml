@@ -40,7 +40,7 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         script: |
           cd /var/www/html
-          git pull
+          ls src
           
           echo "/=============================/" && \
           echo "/==== INSTALLING PACKAGES ====/" && \
