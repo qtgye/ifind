@@ -76,7 +76,8 @@ module.exports = {
     '@config': resolveApp('src/config'),
     '@mocks': resolveApp('src/mocks'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
-  }
+  },
+  coverage: resolveApp('coverage/lcov-report'),
 };
 
 
