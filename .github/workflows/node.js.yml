@@ -41,6 +41,9 @@ jobs:
         script: |
           cd /var/www/html
 
+          # Ensures old untracked files are removed
+          git clean . -f
+
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd front-end && \
@@ -59,7 +62,7 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== RESTARTING SERVER ====/" && \
-          pm2 restart server
+          pm2 restart ifind-fe-server
 
     # TO DO:
     # Add scripts for admin and api server builds
