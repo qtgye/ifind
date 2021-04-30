@@ -58,11 +58,7 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== BUILDING SITE ====/" && \
-          CI=true npm run build && \
-
-          echo "/=============================/" && \
-          echo "/==== RESTARTING SERVER ====/" && \
-          pm2 restart ifind-fe-server
+          CI=true npm run build
 
     # TO DO:
     # Add scripts for admin and api server builds
