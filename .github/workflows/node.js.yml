@@ -50,7 +50,7 @@ jobs:
           
           echo "/=============================/" && \
           echo "/==== INSTALLING PACKAGES ====/" && \
-          npm install && \
+          npm ci && \
 
           echo "/=============================/" && \
           echo "/==== RUNNING TESTS ====/" && \
