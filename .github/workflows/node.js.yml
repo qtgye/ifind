@@ -40,6 +40,10 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         script: |
           cd /var/www/html
+
+          echo "/=============================/" && \
+          echo "/==== PROCESSING FRONT-END ====/" && \
+          cd front-end && \
           
           echo "/=============================/" && \
           echo "/==== INSTALLING PACKAGES ====/" && \
@@ -56,6 +60,6 @@ jobs:
           echo "/=============================/" && \
           echo "/==== RESTARTING SERVER ====/" && \
           pm2 restart server
-        
-     # Thiss will install dependencies, build dependencies, and run automatic testing
- 
+
+    # TO DO:
+    # Add scripts for admin and api server builds
