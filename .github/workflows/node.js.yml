@@ -42,6 +42,7 @@ jobs:
           cd /var/www/html
 
           git clean . -f
+          git clean . -f
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
@@ -61,7 +62,7 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== RESTARTING SERVER ====/" && \
-          pm2 restart ifind-fe-server
+          pm2 restart ifind-fe-server && \
 
     # TO DO:
     # Add scripts for admin and api server builds
