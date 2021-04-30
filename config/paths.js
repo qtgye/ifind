@@ -75,6 +75,7 @@ module.exports = {
     '@assets': resolveApp('src/assets'),
     '@config': resolveApp('src/config'),
     '@mocks': resolveApp('src/mocks'),
+    '@contexts': resolveApp('src/contexts'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
   },
   coverage: resolveApp('coverage/lcov-report'),

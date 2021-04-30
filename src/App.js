@@ -4,6 +4,7 @@ import {
   Route,
 } from 'react-router-dom';
 
+import { Providers } from '@contexts';
 import routes from '@config/routes';
 
 import Header from '@components/Header';
@@ -15,16 +16,18 @@ import './App.scss';
 function App() {
   return (
     <Router>
-      <Header />
-      <main className="main">
-          <Switch>
-            {routes.map(({ path, component, exact = false }) => (
-              <Route key={path} path={path} component={component} exact={exact} />
-            ))}
-          </Switch>
-          <NewsLetter />
-        <Footer />
-      </main>
+      <Providers>
+        <Header />
+        <main className="main">
+            <Switch>
+              {routes.map(({ path, component, exact = false }) => (
+                <Route key={path} path={path} component={component} exact={exact} />
+              ))}
+            </Switch>
+            <NewsLetter />
+          <Footer />
+        </main>
+      </Providers>
     </Router>
   );
 }

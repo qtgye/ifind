@@ -4,9 +4,12 @@ import HeaderTop from './HeaderTop';
 import HeaderMiddle from './HeaderMiddle';
 import HeaderNav from './HeaderNav';
 
+import { useGlobalData } from '@contexts/global';
+
 import './header.scss';
 
 const Header = () => {
+    const { contactInfo } = useGlobalData();
     const [ isSticky, setIsSticky ] = useState(false);
     const [ classNames, setClassNames ] = useState('header');
 
@@ -31,7 +34,7 @@ const Header = () => {
 
     return (
         <header className={classNames}>
-            <HeaderTop />
+            <HeaderTop {...contactInfo} />
             <HeaderMiddle onInterSect={handleHeaderIntersection} />
             <HeaderNav />
         </header>

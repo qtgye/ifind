@@ -1,20 +1,31 @@
-import './header-top.scss';
+import { Link } from 'react-router-dom';
 import TiIcon from '@components/TiIcon';
 
-const HeaderTop = () => {
+import './header-top.scss';
+
+const HeaderTop = ({ phone, email }) => {
     return (
         <div className="header-top">
             <div className="header-top__container">
                 <div className="header-top__content">
                     <div className="header-top__left">
                         <ul className="list-main">
-                            <li>
-                                <TiIcon icon='headphone-alt' />
-                                 +123 (456)
-                                789-102</li>
-                            <li>
-                                <TiIcon icon='email' />
-                                support@ifindilu.com</li>
+                            {
+                                phone && (
+                                    <li>
+                                        <TiIcon icon='headphone-alt' />
+                                        <Link to={`tel:${phone}`}>{phone}</Link>
+                                    </li>
+                                )
+                            }
+                            {
+                                email && (
+                                    <li>
+                                        <TiIcon icon='email' />
+                                        <Link to={`mailto:${email}`}>{email}</Link>
+                                    </li>
+                                )
+                            }
                         </ul>
                     </div>
                     <div className="header-top__right">

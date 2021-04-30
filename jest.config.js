@@ -57,6 +57,7 @@ module.exports = {
         '^@assets/(.*)$': '<rootDir>/src/assets/$1',
         '^@config/(.*)$': '<rootDir>/src/config/$1',
         '^@mocks/(.*)$': '<rootDir>/src/mocks/$1',
+        '^@contexts/(.*)$': '<rootDir>/src/contexts/$1',
         '^@bootstrap(/.*)?$': '<rootDir>/node_modules/bootstrap/scss/bootstrap',
         
         /**
