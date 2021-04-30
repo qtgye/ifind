@@ -1,11 +1,11 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
 import logo from '@assets/images/logo.jpeg';
 
 import './header-middle.scss';
 
-const HeaderMiddle = ({ onInterSect }) => {
+const HeaderMiddle = ({ onInterSect, onSubmit }) => {
     const { pathname } = useLocation();
 
     const headerMiddleRef = useRef(null);
@@ -30,6 +30,21 @@ const HeaderMiddle = ({ onInterSect }) => {
 
     }, [ onInterSect ]);
 
+    const submitHandler = useCallback((e) => {
+        e.preventDefault();
+
+        const rawFormData = new FormData(e.currentTarget);
+        const formData = [...rawFormData.entries()].reduce(( all, [ key, value ]) => ({
+            ...all,
+            [key]: value
+        }), {});
+
+        if ( typeof onSubmit === 'function' ) {
+            onSubmit(formData);
+        }
+    }, [ onSubmit ]);
+    
+
     // Get current route from config
     const currentRoute = routes.find(({ path }) => path === pathname);
 
@@ -44,7 +59,7 @@ const HeaderMiddle = ({ onInterSect }) => {
                             <div className="top-search"><a href="/"><i
                                         className="ti-search"></i></a></div>
                             <div className="search-top">
-                                <form className="search-form"><input type="text"
+                                <form className="search-form" onSubmit={submitHandler}><input type="text"
                                         placeholder="Search here..." name="search" /><button
                                         value="search" type="submit"><i
                                             className="ti-search"></i></button></form>
