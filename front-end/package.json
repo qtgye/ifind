@@ -115,7 +115,6 @@
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
     "bootstrap": "^5.0.0-beta3",
-    "node-sass": "^5.0.0",
-    "postcss-normalize": "^10.0.0"
+    "node-sass": "^5.0.0"
   }
 }
