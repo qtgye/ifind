@@ -1,5 +1,4 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const postcssNormalize = require('postcss-normalize');
 
 const paths = require('../config/paths');
 
