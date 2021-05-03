@@ -1,5 +1,4 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const postcssNormalize = require('postcss-normalize');
 
 const paths = require('../config/paths');
 
@@ -8,7 +7,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
 module.exports = {
   "stories": [
-    "../src/sb/**/stories/*.stories.js",
+    "../src/sb/**/*.stories.js",
     "../src/components/**/stories/*.stories.js",
   ],
   "addons": [
@@ -44,7 +43,7 @@ module.exports = {
     config.module.rules.push({
       test: sassRegex,
       use: [
-        isEnvDevelopment && require.resolve('style-loader'),
+        require.resolve('style-loader'),
         isEnvProduction && {
           loader: MiniCssExtractPlugin.loader,
           // css is located in `static/css`, use '../../' to locate index.html folder
@@ -56,6 +55,7 @@ module.exports = {
         {
           loader: require.resolve('css-loader'),
           options: {
+            modules: true,
             importLoaders: 1,
             sourceMap: isEnvProduction
               ? shouldUseSourceMap
@@ -79,10 +79,6 @@ module.exports = {
                 },
                 stage: 3,
               }),
-              // Adds PostCSS Normalize as the reset css with default options,
-              // so that it honors browserslist config in package.json
-              // which in turn let's users customize the target behavior as per their needs.
-              postcssNormalize(),
             ],
             sourceMap: isEnvProduction ? shouldUseSourceMap : isEnvDevelopment,
           },
