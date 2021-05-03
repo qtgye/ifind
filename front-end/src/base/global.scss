@@ -1,3 +1,5 @@
+@import "./scss";
+
 * {
     box-sizing: border-box;
 }
@@ -8,4 +10,15 @@ ol, ul {
 
 a {
     text-decoration: none;
+}
+
+// Colors utility classes
+@each $color-name, $color-value in $colors {
+    #{"." + $color-name} {
+        color: $color-name;
+    }
+
+    #{".bg-" + $color-name} {
+        background-color: $color-value
+    }
 }

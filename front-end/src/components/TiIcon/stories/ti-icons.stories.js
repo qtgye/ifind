@@ -2,7 +2,7 @@ import { component } from '@sb';
 import TiIcon from '..';
 
 import icons from './icons';
-import './styles.scss';
+import styles from './styles.scss';
 
 export default component({
     title: TiIcon.componentName,
@@ -14,7 +14,7 @@ const Template = TiIcon.bind({});
 export const Icons = () => (
     <ul className="icons">
         {icons.map(icon => (
-            <li className="icon">
+            <li className="icon" key={icon}>
                 <TiIcon icon={icon} />
                 <span className="icon-name">{icon}</span>
             </li>

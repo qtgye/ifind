@@ -69,6 +69,7 @@ module.exports = {
   swSrc: resolveModule(resolveApp, 'src/service-worker'),
   publicUrlOrPath,
   webpackAliases: {
+    '@base': resolveApp('src/base'),
     '@components': resolveApp('src/components'),
     '@templates': resolveApp('src/templates'),
     '@pages': resolveApp('src/pages'),

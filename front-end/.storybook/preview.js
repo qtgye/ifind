@@ -1,4 +1,5 @@
 import '../public/css/themify-icons.css';
+import '@base/global.scss';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
