@@ -38,6 +38,7 @@ jobs:
         USERNAME: ${{ secrets.SSH_USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
+        command_timeout: 200m
         script: |
           cd /var/www/html
 
