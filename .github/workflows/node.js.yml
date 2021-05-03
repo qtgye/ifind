@@ -57,6 +57,10 @@ jobs:
           CI=true npm run test -- --coverage && \
 
           echo "/=============================/" && \
+          echo "/==== BUILDING STORYBOOK ====/" && \
+          npm run build-storybook && \
+
+          echo "/=============================/" && \
           echo "/==== BUILDING SITE ====/" && \
           CI=true npm run build
 

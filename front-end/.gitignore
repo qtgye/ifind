@@ -54,6 +54,9 @@ Thumbs.db
 # testing
 /coverage
 
+# storybook static
+/storybook-static
+
 # production
 /build
 
