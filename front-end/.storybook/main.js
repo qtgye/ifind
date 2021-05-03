@@ -19,6 +19,14 @@ module.exports = {
     // 'PRODUCTION' is used when building the static version of storybook.
     const isEnvDevelopment = configType === 'DEVELOPMENT';
     const isEnvProduction = configType === 'PRODUCTION';
+    
+    if ( configType === 'PRODUCTION' ) {
+      // Disable minimize which causes build fail on terserplugin
+      config.optimization = {
+        minimize: false,
+        minimizer: [],
+      };
+    }
 
     const cssRegex = /\.css$/;
     const sassRegex = /\.(scss|sass)$/;
