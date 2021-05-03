@@ -1,4 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const postcssNormalize = require('postcss-normalize');
 
 const paths = require('../config/paths');
 
@@ -7,7 +8,8 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 
 module.exports = {
   "stories": [
-    "../src/components/**/stories/*.stories.js"
+    "../src/sb/**/stories/*.stories.js",
+    "../src/components/**/stories/*.stories.js",
   ],
   "addons": [
     "@storybook/addon-links",
