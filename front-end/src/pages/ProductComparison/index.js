@@ -1,4 +1,5 @@
 import BasicPage from '@templates/BasicPage';
+import { withComponentName } from '@utilities/component';
 
 const ProductComparison = () => (
   <BasicPage title="Product Comparison">
@@ -6,4 +7,4 @@ const ProductComparison = () => (
   </BasicPage>
 );
 
-export default ProductComparison;
+export default withComponentName('ProductComparisonPage')(ProductComparison);

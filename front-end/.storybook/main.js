@@ -8,7 +8,7 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 module.exports = {
   "stories": [
     "../src/sb/**/*.stories.js",
-    "../src/components/**/stories/*.stories.js",
+    "../src/**/**/stories/*.stories.js",
   ],
   "addons": [
     "@storybook/addon-links",

@@ -77,6 +77,7 @@ module.exports = {
     '@config': resolveApp('src/config'),
     '@mocks': resolveApp('src/mocks'),
     '@contexts': resolveApp('src/contexts'),
+    '@utilities': resolveApp('src/utilities'),
     '@sb': resolveApp('src/sb'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
   },

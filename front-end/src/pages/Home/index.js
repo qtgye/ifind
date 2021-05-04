@@ -1,11 +1,15 @@
+import GeneralTemplate from '@templates/GeneralTemplate';
 import HeroSlider from '@components/HeroSlider';
+import { withComponentName } from '@utilities/component';
 
 const Home = () => {
     return (
-        <div className="home">
-            <HeroSlider />
-        </div>
+        <GeneralTemplate>
+            <div className="home">
+                <HeroSlider />
+            </div>
+        </GeneralTemplate>
     )
 };
 
-export default Home;
+export default withComponentName('HomePage')(Home);

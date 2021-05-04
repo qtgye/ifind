@@ -1,5 +1,6 @@
 import content from '@mocks/pages/data-protection';
 import BasicPage from '@templates/BasicPage';
+import { withComponentName } from '@utilities/component';
 
 const DataProtection = () => {
     return (
@@ -9,4 +10,4 @@ const DataProtection = () => {
     )
 };
 
-export default DataProtection;
+export default withComponentName('DataProtectionPage')(DataProtection);

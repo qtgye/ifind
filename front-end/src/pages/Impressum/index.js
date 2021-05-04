@@ -1,5 +1,6 @@
 import content from '@mocks/pages/impressum';
 import BasicPage from '@templates/BasicPage';
+import { withComponentName } from '@utilities/component';
 
 const Impressum = () => {
     return (
@@ -9,4 +10,4 @@ const Impressum = () => {
     )
 };
 
-export default Impressum;
+export default withComponentName('ImpressumPage')(Impressum);

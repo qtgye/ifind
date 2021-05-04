@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
-import routes, { navigationRoutes } from '@config/routes';
+import { navigationRoutes } from '@config/routes';
+import routes from '@config/routes';
 
 import HeaderSideNav from './HeaderSideNav';
 

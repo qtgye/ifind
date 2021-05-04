@@ -2,7 +2,7 @@ import { component } from '@sb';
 import FoooterComponent from '../';
 
 export default component({
-    title: '',
+    title: 'Footer',
     component: FoooterComponent,
 });
 

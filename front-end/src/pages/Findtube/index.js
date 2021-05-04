@@ -1,4 +1,5 @@
 import BasicPage from '@templates/BasicPage';
+import { withComponentName } from '@utilities/component';
 
 const FindTube = () => (
     <BasicPage title="Findtube">
@@ -6,4 +7,4 @@ const FindTube = () => (
     </BasicPage>
 )
 
-export default FindTube;
+export default withComponentName('FindTubePage')(FindTube);

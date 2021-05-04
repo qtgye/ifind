@@ -1,4 +1,5 @@
 import BasicPage from '@templates/BasicPage';
+import { withComponentName } from '@utilities/component';
 
 const AboutUs = () => (
     <BasicPage title="About Us">
@@ -6,4 +7,4 @@ const AboutUs = () => (
     </BasicPage>
 );
 
-export default AboutUs;
+export default withComponentName('AboutUsPage')(AboutUs);

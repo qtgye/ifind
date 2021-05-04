@@ -12,6 +12,7 @@ import '../public/css/themify-icons.css';
 import '../public/css/reset.css';
 
 import '../src/App.scss';
+import '../src/sb/styles.scss';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },

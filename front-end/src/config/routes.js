@@ -1,13 +1,3 @@
-import Home from '@pages/Home';
-import ProductComparison from '@pages/ProductComparison';
-import Findtube from '@pages/Findtube';
-import Blog from '@pages/Blog';
-import Contact from '@pages/Contact';
-import AGB from '@pages/AGB';
-import Impressum from '@pages/Impressum';
-import DataProtection from '@pages/DataProtection';
-import AboutUs from '@pages/AboutUs';
-
 const routes =  [
 
     /**
@@ -15,7 +5,7 @@ const routes =  [
      */
     {
         path: '/',
-        component: Home,
+        componentName: 'HomePage',
         label: 'Home',
         withSideNav: true,
         exact: true,
@@ -23,22 +13,22 @@ const routes =  [
     },
     {
         path: '/productcomparison',
-        component: ProductComparison,
+        componentName: 'ProductComparisonPage',
         label: 'Product Comparison',
     },
     {   
         path: '/findtube', 
-        component: Findtube,
+        componentName: 'FindTubePage',
         label: 'Findtube',
     },
     {   
         path: '/blog', 
-        component: Blog,
+        componentName: 'BlogPage',
         label: 'Blog',
     },
     {   
         path: '/contact', 
-        component: Contact,
+        componentName: 'ContactPage',
         label: 'Contact',
     },
 
@@ -47,30 +37,24 @@ const routes =  [
      */
      {   
         path: '/about-us',
-        component: AboutUs,
+        componentName: 'AboutUsPage',
         label: 'About Us',
     },
     {   
         path: '/agb',
-        component: AGB,
+        componentName: 'AGBPage',
         label: 'AGB',
     },
     {   
         path: '/impressum',
-        component: Impressum,
+        componentName: 'ImpressumPage',
         label: 'Impressum',
     },
     {   
         path: '/data-protection',
-        component: DataProtection,
+        componentName: 'DataProtectionPage',
         label: 'Data Protection',
     },
-    // {path: 'agb', component: AGBComponent},
-    // {path: 'data-protection', component: DataProtectionComponent},
-    // {path: '', component: HomeComponent},
-    // {path: 'impressum', component: ImpressumComponent},
-    // {path: 'blog', component: BlogComponent},
-    // {path: 'contact', component: ContactComponent},
 ];
 
 export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];

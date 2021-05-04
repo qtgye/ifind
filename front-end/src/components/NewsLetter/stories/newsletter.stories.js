@@ -2,7 +2,7 @@ import { component } from '@sb';
 import NewsLetterComponent from '../';
 
 export default component({
-    title: '',
+    title: 'News Letter',
     component: NewsLetterComponent,
 });
 

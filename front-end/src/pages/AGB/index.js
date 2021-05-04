@@ -1,5 +1,6 @@
 import BasicPage from '@templates/BasicPage';
 import content from '@mocks/pages/agb';
+import { withComponentName } from '@utilities/component';
 
 const AGB = () => (
     <BasicPage title='AGB'>
@@ -7,4 +8,4 @@ const AGB = () => (
     </BasicPage>
 );
 
-export default AGB;
+export default withComponentName('AGBPage')(AGB);

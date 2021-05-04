@@ -5,7 +5,7 @@ import icons from './icons';
 import styles from './styles.scss';
 
 export default component({
-    title: '',
+    title: 'Ti Icon',
     component: TiIconComponent
 });
 
