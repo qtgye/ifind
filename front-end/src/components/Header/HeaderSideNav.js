@@ -1,14 +1,6 @@
-import { useLocation } from 'react-router-dom';
-import { find } from 'lodash';
-import routes from '@config/routes';
-
 import './header-side-nav.scss';
 
-const HeaderSideNav = () => {
-    const { pathname } = useLocation();
-
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path );
-    const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
+const HeaderSideNav = ({ withSideNav }) => {
 
     return  withSideNav ?
     (

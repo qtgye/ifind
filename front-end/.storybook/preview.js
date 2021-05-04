@@ -1,5 +1,17 @@
+import { BrowserRouter } from 'react-router-dom';
+
+// import '../public/css/magnific-popup.min.css';
+// import '../public/css/jquery.fancybox.min.css';
+// import '../public/css/niceselect.css';
+// import '../public/css/animate.css';
+// import '../public/css/flex-slider.min.css';
+// import '../public/css/owl-carousel.css';
+// import '../public/css/slicknav.min.css';
+import '../public/css/font-awesome.css';
 import '../public/css/themify-icons.css';
-import '@base/global.scss';
+import '../public/css/reset.css';
+
+import '../src/App.scss';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -10,3 +22,11 @@ export const parameters = {
     },
   },
 }
+
+export const decorators = [
+  (Story) => (
+    <BrowserRouter>
+      <Story />
+    </BrowserRouter>
+  ),
+];

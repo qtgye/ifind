@@ -1,11 +1,11 @@
-.icons {
+.ti_icons {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 20px;
     list-style: none;
 
-    .icon {
+    &__icon {
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -16,7 +16,7 @@
         padding: 10px;
     }
 
-    [class^="ti"] {
+    [class^="ti-"] {
         display: flex;
         justify-content: center;
         align-items: center;
@@ -24,7 +24,7 @@
         height: 30px;
     }
 
-    .icon-name {
+    &__name {
         font-family: sans-serif;
         font-size: 12px;
         opacity: .5;

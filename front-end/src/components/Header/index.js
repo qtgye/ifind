@@ -1,17 +1,24 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import { find } from 'lodash';
 
 import HeaderTop from './HeaderTop';
 import HeaderMiddle from './HeaderMiddle';
 import HeaderNav from './HeaderNav';
 
 import { useGlobalData } from '@contexts/global';
+import routes from '@config/routes';
 
 import './header.scss';
 
 const Header = () => {
+    const { pathname } = useLocation();
     const { contactInfo } = useGlobalData();
     const [ isSticky, setIsSticky ] = useState(false);
     const [ classNames, setClassNames ] = useState('header');
+
+    const currentRouteConfig = find(routes, ({ path }) => pathname === path );
+    const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
 
     /**
      * Handles intersection
@@ -36,7 +43,7 @@ const Header = () => {
         <header className={classNames}>
             <HeaderTop {...contactInfo} />
             <HeaderMiddle onInterSect={handleHeaderIntersection} />
-            <HeaderNav />
+            <HeaderNav withSideNav={withSideNav} />
         </header>
     )
 }

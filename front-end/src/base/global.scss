@@ -4,11 +4,13 @@
     box-sizing: border-box;
 }
 
-ol, ul {
-    padding-left: 0;
+body {
+    ol, ul, dl {
+        padding-left: 0;
+    }
 }
 
-a {
+a, a[href] {
     text-decoration: none;
 }
 

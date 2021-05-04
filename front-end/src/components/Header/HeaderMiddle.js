@@ -19,7 +19,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }) => {
         if ( observer.current ) observer.current.disconnect();
 
         observer.current = new window.IntersectionObserver(([ intersection ]) => {
-            onInterSect(intersection.isIntersecting);
+            typeof onInterSect == 'function' && onInterSect(intersection.isIntersecting);
         });
 
         if ( headerMiddleRef.current ) {
@@ -106,7 +106,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }) => {
                         <div className="right-bar">
                             {
                                 /* Show user-heart only if noUserHeart is false from routes config */
-                                !currentRoute.noUserHeart && (
+                                !currentRoute?.noUserHeart && (
                                     <div className="single-bar"><a href="/"
                                         className="single-icon"><i aria-hidden="true"
                                             className="fa fa-heart-o"></i>&nbsp;</a></div>

@@ -7,14 +7,14 @@ import './header-nav.scss';
 
 const navigationItems = navigationRoutes.map(path => routes.find(route => route.path === path ));
 
-const HeaderNav = () => {
+const HeaderNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
 
     return (
         <div className="header-nav">
             <div className="header-nav__container">
                 <div className="header-nav__row">
-                    <HeaderSideNav />
+                    <HeaderSideNav withSideNav={withSideNav} />
                     <div className="menu-area">
                         <ul className="main-menu">
                             { navigationItems.map(({ path, label }) => (

@@ -114,6 +114,11 @@ module.exports = {
       ].filter(Boolean)
     );
 
+    // Testing config
+    // require('fs').createWriteStream('config.json');
+    // require('fs').writeFileSync('config.json', JSON.stringify(config.module.rules, null, '  '));
+    // process.exit();
+
     // Return the altered config
     return config;
   },
