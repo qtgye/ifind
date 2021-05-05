@@ -61,7 +61,7 @@ jobs:
           rm -rf /var/www/html/front-end/build && mv build /var/www/html/front-end && \
 
           echo "\n\n/==== BUILDING SITE ====/" && \
-          CI=true npm run build-storybook
+          CI=true npm run build-storybook && \
           rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end
 
     # TO DO:
