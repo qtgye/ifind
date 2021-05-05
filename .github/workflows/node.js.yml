@@ -29,7 +29,7 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }} # SSH Key Generated from the server
       with:
         source: "."
-        target: "/var/www/html" # Directory of the app
+        target: "/var/www/source" # Directory of the app
    
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -40,30 +40,29 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
-          cd /var/www/html
+          cd /var/www/source
 
           git clean . -f
           git clean . -f
 
-          echo "/=============================/" && \
-          echo "/==== PROCESSING FRONT-END ====/" && \
+          echo "\n\n/=============================/" && \
+          echo "\n\n/==== PROCESSING FRONT-END ====/" && \
           cd front-end && \
           
-          echo "/=============================/" && \
-          echo "/==== INSTALLING PACKAGES ====/" && \
+          echo "\n\n/==== INSTALLING PACKAGES ====/" && \
           npm install && \
 
-          echo "/=============================/" && \
-          echo "/==== RUNNING TESTS ====/" && \
+          echo "\n\n/==== RUNNING TESTS ====/" && \
           CI=true npm run test -- --coverage && \
+          rm -rf /var/www/html/front-end/coverage && mv coverage /var/www/html/front-end && \
 
-          echo "/=============================/" && \
-          echo "/==== BUILDING SITE ====/" && \
+          echo "\n\n/==== BUILDING SITE ====/" && \
           CI=true npm run build && \
+          rm -rf /var/www/html/front-end/build && mv build /var/www/html/front-end && \
 
-          echo "/=============================/" && \
-          echo "/==== BUILDING SITE ====/" && \
+          echo "\n\n/==== BUILDING SITE ====/" && \
           CI=true npm run build-storybook
+          rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end && \
 
     # TO DO:
     # Add scripts for admin and api server builds
