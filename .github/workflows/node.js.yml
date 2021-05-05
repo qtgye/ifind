@@ -62,7 +62,7 @@ jobs:
 
           echo "\n\n/==== BUILDING SITE ====/" && \
           CI=true npm run build-storybook
-          rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end && \
+          rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end
 
     # TO DO:
     # Add scripts for admin and api server builds
