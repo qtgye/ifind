@@ -21,6 +21,4 @@ export default styleguide({
     component: ColorsComponent,
 });
 
-const Template = ColorsComponent.bind({});
-
 export const Colors = () => <ColorsComponent />;

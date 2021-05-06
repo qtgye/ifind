@@ -1,9 +1,10 @@
 import { useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
-import logo from '@assets/images/logo.jpeg';
 
 import './header-middle.scss';
+
+const logo = '/images/logo.jpeg';
 
 const HeaderMiddle = ({ onInterSect, onSubmit }) => {
     const { pathname } = useLocation();
@@ -23,7 +24,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }) => {
         });
 
         if ( headerMiddleRef.current ) {
-            observer.current.observe(headerMiddleRef.current);            
+            observer.current.observe(headerMiddleRef.current);
         }
 
         return () => observer.current.disconnect();

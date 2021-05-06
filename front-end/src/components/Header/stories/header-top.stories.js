@@ -1,4 +1,4 @@
-import { BrowserRouter } from 'react-router-dom';
+// import { BrowserRouter } from 'react-router-dom';
 import { component } from '@sb';
 import HeaderTopComponent from '../HeaderTop';
 
@@ -6,7 +6,7 @@ import HeaderTopComponent from '../HeaderTop';
 import { phone, email } from '@mocks/global/contact';
 
 export default component({
-    title: 'Header',
+    title: 'Header/Header Top',
     component: HeaderTopComponent,
 });
 

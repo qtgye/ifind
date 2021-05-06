@@ -1,9 +1,9 @@
-import { BrowserRouter } from 'react-router-dom';
+// import { BrowserRouter } from 'react-router-dom';
 import { component } from '@sb';
 import HeaderNavComponent from '../HeaderNav';
 
 export default component({
-    title: 'Header',
+    title: 'Header/Header Nav',
     component: HeaderNavComponent,
 });
 

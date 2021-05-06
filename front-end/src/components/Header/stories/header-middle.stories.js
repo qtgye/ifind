@@ -2,7 +2,7 @@ import { component } from '@sb';
 import HeaderMiddleComponent from '../HeaderMiddle';
 
 export default component({
-    title: 'Header',
+    title: 'Header/Header Middle',
     component: HeaderMiddleComponent,
 });
 

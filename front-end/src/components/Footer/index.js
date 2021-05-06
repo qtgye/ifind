@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
-
-import logo from '@assets/images/logo.png';
 import routes, { footerRoutes } from '@config/routes';
 
+const logo = '/images/logo.png';
 const informationLinks = footerRoutes.map( path => routes.find(routeItem => routeItem.path === path));
 
 const Footer = () => (

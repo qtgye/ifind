@@ -1,6 +1,7 @@
 // Should match colors config from
 // base/scss/config/_colors.scss
-export default {
+
+const colors = {
     'red': '#ea0000',
     'dark-red': '#bc0031',
 
@@ -28,3 +29,5 @@ export default {
     'lighter-green': '#c8e9d8',
     'pastel-green': '#ddefe6',
 };
+
+export default colors;
