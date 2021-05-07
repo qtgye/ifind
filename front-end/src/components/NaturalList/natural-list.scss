@@ -29,25 +29,37 @@ $item-layout: (
         width: 100%;
         height: 100%;
         direction: rtl;
+        padding: 10px;
+        background-color: color(gray);
     }
     
     &__item {
         display: flex;
         justify-content: center;
         align-items: center;
-        border: 1px solid color(red);
+        border: 1px solid color(mustard);
         position: relative;
         direction: ltr;
+        background-color: color(white);
+        transition: all .3s;
+        box-shadow: none;
 
-        // &:first-child {
+        // Show only first product title
+        &:nth-child(n + 3) {
             .natural-list__title {
-                display: flex;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                width: 100%;
+                display: none;
             }
-        // }
+        }
+
+        // Active state
+        &--active {
+            box-shadow: inset 0 0 0 10px color(mustard);
+
+            .natural-list__title {
+                color: color(white);
+                background-color: color(mustard);
+            }
+        }
 
         // Golden ratio items logic
         @for $i from 1 through 6 {
@@ -72,6 +84,29 @@ $item-layout: (
         }
     }
 
+    &__badge {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 32px;
+        padding: 0 5px;
+        color: color(white);
+        background-color: color(mustard);
+
+        &::after {
+            content: '';
+            display: block;
+            border-top: 16px solid color(mustard);
+            border-left: 10px solid color(mustard);
+            border-right: 10px solid transparent;
+            border-bottom: 16px solid transparent;
+            margin-right: -25px;
+        }
+    }
+
     &__figure {
         width: calc(100% - 10px);
         height: calc(100% - 10px);
@@ -86,6 +121,14 @@ $item-layout: (
     }
 
     &__title {
-        display: none;
+        display: flex;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        background-color: rgba(color(white), .8);
+        text-align: left;
+        transition: all .3s;
     }
 }

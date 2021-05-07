@@ -14,9 +14,7 @@ const ProductDetails = ({ title, store, ratingValue, ratingsCount, category, cat
                 <div className="product-details__meta">
                     {categoryRating} in {category}
                 </div>
-                <div className="product-details__details">
-                    Details WYSIWYG
-                </div>
+                <div className="product-details__details" dangerouslySetInnerHTML={{ __html: details }}></div>
             </div>
         </div>
     )
