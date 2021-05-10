@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import ProductDetails from '@components/ProductDetails';
+import Item from './item';
 
 import './natural-list.scss';
 
@@ -31,12 +32,13 @@ const NaturalList = ({ items }) => {
                         
                     </li>
                     {items.map((item, index) => (
-                        <li className="natural-list__item" key={index} onClick={() => onProductClick(item)}>
-                            <figure className="natural-list__figure">
-                                <img className="img natural-list__image" src={item.image} alt={`${item.title} image`} />
-                                <figcaption className="natural-list__title">{item.title}</figcaption>
-                            </figure>
-                        </li>
+                        <Item 
+                            {...item}
+                            active={activeProduct && activeProduct.id === item.id}
+                            withBadge={index === 0}
+                            onClick={() => onProductClick(item)}
+                            key={index}
+                        />
                     ))}
                 </ul>
             </div>
