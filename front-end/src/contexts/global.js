@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useCallback } from 'react';
 
 // Import mock data for use while backend is not yet available
-import { phone, email } from '@mocks/global/contact';
+import { phone, email, supportPhone, supportEmail } from '@mocks/global/contact';
 
 /**
  * Initial globalData contents
@@ -27,7 +27,9 @@ const initialData = {
      */
     contactInfo: {
         phone,
-        email
+        email,
+        supportPhone,
+        supportEmail
         // ... Add more
     }
 };
@@ -54,14 +56,16 @@ const globalDataReducer = (state, action) => {
                 contactInfo: {
                     email: action.payload.email,
                     phone: action.payload.phone,
+                    supportPhone: action.payload.supportPhone,
+                    supportEmail: action.payload.supportEmail
                 }
             }
-        default:;
+        default: ;
     }
 }
 
 export const GlobalContextProvider = ({ children }) => {
-    const [ globalData, dispatch ] = useReducer(globalDataReducer, initialData);
+    const [globalData, dispatch] = useReducer(globalDataReducer, initialData);
 
     // Handle global data fetching here
     useEffect(() => {
@@ -70,15 +74,15 @@ export const GlobalContextProvider = ({ children }) => {
         // instead of calling it directly
     }, []);
 
-    const updateContact = useCallback(({ email, phone }) => {
+    const updateContact = useCallback(({ email, phone, supportPhone, supportEmail }) => {
         dispatch({
             type: actions.UPDATE_CONTACT,
-            payload: { email, phone }
+            payload: { email, phone, supportPhone, supportEmail }
         })
-    }, [ dispatch ]);
+    }, [dispatch]);
 
     return (
-        <GlobalContext.Provider value={{ ...globalData, updateContact}}>
+        <GlobalContext.Provider value={{ ...globalData, updateContact }}>
             {children}
         </GlobalContext.Provider>
     );
