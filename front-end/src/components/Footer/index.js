@@ -76,7 +76,7 @@ const Footer = () => (
                         </div>
                         <div className="col-lg-6 col-12">
                             <div className="right">
-
+                                <p>*Affiliate-Links. Wir erhalten bei einem Kauf eine kleine Provision. Vielen Dank für Eure Unterstützung!</p>
                             </div>
                         </div>
                     </div>
