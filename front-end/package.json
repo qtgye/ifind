@@ -78,7 +78,7 @@
     "test": "node scripts/test.js",
     "serve": "node server.js",
     "storybook": "start-storybook -p 6006 -s ./public",
-    "build-storybook": "build-storybook -s ./public"
+    "build-storybook": "build-storybook -s ./public --quiet"
   },
   "eslintConfig": {
     "extends": [

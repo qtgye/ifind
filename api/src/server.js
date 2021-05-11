@@ -1,9 +1,12 @@
 import express from 'express';
 import { ApolloServer, gql } from 'apollo-server-express';
+import minimist from 'minimist';
 
-import { port } from './config';
+import config from './config';
 import typeDefs from '@types';
 import resolvers from '@resolvers';
+
+const args = minimist(process.argv);
 
 // const express = require('express');
 // const { ApolloServer, gql } = require('apollo-server-express');
@@ -12,13 +15,14 @@ import resolvers from '@resolvers';
 // const typeDefs = require('./graphql/types');
 // const resolvers = require('./graphql/resolvers');
 
+const port = args.port ? args.port : config.port;
 const path = '/graphql';
 
 // Initialize the app
 const app = express();
 
 // GraphQL Playground
-const playgroundEndpoint = process.env.API_ROOT ? process.env.API_ROOT : `/graphql`;
+const playgroundEndpoint = args.apiRoot ? args.apiRoot : `/graphql`;
 
 // Initialize Appolo Server
 const server = new ApolloServer({
@@ -29,6 +33,8 @@ const server = new ApolloServer({
     endpoint: playgroundEndpoint
   }
 });
+
+console.log({ playgroundEndpoint });
 
 server.applyMiddleware({ app, path });
 
