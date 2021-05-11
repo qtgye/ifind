@@ -64,9 +64,7 @@ jobs:
           echo "/=============================/" && \
           echo "/==== PROCESSING API ====/" && \
           cd ../api && \
-          npm install && \
-          npm run build && \
-          rm -rf /var/www/html/api/dist && mv dist /var/www/html/api
+          npm install && npm run build && pm2 restart api
 
     # TO DO:
     # Add scripts for admin and api server builds

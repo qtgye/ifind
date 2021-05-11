@@ -17,10 +17,17 @@ const path = '/graphql';
 // Initialize the app
 const app = express();
 
+// GraphQL Playground
+const playgroundEndpoint = process.env.API_ROOT ? process.env.API_ROOT : `/graphql`;
+
 // Initialize Appolo Server
 const server = new ApolloServer({
   typeDefs,
-  resolvers
+  resolvers,
+  introspection: true,
+  playground: {
+    endpoint: playgroundEndpoint
+  }
 });
 
 server.applyMiddleware({ app, path });
