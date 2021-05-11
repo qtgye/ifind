@@ -29,27 +29,16 @@ const getBestSellers = async (category) => {
   }
 
   return Promise.all(items.slice(0, 5).map(async item => {
-    const title = item.querySelector('a').textContent.trim();
+    const link = item.querySelector('a');
+    const title = link.textContent.trim();
+    const detailURL = buildFullURL(link.href);
     const image = exractImageElementData(item.querySelector('img'));
-
-    const href = item.querySelector('a').href;
-    const url = buildFullURL(href);
-    const resp = await fetch(url);
-    const body = await resp.text();
-    const { window } = new JSDOM(body);
-    const { document } = window;
-    const details = document.getElementById('dp-container');
-
-    console.log({ url, details });
-    
 
     return {
       // // id: String
       image,
       title,
-      // // ratingValue: Int
-      // // categoryId: String
-      // // detailsHTML: String
+      detailURL
     }
   }))
 }
