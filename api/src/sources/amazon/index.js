@@ -14,6 +14,8 @@ const getBestSellers = async (category) => {
 
   const [...items] = document.querySelectorAll('#zg-ordered-list .a-list-item');
 
+  console.log({ url, items });
+
   const exractImageElementData = (imageElement) => {
     const alt = imageElement.getAttribute('alt');
     const src = imageElement.getAttribute('src');
