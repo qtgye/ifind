@@ -16,4 +16,17 @@ describe('BreadCrumbs Component', () => {
         expect(breadCrumbsElement).not.toBe(null);
 
     });
+
+    it('Renders list elements properly', () => {
+        render(
+            <BrowserRouter>
+                <BreadCrumbs />
+            </BrowserRouter>
+        );
+
+        const ulElements = document.getElementsByClassName('.bread-list');
+        expect(ulElements).not.toBe(null);
+
+    });
+
 });
