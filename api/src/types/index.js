@@ -13,7 +13,8 @@ const queryTypes = [
 module.exports = gql`
   type Query { 
     products: [Product]
-    bestSellers(category: String!): [Product]
+    bestSellers(category: String!, limit: Int!): [Product]
+    productDetail(productDetailURL: String!): Product
   }
   ${nonQueryTypes.join('\n')}
   ${queryTypes.join('\n')}
