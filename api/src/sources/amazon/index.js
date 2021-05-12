@@ -26,7 +26,7 @@ const getBestSellers = async (category) => {
   const itemsData = await Promise.all(items.map(async (item) => item.evaluate( (element, BASE_URL) => {
     const link = element.querySelector('a');
     const title = link.textContent.trim();
-    const detailURL = `${BASE_URL}${link.href}`;
+    const detailURL = `${BASE_URL}${link.href}`.replace(/(\?.*)$/, '');
     const imageElement = element.querySelector('img');
     const alt = imageElement.getAttribute('alt');
     const src = imageElement.getAttribute('src');
