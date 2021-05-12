@@ -8,13 +8,6 @@ import resolvers from '@resolvers';
 
 const args = minimist(process.argv);
 
-// const express = require('express');
-// const { ApolloServer, gql } = require('apollo-server-express');
-
-// const { port } = require('./config');
-// const typeDefs = require('./graphql/types');
-// const resolvers = require('./graphql/resolvers');
-
 const port = args.port ? args.port : config.port;
 const path = '/graphql';
 
@@ -33,8 +26,6 @@ const server = new ApolloServer({
     endpoint: playgroundEndpoint
   }
 });
-
-console.log({ playgroundEndpoint });
 
 server.applyMiddleware({ app, path });
 

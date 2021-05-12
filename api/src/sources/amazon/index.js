@@ -11,7 +11,10 @@ const buildBestSellersURL = (category) => buildFullURL(`/gp/bestsellers/${catego
 
 
 const getBestSellers = async (category) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    ignoreHTTPSErrors: true
+  });
   const page = await browser.newPage();
   const url = buildBestSellersURL(category);
   const itemsSelector = '#zg-ordered-list .a-list-item';
