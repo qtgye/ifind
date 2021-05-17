@@ -1,10 +1,8 @@
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import routes, { footerRoutes } from '@config/routes';
 import { useGlobalData } from '@contexts/globalDataContext';
 
 const logo = '/images/logo.png';
-const informationLinks = footerRoutes.map( path => routes.find(routeItem => routeItem.path === path));
 
 const Footer = () => {
     const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
@@ -26,7 +24,7 @@ const Footer = () => {
         if ( footerSetting?.footer_footnote ) {
             setFooterFootnote(footerSetting.footer_footnote);
         }
-    }, [ footerSetting ]);
+    }, [ footerSetting, socialNetwork ]); // 
 
     return (
         <footer className="footer" id="footer">
@@ -90,14 +88,14 @@ const Footer = () => {
                         <div className="row">
                             <div className="col-lg-6 col-12">
                                 <div className="left">
-                                    <p>Copyright © 2021 <a href="http://www.ifindilu.com" target="_blank" rel="noreferrer">iFINDilu</a> -
+                                    <p>Copyright © 2021 <a href="/" target="_blank" rel="noreferrer">iFINDilu</a> -
                                         All Rights Reserved.
                                     </p>
                                 </div>
                             </div>
                             <div className="col-lg-6 col-12">
                                 <div className="right">
-                                    <p>*Affiliate-Links. Wir erhalten bei einem Kauf eine kleine Provision. Vielen Dank für Eure Unterstützung!</p>
+                                    <p>{footerFootnote}</p>
                                 </div>
                             </div>
                         </div>

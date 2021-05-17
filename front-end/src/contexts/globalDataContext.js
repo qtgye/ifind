@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer, useCallback } from 'react';
+import { createContext, useContext } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { locale } from '@config/locale';
