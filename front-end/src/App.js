@@ -5,7 +5,7 @@ import {
 } from 'react-router-dom';
 
 import { Providers } from '@contexts';
-import { UserContextProvider } from '@contexts/userContext';
+import { AuthContextProvider } from '@contexts/authContext';
 import routesPages from '@config/routesPages';
 
 import Header from '@components/Header';
@@ -15,7 +15,7 @@ import './App.scss';
 function App() {
   return (
     <Router>
-      <UserContextProvider>
+      <AuthContextProvider>
         <Providers>
           <Header />
           <main className="main">
@@ -26,7 +26,7 @@ function App() {
               </Switch>
           </main>
         </Providers>
-      </UserContextProvider>
+      </AuthContextProvider>
     </Router>
   );
 }

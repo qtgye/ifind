@@ -1,29 +1,18 @@
-import { useEffect, useState } from 'react';
-
-import { UserContextProvider } from './userContext';
 import { GlobalContextProvider } from './globalDataContext';
 import { HomepageContextProvider } from './homepageContext';
 import { ProductContextProvider } from './productContext';
-import { useUser } from '@contexts/userContext';
+import { useAuth } from '@contexts/authContext';
 
 const providers = [
-    UserContextProvider,
     GlobalContextProvider,
     HomepageContextProvider,
     ProductContextProvider,
 ];
 
 export const Providers = ({ children }) => {
-    const [ userToken, setUserToken ] = useState(null);
-    const userData = useUser();
+    const { token } = useAuth();
 
-    useEffect(() => {
-        if ( userData?.login?.jwt ) {
-            setUserToken(userData.login.jwt);
-        }
-    }, [ setUserToken, userData ]);
-
-    return userToken && (
+    return token && (
         providers.reverse().reduce(( all, ParentProvider ) => (
             <ParentProvider>
                 {all}

@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/react-hooks';
 import { locale } from '@config/locale';
 import globalDataQuery from '@gql/globalDataQuery';
 import { apiSourceHandle } from '@config/adminApi'
-import { useUser } from '@contexts/userContext';
+import { useAuth } from '@contexts/authContext';
 
 /**
  * This context should contain global data:
@@ -15,7 +15,7 @@ import { useUser } from '@contexts/userContext';
 const GlobalContext = createContext({});
 
 export const GlobalContextProvider = ({ children }) => {
-    const { login: { jwt }} = useUser();
+    const { token } = useAuth();
     const {
         // loading,
         // error,
@@ -24,11 +24,11 @@ export const GlobalContextProvider = ({ children }) => {
         variables: { locale },
         context: {
             apiSource: apiSourceHandle,
-            token: jwt,
+            token
         }
     });
 
-    console.log({ jwt });
+    console.log({ token });
 
     return (
         <GlobalContext.Provider value={{
