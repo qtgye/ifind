@@ -23,7 +23,7 @@ describe('Header Component', () => {
         const mockPhone = '123456';
         const mockEmail = 'test@email.com';
         const contactInfo = {
-            phone: mockPhone,
+            phone_number: mockPhone,
             email: mockEmail
         };
 

@@ -1,4 +1,4 @@
-import { GlobalContextProvider } from './global';
+import { GlobalContextProvider } from './globalDataContext';
 import { HomepageContextProvider } from './homepageContext';
 import { ProductContextProvider } from './productContext';
 

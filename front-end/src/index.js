@@ -5,12 +5,32 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { API_ROOT } from '@config/api';
+import { ADMIN_API_ROOT } from '@config/adminApi';
 
-import ApolloClient from "apollo-boost";
+import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloLink } from "apollo-link";
+
+console.log({ API_ROOT, ADMIN_API_ROOT });
+
+// API Link
+const apiLink = new HttpLink({
+  uri: API_ROOT,
+  headers: {},
+});
+
+console.log({ API_ROOT });
+
+const adminApiLink = new HttpLink({
+  uri: ADMIN_API_ROOT,
+  headers: {},
+});
 
 const client = new ApolloClient({
-  uri: API_ROOT,
+  link: ApolloLink.split(
+    operation => operation.getContext().apiSource === "admin", adminApiLink, apiLink
+  ),
+  cache: new InMemoryCache().restore({})
 });
 
 

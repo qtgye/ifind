@@ -78,7 +78,7 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "REACT_APP_API_ROOT='http://localhost:8080/graphql' node scripts/start.js",
+    "start": "REACT_APP_API_ROOT='http://localhost:8080/graphql' REACT_APP_ADMIN_API_ROOT='http://localhost:1337/graphql' node scripts/start.js",
     "build": "REACT_APP_API_ROOT='/api' node scripts/build.js",
     "test": "node scripts/test.js",
     "serve": "node server.js",

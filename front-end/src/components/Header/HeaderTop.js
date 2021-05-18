@@ -3,7 +3,7 @@ import TiIcon from '@components/TiIcon';
 
 import './header-top.scss';
 
-const HeaderTop = ({ phone, email }) => {
+const HeaderTop = ({ phone_number: phone, email }) => {
     return (
         <div className="header-top">
             <div className="header-top__container">
