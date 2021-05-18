@@ -68,7 +68,7 @@ jobs:
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
-          npm install && npm run build && pm2 restart admin
+          npm install && pm2 restart admin
 
     # TO DO:
     # Add scripts for admin and api server builds
