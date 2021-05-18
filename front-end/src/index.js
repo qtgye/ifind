@@ -5,9 +5,9 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { API_ROOT } from '@config/api';
-import { ADMIN_API_ROOT } from '@config/adminApi';
+import { ADMIN_API_ROOT, apiSourceHandle, userTokenHandle } from '@config/adminApi';
 
-import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
+import { ApolloClient, HttpLink, InMemoryCache, concat } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloLink } from "apollo-link";
 
@@ -19,16 +19,34 @@ const apiLink = new HttpLink({
   headers: {},
 });
 
-console.log({ API_ROOT });
-
+// Admin Link
 const adminApiLink = new HttpLink({
   uri: ADMIN_API_ROOT,
   headers: {},
 });
 
+// Auth middleware, handles authentication to admin endpoints
+const adminAuthMiddleware = new ApolloLink((operation, forward) => {
+  const currentContext = operation.getContext();
+  const token = localStorage.getItem(userTokenHandle) || null;
+
+  if ( currentContext.apiSource === apiSourceHandle && token ) {
+    operation.setContext({
+      ...currentContext,
+      headers: {
+        authorization: `Bearer ${token}`,
+      }
+    });
+  }
+  return forward(operation);
+})
+
 const client = new ApolloClient({
-  link: ApolloLink.split(
-    operation => operation.getContext().apiSource === "admin", adminApiLink, apiLink
+  link: concat(
+    adminAuthMiddleware,
+    ApolloLink.split(
+      operation => operation.getContext().apiSource === apiSourceHandle, adminApiLink, apiLink
+    )
   ),
   cache: new InMemoryCache().restore({})
 });

@@ -3,6 +3,8 @@ import { useQuery } from '@apollo/react-hooks';
 
 import { locale } from '@config/locale';
 import globalDataQuery from '@gql/globalDataQuery';
+import { apiSourceHandle } from '@config/adminApi'
+import { useUser } from '@contexts/userContext';
 
 /**
  * This context should contain global data:
@@ -13,14 +15,20 @@ import globalDataQuery from '@gql/globalDataQuery';
 const GlobalContext = createContext({});
 
 export const GlobalContextProvider = ({ children }) => {
+    const { login: { jwt }} = useUser();
     const {
         // loading,
         // error,
         data: globalData
     } = useQuery(globalDataQuery, {
         variables: { locale },
-        context: { apiSource: 'admin' }
+        context: {
+            apiSource: apiSourceHandle,
+            token: jwt,
+        }
     });
+
+    console.log({ jwt });
 
     return (
         <GlobalContext.Provider value={{
