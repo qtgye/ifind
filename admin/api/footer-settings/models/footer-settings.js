@@ -5,4 +5,15 @@
  * to customize this model
  */
 
-module.exports = {};
+module.exports = {
+  lifecycles: {
+    beforeCreate: async (data) => {
+      console.log('beforeCreate', { data });
+    },
+    beforeUpdate: async (params, data) => {
+      data.links && data.links.forEach(link => {
+        link.label_preview = link.label.map(label => label.text).join(' | ');
+      });
+    },
+  }
+};

@@ -2,7 +2,7 @@
   "kind": "collectionType",
   "collectionName": "pages",
   "info": {
-    "name": "page",
+    "name": "Page",
     "description": ""
   },
   "options": {
@@ -12,9 +12,19 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
+    "slug": {
+      "type": "string"
+    },
+    "page_data": {
+      "type": "component",
+      "repeatable": true,
+      "component": "entry-fields.page-fields",
+      "required": true,
+      "min": 1
+    },
+    "title_preview": {
       "type": "string",
-      "pluginOptions": {}
+      "private": true
     }
   }
 }
