@@ -25,6 +25,9 @@
     "title_preview": {
       "type": "string",
       "private": true
+    },
+    "language": {
+      "model": "language"
     }
   }
 }
