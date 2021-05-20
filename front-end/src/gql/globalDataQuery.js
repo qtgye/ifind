@@ -1,24 +1,16 @@
 import { gql } from "apollo-boost";
 
 const globalDataQuery = gql`
-query GlobalDataQuery ($locale: String!) {
-    footerSetting (locale: $locale) {
-        links {
+query GlobalDataQuery ($language: String) {
+    footerSettingsByLanguage (language: $language) {
+        footer_links {
             label
-            url
+            page {
+                slug
+            }
         }
         footer_text
         footer_footnote
-    }
-    contactDetail {
-        email
-        phone_number
-    }
-    socialNetwork {
-        social_network {
-            type
-            url
-        }
     }
 }
 `;

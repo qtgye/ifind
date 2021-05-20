@@ -12,8 +12,11 @@ const Footer = () => {
     const [ socialLinks, setSocialLinks ] = useState([]);
 
     useEffect(() => {
-        if ( footerSetting?.links?.length ) {
-            setInformationLinks(footerSetting.links.map(({ label, url }) => ({ label, url })));
+        if ( footerSetting?.footer_links?.length ) {
+            setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
+                label,
+                url: `/${page.slug}`
+            })));
         }
         if ( socialNetwork?.social_network?.length ) {
             setSocialLinks(socialNetwork.social_network.map(({ type, url }) => ({ type, url })));
@@ -24,7 +27,7 @@ const Footer = () => {
         if ( footerSetting?.footer_footnote ) {
             setFooterFootnote(footerSetting.footer_footnote);
         }
-    }, [ footerSetting, socialNetwork ]); // 
+    }, [ footerSetting, socialNetwork ]);
 
     return (
         <footer className="footer" id="footer">

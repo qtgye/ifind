@@ -11,8 +11,6 @@ import { ApolloClient, HttpLink, InMemoryCache, concat } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloLink } from "apollo-link";
 
-console.log({ API_ROOT, ADMIN_API_ROOT });
-
 // API Link
 const apiLink = new HttpLink({
   uri: API_ROOT,

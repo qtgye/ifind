@@ -21,19 +21,17 @@ export const GlobalContextProvider = ({ children }) => {
         // error,
         data: globalData
     } = useQuery(globalDataQuery, {
-        variables: { locale },
+        variables: { language: locale },
         context: {
             apiSource: apiSourceHandle,
             token
         }
     });
 
-    console.log({ token });
-
     return (
         <GlobalContext.Provider value={{
             contactInfo: globalData?.contactDetail,
-            footerSetting: globalData?.footerSetting,
+            footerSetting: globalData?.footerSettingsByLanguage,
             socialNetwork: globalData?.socialNetwork
         }}>
             {children}
