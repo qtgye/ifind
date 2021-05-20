@@ -1,19 +1,21 @@
 const { sanitizeEntity } = require('strapi-utils');
 
 module.exports = {
+  definition: `
+    type PageData {
+      slug: String!
+      data: ComponentEntryFieldsPageFields
+    }
+  `,
   query: `
-    pageBySlug(slug: String, language: String): Page
+    pageBySlug(slug: String!, language: String): PageData
   `,
   resolver: {
     Query: {
-      pageBySlug: {
-        resolverOf: 'Page.findOne',
-        resolver(_, args) {
-          // console.log('services', strapi.services);
-          // console.log('models', strapi.models);
-          // const entity = strapi.services['footer-settings'].findOne(args);
-          // return sanitizeEntity(entity, { model: strapi.models.competition });
-        }
+      async pageBySlug(_, args) {
+        console.log({ args });
+        // const pageData = await strapi.services['pages'].findByLanguage(args.language);
+        // return footerSettings;
       }
     }
   }

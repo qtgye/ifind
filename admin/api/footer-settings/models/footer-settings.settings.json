@@ -17,6 +17,12 @@
       "repeatable": true,
       "component": "entry-fields.footer-fields",
       "required": false
+    },
+    "language": {
+      "model": "language"
+    },
+    "page": {
+      "model": "page"
     }
   }
 }

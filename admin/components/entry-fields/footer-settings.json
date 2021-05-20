@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_entry_fields_footer_settings",
+  "info": {
+    "name": "footer_settings",
+    "icon": "cog"
+  },
+  "options": {},
+  "attributes": {
+    "language": {
+      "model": "language"
+    },
+    "language_preview": {
+      "type": "string"
+    },
+    "footer_text": {
+      "type": "text"
+    },
+    "footer_footnote": {
+      "type": "text"
+    }
+  }
+}
