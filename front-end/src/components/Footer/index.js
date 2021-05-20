@@ -18,16 +18,19 @@ const Footer = () => {
                 url: `/${page.slug}`
             })));
         }
-        if ( socialNetwork?.social_network?.length ) {
-            setSocialLinks(socialNetwork.social_network.map(({ type, url }) => ({ type, url })));
-        }
         if ( footerSetting?.footer_text ) {
             setFooterText(footerSetting.footer_text);
         }
         if ( footerSetting?.footer_footnote ) {
             setFooterFootnote(footerSetting.footer_footnote);
         }
-    }, [ footerSetting, socialNetwork ]);
+    }, [ footerSetting ]);
+
+    useEffect(() => {
+        if ( socialNetwork?.social_network?.length ) {
+            setSocialLinks(socialNetwork.social_network.map(({ type, url }) => ({ type, url })));
+        }
+    }, [ socialNetwork ]);
 
     return (
         <footer className="footer" id="footer">

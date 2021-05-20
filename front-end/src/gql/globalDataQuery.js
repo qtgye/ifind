@@ -12,6 +12,16 @@ query GlobalDataQuery ($language: String) {
         footer_text
         footer_footnote
     }
+    socialNetwork {
+        social_network {
+          url
+          type
+        }
+      }
+      contactDetail {
+        phone_number
+        email
+      }
 }
 `;
 
