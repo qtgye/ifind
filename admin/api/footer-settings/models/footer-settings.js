@@ -11,6 +11,8 @@ module.exports = {
       console.log('beforeCreate', { data });
     },
     beforeUpdate: async (params, data) => {
+      // console.log('models', strapi.models);
+      // console.log('services', strapi.services);
       data.links && data.links.forEach(link => {
         link.label_preview = link.label.map(label => label.text).join(' | ');
       });
