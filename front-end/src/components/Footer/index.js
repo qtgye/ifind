@@ -2,27 +2,30 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useGlobalData } from '@contexts/globalDataContext';
 
+import  routes, { footerRoutes } from '@config/routes';
+const mockInfoLinks = routes.filter(route => footerRoutes.includes(route.path));
 const logo = '/images/logo.png';
+
 
 const Footer = () => {
     const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
-    const [ informationLinks, setInformationLinks ] = useState([]);
+    const [ informationLinks, setInformationLinks ] = useState(mockInfoLinks);
     const [ footerText, setFooterText ] = useState('');
     const [ footerFootnote, setFooterFootnote ] = useState('');
     const [ socialLinks, setSocialLinks ] = useState([]);
 
     useEffect(() => {
         if ( footerSetting?.footer_links?.length ) {
-            setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
-                label,
-                url: `/${page.slug}`
-            })));
+            // setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
+            //     label,
+            //     url: `/${page.slug}`
+            // })));
         }
         if ( footerSetting?.footer_text ) {
-            setFooterText(footerSetting.footer_text);
+            // setFooterText(footerSetting.footer_text);
         }
         if ( footerSetting?.footer_footnote ) {
-            setFooterFootnote(footerSetting.footer_footnote);
+            // setFooterFootnote(footerSetting.footer_footnote);
         }
     }, [ footerSetting ]);
 
@@ -42,7 +45,15 @@ const Footer = () => {
                                 <div className="logo">
                                     <a href="index.html"><img src={logo} alt="/" /></a>
                                 </div>
-                                <p className="text">{footerText}</p>
+                                <p className="text">
+                                    {
+                                    footerText || `
+                                        Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
+                                        magna eros eu erat.
+                                        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
+                                        metus.
+                                    `
+                                }</p>
                                 {
                                     contactInfo?.phone_number && (
                                         <p className="call">
@@ -58,8 +69,8 @@ const Footer = () => {
                                 <h4>Information</h4>
                                 <ul>
                                     {informationLinks.map(infoRoute => (
-                                        infoRoute && <li key={infoRoute.url}>
-                                            <Link to={infoRoute.url}>{infoRoute.label}</Link>
+                                        infoRoute && <li key={infoRoute.path}>
+                                            <Link to={infoRoute.path}>{infoRoute.label}</Link>
                                         </li>
                                     ))}
                                 </ul>
@@ -101,7 +112,13 @@ const Footer = () => {
                             </div>
                             <div className="col-lg-6 col-12">
                                 <div className="right">
-                                    <p>{footerFootnote}</p>
+                                    <p>
+                                        {
+                                            footerFootnote || `
+                                            *Affiliate-Links. Wir erhalten bei einem Kauf eine kleine Provision. Vielen Dank für Eure Unterstützung!
+                                            `
+                                        }
+                                    </p>
                                 </div>
                             </div>
                         </div>
