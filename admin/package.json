@@ -4,12 +4,12 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "develop": "node ./server.js --autoReload",
-    "start": "strapi start",
+    "develop": "node ./scripts/strapi-custom.js develop",
+    "start": "node ./scripts/strapi-custom.js start",
     "build": "strapi build --clean",
     "strapi": "strapi",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
-    "config:import": "strapi config:restore -f config-dump.json"
+    "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
   },
   "devDependencies": {
     "colors": "^1.4.0"
