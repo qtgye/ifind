@@ -7,12 +7,19 @@
     "develop": "strapi develop",
     "start": "strapi start",
     "build": "strapi build --clean",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "config:export": "node ./scripts/config-dump.js --f config-dump.json",
+    "config:import": "strapi config:restore -f config-dump.json"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "colors": "^1.4.0"
+  },
   "dependencies": {
     "apollo-link": "^1.2.14",
+    "fs-extra": "^10.0.0",
+    "glob": "^7.1.7",
     "knex": "0.21.18",
+    "minimist": "^1.2.5",
     "mysql": "^2.18.1",
     "strapi": "3.6.2",
     "strapi-admin": "3.6.2",
