@@ -5,6 +5,7 @@
   "description": "A Strapi application",
   "scripts": {
     "develop": "node ./scripts/strapi-custom.js develop",
+    "develop:watch": "node ./scripts/strapi-custom.js develop -- --watch-admin",
     "start": "node ./scripts/strapi-custom.js start",
     "build": "strapi build --clean",
     "strapi": "strapi",
