@@ -36,7 +36,7 @@ const routes =  [
      * Routes visible in the Footer
      * Temporary Static Pages
      */
-     {   
+    {
         path: '/about-us',
         componentName: 'AboutUsPage',
         label: 'About Us',
