@@ -45,17 +45,17 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
-          cd ../admin && \
+          cd admin && \
           npm install && npm run config:import && pm2 restart admin && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING API ====/" && \
           cd ../api && \
-          npm install && npm run build && pm2 restart api
+          npm install && npm run build && pm2 restart api && \
           
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
-          cd front-end && \
+          cd ../front-end && \
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== RUNNING TESTS ====/" && \
@@ -63,7 +63,7 @@ jobs:
           rm -rf /var/www/html/front-end/coverage && mv coverage /var/www/html/front-end && \
           echo "/==== BUILDING SITE ====/" && \
           CI=true npm run build && \
-          rm -rf /var/www/html/front-end/build && mv build /var/www/html/front-end
+          rm -rf /var/www/html/front-end/build && mv build /var/www/html/front-end && \
 
           echo "/==== BUILDING STORYBOOK ====/" && \
           CI=true npm run build-storybook && \
