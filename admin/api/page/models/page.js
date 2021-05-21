@@ -17,11 +17,13 @@ const processPageData = async (data) => {
     return;
   }
 
-  const englishData = data.page_data.find(page_data => page_data.language === englishLanguage.id);
+  // Will use english data to update slug,
+  // otherwise use whichever is first
+  const selectedData = data.page_data.find(page_data => page_data.language === englishLanguage.id) || data.page_data[0];
 
-  if ( englishData ) {
-    data.slug = englishData.title.toLowerCase().replace(/[^A-Z0-9-]/gi, '-');
-    data.title_preview = englishData.title;
+  if ( selectedData ) {
+    data.slug = selectedData.title.toLowerCase().replace(/[^A-Z0-9-]/gi, '-');
+    data.title_preview = selectedData.title;
   }
 }
 
