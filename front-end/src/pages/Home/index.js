@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import GeneralTemplate from '@templates/GeneralTemplate';
-import { withComponentName } from '@utilities/component';
+import { withComponentName, withProvider } from '@utilities/component';
 import { useHomepageData } from '@contexts/homepageContext';
 
 // import HeroSlider from '@components/HeroSlider';
@@ -34,4 +34,4 @@ const Home = () => {
     )
 };
 
-export default withComponentName('HomePage')(Home);
+export default withProvider('HomepageContextProvider')(withComponentName('HomePage')(Home));

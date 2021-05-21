@@ -5,4 +5,8 @@
  * to customize this service
  */
 
-module.exports = {};
+module.exports = {
+  async findBySlug( slug ) {
+    return await strapi.query('page').findOne({ slug });
+  }
+};

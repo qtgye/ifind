@@ -18,7 +18,7 @@ const Footer = () => {
         if ( footerSetting?.footer_links?.length ) {
             setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
                 label,
-                url: `/${page.slug}`
+                path: `/${page.slug}`
             })));
         }
         if ( footerSetting?.footer_text ) {

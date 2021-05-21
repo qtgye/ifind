@@ -2,12 +2,12 @@
   "collectionName": "components_entry_fields_page_fields",
   "info": {
     "name": "page_fields",
-    "icon": "book-open"
+    "icon": "book-open",
+    "description": ""
   },
   "options": {},
   "attributes": {
     "language": {
-      "unique": true,
       "model": "language"
     },
     "title": {

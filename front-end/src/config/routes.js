@@ -34,6 +34,7 @@ const routes =  [
 
     /**
      * Routes visible in the Footer
+     * Temporary Static Pages
      */
      {   
         path: '/about-us',
@@ -57,6 +58,17 @@ const routes =  [
     },
 ];
 
+/**
+ * Dynamic Routes
+ */
+export const dynamicRoutes = [
+    {
+        path: '/:slug', 
+        componentName: 'BasicPage',
+    },
+];
+
 export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];
 export const footerRoutes = [ '/about-us', '/agb', '/impressum', '/data-protection' ];
+
 export default routes;

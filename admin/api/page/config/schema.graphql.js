@@ -1,4 +1,4 @@
-const { sanitizeEntity } = require('strapi-utils');
+const filterByLanguage = appRequire('helpers/filterByLanguage');
 
 module.exports = {
   definition: `
@@ -13,9 +13,14 @@ module.exports = {
   resolver: {
     Query: {
       async pageBySlug(_, args) {
-        console.log({ args });
-        // const pageData = await strapi.services['pages'].findByLanguage(args.language);
-        // return footerSettings;
+        const pageData = await strapi.services['page'].findBySlug(args.slug, args.language);
+
+        return pageData
+          ? {
+            slug: pageData.slug,
+            data: filterByLanguage(pageData.page_data, args.language),
+          }
+          : null;
       }
     }
   }

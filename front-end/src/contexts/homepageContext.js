@@ -18,6 +18,8 @@ export const HomepageContextProvider = ({ children }) => {
     )
 }
 
+HomepageContextProvider.providerName = 'HomepageContextProvider';
+
 export const useHomepageData = () => {
     const context = useContext(HomepageContext);
     return context;

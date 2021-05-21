@@ -1,11 +1,9 @@
 import { GlobalContextProvider } from './globalDataContext';
-import { HomepageContextProvider } from './homepageContext';
 import { ProductContextProvider } from './productContext';
 import { useAuth } from '@contexts/authContext';
 
 const providers = [
     GlobalContextProvider,
-    HomepageContextProvider,
     ProductContextProvider,
 ];
 
