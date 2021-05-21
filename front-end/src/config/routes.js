@@ -36,26 +36,26 @@ const routes =  [
      * Routes visible in the Footer
      * Temporary Static Pages
      */
-    {
-        path: '/about-us',
-        componentName: 'AboutUsPage',
-        label: 'About Us',
-    },
-    {   
-        path: '/agb',
-        componentName: 'AGBPage',
-        label: 'AGB',
-    },
-    {   
-        path: '/impressum',
-        componentName: 'ImpressumPage',
-        label: 'Impressum',
-    },
-    {   
-        path: '/data-protection',
-        componentName: 'DataProtectionPage',
-        label: 'Data Protection',
-    },
+    // {
+    //     path: '/about-us',
+    //     componentName: 'AboutUsPage',
+    //     label: 'About Us',
+    // },
+    // {   
+    //     path: '/agb',
+    //     componentName: 'AGBPage',
+    //     label: 'AGB',
+    // },
+    // {   
+    //     path: '/impressum',
+    //     componentName: 'ImpressumPage',
+    //     label: 'Impressum',
+    // },
+    // {   
+    //     path: '/data-protection',
+    //     componentName: 'DataProtectionPage',
+    //     label: 'Data Protection',
+    // },
 ];
 
 /**
@@ -69,6 +69,11 @@ export const dynamicRoutes = [
 ];
 
 export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];
-export const footerRoutes = [ '/about-us', '/agb', '/impressum', '/data-protection' ];
+export const footerRoutes = [
+    // '/about-us',
+    // '/agb',
+    // '/impressum',
+    // '/data-protection'
+];
 
 export default routes;
