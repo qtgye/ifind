@@ -16,16 +16,16 @@ const Footer = () => {
 
     useEffect(() => {
         if ( footerSetting?.footer_links?.length ) {
-            // setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
-            //     label,
-            //     url: `/${page.slug}`
-            // })));
+            setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
+                label,
+                url: `/${page.slug}`
+            })));
         }
         if ( footerSetting?.footer_text ) {
-            // setFooterText(footerSetting.footer_text);
+            setFooterText(footerSetting.footer_text);
         }
         if ( footerSetting?.footer_footnote ) {
-            // setFooterFootnote(footerSetting.footer_footnote);
+            setFooterFootnote(footerSetting.footer_footnote);
         }
     }, [ footerSetting ]);
 
