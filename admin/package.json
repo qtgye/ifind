@@ -16,6 +16,8 @@
     "colors": "^1.4.0"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.1.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
     "apollo-link": "^1.2.14",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
