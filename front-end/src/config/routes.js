@@ -1,4 +1,4 @@
-const routes =  [
+const routes = [
 
     /**
      * Routes visible in Header Navigation
@@ -15,19 +15,21 @@ const routes =  [
         path: '/productcomparison',
         componentName: 'ProductComparisonPage',
         label: 'Product Comparison',
+        withSideNav: true,
+        exact: true,
     },
-    {   
-        path: '/findtube', 
+    {
+        path: '/findtube',
         componentName: 'FindTubePage',
         label: 'Findtube',
     },
-    {   
-        path: '/blog', 
+    {
+        path: '/blog',
         componentName: 'BlogPage',
         label: 'Blog',
     },
-    {   
-        path: '/contact', 
+    {
+        path: '/contact',
         componentName: 'ContactPage',
         label: 'Contact',
     },
@@ -35,28 +37,28 @@ const routes =  [
     /**
      * Routes visible in the Footer
      */
-     {   
+    {
         path: '/about-us',
         componentName: 'AboutUsPage',
         label: 'About Us',
     },
-    {   
+    {
         path: '/agb',
         componentName: 'AGBPage',
         label: 'AGB',
     },
-    {   
+    {
         path: '/impressum',
         componentName: 'ImpressumPage',
         label: 'Impressum',
     },
-    {   
+    {
         path: '/data-protection',
         componentName: 'DataProtectionPage',
         label: 'Data Protection',
     },
 ];
 
-export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];
-export const footerRoutes = [ '/about-us', '/agb', '/impressum', '/data-protection' ];
+export const navigationRoutes = ['/', '/productcomparison', '/findtube', '/blog', '/contact'];
+export const footerRoutes = ['/about-us', '/agb', '/impressum', '/data-protection'];
 export default routes;
