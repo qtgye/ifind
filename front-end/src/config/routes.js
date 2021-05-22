@@ -70,6 +70,7 @@ export const dynamicRoutes = [
     },
 ];
 
+
 export const navigationRoutes = ['/', '/productcomparison', '/findtube', '/blog', '/contact'];
 export const footerRoutes = [
     // '/about-us',

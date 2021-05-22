@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useGlobalData } from '@contexts/globalDataContext';
 
 import routes, { footerRoutes } from '@config/routes';
+
 const mockInfoLinks = routes.filter(route => footerRoutes.includes(route.path));
 const logo = '/images/logo.png';
 
@@ -16,11 +17,13 @@ const Footer = () => {
 
     useEffect(() => {
         if (footerSetting?.footer_links?.length) {
+
             setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
                 label,
                 path: `/${page.slug}`
             })));
         }
+
         if (footerSetting?.footer_text) {
             setFooterText(footerSetting.footer_text);
         }
@@ -35,6 +38,7 @@ const Footer = () => {
         }
     }, [socialNetwork]);
 
+
     return (
         <footer className="footer" id="footer">
             <div className="footer-top section">
@@ -47,13 +51,18 @@ const Footer = () => {
                                 </div>
                                 <p className="text">
                                     {
+
+
                                         footerText || `
+
                                         Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
                                         magna eros eu erat.
                                         Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
                                         metus.
                                     `
+
                                     }</p>
+
                                 {
                                     contactInfo?.phone_number && (
                                         <p className="call">
