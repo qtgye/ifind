@@ -8,7 +8,15 @@ import Impressum from '@pages/Impressum';
 import DataProtection from '@pages/DataProtection';
 import AboutUs from '@pages/AboutUs';
 
-import routes from './routes';
+import { PageContextProvider} from '@contexts/pageContext';
+import { HomepageContextProvider } from '@contexts/homepageContext';
+
+/**
+ * Dynamic route pages
+ */
+import BasicPage from '@pages/BasicPage';
+
+import routes, { dynamicRoutes } from './routes';
 
 export const pages = [
     Home,
@@ -22,7 +30,40 @@ export const pages = [
     AboutUs,
 ];
 
+export const dynamicPages = [
+    BasicPage,
+];
+
+const providers = [
+    PageContextProvider,
+    HomepageContextProvider,
+];
+
+const wrapWithProvider = (PageComponent) => {
+    if ( PageComponent?.provider ) {
+        const MatchedProvider = providers.find(provider => provider.providerName === PageComponent.provider );
+        if ( MatchedProvider ) {
+            return () => (
+                <MatchedProvider>
+                    <PageComponent />
+                </MatchedProvider>
+            )
+        }
+    }
+
+    return PageComponent || null;
+};
+
 export default routes.map(route => ({
     ...route,
-    component: pages.find(page => page.componentName === route.componentName),
+    component: wrapWithProvider(
+                pages.find(page => page.componentName === route.componentName)
+            ),
 }))
+
+export const dynamicRoutePages = dynamicRoutes.map(route => ({
+    ...route,
+    component: wrapWithProvider(
+                dynamicPages.find(page => page.componentName === route.componentName)
+            )
+}));

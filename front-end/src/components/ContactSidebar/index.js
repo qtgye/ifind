@@ -1,6 +1,6 @@
 import SideBar from './SideBar';
 
-import { useGlobalData } from '@contexts/global';
+import { useGlobalData } from '@contexts/globalDataContext';
 
 const ContactSidebar = () => {
     const { contactInfo } = useGlobalData();

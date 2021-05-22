@@ -1,0 +1,49 @@
+{
+  "name": "admin",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "node ./scripts/strapi-custom.js develop",
+    "develop:watch": "node ./scripts/strapi-custom.js develop -- --watch-admin",
+    "start": "node ./scripts/strapi-custom.js start",
+    "build": "strapi build --clean",
+    "strapi": "strapi",
+    "config:export": "node ./scripts/config-dump.js --f config-dump.json",
+    "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0"
+  },
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^27.1.0",
+    "@ckeditor/ckeditor5-react": "^3.0.2",
+    "apollo-link": "^1.2.14",
+    "fs-extra": "^10.0.0",
+    "glob": "^7.1.7",
+    "knex": "0.21.18",
+    "minimist": "^1.2.5",
+    "mysql": "^2.18.1",
+    "strapi": "3.6.2",
+    "strapi-admin": "3.6.2",
+    "strapi-connector-bookshelf": "3.6.2",
+    "strapi-plugin-content-manager": "3.6.2",
+    "strapi-plugin-content-type-builder": "3.6.2",
+    "strapi-plugin-email": "3.6.2",
+    "strapi-plugin-graphql": "^3.6.2",
+    "strapi-plugin-upload": "3.6.2",
+    "strapi-plugin-users-permissions": "3.6.2",
+    "strapi-utils": "3.6.2"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "7115922a-8d96-44df-ab10-5e2e221433ba"
+  },
+  "engines": {
+    "node": ">=10.16.0 <=14.x.x",
+    "npm": "^6.0.0"
+  },
+  "license": "MIT"
+}

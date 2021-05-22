@@ -5,7 +5,8 @@ import {
 } from 'react-router-dom';
 
 import { Providers } from '@contexts';
-import routesPages from '@config/routesPages';
+import { AuthContextProvider } from '@contexts/authContext';
+import routesPages, { dynamicRoutePages } from '@config/routesPages';
 
 import Header from '@components/Header';
 
@@ -14,16 +15,21 @@ import './App.scss';
 function App() {
   return (
     <Router>
-      <Providers>
-        <Header />
-        <main className="main">
-            <Switch>
-              {routesPages.map(({ path, component, exact = false }) => (
-                <Route key={path} path={path} component={component} exact={exact} />
-              ))}
-            </Switch>
-        </main>
-      </Providers>
+      <AuthContextProvider>
+        <Providers>
+          <Header />
+          <main className="main">
+              <Switch>
+                {
+                  routesPages.concat(dynamicRoutePages)
+                  .filter(({ component }) => component || false)
+                  .map(({ path, component, exact = false }) => (
+                    <Route key={path} path={path} component={component} exact={exact} />
+                ))}
+              </Switch>
+          </main>
+        </Providers>
+      </AuthContextProvider>
     </Router>
   );
 }

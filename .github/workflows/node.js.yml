@@ -6,8 +6,6 @@ name: Node.js CI
 on:
   push:
     branches: [ react ]
-  pull_request:
-    branches: [ react ]
 
 jobs:
   build:
@@ -45,22 +43,29 @@ jobs:
           git clean . -f
           git clean . -f
 
-          echo "\n\n/=============================/" && \
-          echo "\n\n/==== PROCESSING FRONT-END ====/" && \
-          cd front-end && \
-          
-          echo "\n\n/==== INSTALLING PACKAGES ====/" && \
-          npm install && \
+          echo "/=============================/" && \
+          echo "/==== PROCESSING ADMIN ====/" && \
+          cd admin && \
+          npm install && npm run config:import && npm run build && pm2 restart admin && \
 
-          echo "\n\n/==== RUNNING TESTS ====/" && \
+          echo "/=============================/" && \
+          echo "/==== PROCESSING API ====/" && \
+          cd ../api && \
+          npm install && npm run build && pm2 restart api && \
+          
+          echo "/=============================/" && \
+          echo "/==== PROCESSING FRONT-END ====/" && \
+          cd ../front-end && \
+          echo "/==== INSTALLING PACKAGES ====/" && \
+          npm install && \
+          echo "/==== RUNNING TESTS ====/" && \
           CI=true npm run test -- --coverage && \
           rm -rf /var/www/html/front-end/coverage && mv coverage /var/www/html/front-end && \
-
-          echo "\n\n/==== BUILDING SITE ====/" && \
+          echo "/==== BUILDING SITE ====/" && \
           CI=true npm run build && \
           rm -rf /var/www/html/front-end/build && mv build /var/www/html/front-end && \
 
-          echo "\n\n/==== BUILDING SITE ====/" && \
+          echo "/==== BUILDING STORYBOOK ====/" && \
           CI=true npm run build-storybook && \
           rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end
 

@@ -79,6 +79,7 @@ module.exports = {
     '@contexts': resolveApp('src/contexts'),
     '@utilities': resolveApp('src/utilities'),
     '@sb': resolveApp('src/sb'),
+    '@gql': resolveApp('src/gql'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
   },
   coverage: resolveApp('coverage/lcov-report'),

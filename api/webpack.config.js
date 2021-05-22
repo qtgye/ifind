@@ -1,13 +1,22 @@
+/**
+ * TODO:
+ * Add ESLint
+ */
+
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
 
 const appRoot = process.cwd();
 const resolveApp = (relativePath = '') => path.resolve(appRoot, relativePath);
 
+const { port } = require('./src/config');
+const isProduction = process.env.CI === 'true';
+
 module.exports = {
-  // mode: 'development',
+  mode: isProduction ? 'production' : 'development',
+  // watch: true,
   entry: {
-    server: resolveApp('server.js'),
+    server: resolveApp('src/server.js'),
   },
   target: 'node',
   module: {
@@ -20,16 +29,21 @@ module.exports = {
           loader: "babel-loader"
         }
       },
-      {
-        // Loads the javacript into html template provided.
-        // Entry point is set below in HtmlWebPackPlugin in Plugins 
-        test: /\.html$/,
-        use: [{loader: "html-loader"}]
-      }
     ]
   },
   externals: [nodeExternals()],
   stats: {
     errorDetails: true
-  }
+  },
+  resolve: {
+    alias: {
+      '@types': resolveApp('src/types'),
+      '@resolvers': resolveApp('src/resolvers'),
+      '@sources': resolveApp('src/sources'),
+    }
+  },
+  // devServer: {
+  //   index: resolveApp('dist/server.js'),
+  //   port,
+  // }
 };

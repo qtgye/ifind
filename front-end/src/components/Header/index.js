@@ -6,7 +6,7 @@ import HeaderTop from './HeaderTop';
 import HeaderMiddle from './HeaderMiddle';
 import HeaderNav from './HeaderNav';
 
-import { useGlobalData } from '@contexts/global';
+import { useGlobalData } from '@contexts/globalDataContext';
 import routes from '@config/routes';
 
 import './header.scss';
