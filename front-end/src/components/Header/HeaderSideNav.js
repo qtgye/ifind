@@ -31,7 +31,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                             {homedata.map((item, index) => {
                                 return (
                                     <li key={index}>
-                                        <Link>
+                                        <Link to="#">
                                             {item.categoryIcon}
                                             <span>{item.categoryLabel}</span>
                                         </Link>

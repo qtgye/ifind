@@ -11,7 +11,7 @@ const HeaderSideNavSubMenu = ({ item, index, checked }) => {
     return (
         <>
             <li>
-                <Link onClick={item.subCategories && showSubCategories} key={index}>
+                <Link onClick={item.subCategories && showSubCategories} key={index} to="#">
                     {item.categoryIcon}
                     <span>{item.categoryLabel}</span>
                 </Link>
@@ -19,7 +19,7 @@ const HeaderSideNavSubMenu = ({ item, index, checked }) => {
                     {checked ? (
                         subCategories && item.subCategories.map((item, index) => {
                             return (
-                                <li key={index}><Link>{item.categoryLabel}</Link></li>
+                                <li key={index}><Link to="#">{item.categoryLabel}</Link></li>
                             );
                         })
                     ) : null}
