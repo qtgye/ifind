@@ -1,4 +1,4 @@
-const routes =  [
+const routes = [
 
     /**
      * Routes visible in Header Navigation
@@ -15,19 +15,21 @@ const routes =  [
         path: '/productcomparison',
         componentName: 'ProductComparisonPage',
         label: 'Product Comparison',
+        withSideNav: true,
+        exact: true,
     },
-    {   
-        path: '/findtube', 
+    {
+        path: '/findtube',
         componentName: 'FindTubePage',
         label: 'Findtube',
     },
-    {   
-        path: '/blog', 
+    {
+        path: '/blog',
         componentName: 'BlogPage',
         label: 'Blog',
     },
-    {   
-        path: '/contact', 
+    {
+        path: '/contact',
         componentName: 'ContactPage',
         label: 'Contact',
     },
@@ -63,12 +65,13 @@ const routes =  [
  */
 export const dynamicRoutes = [
     {
-        path: '/:slug', 
+        path: '/:slug',
         componentName: 'BasicPage',
     },
 ];
 
-export const navigationRoutes = [ '/', '/productcomparison', '/findtube', '/blog', '/contact' ];
+
+export const navigationRoutes = ['/', '/productcomparison', '/findtube', '/blog', '/contact'];
 export const footerRoutes = [
     // '/about-us',
     // '/agb',
