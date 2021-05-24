@@ -17,8 +17,9 @@
 
 
 ## Local Setup
-1. Run `npm install`  
-2. Run necessary scripts for development:  
+1. Run `npm install`.  
+2. Copy and rename `.env.example` into `.env`.  
+3. Run necessary scripts for development:  
    - `npm run start` to start the front-end site. This will automatically refresh on file changes.
    - `npm run test` to start the test watcher. This will automatically run tests on changed files.
    - `npm run storybook` to start the Storybook. This contains the styleguide and component libraries.
