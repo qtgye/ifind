@@ -37,7 +37,9 @@ const connection = mysql.createConnection({
 connection.connect();
 
 // Build keys to select from core_store
-const keys = [];
+const keys = [
+  'plugin_content_manager_configuration_content_types::plugins::users-permissions.user',
+];
 const models = glob.sync(resolveApp('api/*')).map(modelPath => modelPath.split('/').pop());
 const components = glob.sync(resolveApp('components/**/*.json')).reduce((all, componentFilePath) => {
   const [ componentFile, category ] = componentFilePath.replace(/\..+$/i, '').split('/').reverse();
