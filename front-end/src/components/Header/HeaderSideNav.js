@@ -42,10 +42,10 @@ const HeaderSideNav = ({ withSideNav }) => {
                         ) : (<div>
                             <div className="header-side-nav__label">
 
-                                <label class="label">Scroll with Subcategories</label>
-                                <label class="switch">
+                                <label className="label">Scroll with Subcategories</label>
+                                <label className="switch">
                                     <input id="check" type="checkbox" onChange={checkChange} checked={checked} />
-                                    <span class="slider round"></span>
+                                    <span className="slider round"></span>
                                 </label>
 
                             </div>
