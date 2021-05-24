@@ -6,7 +6,7 @@ export const data = [
     {
         categoryLabel: 'Alle Kategorien',
         categoryURL: '/all',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-globe" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -25,7 +25,7 @@ export const data = [
     {
         categoryLabel: 'Video',
         categoryURL: '/video',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-video-camera" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -44,7 +44,7 @@ export const data = [
     {
         categoryLabel: 'Bekleidung',
         categoryURL: '/apparel',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-shopping-bag" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -63,7 +63,7 @@ export const data = [
     {
         categoryLabel: 'Elektro-Großgeräte',
         categoryURL: '/appliances',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-television" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -82,7 +82,7 @@ export const data = [
     {
         categoryLabel: 'Auto & Motorrad',
         categoryURL: '/automotive',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-car" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -101,7 +101,7 @@ export const data = [
     {
         categoryLabel: 'Baby',
         categoryURL: '/baby',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-user-o" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -121,7 +121,7 @@ export const data = [
     {
         categoryLabel: 'Beauty',
         categoryURL: '/beauty',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-heart" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -140,7 +140,7 @@ export const data = [
     {
         categoryLabel: 'Bücher',
         categoryURL: '/books',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-book" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -159,7 +159,7 @@ export const data = [
     {
         categoryLabel: 'Klassik',
         categoryURL: '/classical',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-university" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -178,7 +178,7 @@ export const data = [
     {
         categoryLabel: 'Computer & Zubehör',
         categoryURL: '/computer',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-desktop" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -212,7 +212,7 @@ export const data = [
     {
         categoryLabel: 'Musik-Downloads',
         categoryURL: '/digitalmusic',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-music" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -231,7 +231,7 @@ export const data = [
     {
         categoryLabel: 'Elektronik & Foto',
         categoryURL: '/electronics',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-microchip" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -255,7 +255,7 @@ export const data = [
     {
         categoryLabel: 'Sonstiges',
         categoryURL: '/everythingelse',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-briefcase" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -274,7 +274,7 @@ export const data = [
     {
         categoryLabel: 'Garten',
         categoryURL: '/gardenandoutdoor',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-envira" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -293,7 +293,7 @@ export const data = [
     {
         categoryLabel: 'Geschenkgutscheine',
         categoryURL: '/giftcards',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-gift" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -312,7 +312,7 @@ export const data = [
     {
         categoryLabel: 'Lebensmittel & Getränke',
         categoryURL: '/groceeyandgourmetfood',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-cutlery" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -341,7 +341,7 @@ export const data = [
     {
         categoryLabel: 'Handmade',
         categoryURL: '/handmade',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-hand-paper-o" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -360,7 +360,7 @@ export const data = [
     {
         categoryLabel: 'Drogerie & Körperpflege',
         categoryURL: '/healthpersonalcare',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-medkit" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -385,7 +385,7 @@ export const data = [
     {
         categoryLabel: 'Küche, Haushalt & Wohnen',
         categoryURL: '/homeandkitchen',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-home" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -409,7 +409,7 @@ export const data = [
     {
         categoryLabel: 'Gewerbe, Industrie & Wissenschaft',
         categoryURL: '/industrial',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-industry" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -428,7 +428,7 @@ export const data = [
     {
         categoryLabel: 'Schmuck',
         categoryURL: '/jewelry',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-diamond" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -457,7 +457,7 @@ export const data = [
     {
         categoryLabel: 'Sale',
         categoryURL: '/sale',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-tags" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -476,7 +476,7 @@ export const data = [
     {
         categoryLabel: 'Koffer, Rucksäcke & Taschen',
         categoryURL: '/luggage',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-suitcase" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -500,7 +500,7 @@ export const data = [
     {
         categoryLabel: 'Luxury Beauty',
         categoryURL: '/luxurybeauty',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-gratipay" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -519,7 +519,7 @@ export const data = [
     {
         categoryLabel: 'Apps & Spiele',
         categoryURL: '/mobileapps',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-mobile" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -544,7 +544,7 @@ export const data = [
     {
         categoryLabel: 'DVD & Blu-ray',
         categoryURL: '/moviesandtv',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-film" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -578,7 +578,7 @@ export const data = [
     {
         categoryLabel: 'Musik-CDs & Vinyl',
         categoryURL: '/music',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-headphones" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -602,7 +602,7 @@ export const data = [
     {
         categoryLabel: 'Musikinstrumente & DJ-Equipment',
         categoryURL: '/musicalinstruments',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-music" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -626,7 +626,7 @@ export const data = [
     {
         categoryLabel: 'Bürobedarf & Schreibwaren',
         categoryURL: '/officeproducts',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-building" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -645,7 +645,7 @@ export const data = [
     {
         categoryLabel: 'Haustier',
         categoryURL: '/petsupplies',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-paw" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -664,7 +664,7 @@ export const data = [
     {
         categoryLabel: 'Kamera & Foto',
         categoryURL: '/photo',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-camera" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -688,7 +688,7 @@ export const data = [
     {
         categoryLabel: 'Schuhe & Handtaschen',
         categoryURL: '/shoes',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-location-arrow" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -712,7 +712,7 @@ export const data = [
     {
         categoryLabel: 'Software',
         categoryURL: '/software',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-th-large" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -731,7 +731,7 @@ export const data = [
     {
         categoryLabel: 'Sport & Freizeit',
         categoryURL: '/sportsandoutdoors',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-outdent" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -750,7 +750,7 @@ export const data = [
     {
         categoryLabel: 'Baumarkt',
         categoryURL: '/toolsandhomeimprovement',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-wrench" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -779,7 +779,7 @@ export const data = [
     {
         categoryLabel: 'Spielzeug',
         categoryURL: '/toysandgames',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-superpowers" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -798,7 +798,7 @@ export const data = [
     {
         categoryLabel: 'VHS',
         categoryURL: '/vhs',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-file-video-o" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -817,7 +817,7 @@ export const data = [
     {
         categoryLabel: 'Games',
         categoryURL: '/videogames',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-gamepad" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -836,7 +836,7 @@ export const data = [
     {
         categoryLabel: 'Uhren',
         categoryURL: '/watches',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i class="fa fa-clock-o" aria-hidden="true"></i>,
 
         subCategories: [
             {

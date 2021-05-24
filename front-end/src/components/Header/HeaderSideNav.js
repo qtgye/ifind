@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
 
-    const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(false);
     const checkChange = () => setChecked(!checked);
 
     return withSideNav ?
@@ -29,7 +30,12 @@ const HeaderSideNav = ({ withSideNav }) => {
                         (<div>
                             {homedata.map((item, index) => {
                                 return (
-                                    <li key={index}><a>{item.categoryLabel}</a></li>
+                                    <li key={index}>
+                                        <Link>
+                                            {item.categoryIcon}
+                                            <span>{item.categoryLabel}</span>
+                                        </Link>
+                                    </li>
                                 )
                             })}
                         </div>

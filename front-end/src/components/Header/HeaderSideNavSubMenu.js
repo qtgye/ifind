@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 const HeaderSideNavSubMenu = ({ item, index, checked }) => {
@@ -10,12 +11,15 @@ const HeaderSideNavSubMenu = ({ item, index, checked }) => {
     return (
         <>
             <li>
-                <a onClick={item.subCategories && showSubCategories} href="#" key={index}>{item.categoryLabel}</a>
+                <Link onClick={item.subCategories && showSubCategories} key={index}>
+                    {item.categoryIcon}
+                    <span>{item.categoryLabel}</span>
+                </Link>
                 <ul className="header-side-nav__sub-list">
                     {checked ? (
                         subCategories && item.subCategories.map((item, index) => {
                             return (
-                                <li key={index}><a href="#" >{item.categoryLabel}</a></li>
+                                <li key={index}><Link>{item.categoryLabel}</Link></li>
                             );
                         })
                     ) : null}
