@@ -6,7 +6,7 @@ export const homedata = [
     {
         categoryLabel: 'Amazon',
         categoryURL: '/amazon',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i className="fa fa-amazon" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -25,7 +25,7 @@ export const homedata = [
     {
         categoryLabel: 'Alibaba',
         categoryURL: '/alibaba',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i className="fa fa-adn" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -44,7 +44,7 @@ export const homedata = [
     {
         categoryLabel: 'eBay',
         categoryURL: '/ebay',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i className="fa fa-etsy" aria-hidden="true"></i>,
 
         subCategories: [
             {
@@ -63,7 +63,7 @@ export const homedata = [
     {
         categoryLabel: 'Idealo',
         categoryURL: '/idealo',
-        //categoryIcon: <AiIcons.AiFillHome />,
+        categoryIcon: <i className="fa fa-ioxhost" aria-hidden="true"></i>,
 
         subCategories: [
             {

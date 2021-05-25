@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
 
-    const [checked, setChecked] = useState(true);
+    const [checked, setChecked] = useState(false);
     const checkChange = () => setChecked(!checked);
 
     return withSideNav ?
@@ -29,17 +30,22 @@ const HeaderSideNav = ({ withSideNav }) => {
                         (<div>
                             {homedata.map((item, index) => {
                                 return (
-                                    <li key={index}><a>{item.categoryLabel}</a></li>
+                                    <li key={index}>
+                                        <Link to="#">
+                                            {item.categoryIcon}
+                                            <span>{item.categoryLabel}</span>
+                                        </Link>
+                                    </li>
                                 )
                             })}
                         </div>
                         ) : (<div>
                             <div className="header-side-nav__label">
 
-                                <label class="label">Scroll with Subcategories</label>
-                                <label class="switch">
+                                <label className="label">Scroll with Subcategories</label>
+                                <label className="switch">
                                     <input id="check" type="checkbox" onChange={checkChange} checked={checked} />
-                                    <span class="slider round"></span>
+                                    <span className="slider round"></span>
                                 </label>
 
                             </div>
