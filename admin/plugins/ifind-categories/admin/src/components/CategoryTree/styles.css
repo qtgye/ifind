@@ -1,0 +1,46 @@
+.category-tree {
+  display: flex;
+  flex-direction: column;
+}
+
+.category-tree__item {
+  padding: 5px;
+  position: relative;
+}
+
+.category-tree__item[data-has-parent="true"] {
+  left: 30px;
+}
+
+.category-tree__item[data-hovered="true"] {
+  box-shadow: 0 0 3px lightsteelblue;
+}
+
+.category-tree__item-info {
+  display: flex;
+  border-radius: 0 5px 5px 0;
+  overflow: hidden;
+  border: 1px solid lightgray;
+  background-color: white;
+}
+
+.category-tree__drag {
+  width: 30px;
+  background-color: lightgray;
+  cursor: move;
+}
+
+.category-tree__drag::after {
+  content: '';
+  padding-top: 100%;
+}
+
+.category-tree__details {
+  padding: 2px 10px;
+}
+
+.category-tree__edit {
+  margin-left: auto;
+  align-self: center;
+  margin-right: 10px;
+}

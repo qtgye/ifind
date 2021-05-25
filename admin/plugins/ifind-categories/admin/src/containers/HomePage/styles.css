@@ -1,0 +1,11 @@
+.category-tree-heading {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.category-tree-add {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
