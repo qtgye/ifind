@@ -10,13 +10,13 @@ import {
 
 import './styles.css';
 
-const ItemRenderer = ({ data: { url, id, label, depth, ...restData }, ...restProps }) => {
+const ItemRenderer = ({ data: { url, id, label, depth, softParent, ...restData }, ...restProps }) => {
   const [a, drag, ...dragRest] = useDrag();
   const [{ hovered }, drop, ...dropRest] = useDrop(); 
 
   return (
     <>
-      <div className="category-tree__item" data-hovered={hovered} ref={drop} data-has-parent={depth > 0}>
+      <div className="category-tree__item" data-hovered={hovered} ref={drop} data-has-parent={depth > 0} data-parent-soft={softParent || null}>
         <div className="category-tree__item-info" ref={drag}>
           <div className="category-tree__drag"></div>
           <div className="category-tree__details">
@@ -43,10 +43,16 @@ const CategoryTree = () => {
   }, []);
 
   useEffect(() => {
-    // Max depth is 1 only
+    // - Max depth is 1 only
+    // - Add softParent
+    let lastParentID = null;
+
     categories.forEach(category => {
       if ( category.depth > 1 ) {
         category.depth = 1;
+        category.softParent = lastParentID;
+      } else {
+        lastParentID = category.id;
       }
     });
 
@@ -54,7 +60,7 @@ const CategoryTree = () => {
   }, [categories]);
 
   return (
-    <div className="category-tree">
+    <form className="category-tree">
       {
         loading
         ? (<h3 className="pt-30">Loading...</h3>)
@@ -64,7 +70,7 @@ const CategoryTree = () => {
           </Sortly>
         )
       }
-    </div>
+    </form>
   )
 };
 
