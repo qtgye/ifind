@@ -14,6 +14,8 @@ import '../public/css/reset.css';
 import '../src/App.scss';
 import '../src/sb/styles.scss';
 
+import { spriteContents } from 'ifind-icons';
+
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
@@ -27,6 +29,7 @@ export const parameters = {
 export const decorators = [
   (Story) => (
     <BrowserRouter>
+      <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
       <Story />
     </BrowserRouter>
   ),

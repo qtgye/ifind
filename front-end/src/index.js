@@ -11,6 +11,8 @@ import { ApolloClient, HttpLink, InMemoryCache, concat } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { ApolloLink } from "apollo-link";
 
+import { spriteContents } from 'ifind-icons';
+
 // API Link
 const apiLink = new HttpLink({
   uri: API_ROOT,
@@ -53,6 +55,7 @@ const client = new ApolloClient({
 ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
+      <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
       <App />
     </ApolloProvider>
   </React.StrictMode>,
