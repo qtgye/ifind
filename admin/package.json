@@ -4,8 +4,7 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "develop": "node ./scripts/strapi-custom.js develop",
-    "develop:watch": "node ./scripts/strapi-custom.js develop --watch-admin",
+    "develop": "nodemon --ignore build/ --ignore .cache/ --ignore node_modules/ --ignore '*.json' ./scripts/strapi-custom.js develop",
     "start": "node ./scripts/strapi-custom.js start",
     "build": "strapi build",
     "strapi": "strapi",
@@ -13,7 +12,8 @@
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
   },
   "devDependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
@@ -50,5 +50,8 @@
     "node": ">=10.16.0 <=14.x.x",
     "npm": "^6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "nodemonConfig": {
+    "ignore": [ ".cache/", "build/", "node_modules/", "*.json" ]
+  }
 }
