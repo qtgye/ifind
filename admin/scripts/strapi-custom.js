@@ -6,7 +6,7 @@ const strapi = require('strapi');
 
 // Remove build and cache folders for build script on --watch-plugin
 // This is necessary when building plugin
-if ( process.argv.includes('live') || process.argv.includes('watch-plugin') ) {
+if ( process.argv.includes('watch-plugin') ) {
   const build = resolveApp('build');
   const cache = resolveApp('.cache');
   const rmOptions = { recursive: true, force: true };
