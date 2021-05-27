@@ -18,9 +18,6 @@ const HomePage = () => {
       <div className="row">
         <h1 className="category-tree-heading col-md-12">
           IFIND Categories
-          <a href="/admin/plugins/content-manager/collectionType/application::category.category/create" className="btn btn-primary category-tree-add">
-            Add Category
-          </a>
         </h1>
       </div>
       <div className="row">

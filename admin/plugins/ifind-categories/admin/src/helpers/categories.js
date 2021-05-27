@@ -89,6 +89,7 @@ export const useCategories = () => {
   
   return {
     categories,
+    setCategories,
     loading
   };
 }

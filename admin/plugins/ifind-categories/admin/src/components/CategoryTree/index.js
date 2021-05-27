@@ -11,6 +11,12 @@ import {
 
 import { useLanguages } from '../../helpers/languages';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { Button } from '@buffetjs/core';
+import { Header } from '@buffetjs/custom';
+import { LoadingIndicator } from '@buffetjs/styles';
+
 import './styles.css';
 
 const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...restData }, ...restProps }) => {
@@ -45,6 +51,13 @@ const CategoryGroup = (props) => {
   return null;
 }
 
+const AddCategoryButton = () => (
+  <Link to='/plugins/content-manager/collectionType/application::category.category/create' className="btn btn-primary category-tree-add">
+    <FontAwesomeIcon icon={faPlus} />
+    Add Category
+  </Link>
+);
+
 const CategoryTree = () => {
   const { languages } = useLanguages();
   const { categories, setCategories, loading } = useCategories();
@@ -60,8 +73,6 @@ const CategoryTree = () => {
     if ( languages?.length && categories?.length ) {
 
       const categoryGroups = groupCategoriesByLanguage(categories, languages);
-
-      console.log({ categoryGroups });
 
       // - Max depth is 1 only
       // - Add softParent
@@ -85,19 +96,27 @@ const CategoryTree = () => {
     }
   }, [ categories, languages ]);
 
-  return (
-    <form className="category-tree">
+  return <>
+    <div className="category-tree__header">
+      <Header
+        title={{
+          label: 'Language Title Here',
+        }}
+      />
+    </div>
+    <AddCategoryButton />
+    <div className="category-tree">
       {
         loading
-        ? (<h3 className="pt-30">Loading...</h3>)
+        ? (<h3 className="pt-30"> <LoadingIndicator /> Loading...</h3>)
         : (
           <Sortly items={items} onChange={handleChange}>
             {(props) => <ItemRenderer {...props} />}
           </Sortly>
         )
       }
-    </form>
-  )
+    </div>
+  </>
 };
 
 export default CategoryTree;
