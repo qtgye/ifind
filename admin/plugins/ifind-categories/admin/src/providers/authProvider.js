@@ -6,11 +6,10 @@ import React, {
   useContext
 } from 'react';
 
-const storage = /ifindilu\.com\/admin/i.test(strapi.remoteURL) ? window.sessionStorage : window.localStorage;
-
 export const AuthContext = createContext({});
 
 export const AuthContextProvider = ({ children }) => {
+  const storage = /ifindilu\.com\/admin/i.test(strapi.remoteURL) ? window.sessionStorage : window.localStorage;
   const [ jwt ] = useState(( storage.getItem('jwtToken') || '' ).replace(/"/g, ''));
 
   return (
