@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Icon from '../Icon';
+import Icon from '../IconItem';
 import { iconsList } from 'ifind-icons';
 
 import './styles.css';
