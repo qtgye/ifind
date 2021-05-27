@@ -12,22 +12,16 @@ import { NotFound } from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 // Containers
 import HomePage from '../HomePage';
-// Providers
-import Providers from '../../providers';
-
-import { spriteContents } from 'ifind-icons';
 
 const App = () => {
-  return <>
-    <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
-
-    <Providers>
+  return (
+    <div>
       <Switch>
         <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
         <Route component={NotFound} />
       </Switch>
-    </Providers>
-  </>
+    </div>
+  );
 };
 
 export default App;

@@ -7,7 +7,6 @@
 import React, { memo, useState } from 'react';
 // import PropTypes from 'prop-types';
 import pluginId from '../../pluginId';
-
 import CategoryTree from '../../components/CategoryTree';
 
 import './styles.css';

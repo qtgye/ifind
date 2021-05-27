@@ -13,7 +13,7 @@ import { useLanguages } from '../../helpers/languages';
 
 import './styles.css';
 
-const ItemRenderer = ({ data: { url, id, label, depth, softParent, ...restData }, ...restProps }) => {
+const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...restData }, ...restProps }) => {
   const [a, drag, ...dragRest] = useDrag();
   const [{ hovered }, drop, ...dropRest] = useDrop(); 
 
@@ -21,7 +21,11 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, ...restData }
     <>
       <div className="category-tree__item" data-hovered={hovered} ref={drop} data-has-parent={depth > 0} data-parent-soft={softParent || null}>
         <div className="category-tree__item-info" ref={drag}>
-          <div className="category-tree__drag"></div>
+          <div className="category-tree__drag">
+            { icon && (
+              <svg className="category-tree__icon"><use xlinkHref={`#${icon.replace(/_/g, '-')}`} /></svg>
+            ) }
+          </div>
           <div className="category-tree__details">
             <div>{label}</div>
             <a href={url} target="_blank"><small>{url}&nbsp;</small></a>
@@ -36,6 +40,10 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, ...restData }
     </>
   );
 };
+
+const CategoryGroup = (props) => {
+  return null;
+}
 
 const CategoryTree = () => {
   const { languages } = useLanguages();

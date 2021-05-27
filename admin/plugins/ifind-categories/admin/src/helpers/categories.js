@@ -10,6 +10,7 @@ query GetCategories {
     url
     slug
     id
+    icon
     parent {
       id
       label
