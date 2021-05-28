@@ -1,6 +1,13 @@
 .category-tree {
   display: flex;
   flex-direction: column;
+  padding: 0;
+  margin-top: 20px;
+}
+
+.category-tree__header {
+  display: flex;
+  justify-content: space-between;
 }
 
 .category-tree__item {
@@ -50,8 +57,13 @@
 }
 
 .category-tree-add {
-  padding-left: 20px !important;
-  padding-right: 20px !important;
-  padding-top: 10px !important;
-  padding-bottom: 10px !important;
+  height: 30px;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
+  border-radius: 2px;
+  margin-left: 5px;
+}
+
+.category-tree-add svg {
+  margin-right: 10px;
 }

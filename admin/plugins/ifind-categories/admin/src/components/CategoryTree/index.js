@@ -12,16 +12,16 @@ import {
 import { useLanguages } from '../../helpers/languages';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { Button } from '@buffetjs/core';
+import { faPlus, faSave, faPen, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { Button, Select } from '@buffetjs/core';
 import { Header } from '@buffetjs/custom';
 import { LoadingIndicator } from '@buffetjs/styles';
 
 import './styles.css';
 
 const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...restData }, ...restProps }) => {
-  const [a, drag, ...dragRest] = useDrag();
-  const [{ hovered }, drop, ...dropRest] = useDrop(); 
+  const [, drag] = useDrag();
+  const [{ hovered }, drop] = useDrop(); 
 
   return (
     <>
@@ -39,7 +39,7 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...rest
           <Link
             className="category-tree__edit"
             to={`/plugins/content-manager/collectionType/application::category.category/${id}`}>
-            edit
+            <FontAwesomeIcon icon={faPen} />
           </Link>
         </div>
       </div>
@@ -58,63 +58,186 @@ const AddCategoryButton = () => (
   </Link>
 );
 
+const SaveButton = ({ save, loading }) => {
+  const saveFn = useCallback((e) => {
+    e.preventDefault();
+
+    if ( !loading ) {
+      save();
+    }
+  }, [ save, loading ]);
+
+  return (
+    <Button
+      color={loading ? 'cancel' : 'secondary'}
+      icon={<FontAwesomeIcon icon={ loading? faSpinner : faSave} pulse={loading}/>}
+      onClick={saveFn}
+      label={loading ? 'Saving' : 'Save Changes'}
+    />
+  );
+};
+
 const CategoryTree = () => {
   const { languages } = useLanguages();
-  const { categories, setCategories, loading } = useCategories();
-  const [ itemsByLanguage, setItemsByLanguage ] = useState({});
-  const [ items, setItems ] = useState([]);
+  const [ languageOptions, setLanguageOptions ] = useState(['en']);
+  const [ currentLanguage, setCurrentLanguage ] = useState('en');
+  const [ isSaving, setIsSaving ] = useState(false);
+
+  // Original category data
+  const [
+    categories,
+    updateCategories,
+  ] = useCategories();
+
+  // Local data
+  const [ itemsByLanguage, setItemsByLanguage ] = useState([]);
+  const [ itemsInView, setItemsInView ] = useState([]);
 
   const handleChange = useCallback((newItems) => {
-    setCategories(newItems);
-  }, []);
+    const updatedItemsByLanguage = itemsByLanguage.map(itemsGroup => {
+      // Use newItems for current categories
+      if ( itemsGroup.language.code === currentLanguage ) {
+        itemsGroup.categories = processCategories(newItems, true);
+      };
 
+      return itemsGroup;
+    });
+
+    // Apply updated itemsByLanguage
+    setItemsByLanguage(updatedItemsByLanguage);
+  }, [ itemsByLanguage, currentLanguage ]);
+
+  const saveChanges = useCallback(() => {
+    setIsSaving(true);
+
+    // Flatted grouped items into a single array
+    const flatItems = itemsByLanguage.reduce((all, byLanguage)=> {
+      all.push(
+        ...byLanguage.categories
+          // Filter only changed items
+          .filter(({ softParent, softOrder, parent, order }) => (
+            (parent?.id || null) !== softParent || order !== softOrder
+          ))
+          // Format data to be passed into GraphQL
+          .map(({ id, parent, softParent, order, softOrder }) => ({
+            id, parent: softParent, order: softOrder,
+
+          }))
+      );
+
+      return all;
+    }, []);
+
+    if ( !flatItems.length ) {
+      setIsSaving(false);
+      return;
+    }
+    
+    try {
+      updateCategories(flatItems)
+    }
+    catch (err) {
+      window.strapi.notification.error(`Unable to Update categories: ${err.message}`);
+      setIsSaving(false);
+    }
+  }, [ itemsByLanguage ]);
+
+  const processCategories = useCallback((categoriesList, retainIndex = false) => {
+    // Add softParent and softOrder used for temporary changes in UI
+    const processedCategories = categoriesList.map((category, index) => ({
+      ...category,
+      softParent: category.softParent || category.parent?.id || null,
+      softOrder: retainIndex ? index : category.softOrder || category.order,
+    }));
+
+    // Sort categories
+    const sortedCategories = processedCategories.sort((categoryA, categoryB) => (
+      categoryA.softOrder > categoryB.softOrder ? 1  :-1
+    ));
+
+    // - Max depth is 1 only
+    // - Add softParent
+    let lastParentID = null;
+
+    sortedCategories.forEach((category, index) => {
+      // Update softParent
+      if ( category.depth >= 1 ) {
+        category.softParent = lastParentID;
+      }
+      else {
+        category.softParent = null;
+        lastParentID = category.id;
+      }
+
+      // Update softOrder, as this can still be null
+      // Even after the previous sorting
+      category.softOrder = index;
+    });
+
+    return sortedCategories;
+  });
+
+  /**
+   * Initial effect,
+   * Processes raw categories and languages data from hooks
+   * Into UI-consumable data
+   */
   useEffect(() => {
-    console.log({ languages, categories });
-    if ( languages?.length && categories?.length ) {
+    if ( languages?.length ) {
+      setLanguageOptions(languages.map(({ code }) => code));
 
-      const categoryGroups = groupCategoriesByLanguage(categories, languages);
+      if ( categories?.length ) {
+        setIsSaving(false);
 
-      // - Max depth is 1 only
-      // - Add softParent
-      let lastParentID = null;
+        const categoryGroups = groupCategoriesByLanguage(categories, languages);
+        const processedItemsByLanguage = categoryGroups.map(group => ({
+          ...group,
+          categories: processCategories(group.categories),
+        }));
 
-      categories.forEach((category, index) => {
-        // Add softParent
-        if ( category.depth > 1 ) {
-          category.depth = 1;
-          category.softParent = lastParentID;
-        } else {
-          lastParentID = category.id;
-        }
-
-        // Add order
-        category.order = index;
-      });
-
-      // Add order
-      setItems(categories);
+        setItemsByLanguage(processedItemsByLanguage);
+      }
     }
   }, [ categories, languages ]);
 
+  useEffect(() => {
+    // Find categoriesGroup for current language
+    const currentGroupByLanguage = itemsByLanguage.find(({ language }) => language.code === currentLanguage);
+
+    if ( currentGroupByLanguage ) {
+      setItemsInView(currentGroupByLanguage.categories);
+    }
+
+  }, [ itemsByLanguage, currentLanguage ])
+
   return <>
-    <div className="category-tree__header">
-      <Header
-        title={{
-          label: 'Language Title Here',
-        }}
-      />
-    </div>
-    <AddCategoryButton />
-    <div className="category-tree">
-      {
-        loading
-        ? (<h3 className="pt-30"> <LoadingIndicator /> Loading...</h3>)
-        : (
-          <Sortly items={items} onChange={handleChange}>
-            {(props) => <ItemRenderer {...props} />}
-          </Sortly>
-        )
+    <div className="row category-tree__header">
+      { currentLanguage &&
+        <Select
+          name='language'
+          onChange={({ target: { value } }) => setCurrentLanguage(value)}
+          options={languageOptions}
+          value={currentLanguage}
+          className="col-sm-2"
+        />
       }
+      <div className="category-tree__controls">
+        <SaveButton save={saveChanges} loading={isSaving} />
+        <AddCategoryButton />
+      </div>
+    </div>
+    <div className="row">
+      <div className="category-tree col-md-6">
+        {
+          !categories?.length
+          ? (<h3 className="pt-30"><FontAwesomeIcon icon={faSpinner} pulse size="md" />&nbsp;Loading...</h3>)
+          : (
+            <Sortly items={itemsInView} onChange={handleChange}>
+              {(props) => <ItemRenderer {...props} />}
+            </Sortly>
+          )
+        }
+      </div>
     </div>
   </>
 };

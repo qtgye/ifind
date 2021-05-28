@@ -72,7 +72,11 @@
         "washer",
         "watch"
       ],
-      "default": "choose_here"
+      "default": "chip"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
     }
   }
 }
