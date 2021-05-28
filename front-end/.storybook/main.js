@@ -8,11 +8,13 @@ const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 module.exports = {
   "stories": [
     "../src/sb/**/*.stories.js",
+    "../src/sb/**/*.stories.mdx",
     "../src/**/**/stories/*.stories.js",
+    "../src/**/**/stories/*.stories.mdx",
   ],
   "addons": [
     "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    "@storybook/addon-essentials",
   ],
   webpackFinal: async (config, { configType }) => {
     // `configType` has a value of 'DEVELOPMENT' or 'PRODUCTION'

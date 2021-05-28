@@ -46,7 +46,7 @@ jobs:
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
           cd admin && \
-          npm install && npm run config:import && npm run build && pm2 restart admin && \
+          npm install && npm run config:import && pm2 restart admin && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING API ====/" && \

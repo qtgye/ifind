@@ -25,14 +25,12 @@
 }
 
 .category-tree__drag {
-  width: 30px;
+  width: 40px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   background-color: lightgray;
   cursor: move;
-}
-
-.category-tree__drag::after {
-  content: '';
-  padding-top: 100%;
 }
 
 .category-tree__details {
@@ -43,4 +41,17 @@
   margin-left: auto;
   align-self: center;
   margin-right: 10px;
+}
+
+.category-tree__icon {
+  width: 25px;
+  height: 25px;
+  color: white;
+}
+
+.category-tree-add {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
 }

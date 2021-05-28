@@ -1,54 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../providers/authProvider';
+import { useLanguages } from './languages';
+import { useQuery } from './query';
 
-export const getCategories = (jwt) => {
-  return window.fetch(`/graphql`, {
-    method: 'post',
-    headers: {
-      authorization: `Bearer ${jwt}`,
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      operationName: "GetCategories",
-      query: `
-        query GetCategories {
-          categories {
-            label
-            url
-            slug
-            id
-            parent {
-              id
-              label
-            }
-          }
-        }
-      `,
-      variables: {}
-    })
-  })
-  .then(res => res.json());
-};
+const categoriesQuery = `
+query GetCategories {
+  categories {
+    label
+    url
+    slug
+    id
+    icon
+    parent {
+      id
+      label
+    }
+    language {
+      id
+      code
+      name
+    }
+  }
+}
+`;
 
 export const flattenCategoriesTree = (tree, currentDepth = 0) => {
   const list = Object.values(tree).reduce((list, currentNode) => {
     currentNode.depth = currentDepth;
-
+    
     list.push(currentNode);
-
+    
     if ( currentNode.children ) {
       list.push(...flattenCategoriesTree(currentNode.children, currentDepth + 1));
     }
-
+    
     return list;
   }, []);
-
+  
   return list;
 };
 
 export const mapCategoriesTree = (rawCategories) => {
   const categoryTree = {};
-
+  
   if ( rawCategories ) {
     rawCategories.forEach(category => {
       if ( category.parent ) {
@@ -64,35 +58,35 @@ export const mapCategoriesTree = (rawCategories) => {
       }
     });
   }
-
+  
   return categoryTree;
-
+  
 };
 
+
+export const groupCategoriesByLanguage = (categoriesList, languages) => {
+  return languages.map(language => ({
+    language,
+    categories: categoriesList.filter(category => category.language?.id === language.id),
+  }));
+};
+
+
 export const useCategories = () => {
-  const { jwt } = useAuth();
   const [ categories, setCategories ] = useState([]);
   const [ loading, setLoading ] = useState(true);
+  const { data } = useQuery(categoriesQuery);
 
   useEffect(() => {
-    if ( !jwt ) {
-      return;
+    if ( data ) {
+      const categoryTree = mapCategoriesTree(data.categories);
+      const categoryList = flattenCategoriesTree(categoryTree);
+
+      setLoading(false);
+      setCategories(categoryList);
     }
-
-    setLoading(true);
-
-    getCategories(jwt)
-    .then((rawData) => {
-      if ( rawData?.data ) {
-        const categoryTree = mapCategoriesTree(rawData.data.categories);
-        const categoryList = flattenCategoriesTree(categoryTree);
-
-        setLoading(false);
-        setCategories(categoryList);
-      }
-    });
-  }, [ jwt ]);
-
+  }, [ data ]);
+  
   return {
     categories,
     setCategories,

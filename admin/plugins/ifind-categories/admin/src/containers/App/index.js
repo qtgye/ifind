@@ -15,15 +15,19 @@ import HomePage from '../HomePage';
 // Providers
 import Providers from '../../providers';
 
+import { spriteContents } from 'ifind-icons';
+
 const App = () => {
-  return (
+  return <>
+    <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
+
     <Providers>
       <Switch>
         <Route path={`/plugins/${pluginId}`} component={HomePage} exact />
         <Route component={NotFound} />
       </Switch>
     </Providers>
-  );
+  </>
 };
 
 export default App;

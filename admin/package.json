@@ -4,8 +4,9 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "develop": "node ./scripts/strapi-custom.js develop",
-    "develop:watch": "node ./scripts/strapi-custom.js develop --watch-admin",
+    "develop": "nodemon ./scripts/strapi-custom.js develop",
+    "develop:live": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
+    "develop:watch": "nodemon ./scripts/strapi-custom.js develop watch-plugin",
     "start": "node ./scripts/strapi-custom.js start",
     "build": "strapi build",
     "strapi": "strapi",
@@ -13,7 +14,8 @@
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
   },
   "devDependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "nodemon": "^2.0.7"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
@@ -21,6 +23,7 @@
     "apollo-link": "^1.2.14",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
+    "ifind-icons": "file:../ifind-icons",
     "immutability-helper": "^3.1.1",
     "knex": "0.21.18",
     "memoize-one": "^5.2.1",
@@ -50,5 +53,11 @@
     "node": ">=10.16.0 <=14.x.x",
     "npm": "^6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "nodemonConfig": {
+    "watch": [
+      "plugins/"
+    ],
+    "ignore": []
+  }
 }
