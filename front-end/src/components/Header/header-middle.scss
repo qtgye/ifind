@@ -109,6 +109,52 @@
         &:not(:first-child) {
             margin-left: 25px;
         }
+        position: relative;
+        
+        button {
+            border: none;
+            background-color: white;
+            padding-left: 4px;
+            padding-right: 2px;
+            padding-bottom: 2px;
+            //font-size: 20px;
+            &:hover {
+                background-color: #eaeaea;
+            }
+
+            span {
+                margin-left: 5px;
+                margin-bottom: 2px;
+                font-size: 12px;
+            }
+        }
+
+        ul {
+            position: absolute;
+            top: 110%;
+            right: 0px;
+            width: 150px;
+            background-color: $white;
+            cursor: pointer;
+            height: fit-content;
+
+            li {
+                padding-left: 25px;
+                padding-top: 5px;
+                height: 35px;
+                text-align: left;
+                // border-bottom: 1px solid $gray-500;
+                
+                &:hover {
+                    background-color: #eaeaea;
+                }
+            }
+
+            span {
+                margin-left: 10px;
+                font-size: 15px;
+            }
+        }
     }
 
     .single-icon {
@@ -119,4 +165,5 @@
             color: #bc0031;
         }
     }
+
 }

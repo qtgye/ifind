@@ -16,7 +16,7 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
 
-    const [checked, setChecked] = useState(false);
+    const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
 
     return withSideNav ?
