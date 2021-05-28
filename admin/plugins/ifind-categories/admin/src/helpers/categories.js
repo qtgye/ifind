@@ -133,9 +133,16 @@ export const groupCategoriesByLanguage = (categoriesList, languages) => {
 
 export const useCategories = () => {
   const { data } = useQuery(categoriesQuery);
-  const [ callMutation, { data: updatedCategoriesData } ] = useMutation();
+  const [
+    callMutation,
+    {
+      data: updatedCategoriesData,
+      error: updateCategoriesError
+    }
+  ] = useMutation();
   const [ categories, setCategories ] = useState([]);
   const [ loading, setLoading ] = useState(true);
+  const [ error, setError ] = useState(false);
 
   const updateCategoriesQuery = useCallback((updatedCategories) => {
     callMutation(categoriesMutation(updatedCategories));
@@ -181,9 +188,16 @@ export const useCategories = () => {
       updateCategoriesList(updatedCategoriesData);
     }
   }, [ updatedCategoriesData ]);
+
+  useEffect(() => {
+    if ( updateCategoriesError ) {
+      setError(updateCategoriesError);
+    }
+  }, [ updateCategoriesError ]);
   
   return [
     categories,
     updateCategoriesQuery,
+    error,
   ];
 }

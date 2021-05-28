@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "develop": "nodemon ./scripts/strapi-custom.js develop",
+    "develop": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
     "develop:live": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
     "develop:watch": "nodemon ./scripts/strapi-custom.js develop watch-plugin",
     "start": "node ./scripts/strapi-custom.js start",

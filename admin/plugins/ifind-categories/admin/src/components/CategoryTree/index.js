@@ -87,6 +87,7 @@ const CategoryTree = () => {
   const [
     categories,
     updateCategories,
+    error
   ] = useCategories();
 
   // Local data
@@ -133,13 +134,7 @@ const CategoryTree = () => {
       return;
     }
     
-    try {
-      updateCategories(flatItems)
-    }
-    catch (err) {
-      window.strapi.notification.error(`Unable to Update categories: ${err.message}`);
-      setIsSaving(false);
-    }
+    updateCategories(flatItems);
   }, [ itemsByLanguage ]);
 
   const processCategories = useCallback((categoriesList, retainIndex = false) => {
@@ -196,6 +191,11 @@ const CategoryTree = () => {
         }));
 
         setItemsByLanguage(processedItemsByLanguage);
+
+        window.strapi.notification.toggle({
+          type: 'success',
+          message: 'Categories Loaded!',
+        });
       }
     }
   }, [ categories, languages ]);
@@ -209,6 +209,18 @@ const CategoryTree = () => {
     }
 
   }, [ itemsByLanguage, currentLanguage ])
+
+  useEffect(() => {
+    if ( error ) {
+      strapi.notification.toggle({
+        type: 'warning',
+        title: 'Unable to update categories',
+        message: error.message,
+      });
+      setIsSaving(false);
+      console.error(error);
+    }
+  }, [ error ]);
 
   return <>
     <div className="row category-tree__header">

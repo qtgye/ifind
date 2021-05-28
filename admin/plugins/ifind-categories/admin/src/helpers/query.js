@@ -38,7 +38,6 @@ export const useQuery = (query, variables) => {
   }, [ jwt ]);
 
   useEffect(() => {
-    console.log({ data, error });
     if ( data || error ) {
       setLoading(false);
     }
@@ -55,7 +54,7 @@ export const useQuery = (query, variables) => {
 export const useMutation = () => {
   const { jwt } = useAuth();
   const [ loading, setLoading ] = useState(true);
-  const [ error, setError ] = useState(null);
+  const [ error, setError ] = useState(false);
   const [ data, setData ] = useState(data);
 
   const callMutation = useCallback((query, variables) => {
@@ -78,8 +77,8 @@ export const useMutation = () => {
   }, [ jwt ]);
 
   useEffect(() => {
-    console.log({ data, error });
     if ( data || error ) {
+      console.log({ error });
       setLoading(false);
     }
   }, [ error, data ]);
