@@ -3,14 +3,17 @@ import { useAuth } from '../providers/authProvider';
 import { useLanguages } from './languages';
 import { useQuery, useMutation } from './query';
 
-const categoryFieldsFragment = `
-fragment CategoryFields on Category {
+const categoryFieldsOverviewFragment = `
+fragment CategoryFieldsOverview on Category {
   label
-  url
-  slug
   id
-  icon
   order
+  icon
+}`;
+
+const categoryFieldsDetailsFragment = `
+fragment CategoryFieldsDetails on Category {
+  url
   parent {
     id
     label
@@ -24,29 +27,38 @@ fragment CategoryFields on Category {
     id
     title
   }
-}
-`;
+}`;
+
+const categoryFieldsCompleteFragment = `
+fragment CategoryFieldsComplete on Category {
+  ... CategoryFieldsOverview
+  ... CategoryFieldsDetails
+}`;
 
 const updatedCategoryFieldsFragment = `
 fragment UpdatedCategoryFields on updateCategoryPayload {
   category {
-    ... CategoryFields
+    ... CategoryFieldsComplete
   }
-}
-`
+}`;
+
 
 const categoriesQuery = `
-${categoryFieldsFragment}
+${categoryFieldsOverviewFragment}
+${categoryFieldsDetailsFragment}
+${categoryFieldsCompleteFragment}
 query GetCategories {
   categories {
-    ... CategoryFields
+    ... CategoryFieldsComplete
   }
 }
 `;
 
 const categoriesMutation = (categories) => (
   `
-  ${categoryFieldsFragment}
+  ${categoryFieldsOverviewFragment}
+  ${categoryFieldsDetailsFragment}
+  ${categoryFieldsCompleteFragment}
   ${updatedCategoryFieldsFragment}
   mutation {
     ${

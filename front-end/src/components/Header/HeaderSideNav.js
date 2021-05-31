@@ -4,10 +4,11 @@ import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 
 import { homedata } from '@mocks/components/homesidenav';
-import { data } from '@mocks/components/prodcompsidenav';
+// import { data } from '@mocks/components/prodcompsidenav';
 
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import routes from '@config/routes';
+import { useCategoryTree } from '@contexts/categoriesContext';
 
 import './header-side-nav.scss';
 
@@ -15,6 +16,7 @@ const HeaderSideNav = ({ withSideNav }) => {
 
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const categoryTree = useCategoryTree();
 
     const [checked, setChecked] = useState(false);
     const checkChange = () => setChecked(!checked);
@@ -49,7 +51,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                                 </label>
 
                             </div>
-                            {data.map((item, index) => {
+                            {categoryTree.map((item, index) => {
                                 return (
                                     <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
                                 )

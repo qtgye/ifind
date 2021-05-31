@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import IfindIcon from '@components/IfindIcon';
 
 const HeaderSideNavSubMenu = ({ item, index, checked }) => {
 
@@ -11,15 +12,15 @@ const HeaderSideNavSubMenu = ({ item, index, checked }) => {
     return (
         <>
             <li>
-                <Link onClick={item.subCategories && showSubCategories} key={index} to="#">
-                    {item.categoryIcon}
-                    <span>{item.categoryLabel}</span>
+                <Link onClick={item.children && showSubCategories} key={index} to="#">
+                    <IfindIcon icon={item.icon} className="header-side-nav__icon"/>
+                    <span>{item.label}</span>
                 </Link>
                 <ul className="header-side-nav__sub-list">
                     {checked ? (
-                        subCategories && item.subCategories.map((item, index) => {
+                        subCategories && item.children.map((item, index) => {
                             return (
-                                <li key={index}><Link to="#">{item.categoryLabel}</Link></li>
+                                <li key={index}><Link to="#">{item.label}</Link></li>
                             );
                         })
                     ) : null}
