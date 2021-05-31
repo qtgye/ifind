@@ -12,14 +12,14 @@ import {
 import { useLanguages } from '../../helpers/languages';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSave, faPen, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faSave, faPen, faSpinner, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import { Button, Select } from '@buffetjs/core';
 import { Header } from '@buffetjs/custom';
 import { LoadingIndicator } from '@buffetjs/styles';
 
 import './styles.css';
 
-const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...restData }, ...restProps }) => {
+const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, products } }) => {
   const [, drag] = useDrag();
   const [{ hovered }, drop] = useDrop(); 
 
@@ -36,20 +36,29 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, ...rest
             <div>{label}</div>
             <a href={url} target="_blank"><small>{url}&nbsp;</small></a>
           </div>
-          <Link
-            className="category-tree__edit"
-            to={`/plugins/content-manager/collectionType/application::category.category/${id}`}>
-            <FontAwesomeIcon icon={faPen} />
-          </Link>
+          {products?.length && <ProductListLink count={products.length} categoryId={id} /> || ''}
+          <EditCategoryButton id={id} />
         </div>
       </div>
     </>
   );
 };
 
-const CategoryGroup = (props) => {
-  return null;
-}
+const EditCategoryButton = ({ id }) => (
+  <Link
+    className="category-tree__edit"
+    to={`/plugins/content-manager/collectionType/application::category.category/${id}`}>
+    <FontAwesomeIcon icon={faPen} />
+  </Link>
+);
+
+const ProductListLink = ({ count = 0, categoryId }) => (
+  <Link
+    className="category-tree__products-link"
+    to={`/plugins/content-manager/collectionType/application::product.product?page=1&_sort=url:ASC&_where[0][category.id]=${categoryId}`}>
+    {count} Product(s)
+  </Link>
+)
 
 const AddCategoryButton = () => (
   <Link to='/plugins/content-manager/collectionType/application::category.category/create' className="btn btn-primary category-tree-add">

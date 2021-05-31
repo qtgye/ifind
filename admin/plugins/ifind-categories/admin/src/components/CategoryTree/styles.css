@@ -67,3 +67,8 @@
 .category-tree-add svg {
   margin-right: 10px;
 }
+
+.category-tree__products-link {
+  padding: 2px 5px;
+  color: silver;
+}

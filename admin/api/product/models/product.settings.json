@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "products",
   "info": {
-    "name": "Product"
+    "name": "Product",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -10,10 +11,6 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "Title": {
-      "type": "string",
-      "required": true
-    },
     "url": {
       "type": "string",
       "required": true
@@ -29,7 +26,12 @@
       "pluginOptions": {}
     },
     "category": {
+      "via": "products",
       "model": "category"
+    },
+    "title": {
+      "type": "string",
+      "required": true
     }
   }
 }

@@ -20,6 +20,10 @@ fragment CategoryFields on Category {
     code
     name
   }
+  products {
+    id
+    title
+  }
 }
 `;
 
