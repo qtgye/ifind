@@ -40,3 +40,7 @@
   z-index: 5;
   transition: transform .15s;
 }
+
+.icons-list-filter {
+  padding: 10px 0;
+}

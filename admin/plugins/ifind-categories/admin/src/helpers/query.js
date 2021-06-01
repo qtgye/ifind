@@ -30,7 +30,6 @@ export const useQuery = (query, variables) => {
   });
 
   useEffect(() => {
-    console.log({ jwt });
     if ( jwt ) {
       callQuery(query, variables)
       .then(({ data }) => setData(data))
@@ -39,7 +38,6 @@ export const useQuery = (query, variables) => {
   }, [ jwt ]);
 
   useEffect(() => {
-    console.log({ data, error });
     if ( data || error ) {
       setLoading(false);
     }
@@ -51,4 +49,46 @@ export const useQuery = (query, variables) => {
     data,
   };
 
+}
+
+export const useMutation = () => {
+  const { jwt } = useAuth();
+  const [ loading, setLoading ] = useState(true);
+  const [ error, setError ] = useState(false);
+  const [ data, setData ] = useState(data);
+
+  const callMutation = useCallback((query, variables) => {
+    if ( jwt ) {
+      window.fetch(`/graphql`, {
+        method: 'post',
+        headers: {
+          authorization: `Bearer ${jwt}`,
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          query,
+          variables: variables || {}
+        })
+      })
+      .then(res => res.json())
+      .then(({ data }) => setData(data))
+      .catch(error => setError(error))
+    }
+  }, [ jwt ]);
+
+  useEffect(() => {
+    if ( data || error ) {
+      console.log({ error });
+      setLoading(false);
+    }
+  }, [ error, data ]);
+
+  return [
+    callMutation,
+    {
+      loading,
+      error,
+      data,
+    }
+  ];
 }

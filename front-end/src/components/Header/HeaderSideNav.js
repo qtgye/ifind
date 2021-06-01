@@ -4,10 +4,11 @@ import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 
 import { homedata } from '@mocks/components/homesidenav';
-import { data } from '@mocks/components/prodcompsidenav';
+// import { data } from '@mocks/components/prodcompsidenav';
 
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import routes from '@config/routes';
+import { useCategoryTree } from '@contexts/categoriesContext';
 
 import './header-side-nav.scss';
 
@@ -15,6 +16,7 @@ const HeaderSideNav = ({ withSideNav }) => {
 
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const categoryTree = useCategoryTree();
 
     const [catList, setCatList] = useState(false);
 
@@ -51,26 +53,11 @@ const HeaderSideNav = ({ withSideNav }) => {
                                 </label>
 
                             </div>
-                            <section id="sec-1">
-                                {data.slice(0, 10).map((item, index) => {
-                                    return (
-                                        <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
-                                    )
-                                })}
-                                <div className="scroll-button">
-                                    <a href="#sec-2" onClick={() => setCatList(!catList)}><i aria-hidden="true" className="fa fa-caret-down"></i></a>
-                                </div>
-                            </section>
-                            <section id="sec-2">
-                                {data.slice(10, 20).map((item, index) => {
-                                    return (
-                                        <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
-                                    )
-                                })}
-                                <div className="scroll-button">
-                                    <a href="#sec-1" onClick={() => setCatList(!catList)}><i aria-hidden="true" className="fa fa-caret-down"></i></a>
-                                </div>
-                            </section>
+                            {categoryTree.map((item, index) => {
+                                return (
+                                    <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
+                                )
+                            })}
                         </div>
 
                         )

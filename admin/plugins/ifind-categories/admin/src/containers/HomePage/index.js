@@ -20,11 +20,7 @@ const HomePage = () => {
           IFIND Categories
         </h1>
       </div>
-      <div className="row">
-        <div className="col-md-6">
-          <CategoryTree />
-        </div>
-      </div>
+      <CategoryTree />
     </div>
   );
 };

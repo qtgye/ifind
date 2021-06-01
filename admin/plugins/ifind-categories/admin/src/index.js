@@ -33,7 +33,7 @@ export default strapi => {
           icon,
           label: {
             id: `${pluginId}.plugin.name`,
-            defaultMessage: name,
+            defaultMessage: 'Categories Management',
           },
           name,
           permissions: [

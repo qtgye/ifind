@@ -2,13 +2,11 @@ import './ifind-icon.scss';
 
 const IfindIcon = ({ icon, ...props }) => {
 
-    const classNames = [ props.className, 'ifind-icon' ];
-
-    props.className = [ props.className, 'ifind-icon' ].join(' ');
+    props.className = [ props.className, 'ifind-icon' ].filter(Boolean).join(' ');
 
     return (
         <svg {...props}>
-            <use xlinkHref={`#${icon}`} ></use>
+            <use xlinkHref={`#${icon.replace(/_/g, '-')}`} ></use>
         </svg>
     )
 };

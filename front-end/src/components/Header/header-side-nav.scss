@@ -69,7 +69,7 @@
             font-size: 14px;
             font-weight: 400;
             color: $gray-900;
-            padding: 13px 25px 13px 25px;
+            padding: 13px 25px 13px 0;
             display: block;
             border-bottom: 1px solid $gray-300;
 
@@ -85,34 +85,12 @@
             }
 
         }
+    }
 
-        &__sub-list {
-            position: absolute;
-            align-items: center;
-            width: 100%;
-            opacity: 0;
-            background-color: $white;
-            transition: all 0.15s ease-out;
-            visibility: hidden;
-
-            a {
-                font-size: 14px;
-                font-weight: 400;
-
-                &:hover {
-                    color: $red;
-                    background-color: #eaeaea;
-                }
-
-                &:focus {
-                    color: $red;
-                    background-color: #eaeaea;
-                    text-decoration: underline;
-                }
-    
-            }
+    &__sub-list {
+        a {
+            padding: 13px 20px;
         }
-
     }
 
     &__label {
@@ -191,33 +169,10 @@
         }  
 
     }
-    
-    .my-icon {
-        width: 15x;
-        height: 15px;
-        //color: color(blue);
-        margin-right: 15px;
+
+    &__icon {
+        padding: 5px;
+        margin-right: 5px;
     }
 
-    .scroll-button {
-        position: relative;
-        text-align: center;
-        background-color: $white;
-        margin-bottom: 10px;
-        
-        i {
-            font-size: 25px;
-        }
-        i:hover {
-            color: $red;
-        }
-    }
-
-    // #sec-1 {
-    //     position: absolute;
-    // }
-
-    // #sec-2 {
-    //     position: absolute;
-    // }
 }

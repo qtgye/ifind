@@ -72,7 +72,18 @@
         "washer",
         "watch"
       ],
-      "default": "choose_here"
+      "default": "chip"
+    },
+    "order": {
+      "type": "integer",
+      "default": 0
+    },
+    "label_preview": {
+      "type": "string"
+    },
+    "products": {
+      "via": "category",
+      "collection": "product"
     }
   }
 }
