@@ -16,8 +16,8 @@
       "required": true
     },
     "sources": {
-      "collection": "source",
       "via": "regions",
+      "collection": "source",
       "dominant": true
     },
     "categories": {

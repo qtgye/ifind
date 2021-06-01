@@ -2,12 +2,13 @@
   "kind": "collectionType",
   "collectionName": "sources",
   "info": {
-    "name": "Source"
+    "name": "Source",
+    "description": ""
   },
   "options": {
     "increments": true,
     "timestamps": true,
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "attributes": {
     "name": {
@@ -18,9 +19,9 @@
       "via": "sources",
       "collection": "region"
     },
-    "category": {
-      "via": "source",
-      "model": "category"
+    "categories": {
+      "collection": "category",
+      "via": "source"
     }
   }
 }

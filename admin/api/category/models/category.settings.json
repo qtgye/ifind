@@ -85,13 +85,13 @@
       "via": "category",
       "collection": "product"
     },
-    "source": {
-      "model": "source",
-      "via": "category"
-    },
     "region": {
       "model": "region",
       "via": "categories"
+    },
+    "source": {
+      "via": "categories",
+      "model": "source"
     }
   }
 }
