@@ -16,6 +16,8 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
 
+    const [catList, setCatList] = useState(false);
+
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
 
@@ -49,11 +51,26 @@ const HeaderSideNav = ({ withSideNav }) => {
                                 </label>
 
                             </div>
-                            {data.map((item, index) => {
-                                return (
-                                    <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
-                                )
-                            })}
+                            <section id="sec-1">
+                                {data.slice(0, 10).map((item, index) => {
+                                    return (
+                                        <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
+                                    )
+                                })}
+                                <div className="scroll-button">
+                                    <a href="#sec-2" onClick={() => setCatList(!catList)}><i aria-hidden="true" className="fa fa-caret-down"></i></a>
+                                </div>
+                            </section>
+                            <section id="sec-2">
+                                {data.slice(10, 20).map((item, index) => {
+                                    return (
+                                        <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
+                                    )
+                                })}
+                                <div className="scroll-button">
+                                    <a href="#sec-1" onClick={() => setCatList(!catList)}><i aria-hidden="true" className="fa fa-caret-down"></i></a>
+                                </div>
+                            </section>
                         </div>
 
                         )

@@ -25,5 +25,16 @@ export const languages = [
         country_code: 'es',
         flag: <CountryFlag countryCode="ES" svg />,
     },
-
+    {
+        code: 'ru',
+        name: 'Pусский',
+        country_code: 'ru',
+        flag: <CountryFlag countryCode="RU" svg />,
+    },
+    {
+        code: 'it',
+        name: 'Italiano',
+        country_code: 'it',
+        flag: <CountryFlag countryCode="IT" svg />,
+    },
 ];

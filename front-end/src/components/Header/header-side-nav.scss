@@ -43,8 +43,8 @@
         transition: all 0.15s ease-out;
         z-index: $z-index-sidenav-list;
         cursor: default;
-        height: 510px;
-        overflow-y: scroll;
+        height: 550px;
+        overflow-y: hidden;
 
         .header--sticked & {
             opacity: 0;
@@ -190,6 +190,34 @@
             border-radius: 100%;
         }  
 
-    }  
+    }
+    
+    .my-icon {
+        width: 15x;
+        height: 15px;
+        //color: color(blue);
+        margin-right: 15px;
+    }
 
+    .scroll-button {
+        position: relative;
+        text-align: center;
+        background-color: $white;
+        margin-bottom: 10px;
+        
+        i {
+            font-size: 25px;
+        }
+        i:hover {
+            color: $red;
+        }
+    }
+
+    // #sec-1 {
+    //     position: absolute;
+    // }
+
+    // #sec-2 {
+    //     position: absolute;
+    // }
 }
