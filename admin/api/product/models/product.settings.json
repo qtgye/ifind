@@ -13,7 +13,8 @@
   "attributes": {
     "url": {
       "type": "string",
-      "required": true
+      "required": true,
+      "regex": "(https?:\\/\\/.+)?"
     },
     "image": {
       "model": "file",
@@ -32,6 +33,34 @@
     "title": {
       "type": "string",
       "required": true
+    },
+    "website_tab": {
+      "type": "enumeration",
+      "enum": [
+        "tab_1",
+        "tab_2"
+      ],
+      "required": true,
+      "default": "tab_1"
+    },
+    "url_type": {
+      "type": "enumeration",
+      "enum": [
+        "amazon",
+        "alibaba",
+        "ebay"
+      ],
+      "default": "amazon",
+      "required": true
+    },
+    "position": {
+      "type": "integer",
+      "default": 0,
+      "min": 0
+    },
+    "price": {
+      "type": "decimal",
+      "min": 0
     }
   }
 }
