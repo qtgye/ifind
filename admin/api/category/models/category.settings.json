@@ -84,6 +84,14 @@
     "products": {
       "via": "category",
       "collection": "product"
+    },
+    "source": {
+      "model": "source",
+      "via": "category"
+    },
+    "region": {
+      "model": "region",
+      "via": "categories"
     }
   }
 }
