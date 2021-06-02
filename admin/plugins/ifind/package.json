@@ -1,5 +1,5 @@
 {
-  "name": "strapi-plugin-ifind-categories",
+  "name": "strapi-plugin-ifind",
   "version": "0.0.0",
   "description": "This is the description of the plugin.",
   "strapi": {

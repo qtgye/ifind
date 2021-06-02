@@ -9,20 +9,22 @@ import React, { memo, useState } from 'react';
 import pluginId from '../../pluginId';
 import CategoryTree from '../../components/CategoryTree';
 
+import { Header } from '@buffetjs/custom';
+
 import './styles.css';
 
 
-const HomePage = () => {
+const Categories = () => {
   return (
     <div className="container">
       <div className="row">
-        <h1 className="category-tree-heading col-md-12">
-          IFIND Categories
-        </h1>
+        <Header
+          title={{ label: 'Categories Management' }}
+        />
       </div>
       <CategoryTree />
     </div>
   );
 };
 
-export default memo(HomePage);
+export default memo(Categories);
