@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sources",
+  "info": {
+    "name": "Source",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "regions": {
+      "via": "sources",
+      "collection": "region"
+    },
+    "categories": {
+      "collection": "category",
+      "via": "source"
+    }
+  }
+}
