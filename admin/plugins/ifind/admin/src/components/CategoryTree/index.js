@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Sortly, { ContextProvider, useDrag, useDrop } from 'react-sortly';
+import Sortly, { useDrag, useDrop } from 'react-sortly';
 import {
   useCategories,
   getCategories,
@@ -17,7 +17,7 @@ import { Button, Select } from '@buffetjs/core';
 import { Header } from '@buffetjs/custom';
 import { LoadingIndicator } from '@buffetjs/styles';
 
-import './styles.css';
+import './styles.scss';
 
 const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, products } }) => {
   const [, drag] = useDrag();

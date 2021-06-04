@@ -15,6 +15,10 @@ export const useQuery = (query, variables) => {
   const [ data, setData ] = useState(data);
 
   const callQuery = useCallback((query, variables) => {
+    if ( !query ) {
+      return Promise.resolve({ data: null });
+    }
+
     return window.fetch(`/graphql`, {
       method: 'post',
       headers: {
@@ -35,11 +39,20 @@ export const useQuery = (query, variables) => {
       .then(({ data }) => setData(data))
       .catch(error => setError(error))
     }
-  }, [ jwt ]);
+  }, [ jwt, query, variables ]);
 
   useEffect(() => {
     if ( data || error ) {
       setLoading(false);
+    }
+
+    if ( error ) {
+      strapi.notification.toggle({
+        type: 'warning',
+        title: 'Fetch error',
+        message: error.message,
+      });
+      console.error(error);
     }
   }, [ error, data ]);
 
