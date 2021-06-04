@@ -43,8 +43,12 @@
         transition: all 0.15s ease-out;
         z-index: $z-index-sidenav-list;
         cursor: default;
-        height: 510px;
+        height: 525px;
         overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
 
         .header--sticked & {
             opacity: 0;
@@ -61,16 +65,17 @@
             text-align: start;
         }
 
-        i {
-            margin-right: 15px;
-        }
-
         a {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            height: 50px;
+            align-items: center;
             font-size: 14px;
             font-weight: 400;
             color: $gray-900;
             padding: 13px 25px 13px 0;
-            display: block;
+            //display: block;
             border-bottom: 1px solid $gray-300;
 
             &:hover {
@@ -78,7 +83,7 @@
                 background-color: #eaeaea;
             }
 
-            &:focus {
+            &:focus, &:active {
                 color: $red;
                 background-color: #eaeaea;
                 text-decoration: underline;
@@ -89,6 +94,7 @@
 
     &__sub-list {
         a {
+            height: 50px;
             padding: 13px 20px;
         }
     }
@@ -174,4 +180,5 @@
         padding: 5px;
         margin-right: 5px;
     }
+
 }

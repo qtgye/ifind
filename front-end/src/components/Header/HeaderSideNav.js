@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
@@ -18,8 +18,21 @@ const HeaderSideNav = ({ withSideNav }) => {
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const categoryTree = useCategoryTree();
 
-    const [checked, setChecked] = useState(false);
+    //const [catList, setCatList] = useState(false);
+
+    const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
+
+    const myRef = useRef(null);
+
+    // const executeScroll = () => myRef.current.scrollIntoView({ behavior: "smooth" });
+    // const scrollToTop = () => {
+    //     window.scrollTo({
+    //         top: 0,
+    //         behavior: "smooth"
+    //     });
+    // };
+
 
     return withSideNav ?
         (
@@ -42,11 +55,12 @@ const HeaderSideNav = ({ withSideNav }) => {
                             })}
                         </div>
                         ) : (<div>
+
                             <div className="header-side-nav__label">
 
                                 <label className="label">Scroll with Subcategories</label>
                                 <label className="switch">
-                                    <input id="check" type="checkbox" onChange={checkChange} checked={checked} />
+                                    <input id="check" type="checkbox" onChange={checkChange} checked={checked} ref={myRef} />
                                     <span className="slider round"></span>
                                 </label>
 
@@ -56,6 +70,9 @@ const HeaderSideNav = ({ withSideNav }) => {
                                     <HeaderSideNavSubMenu item={item} key={index} checked={checked} />
                                 )
                             })}
+
+                            {/* <button onClick={executeScroll}> Click Me!</button> */}
+
                         </div>
 
                         )
@@ -85,6 +102,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                     } */}
 
                 </ul>
+
             </div >
         ) : null;
 };

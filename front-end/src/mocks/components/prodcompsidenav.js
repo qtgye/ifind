@@ -1,6 +1,4 @@
-//import React from 'react';
-//import * as FaIcons from 'react-icons/fa';
-
+import IfindIcon from '@components/IfindIcon';
 
 export const data = [
     {
@@ -25,7 +23,7 @@ export const data = [
     {
         categoryLabel: 'Video',
         categoryURL: '/video',
-        categoryIcon: <i className="fa fa-video-camera" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="play" className="my-icon" />,
 
         subCategories: [
             {
@@ -44,7 +42,7 @@ export const data = [
     {
         categoryLabel: 'Bekleidung',
         categoryURL: '/apparel',
-        categoryIcon: <i className="fa fa-shopping-bag" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="shirt" className="my-icon" />,
 
         subCategories: [
             {
@@ -63,7 +61,7 @@ export const data = [
     {
         categoryLabel: 'Elektro-Großgeräte',
         categoryURL: '/appliances',
-        categoryIcon: <i className="fa fa-television" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="washer" className="my-icon" />,
 
         subCategories: [
             {
@@ -82,7 +80,7 @@ export const data = [
     {
         categoryLabel: 'Auto & Motorrad',
         categoryURL: '/automotive',
-        categoryIcon: <i className="fa fa-car" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="car-cog" className="my-icon" />,
 
         subCategories: [
             {
@@ -101,7 +99,7 @@ export const data = [
     {
         categoryLabel: 'Baby',
         categoryURL: '/baby',
-        categoryIcon: <i className="fa fa-user-o" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="infant" className="my-icon" />,
 
         subCategories: [
             {
@@ -121,7 +119,7 @@ export const data = [
     {
         categoryLabel: 'Beauty',
         categoryURL: '/beauty',
-        categoryIcon: <i className="fa fa-heart" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="hair-care" className="my-icon" />,
 
         subCategories: [
             {
@@ -140,7 +138,7 @@ export const data = [
     {
         categoryLabel: 'Bücher',
         categoryURL: '/books',
-        categoryIcon: <i className="fa fa-book" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="foreign-books" className="my-icon" />,
 
         subCategories: [
             {
@@ -159,7 +157,7 @@ export const data = [
     {
         categoryLabel: 'Klassik',
         categoryURL: '/classical',
-        categoryIcon: <i className="fa fa-university" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="pillars" className="my-icon" />,
 
         subCategories: [
             {
@@ -178,7 +176,7 @@ export const data = [
     {
         categoryLabel: 'Computer & Zubehör',
         categoryURL: '/computer',
-        categoryIcon: <i className="fa fa-desktop" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="pc" className="my-icon" />,
 
         subCategories: [
             {
@@ -212,7 +210,7 @@ export const data = [
     {
         categoryLabel: 'Musik-Downloads',
         categoryURL: '/digitalmusic',
-        categoryIcon: <i className="fa fa-music" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="binary-headset" className="my-icon" />,
 
         subCategories: [
             {
@@ -231,7 +229,7 @@ export const data = [
     {
         categoryLabel: 'Elektronik & Foto',
         categoryURL: '/electronics',
-        categoryIcon: <i className="fa fa-microchip" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="chip" className="my-icon" />,
 
         subCategories: [
             {
@@ -274,7 +272,7 @@ export const data = [
     {
         categoryLabel: 'Garten',
         categoryURL: '/gardenandoutdoor',
-        categoryIcon: <i className="fa fa-envira" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="flower-shovel" className="my-icon" />,
 
         subCategories: [
             {
@@ -293,7 +291,7 @@ export const data = [
     {
         categoryLabel: 'Geschenkgutscheine',
         categoryURL: '/giftcards',
-        categoryIcon: <i className="fa fa-gift" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="gift-cards" className="my-icon" />,
 
         subCategories: [
             {
@@ -312,7 +310,7 @@ export const data = [
     {
         categoryLabel: 'Lebensmittel & Getränke',
         categoryURL: '/groceeyandgourmetfood',
-        categoryIcon: <i className="fa fa-cutlery" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="dine-house" className="my-icon" />,
 
         subCategories: [
             {
@@ -341,7 +339,7 @@ export const data = [
     {
         categoryLabel: 'Handmade',
         categoryURL: '/handmade',
-        categoryIcon: <i className="fa fa-hand-paper-o" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="hands-twirl" className="my-icon" />,
 
         subCategories: [
             {
@@ -360,7 +358,7 @@ export const data = [
     {
         categoryLabel: 'Drogerie & Körperpflege',
         categoryURL: '/healthpersonalcare',
-        categoryIcon: <i className="fa fa-medkit" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="doctor" className="my-icon" />,
 
         subCategories: [
             {
@@ -385,7 +383,7 @@ export const data = [
     {
         categoryLabel: 'Küche, Haushalt & Wohnen',
         categoryURL: '/homeandkitchen',
-        categoryIcon: <i className="fa fa-home" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="dine-house" className="my-icon" />,
 
         subCategories: [
             {
@@ -409,7 +407,7 @@ export const data = [
     {
         categoryLabel: 'Gewerbe, Industrie & Wissenschaft',
         categoryURL: '/industrial',
-        categoryIcon: <i className="fa fa-industry" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="factory-cog" className="my-icon" />,
 
         subCategories: [
             {
@@ -428,7 +426,7 @@ export const data = [
     {
         categoryLabel: 'Schmuck',
         categoryURL: '/jewelry',
-        categoryIcon: <i className="fa fa-diamond" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="necklace-display" className="my-icon" />,
 
         subCategories: [
             {
@@ -457,7 +455,7 @@ export const data = [
     {
         categoryLabel: 'Sale',
         categoryURL: '/sale',
-        categoryIcon: <i className="fa fa-tags" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="sale-tag" className="my-icon" />,
 
         subCategories: [
             {
@@ -500,7 +498,7 @@ export const data = [
     {
         categoryLabel: 'Luxury Beauty',
         categoryURL: '/luxurybeauty',
-        categoryIcon: <i className="fa fa-gratipay" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="ladies-bag" className="my-icon" />,
 
         subCategories: [
             {
@@ -544,7 +542,7 @@ export const data = [
     {
         categoryLabel: 'DVD & Blu-ray',
         categoryURL: '/moviesandtv',
-        categoryIcon: <i className="fa fa-film" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="play-tv" className="my-icon" />,
 
         subCategories: [
             {
@@ -578,7 +576,7 @@ export const data = [
     {
         categoryLabel: 'Musik-CDs & Vinyl',
         categoryURL: '/music',
-        categoryIcon: <i className="fa fa-headphones" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="note" className="my-icon" />,
 
         subCategories: [
             {
@@ -602,7 +600,7 @@ export const data = [
     {
         categoryLabel: 'Musikinstrumente & DJ-Equipment',
         categoryURL: '/musicalinstruments',
-        categoryIcon: <i className="fa fa-music" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="music-instruments" className="my-icon" />,
 
         subCategories: [
             {
@@ -626,7 +624,7 @@ export const data = [
     {
         categoryLabel: 'Bürobedarf & Schreibwaren',
         categoryURL: '/officeproducts',
-        categoryIcon: <i className="fa fa-building" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="table-with-chair" className="my-icon" />,
 
         subCategories: [
             {
@@ -645,7 +643,7 @@ export const data = [
     {
         categoryLabel: 'Haustier',
         categoryURL: '/petsupplies',
-        categoryIcon: <i className="fa fa-paw" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="paw-circle" className="my-icon" />,
 
         subCategories: [
             {
@@ -664,7 +662,7 @@ export const data = [
     {
         categoryLabel: 'Kamera & Foto',
         categoryURL: '/photo',
-        categoryIcon: <i className="fa fa-camera" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="camera" className="my-icon" />,
 
         subCategories: [
             {
@@ -688,7 +686,7 @@ export const data = [
     {
         categoryLabel: 'Schuhe & Handtaschen',
         categoryURL: '/shoes',
-        categoryIcon: <i className="fa fa-location-arrow" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="shoes" className="my-icon" />,
 
         subCategories: [
             {
@@ -731,7 +729,7 @@ export const data = [
     {
         categoryLabel: 'Sport & Freizeit',
         categoryURL: '/sportsandoutdoors',
-        categoryIcon: <i className="fa fa-outdent" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="tent-soccer" className="my-icon" />,
 
         subCategories: [
             {
@@ -750,7 +748,7 @@ export const data = [
     {
         categoryLabel: 'Baumarkt',
         categoryURL: '/toolsandhomeimprovement',
-        categoryIcon: <i className="fa fa-wrench" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="home-build" className="my-icon" />,
 
         subCategories: [
             {
@@ -779,7 +777,7 @@ export const data = [
     {
         categoryLabel: 'Spielzeug',
         categoryURL: '/toysandgames',
-        categoryIcon: <i className="fa fa-superpowers" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="duck" className="my-icon" />,
 
         subCategories: [
             {
@@ -798,7 +796,7 @@ export const data = [
     {
         categoryLabel: 'VHS',
         categoryURL: '/vhs',
-        categoryIcon: <i className="fa fa-file-video-o" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="console" className="my-icon" />,
 
         subCategories: [
             {
@@ -817,7 +815,7 @@ export const data = [
     {
         categoryLabel: 'Games',
         categoryURL: '/videogames',
-        categoryIcon: <i className="fa fa-gamepad" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="controller" className="my-icon" />,
 
         subCategories: [
             {
@@ -836,7 +834,7 @@ export const data = [
     {
         categoryLabel: 'Uhren',
         categoryURL: '/watches',
-        categoryIcon: <i className="fa fa-clock-o" aria-hidden="true"></i>,
+        categoryIcon: <IfindIcon icon="watch" className="my-icon" />,
 
         subCategories: [
             {
