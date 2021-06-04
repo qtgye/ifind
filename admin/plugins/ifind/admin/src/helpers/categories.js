@@ -5,7 +5,7 @@ import { useQuery, useMutation } from './query';
 
 const categoryFieldsOverviewFragment = `
 fragment CategoryFieldsOverview on Category {
-  label
+  label: label_preview
   id
   order
   icon
@@ -16,7 +16,7 @@ fragment CategoryFieldsDetails on Category {
   url
   parent {
     id
-    label
+    label: label_preview
   }
   language {
     id
@@ -26,6 +26,12 @@ fragment CategoryFieldsDetails on Category {
   products {
     id
     title
+  }
+  source {
+    id
+  }
+  region {
+    id
   }
 }`;
 
@@ -148,13 +154,22 @@ export const mapCategoriesTree = (rawCategories) => {
   return categoryTree;
 };
 
-
+// NOTE: Will deprecate once source region is implemented
 export const groupCategoriesByLanguage = (categoriesList, languages) => {
   return languages.map(language => ({
     language,
     categories: categoriesList.filter(category => category.language?.id === language.id),
   }));
 };
+
+export const groupCategoriesBySourceRegion = (categoriesList, sourcesRegions) => {
+  return sourcesRegions.map(sourceRegion => ({
+    ...sourceRegion,
+    categories: categoriesList.filter(category => (
+      category.source?.id === sourceRegion.source && category.region?.id === sourceRegion.region
+    )),
+  }))
+}
 
 
 export const useCategories = () => {

@@ -11,9 +11,6 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "label": {
-      "type": "string"
-    },
     "slug": {
       "type": "string"
     },
@@ -92,6 +89,13 @@
     "source": {
       "via": "categories",
       "model": "source"
+    },
+    "label": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.translateable-label",
+      "required": true,
+      "min": 1
     }
   }
 }

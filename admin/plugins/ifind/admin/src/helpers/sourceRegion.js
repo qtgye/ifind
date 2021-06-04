@@ -23,9 +23,7 @@ const sourcesRegionsQuery = `
   }
 `;
 
-export const SourceRegionContext = createContext({});
-
-export const SourceRegionProvider = ({ children }) => {
+export const useSourceRegion = () => {
   const [ sources, setSources ] = useState([]);
   const [ regions, setRegions ] = useState([]);
   const {
@@ -43,13 +41,8 @@ export const SourceRegionProvider = ({ children }) => {
     }
   }, [ data ]);
 
-  return (
-    <SourceRegionContext.Provider value={{ sources, regions }}>
-      {children}
-    </SourceRegionContext.Provider>
-  );
+  return {
+    sources,
+    regions
+  };
 }
-
-export const useSourceRegion = () => {
-  return useContext(SourceRegionContext);
-};

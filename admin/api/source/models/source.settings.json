@@ -20,8 +20,8 @@
       "collection": "region"
     },
     "categories": {
-      "collection": "category",
-      "via": "source"
+      "via": "source",
+      "collection": "category"
     }
   }
 }

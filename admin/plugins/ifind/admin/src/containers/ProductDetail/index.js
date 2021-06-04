@@ -38,9 +38,7 @@ const ProductDetail = () => {
           ]}
         />
       </div>
-      <div className="row">
-        <ProductForm />
-      </div>
+      <ProductForm />
     </div>
   )
 };

@@ -4,10 +4,9 @@ import Sortly, { useDrag, useDrop } from 'react-sortly';
 import {
   useCategories,
   getCategories,
-  groupCategoriesByLanguage,
+  groupCategoriesBySourceRegion,
 } from '../../helpers/categories';
-
-import { useLanguages } from '../../helpers/languages';
+import { useSourceRegion } from '../../helpers/sourceRegion';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSave, faPen, faSpinner, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
@@ -85,9 +84,9 @@ const SaveButton = ({ save, loading }) => {
 };
 
 const CategoryTree = () => {
-  const { languages } = useLanguages();
-  const [ languageOptions, setLanguageOptions ] = useState(['en']);
-  const [ currentLanguage, setCurrentLanguage ] = useState('en');
+  const { sources } = useSourceRegion();
+  const [ sourcesRegions, setSourcesRegions ] = useState([]);
+  const [ currentSourceRegion, setCurrentSourceRegion ] = useState(null); // e.g., "amazon international"
   const [ isSaving, setIsSaving ] = useState(false);
 
   // Original category data
@@ -98,14 +97,14 @@ const CategoryTree = () => {
   ] = useCategories();
 
   // Local data
-  const [ itemsByLanguage, setItemsByLanguage ] = useState([]);
+  const [ itemsBySourceRegion, setItemsBySourceRegion ] = useState([]);
   const [ itemsInView, setItemsInView ] = useState([]);
   const [ changedItems, setChangedItems ] = useState([]);
 
   const handleChange = useCallback((newItems) => {
-    const updatedItemsByLanguage = itemsByLanguage.map(itemsGroup => {
+    const updatedItemsBySourceRegion = itemsBySourceRegion.map(itemsGroup => {
       // Use newItems for current categories
-      if ( itemsGroup.language.code === currentLanguage ) {
+      if ( itemsGroup.label === currentSourceRegion ) {
         itemsGroup.categories = processCategories(newItems, true);
       };
 
@@ -117,16 +116,16 @@ const CategoryTree = () => {
     // Set changed items
     setChangedItems(_changedItems);
 
-    // Apply updated itemsByLanguage
-    setItemsByLanguage(updatedItemsByLanguage);
-  }, [ itemsByLanguage, currentLanguage ]);
+    // Apply updated itemsBySourceRegion
+    setItemsBySourceRegion(updatedItemsBySourceRegion);
+  }, [ itemsBySourceRegion, currentSourceRegion ]);
 
   const getChangedItems = useCallback(() => {
     // Flatten grouped items into a single array
     // Filter only changed items
-    const _changedItems = itemsByLanguage.reduce((all, byLanguage)=> {
+    const _changedItems = itemsBySourceRegion.reduce((all, bySourceRegion)=> {
       all.push(
-        ...byLanguage.categories
+        ...bySourceRegion.categories
           // Filter only changed items
           .filter(({ softParent, softOrder, parent, order }) => (
             (parent?.id || null) !== softParent || order !== softOrder
@@ -137,7 +136,7 @@ const CategoryTree = () => {
     }, []);
     
     return _changedItems;
-  }, [ itemsByLanguage ]);
+  }, [ itemsBySourceRegion ]);
 
   const saveChanges = useCallback(() => {
     if ( !changedItems.length ) {
@@ -152,7 +151,7 @@ const CategoryTree = () => {
     }));
     
     updateCategories(itemsToChange);
-  }, [ itemsByLanguage, changedItems ]);
+  }, [ changedItems, updateCategories ]);
 
   const processCategories = useCallback((categoriesList, retainIndex = false) => {
     // Add softParent and softOrder used for temporary changes in UI
@@ -220,46 +219,53 @@ const CategoryTree = () => {
 
   /**
    * Initial effect,
-   * Processes raw categories and languages data from hooks
+   * Processes raw categories and sources-regions data from hooks
    * Into UI-consumable data
    */
   useEffect(() => {
-    if ( languages?.length ) {
-      setLanguageOptions(languages.map(({ code }) => code));
+    if ( sources?.length ) {
+      const flatSourcesRegions = sources.reduce((list, source) => {
+        (source.regions || []).forEach(region => {
+          list.push({
+            label: `${source.name} ${region.name}`.toLowerCase(),
+            source: source.id,
+            region: region.id,
+          });
+        });
+
+        return list;
+      }, []);
+
+      setSourcesRegions(flatSourcesRegions);
+      setCurrentSourceRegion(flatSourcesRegions[0].label);
 
       if ( categories?.length ) {
-        setIsSaving(false);
-
-        const categoryGroups = groupCategoriesByLanguage(categories, languages);
-        const processedItemsByLanguage = categoryGroups.map(group => ({
+        const categoriesBySourceRegion = groupCategoriesBySourceRegion(categories, flatSourcesRegions);
+        const processedItemsBySourceRegion = categoriesBySourceRegion.map(group => ({
           ...group,
           categories: processCategories(group.categories),
         }));
 
-        setItemsByLanguage(processedItemsByLanguage);
+        setItemsBySourceRegion(processedItemsBySourceRegion);
 
         window.strapi.notification.toggle({
           type: 'success',
           message: 'Categories Loaded!',
         });
+
+        setIsSaving(false);
       }
     }
-  }, [ categories, languages ]);
+  }, [ categories, sources ]);
 
   useEffect(() => {
-    const _changedItems = getChangedItems();
-    setChangedItems(_changedItems);
-  }, [ itemsByLanguage ]);
-
-  useEffect(() => {
-    // Find categoriesGroup for current language
-    const currentGroupByLanguage = itemsByLanguage.find(({ language }) => language.code === currentLanguage);
-
-    if ( currentGroupByLanguage ) {
-      setItemsInView(currentGroupByLanguage.categories);
+    // Find categoriesGroup for current source-region
+    const currentGroupBySourceRegion = itemsBySourceRegion.find(({ label }) => label === currentSourceRegion);
+    if ( currentGroupBySourceRegion ) {
+      setItemsInView(currentGroupBySourceRegion.categories);
     }
 
-  }, [ itemsByLanguage, currentLanguage ])
+  }, [ itemsBySourceRegion, currentSourceRegion ]);
 
   useEffect(() => {
     if ( error ) {
@@ -275,12 +281,13 @@ const CategoryTree = () => {
 
   return <>
     <div className="row category-tree__header">
-      { currentLanguage &&
+      {
+        sourcesRegions.length &&
         <Select
-          name='language'
-          onChange={({ target: { value } }) => setCurrentLanguage(value)}
-          options={languageOptions}
-          value={currentLanguage}
+          name='source_region'
+          onChange={({ target: { value } }) => setCurrentSourceRegion(value)}
+          options={sourcesRegions.map(({label}) => label)}
+          value={currentSourceRegion}
           className="col-sm-2"
         />
       }
