@@ -1,17 +1,13 @@
 import React from 'react';
-import { ContextProvider } from 'react-sortly';
-import { DndProvider } from 'react-dnd';
-import HTML5Backend from 'react-dnd-html5-backend';
+
+import { DragAndDropProvider } from './dragAndDropProvider';
 import { AuthContextProvider } from './authProvider';
+import { SourceRegionProvider } from './sourceRegionProvider';
 
 const providers = [
-  ({ children }) => (
-    <DndProvider backend={HTML5Backend}>
-      {children}
-    </DndProvider>
-  ),
-  ContextProvider,
   AuthContextProvider,
+  SourceRegionProvider,
+  DragAndDropProvider,
 ];
 
 const Providers = ({ children }) => (

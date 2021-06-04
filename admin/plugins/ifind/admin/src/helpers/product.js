@@ -1,16 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../providers/authProvider';
 import { useLanguages } from './languages';
 import { useQuery, useMutation } from './query';
 
-const productDataFragment = `
+export const productDataFragment = `
   fragment ProductDataFragment on Product {
     title
   }
 `;
 
-const productQuery = `
+export const productQuery = `
   ${productDataFragment}
   query GetProduct ($id: ID!) {
     product (id: $id) {
@@ -19,7 +19,7 @@ const productQuery = `
   }
 `;
 
-const productMutation = (product) => (
+export const productMutation = (product) => (
   `
   mutation {
     updateProduct (input: {
@@ -35,8 +35,10 @@ const productMutation = (product) => (
 );
 
 export const useProduct = () => {
+  const _productQuery = useRef(productQuery);
   const { productId } = useParams();
-  const { data } = useQuery(productQuery, { id: productId });
+  const [ query, setQuery ] = useState(null);
+  const { data } = useQuery(query, { id: productId });
   const [
     callMutation,
     {
@@ -58,6 +60,12 @@ export const useProduct = () => {
       console.log('Saving product', data);
     }
   }, [ productData ]);
+
+  useEffect(() => {
+    if ( productId ) {
+      setQuery(_productQuery.current);
+    }
+  }, [ productId ]);
 
   useEffect(() => {
     if ( data?.product ) {

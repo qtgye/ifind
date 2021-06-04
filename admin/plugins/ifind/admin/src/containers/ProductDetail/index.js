@@ -1,20 +1,20 @@
 import React, { memo, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useProduct } from '../../helpers/product';
-
 import { Header } from '@buffetjs/custom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faSave, faPen, faSpinner, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+
+import { useProduct } from '../../helpers/product';
+import ProductForm from '../../components/ProductForm';
 
 const ProductDetail = () => {
   const {
     productData,
-    updateProduct,
-    addProduct,
    } = useProduct();
   const [ title, setTitle ] = useState('');
 
   useEffect(() => {
     if ( productData ) {
-      console.log({ productData });
       setTitle(productData.title);
     }
     else {
@@ -31,12 +31,15 @@ const ProductDetail = () => {
             {
               label: 'Save',
               onClick: () => history.push(`/plugins/${pluginId}/products/create`),
-              color: 'primary',
-              type: 'submit',
-              icon: 'save'
+              color: 'success',
+              type: 'button',
+              icon: (<FontAwesomeIcon icon={faSave} />)
             },
           ]}
         />
+      </div>
+      <div className="row">
+        <ProductForm />
       </div>
     </div>
   )

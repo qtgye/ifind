@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Sortly, { ContextProvider, useDrag, useDrop } from 'react-sortly';
+import Sortly, { useDrag, useDrop } from 'react-sortly';
 import {
   useCategories,
   getCategories,
