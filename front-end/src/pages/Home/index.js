@@ -8,22 +8,22 @@ import NaturalList from '@components/NaturalList';
 
 const Home = () => {
     const homepageData = useHomepageData();
-    const [ isLoading, setIsLoading ] = useState(true);
-    
-    const [ items, setItems ] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [items, setItems] = useState([]);
 
     useEffect(() => {
-        if ( homepageData ) {
+        if (homepageData) {
             const { bestSellers } = homepageData;
             setItems(bestSellers);
             setIsLoading(false);
         }
-    }, [ homepageData ])
+    }, [homepageData])
 
     return (
         <GeneralTemplate>
             <div className="home">
-                <div className="container" style={{paddingLeft: '280px'}}>
+                <div className="container" style={{ paddingLeft: '280px' }}>
                     <NaturalList
                         loading={isLoading}
                         items={items}

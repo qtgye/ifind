@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+// import React, { useState } from 'react';
 
-const HeaderLanguages = ({ item, index }) => {
+// const HeaderLanguages = ({ item, index }) => {
 
-    // const [click, setClick] = useState(false);
-    // const handleClick = setClick(!click);
+//     // const [click, setClick] = useState(false);
+//     // const handleClick = setClick(!click);
 
-    return (
-        <>
+//     return (
+//         <>
 
-            <li key={index} >
-                {item.flag}
-                <span>{item.name}</span>
-            </li>
+//             <li key={index} >
+//                 {item.flag}
+//                 <span>{item.name}</span>
+//             </li>
 
-        </>
-    )
-}
+//         </>
+//     )
+// }
 
-export default HeaderLanguages;
+// export default HeaderLanguages;

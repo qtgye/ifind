@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
-import HeaderLanguages from './HeaderLanguages';
-// import { languages } from '@mocks/components/languages';
+import ReactFlagsSelect from 'react-flags-select';
 
-import { AiFillCaretDown } from 'react-icons/ai';
-import CountryFlag from 'react-country-flag';
-import { set } from 'lodash';
+import { country } from '@mocks/components/countries';
+import { labels } from '@mocks/components/countries';
 
+const HeaderLanguageButton = () => {
 
-const HeaderLanguageButton = ({ onClick, dropdown, language, setLanguage }) => {
+    const [selected, setSelected] = useState('US');
 
     return (
         <div>
-            <button onClick={onClick}>
+
+            <ReactFlagsSelect
+                selected={selected}
+                onSelect={flag => setSelected(flag)}
+                countries={country}
+                placeholder="Select a Language"
+                showSelectedLabel={false}
+                className="menu-flags"
+                selectButtonClassName="menu-flags-button"
+                fullWidth={false}
+                alignOptionsToRight={true}
+                customLabels={labels}
+            />
+            {/* <button onClick={onClick}>
                 <CountryFlag countryCode="us" svg />
                 <span><AiFillCaretDown /></span>
             </button>
@@ -21,7 +33,7 @@ const HeaderLanguageButton = ({ onClick, dropdown, language, setLanguage }) => {
                         <HeaderLanguages item={item} key={index} />
                     )
                 })}
-            </ul>
+            </ul> */}
         </div>
 
     )

@@ -1,13 +1,11 @@
-import { useRef, useEffect, useCallback, useState } from 'react';
+import { useRef, useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
 
 import HeaderLanguageButton from './HeaderLanguageButton';
-import { languages } from '@mocks/components/languages';
-
+//import { languages } from '@mocks/components/languages';
 
 import './header-middle.scss';
-import { set } from 'lodash';
 
 const logo = '/images/logo.jpeg';
 
@@ -17,8 +15,8 @@ const HeaderMiddle = ({ onInterSect, onSubmit }) => {
     const headerMiddleRef = useRef(null);
     const observer = useRef(null);
 
-    const [dropdown, setDropdown] = useState(false);
-    const [lang, setLang] = useState(languages);
+    // const [dropdown, setDropdown] = useState(false);
+    // const [lang, setLang] = useState(languages);
 
     /**
      * Apply intersection observer so we can track whether the header
@@ -114,8 +112,8 @@ const HeaderMiddle = ({ onInterSect, onSubmit }) => {
                     <div className="header-middle__right">
 
                         <div className="right-bar">
-                            <div className="single-bar">
-                                <HeaderLanguageButton onClick={() => setDropdown(!dropdown)} dropdown={dropdown} language={lang} setLanguage={setLang} />
+                            <div className="flag-container">
+                                <HeaderLanguageButton />
                             </div>
                             {
                                 /* Show user-heart only if noUserHeart is false from routes config */
