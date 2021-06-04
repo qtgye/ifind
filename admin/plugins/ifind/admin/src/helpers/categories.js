@@ -84,13 +84,20 @@ const categoriesMutation = (categories) => (
 );
 
 export const flattenCategoriesTree = (tree, currentDepth = 0) => {
-  const list = Object.values(tree).reduce((list, currentNode) => {
+  const list = Object.values(tree)
+  // Sort items first
+  .sort((catA, catB) => catA.order > catB.order ? 1 : -1)
+  // Process each item
+  .reduce((list, currentNode) => {
     currentNode.depth = currentDepth;
-    
+
     list.push(currentNode);
-    
+
+    // Flat-append this item's children
     if ( currentNode.children ) {
       list.push(...flattenCategoriesTree(currentNode.children, currentDepth + 1));
+      // Remove this item's children prop to avoid confusion
+      delete currentNode.children;
     }
     
     return list;
@@ -99,6 +106,11 @@ export const flattenCategoriesTree = (tree, currentDepth = 0) => {
   return list;
 };
 
+/**
+ * Creates an object tree of categories
+ * @param {array} rawCategories 
+ * @returns object
+ */
 export const mapCategoriesTree = (rawCategories) => {
   const categoryTree = {};
   const byId = rawCategories.reduce(( all, category) => ({
@@ -106,36 +118,34 @@ export const mapCategoriesTree = (rawCategories) => {
     [category.id]: category,
   }), {});
 
-
   if ( rawCategories ) {
-
-    // Get parent categories first
-    rawCategories
-    .filter(category => category.parent)
-    .forEach(childCategory => {
-      categoryTree[childCategory.parent.id] = categoryTree[childCategory.parent.id] || {
-        ...byId[childCategory.parent.id],
-        children: {}
-      };
-    });
-
-    // Add child categories
     rawCategories.forEach(category => {
-      // Check if category parent exists in categoryTree
-      if ( category.parent && category.parent.id in categoryTree ) {
-        categoryTree[category.parent.id].children[category.id] = category;
+      // Check if category has existing parent
+      if ( category.parent && category.parent.id in byId ) {
+        // Append to the parent's children
+        byId[category.parent.id].children = byId[category.parent.id].children || {};
+        byId[category.parent.id].children[category.id] = category;
+
+        // Determine depth acc. to parent
+        let currentDepthCount = 1;
+        let currentParent = category.parent;
+        while ( currentParent.parent ) {
+          currentDepthCount++;
+          currentParent = currentParent.parent;
+        }
+        category.depth = currentDepthCount;
       }
+      // Treat this category as a root
       else {
-        categoryTree[category.id] = categoryTree[category.id] || {
-          ...category,
-          children: {}
-        };
+        categoryTree[category.id] = category;
+        category.depth = 0;
+        // Remove non-existing parent prop to avoid confusion
+        delete category.parent;
       }
     });
   }
 
   return categoryTree;
-  
 };
 
 

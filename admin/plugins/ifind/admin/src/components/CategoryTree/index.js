@@ -4,8 +4,6 @@ import Sortly, { useDrag, useDrop } from 'react-sortly';
 import {
   useCategories,
   getCategories,
-  flattenCategoriesTree,
-  mapCategoriesTree,
   groupCategoriesByLanguage,
 } from '../../helpers/categories';
 
@@ -25,7 +23,7 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, product
 
   return (
     <>
-      <div className="category-tree__item" data-hovered={hovered} ref={drop} data-has-parent={depth > 0} data-parent-soft={softParent || null}>
+      <div className="category-tree__item" data-hovered={hovered} ref={drop} data-depth={depth} data-id={id} data-soft-parent={softParent}>
         <div className="category-tree__item-info" ref={drag}>
           <div className="category-tree__drag">
             { icon && (
@@ -102,6 +100,7 @@ const CategoryTree = () => {
   // Local data
   const [ itemsByLanguage, setItemsByLanguage ] = useState([]);
   const [ itemsInView, setItemsInView ] = useState([]);
+  const [ changedItems, setChangedItems ] = useState([]);
 
   const handleChange = useCallback((newItems) => {
     const updatedItemsByLanguage = itemsByLanguage.map(itemsGroup => {
@@ -113,38 +112,47 @@ const CategoryTree = () => {
       return itemsGroup;
     });
 
+    const _changedItems = getChangedItems();
+
+    // Set changed items
+    setChangedItems(_changedItems);
+
     // Apply updated itemsByLanguage
     setItemsByLanguage(updatedItemsByLanguage);
   }, [ itemsByLanguage, currentLanguage ]);
 
-  const saveChanges = useCallback(() => {
-    setIsSaving(true);
-
-    // Flatted grouped items into a single array
-    const flatItems = itemsByLanguage.reduce((all, byLanguage)=> {
+  const getChangedItems = useCallback(() => {
+    // Flatten grouped items into a single array
+    // Filter only changed items
+    const _changedItems = itemsByLanguage.reduce((all, byLanguage)=> {
       all.push(
         ...byLanguage.categories
           // Filter only changed items
           .filter(({ softParent, softOrder, parent, order }) => (
             (parent?.id || null) !== softParent || order !== softOrder
           ))
-          // Format data to be passed into GraphQL
-          .map(({ id, parent, softParent, order, softOrder }) => ({
-            id, parent: softParent, order: softOrder,
-
-          }))
       );
 
       return all;
     }, []);
+    
+    return _changedItems;
+  }, [ itemsByLanguage ]);
 
-    if ( !flatItems.length ) {
-      setIsSaving(false);
+  const saveChanges = useCallback(() => {
+    if ( !changedItems.length ) {
       return;
     }
+
+    setIsSaving(true);
+
+    // Format data to be passed into GraphQL
+    const itemsToChange = changedItems.map(({ id, parent, softParent, order, softOrder }) => ({
+      id, parent: softParent, order: softOrder,
+    }));
     
-    updateCategories(flatItems);
-  }, [ itemsByLanguage ]);
+    updateCategories(itemsToChange);
+  }, [ itemsByLanguage, changedItems ]);
 
   const processCategories = useCallback((categoriesList, retainIndex = false) => {
     // Add softParent and softOrder used for temporary changes in UI
@@ -159,26 +167,55 @@ const CategoryTree = () => {
       categoryA.softOrder > categoryB.softOrder ? 1  :-1
     ));
 
-    // - Max depth is 1 only
-    // - Add softParent
-    let lastParentID = null;
+    const updatedSoftParents = updateSoftParents(sortedCategories);
+    return updatedSoftParents;
+  });
 
-    sortedCategories.forEach((category, index) => {
-      // Update softParent
-      if ( category.depth >= 1 ) {
-        category.softParent = lastParentID;
-      }
-      else {
-        category.softParent = null;
-        lastParentID = category.id;
-      }
+  /**
+   * Recursive function to update soft parents
+   * of a flat list of categories
+   * based on each item's depth
+   */
+  const updateSoftParents = useCallback((items) => {
+    const updatedSoftParents = [];
+    let currentParentPath = [
+      // { id, depth } - parent id and depth, add as the level goes deeper
+    ];
+
+    items.forEach((item, index) => {
+      const [ previousItem ] = updatedSoftParents.slice(-1);
 
       // Update softOrder, as this can still be null
-      // Even after the previous sorting
-      category.softOrder = index;
+      item.softOrder = index;
+
+      // First item in the list
+      if ( !previousItem ) {
+        item.softParent = null;
+        updatedSoftParents.push(item);
+        return;
+      }
+
+      // One level deeper
+      if ( item.depth > previousItem.depth ) {
+        // Add previous item as a parent
+        currentParentPath.push({
+          id: previousItem.id,
+          depth: previousItem.depth,
+        });
+      }
+      // One level back
+      else if ( item.depth < previousItem.depth ) {
+        // Pop till we get to the direct parent
+        while ( currentParentPath.length && currentParentPath.slice(-1)[0].depth >= item.depth ) {
+          currentParentPath.pop();
+        }
+      }
+
+      item.softParent = (currentParentPath.slice(-1)[0] || {}).id || null;
+      updatedSoftParents.push(item);
     });
 
-    return sortedCategories;
+    return updatedSoftParents;
   });
 
   /**
@@ -208,6 +245,11 @@ const CategoryTree = () => {
       }
     }
   }, [ categories, languages ]);
+
+  useEffect(() => {
+    const _changedItems = getChangedItems();
+    setChangedItems(_changedItems);
+  }, [ itemsByLanguage ]);
 
   useEffect(() => {
     // Find categoriesGroup for current language
@@ -243,7 +285,7 @@ const CategoryTree = () => {
         />
       }
       <div className="category-tree__controls">
-        <SaveButton save={saveChanges} loading={isSaving} />
+        {changedItems.length ? <SaveButton save={saveChanges} loading={isSaving} /> : null}
         <AddCategoryButton />
       </div>
     </div>
