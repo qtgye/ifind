@@ -3,11 +3,13 @@ import { useQuery } from '@apollo/react-hooks';
 import { apiSourceHandle } from '@config/adminApi';
 import getCategoryTree from '@gql/getCategoryTreeQuery';
 import { useAuth } from './authContext';
+import { useRegion } from './regionContext';
 import { locale as language } from '@config/locale';
 
 export const CategoriesContext = createContext({});
 
 export const CategoriesContextProvider = ({ children }) => {
+    const { region } = useRegion();
     const [ categoryTree, setCategoryTree ] = useState([]);
     const { token } = useAuth();
     const {
@@ -15,7 +17,7 @@ export const CategoriesContextProvider = ({ children }) => {
         // loading,
         // error
     } = useQuery(getCategoryTree, {
-        variables: { language },
+        variables: { region, language },
         context: {
             apiSource: apiSourceHandle,
             token
@@ -23,8 +25,8 @@ export const CategoriesContextProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        if ( data?.categoryTree?.categories ) {
-            setCategoryTree(data.categoryTree.categories);
+        if ( data?.categoryTree ) {
+            setCategoryTree(data.categoryTree);
         }
     }, [ data ]);
 

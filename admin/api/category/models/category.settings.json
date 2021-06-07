@@ -83,8 +83,8 @@
       "collection": "product"
     },
     "region": {
-      "model": "region",
-      "via": "categories"
+      "via": "categories",
+      "model": "region"
     },
     "source": {
       "via": "categories",

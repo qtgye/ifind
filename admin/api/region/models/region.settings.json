@@ -23,6 +23,10 @@
     "categories": {
       "via": "region",
       "collection": "category"
+    },
+    "code": {
+      "type": "string",
+      "required": true
     }
   }
 }

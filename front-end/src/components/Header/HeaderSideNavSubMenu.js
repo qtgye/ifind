@@ -15,7 +15,7 @@ const HeaderSideNavSubMenu = ({ item, index, checked, ref }) => {
                 <div ref={ref} />
                 <Link onClick={item.children && showSubCategories} to="#">
                     <IfindIcon icon={item.icon} className="header-side-nav__icon" />
-                    <span>{item.label}</span>
+                    <span>{item.label.label}</span>
                 </Link>
                 {console.log(ref)}
 
@@ -26,7 +26,7 @@ const HeaderSideNavSubMenu = ({ item, index, checked, ref }) => {
                                 <li key={index}>
                                     <Link to="#">
                                         {/* <IfindIcon icon={item.icon} className="header-side-nav__icon" /> */}
-                                        <span>{item.label}</span>
+                                        <span>{item.label.label}</span>
                                     </Link>
                                 </li>
                             );

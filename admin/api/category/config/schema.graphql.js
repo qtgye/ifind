@@ -1,25 +1,21 @@
 module.exports = {
   definition: `
     type CategoryWithChild {
-      label: String!
-      id: String!
+      label: ComponentAtomsTranslateableLabel
+      id: ID!
       order: Int!
       icon: String
-      children: [ Category ]
-    }
-
-    type CategoryTree {
-      language: Language
-      categories: [ CategoryWithChild ]
+      region: Region
+      children: [ CategoryWithChild ]
     }
   `,
   query: `
-    categoryTree (language: String!): CategoryTree
+    categoryTree (region: String!, language: String): [CategoryWithChild]
   `,
   resolver: {
     Query: {
       async categoryTree(_, args, ...rest) {
-        const categoryTree = await strapi.services.category.categoryTree(args.language);
+        const categoryTree = await strapi.services.category.categoryTree(args.region, args.language);
         return categoryTree;
       }
     }
