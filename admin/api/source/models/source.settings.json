@@ -22,6 +22,10 @@
     "categories": {
       "via": "source",
       "collection": "category"
+    },
+    "product": {
+      "via": "source",
+      "model": "product"
     }
   }
 }

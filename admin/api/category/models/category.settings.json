@@ -78,10 +78,6 @@
     "label_preview": {
       "type": "string"
     },
-    "products": {
-      "via": "category",
-      "collection": "product"
-    },
     "region": {
       "via": "categories",
       "model": "region"
@@ -96,6 +92,10 @@
       "component": "atoms.translateable-label",
       "required": true,
       "min": 1
+    },
+    "products": {
+      "via": "categories",
+      "collection": "product"
     }
   }
 }

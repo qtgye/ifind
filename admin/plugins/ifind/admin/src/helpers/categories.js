@@ -242,3 +242,34 @@ export const useCategories = () => {
     error,
   ];
 }
+
+/**
+ * Given a category id,
+ * this will generate the ancestral path towards the category,
+ * with the given category id being the last item in the array
+ * Like so: [ grandParent, parent, child, grandChild, ...soOn ]
+ */
+export const buildCategoryPath = (categoryID, categories = []) => {
+  const byId = categories.reduce(( all, category) => ({
+    ...all,
+    [category.id]: category,
+  }), {});
+
+  const categoryPath = [];
+  const matchedCategory = byId[categoryID];
+
+  if ( !matchedCategory ) {
+    return categoryPath;
+  }
+
+  let lastCategoryEntry = matchedCategory;
+  while ( lastCategoryEntry ) {
+    categoryPath.push(lastCategoryEntry);
+    lastCategoryEntry = lastCategoryEntry.parent ? byId[lastCategoryEntry.parent.id] : null;
+  }
+
+  // From granparent -> grandchild
+  categoryPath.reverse();
+
+  return categoryPath;
+}

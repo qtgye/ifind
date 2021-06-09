@@ -1,122 +1,160 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
+import { InputText, Label, Select, Text } from '@buffetjs/core';
+import { Header } from '@buffetjs/custom';
+
 import { useSourceRegion } from '../../helpers/sourceRegion';
-import { useCategories, mapCategoriesTree } from '../../helpers/categories';
-import { InputText, Label, Select } from '@buffetjs/core';
+import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../helpers/categories';
+
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
 import ImagePreview from '../ImagePreview';
+import NestedCategoryOption from '../NestedCategoryOption';
 
-
-const websiteTabOptions = [
+const _websiteTabOptions = [
   'home',
   'product_comparison',
   'find_tube',
 ];
 
+export const useProductFormData = () => {
+  const [ productFormData, setProductFormData ] = useState({});
 
-const NestedCategoryOption = ({ categories, activeCategory = null, setFinalCategory = null, isChildren }) => {
-  const [ id ] = useState(Math.random() * 1000);
-  const [ categoryOptions, setCategoryOptions ] = useState([]);
-  const [ selectedCategory, setSelectedCategory ] = useState(activeCategory);
-  const [ children, setChildren  ] = useState(null);
-
-  const categoryLabel = useCallback((categoryData) => (
-    `${categoryData.label} (${categoryData.id})`
-  ), []);
-
-  const setFinalSelectedCategory = useCallback((categoryID) => {
-    if ( typeof setFinalCategory === 'function' ) {
-      setFinalCategory(categoryID);
-    }
-  }, [ setFinalCategory ]);
-
-  useEffect(() => {
-    console.log({ categories });
-
-    const processedCategories = categories.map(category => ({
-      label: categoryLabel(category),
-      id: category.id,
-      category
-    }));
-
-    setCategoryOptions([
-      '',
-      ...processedCategories
-    ]);
-
-    // Clear selections
-    setFinalSelectedCategory(null);
-    setChildren(null);
-    setSelectedCategory(null);
-
-  }, [ categories ]);
-
-  useEffect(() => {
-    const matchedCategory = categoryOptions.find(categoryOption => (
-      selectedCategory === categoryOption.label
-    ));
-
-    console.log({ selectedCategory, matchedCategory, categoryOptions });
-
-    if ( matchedCategory ) {
-      if ( matchedCategory?.category?.children ) {
-        setChildren(Object.values(matchedCategory.category.children));
-      } else {
-        setChildren(null);
-      }
-    } else {
-      setChildren(null);
-      setFinalSelectedCategory(null);
-    }
-  }, [ selectedCategory ]);
-
-  return (
-    <>
-      <InputBlock className="col-md-12">
-        <Label htmlFor="category">{isChildren ? 'Subcategory' : 'Category'}</Label>
-        <Select
-          name="category"
-          id="category"
-          onChange={({ target: { value } }) => {
-            setSelectedCategory(value);
-          }}
-          options={categoryOptions.map(option => option?.label || '')}
-          value={selectedCategory}
-        />
-      </InputBlock>
-      {
-        (children && (
-          <NestedCategoryOption
-            categories={children}
-            setFinalCategory={setFinalCategory}
-            isChildren={true}
-            />
-        ))
-      }
-    </>
-  )
+  return [
+    productFormData,
+    setProductFormData
+  ]
 }
 
-
-const ProductForm = () => {
+const ProductForm = ({ product, setProductFormData }, ref) => {
   const { sources } = useSourceRegion();
   const [ categories ] = useCategories();
-  const websiteTabOptionsRef = useRef(websiteTabOptions);
+  const [ websiteTabOptions ] = useState(_websiteTabOptions);
   const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
-  const [ categoryOptions, setCategoryOptions ] = useState([]);
+
+  // Read-only fields
+  const [ id, setId ] = useState(null);
+  const [ position, setPosition ] = useState(null);
+  const [ createdAt, setCreatedAt ] = useState('');
+  const [ createdBy, setCreatedBy ] = useState('');
+  const [ updatedAt, setUpdatedAt ] = useState('');
+  const [ updatedBy, setUpdatedBy ] = useState('');
+
+  // Nested category data
+  const [ categoryPath, setCategoryPath ] = useState([]);
+  const [ categoryOptions, setCategoryOptions ] = useState([]); // source-region-filtered categories
 
   // Field states
   const [ websiteTab, setWebsiteTab ] = useState('home');
   const [ title, setTitle ] = useState('');
-  const [ category, setCategory ] = useState('');
+  const [ category, setCategory ] = useState(null);
   const [ urlType, setUrlType ] = useState('');
+  const [ url, setUrl ] = useState('');
   const [ price, setPrice ] = useState(0);
   const [ image, setImage ] = useState('');
 
-  const [ subCategoryOptions, setSubCategoryOptions ] = useState([]);
-  const [ subCategory, setSubCategory ] = useState('');
+  const collectFormData = useCallback(() => {
+    return {
+      id,
+      websiteTab,
+      title,
+      category,
+      urlType,
+      price,
+      image,
+      url,
+      urlType
+    }
+  }, [
+    id,
+    websiteTab,
+    title,
+    category,
+    urlType,
+    price,
+    image,
+    url,
+    urlType
+  ]);
+
+  const processFormData = useCallback((formData) => {
+    // Process urlType into region and source
+    if ( formData.urlType ) {
+      const matchedUrlTypeOption = urlTypeOptions.find(({ label }) => label === formData.urlType);
+      if ( matchedUrlTypeOption ) {
+        formData.region = matchedUrlTypeOption.region;
+        formData.source = matchedUrlTypeOption.source;
+      }
+    }
+    // Process websiteTab
+    formData.website_tab = formData.websiteTab;
+
+    // Delete unnecessary props
+    delete formData.urlType;
+    delete formData.websiteTab;
+
+    return formData;
+  }, []);
+
+  const onChange = useCallback(() => {
+    const formData = collectFormData();
+    const processedData = processFormData(formData);
+    setProductFormData(processedData);
+  }, [ collectFormData, setProductFormData, processFormData ]);
+
+  const onCategorySelect = useCallback((categoryID) => {
+    setCategory(categoryID);
+  }, [ setCategory ]);
+
+  const setInitialCategoryPath = useCallback(() => {
+    // Build category path
+    const categoryPath = buildCategoryPath(category, categories);
+    // Use only id's for path
+    setCategoryPath(categoryPath.map(({ id }) => id));
+  }, [ category, categories ]);
 
   useEffect(() => {
+    if ( product ) {
+      setId(product.id);
+      setWebsiteTab(product.website_tab);
+      setTitle(product.title);
+      setUrl(product.url);
+      setPrice(product.price);
+      setImage(product.image);
+      setPosition(product.position);
+      setCategory(product.categories[0]?.id);
+
+      // Find url_type based on source and region
+      if ( product.source && product.region ) {
+        const matchedUrlType = urlTypeOptions.find(urlType => (
+          urlType.source === product.source.id && urlType.region === product.region.id
+        ));
+        matchedUrlType && setUrlType(matchedUrlType.label);
+      }
+    }
+  }, [ product, urlTypeOptions ]);
+
+  useEffect(() => {
+    onChange();
+  }, [
+    id,
+    websiteTab,
+    title,
+    category,
+    urlType,
+    price,
+    image,
+    url,
+  ]);
+
+  useEffect(() => {
+    if ( category ) {
+      setInitialCategoryPath();
+    }
+  }, [ category ]);
+
+  useEffect(() => {
+    const urlTypeOptions = [''];
+
     if ( sources?.length ) {
       const sourceRegionOptions = sources.reduce((sources, source) => ([
         ...sources,
@@ -127,8 +165,10 @@ const ProductForm = () => {
         }))
       ]), []);
 
-      setUrlTypeOptions(sourceRegionOptions);
+      urlTypeOptions.push(...sourceRegionOptions);
     }
+
+    setUrlTypeOptions(urlTypeOptions);
   }, [ sources ]);
 
   useEffect(() => {
@@ -145,10 +185,13 @@ const ProductForm = () => {
       const categoryTree = mapCategoriesTree(filteredCateogories);
       setCategoryOptions(Object.values(categoryTree));
     }
+    else {
+      setCategoryOptions([]);
+    }
   }, [ categories, urlType, urlTypeOptions ]);
 
   return (
-    <div className="row">
+    <form className="row">
       <Panel className="col-md-8">
 
         {/* Website Tab */}
@@ -160,12 +203,22 @@ const ProductForm = () => {
             onChange={({ target: { value } }) => {
               setWebsiteTab(value);
             }}
-            options={websiteTabOptionsRef.current}
+            options={websiteTabOptions}
             value={websiteTab}
           />
         </InputBlock>
-
-        <br />
+        
+        {/* Position */}
+        <InputBlock className="col-md-6">
+          <Label htmlFor="website-tab">Position</Label>
+          <InputText
+              id='position'
+              name='position'
+              type="number"
+              value="0"
+              disabled
+            />
+        </InputBlock>
 
         {/* Title */}
         <InputBlock className="col-md-12">
@@ -173,9 +226,7 @@ const ProductForm = () => {
           <InputText
               id='product-title'
               name='product-title'
-              onChange={({ target: { value } }) => {
-                setTitle(value);
-              }}
+              onChange={({ target: { value } }) => setTitle(value)}
               type="text"
               value={title}
             />
@@ -190,7 +241,7 @@ const ProductForm = () => {
             onChange={({ target: { value } }) => {
               setUrlType(value);
             }}
-            options={urlTypeOptions.map(({ label }) => label)}
+            options={urlTypeOptions.map((urlType) => (urlType && urlType.label) || '')}
             value={urlType}
           />
         </InputBlock>
@@ -201,11 +252,9 @@ const ProductForm = () => {
           <InputText
             id='url'
             name='url'
-            onChange={({ target: { value } }) => {
-              setTitle(value);
-            }}
-            type="url"
-            value={title}
+            onChange={({ target: { value } }) => setUrl(value)}
+            type="text"
+            value={url}
           />
         </InputBlock>
 
@@ -215,9 +264,7 @@ const ProductForm = () => {
           <InputText
             id='price'
             name='price'
-            onChange={({ target: { value } }) => {
-              setPrice(value);
-            }}
+            onChange={({ target: { value } }) => setPrice(value)}
             step=".01"
             type="number"
             value={price}
@@ -230,10 +277,7 @@ const ProductForm = () => {
           <InputText
             id='image'
             name='image'
-            onChange={({ target: { value } }) => {
-              console.log({ value });
-              setImage(value);
-            }}
+            onChange={({ target: { value } }) => setImage(value)}
             type="text"
             value={image}
           />
@@ -251,14 +295,25 @@ const ProductForm = () => {
         {/* Category Options */}
         <NestedCategoryOption
           categories={categoryOptions}
-          setFinalCategory={(selectedCat) => {
-            console.log('Selected Category', selectedCat);
-            // setCategory()
-          }}
+          categoryPath={categoryPath}
+          onChange={onCategorySelect}
         />
       </Panel>
-    </div>
+
+      <br /><br />
+
+      <Panel className="col-md-12">
+        <div className="col-md-12">
+          <Text size="lg"><strong>Meta</strong></Text>
+          <br />
+          <p>Last Modified on <strong>last_modified</strong> by <strong><em>author_name</em></strong></p>
+          <p>Created on <strong>date_created</strong> by <strong><em>author_name</em></strong></p>
+        </div>
+      </Panel>
+
+    </form>
   )
 };
 
-export default ProductForm;
+
+export default memo(ProductForm);

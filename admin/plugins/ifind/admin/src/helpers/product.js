@@ -6,7 +6,22 @@ import { useQuery, useMutation } from './query';
 
 export const productDataFragment = `
   fragment ProductDataFragment on Product {
+    id
     title
+    url
+    price
+    image
+    position
+    website_tab
+    categories {
+      id
+    }
+    source {
+      id
+    }
+    region {
+      id
+    }
   }
 `;
 
@@ -46,7 +61,7 @@ export const useProduct = () => {
       error: updateProductError
     }
   ] = useMutation();
-  const [ productData, setSetProductData ] = useState(null);
+  const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
 
@@ -65,11 +80,11 @@ export const useProduct = () => {
     if ( productId ) {
       setQuery(_productQuery.current);
     }
-  }, [ productId ]);
+  }, [ productId, _productQuery ]);
 
   useEffect(() => {
     if ( data?.product ) {
-      setSetProductData(data.product);
+      setProductData(data.product);
     }
   }, [ data ]);
   
@@ -78,4 +93,4 @@ export const useProduct = () => {
     updateProduct,
     addProduct,
   }
-}
+};

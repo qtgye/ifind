@@ -27,6 +27,10 @@
     "code": {
       "type": "string",
       "required": true
+    },
+    "product": {
+      "via": "region",
+      "model": "product"
     }
   }
 }
