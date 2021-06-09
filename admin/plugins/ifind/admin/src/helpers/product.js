@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../providers/authProvider';
 import { useLanguages } from './languages';
+import { validationRules } from './form';
 import { useQuery, useMutation } from './query';
 
 export const productDataFragment = `

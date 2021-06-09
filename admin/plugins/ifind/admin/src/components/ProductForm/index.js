@@ -22,12 +22,13 @@ export const useProductFormData = () => {
   return [
     productFormData,
     setProductFormData
-  ]
+  ];
 }
 
-const ProductForm = ({ product, setProductFormData }, ref) => {
+const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const { sources } = useSourceRegion();
   const [ categories ] = useCategories();
+  const [ productFormData ] = useProductFormData();
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
   const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
 
@@ -81,8 +82,10 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
     if ( formData.urlType ) {
       const matchedUrlTypeOption = urlTypeOptions.find(({ label }) => label === formData.urlType);
       if ( matchedUrlTypeOption ) {
-        formData.region = matchedUrlTypeOption.region;
-        formData.source = matchedUrlTypeOption.source;
+        formData.url_type = {
+          region: matchedUrlTypeOption.region,
+          source: matchedUrlTypeOption.source,
+        };
       }
     }
     // Process websiteTab
@@ -93,7 +96,7 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
     delete formData.websiteTab;
 
     return formData;
-  }, []);
+  }, [ urlTypeOptions ]);
 
   const onChange = useCallback(() => {
     const formData = collectFormData();
@@ -190,12 +193,16 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
     }
   }, [ categories, urlType, urlTypeOptions ]);
 
+  useEffect(()=> {
+    console.log({ formErrors });
+  }, [formErrors]);
+
   return (
     <form className="row">
       <Panel className="col-md-8">
 
         {/* Website Tab */}
-        <InputBlock className="col-md-6">
+        <InputBlock className="col-md-6" error={formErrors.website_tab}>
           <Label htmlFor="website-tab">Website Tab</Label>
           <Select
             name="website-tab"
@@ -221,7 +228,7 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
         </InputBlock>
 
         {/* Title */}
-        <InputBlock className="col-md-12">
+        <InputBlock className="col-md-12" error={formErrors.title}>
           <Label htmlFor="product-title">Title</Label>
           <InputText
               id='product-title'
@@ -233,7 +240,7 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
         </InputBlock>
 
         {/* URL Type */}
-        <InputBlock className="col-md-3">
+        <InputBlock className="col-md-3" error={formErrors.url_type}>
           <Label htmlFor="url-type">URL Type</Label>
           <Select
             name="url-type"
@@ -247,7 +254,7 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
         </InputBlock>
 
         {/* URL */}
-        <InputBlock className="col-md-9">
+        <InputBlock className="col-md-9" error={formErrors.url}>
           <Label htmlFor="url">URL</Label>
           <InputText
             id='url'
@@ -259,7 +266,7 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
         </InputBlock>
 
         {/* Price */}
-        <InputBlock className="col-md-3">
+        <InputBlock className="col-md-3" error={formErrors.price}>
           <Label htmlFor="price">Price</Label>
           <InputText
             id='price'
@@ -271,8 +278,8 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
           />
         </InputBlock>
 
-        {/* Price */}
-        <InputBlock className="col-md-9">
+        {/* Image */}
+        <InputBlock className="col-md-9" error={formErrors.image}>
           <Label htmlFor="image">Image URL</Label>
           <InputText
             id='image'
@@ -297,17 +304,21 @@ const ProductForm = ({ product, setProductFormData }, ref) => {
           categories={categoryOptions}
           categoryPath={categoryPath}
           onChange={onCategorySelect}
+          hasError={formErrors.category}
         />
+        { formErrors.category && (
+          <Text className="col-sm-12" size="sm" color="red">{formErrors.category.join('<br />')}</Text>
+        )}
       </Panel>
 
-      <br /><br />
+      <hr />
 
       <Panel className="col-md-12">
         <div className="col-md-12">
           <Text size="lg"><strong>Meta</strong></Text>
           <br />
-          <p>Last Modified on <strong>last_modified</strong> by <strong><em>author_name</em></strong></p>
-          <p>Created on <strong>date_created</strong> by <strong><em>author_name</em></strong></p>
+          <Text size="sm" color="gray">Last Modified on <strong>last_modified</strong> by <strong><em>author_name</em></strong></Text>
+          <Text size="sm" color="gray">Created on <strong>date_created</strong> by <strong><em>author_name</em></strong></Text>
         </div>
       </Panel>
 

@@ -17,7 +17,7 @@ import InputBlock from '../InputBlock';
 
 */
 
-const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, level = 1 }) => {
+const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, level = 1, hasError = false}) => {
   const [ id ] = useState(Math.random() * 1000);
   const [ categoryOptions, setCategoryOptions ] = useState([]);
   const [ selectedCategory, setSelectedCategory ] = useState(null);
@@ -104,7 +104,7 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
 
   return (
     <>
-      <InputBlock className="col-md-12">
+      <InputBlock className={[ 'col-md-12', hasError ? 'input-block--error': '' ].join(' ')}>
         <Label htmlFor="category">{level > 1 ? 'Subcategory' : 'Category'}</Label>
         {
           (level === 1 && categoryOptions.length <= 1) ?
@@ -127,6 +127,7 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
             onChange={onChange}
             level={++level}
             categoryPath={categoryPath.slice(1)}
+            hasError={hasError}
             />
         ))
       }
