@@ -23,9 +23,9 @@
       "via": "source",
       "collection": "category"
     },
-    "product": {
+    "products": {
       "via": "source",
-      "model": "product"
+      "collection": "product"
     }
   }
 }

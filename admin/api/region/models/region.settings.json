@@ -28,9 +28,9 @@
       "type": "string",
       "required": true
     },
-    "product": {
+    "products": {
       "via": "region",
-      "model": "product"
+      "collection": "product"
     }
   }
 }

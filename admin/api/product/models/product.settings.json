@@ -45,11 +45,11 @@
     },
     "region": {
       "model": "region",
-      "via": "product"
+      "via": "products"
     },
     "source": {
       "model": "source",
-      "via": "product"
+      "via": "products"
     },
     "website_tab": {
       "type": "string",
