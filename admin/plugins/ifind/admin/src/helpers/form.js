@@ -55,7 +55,7 @@ export const validateData = (data, validationRules = {}) => {
   });
 
   return {
-    success: Object.keys(validationErrors).length,
+    success: Object.keys(validationErrors).length ? false : true,
     errors: validationErrors,
   };
 };

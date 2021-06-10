@@ -6,55 +6,79 @@ import { validationRules } from './form';
 import { useQuery, useMutation } from './query';
 
 export const productDataFragment = `
-  fragment ProductDataFragment on Product {
+fragment ProductDataFragment on Product {
+  id
+  title
+  url
+  price
+  image
+  position
+  website_tab
+  categories {
     id
-    title
-    url
-    price
-    image
-    position
-    website_tab
-    categories {
-      id
-    }
-    source {
-      id
-    }
-    region {
-      id
-    }
   }
+  source {
+    id
+  }
+  region {
+    id
+  }
+}
 `;
 
 export const productQuery = `
-  ${productDataFragment}
-  query GetProduct ($id: ID!) {
-    product (id: $id) {
-      ... ProductDataFragment
-    }
+${productDataFragment}
+query GetProduct ($id: ID!) {
+  product (id: $id) {
+    ... ProductDataFragment
   }
+}
 `;
 
-export const productMutation = (product) => (
-  `
-  mutation {
-    updateProduct (input: {
-      where: { id: ${id} },
+export const addProductMutation = `
+${productDataFragment}
+mutation CreateProduct (
+  $url: String!
+  $image: String!
+  $title: String!
+  $website_tab: String!
+  $source: ID!
+  $region: ID!
+  $price: Float!
+  $categories: [ID!]!
+  ){
+    createProduct (input: {
       data: {
-        
+        url: $url
+        image: $image
+        title: $title
+        website_tab: $website_tab
+        source: $source
+        region: $region
+        categories: $categories
+        price: $price
       }
     }) {
-      ... UpdatedProductFields
+      product {
+        ... ProductDataFragment
+      }
     }
   }
   `
-);
 
 export const useProduct = () => {
-  const _productQuery = useRef(productQuery);
   const { productId } = useParams();
-  const [ query, setQuery ] = useState(null);
-  const { data } = useQuery(query, { id: productId });
+  const [ getProductQuery, setGetProductQuery ] = useState(null);
+  const [ productMutationQuery, setProductMutationQuery ] = useState(null);
+  const { data: queryData, refetch } = useQuery(getProductQuery, { id: productId });
+  const [
+    addOrUpdateProduct,
+    {
+      // loading,
+      // error,
+      data: mutationData,
+    }
+  ] = useMutation();
   const [
     callMutation,
     {
@@ -65,29 +89,35 @@ export const useProduct = () => {
   const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
-
+  
   const addProduct = useCallback((data) => {
-    console.log('Add product', data);
+    addOrUpdateProduct(addProductMutation, data);
   });
-
+  
   const updateProduct = useCallback((data) => {
-    if ( productData ) {
-      // setSetProductData(data);
-      console.log('Saving product', data);
+    if ( data ) {
+      console.log('Updating product', data);
     }
-  }, [ productData ]);
-
+  });
+  
   useEffect(() => {
     if ( productId ) {
-      setQuery(_productQuery.current);
+      console.log({ productId });
+      setGetProductQuery(productQuery);
     }
-  }, [ productId, _productQuery ]);
-
+  }, [ productId, refetch, productQuery ]);
+  
   useEffect(() => {
-    if ( data?.product ) {
-      setProductData(data.product);
+    if ( queryData?.product ) {
+      setProductData(queryData.product);
     }
-  }, [ data ]);
+  }, [ queryData ]);
+  
+  useEffect(() => {
+    if ( mutationData?.createProduct?.product ) {
+      setProductData(mutationData.createProduct.product);
+    }
+  }, [ mutationData ]);
   
   return {
     productData,

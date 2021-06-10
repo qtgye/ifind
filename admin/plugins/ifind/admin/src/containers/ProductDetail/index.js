@@ -1,5 +1,5 @@
 import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Header } from '@buffetjs/custom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
@@ -36,9 +36,11 @@ const ProductDetail = () => {
     updateProduct,
     addProduct,
    } = useProduct();
+  const history = useHistory();
   const [ title, setTitle ] = useState('');
   const [ formErrors, setFormErrors ] = useState({});
   const [ productFormData, setProductFormData ] = useProductFormData();
+  const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
 
   const saveProduct = useCallback(() => {
     const { success, errors } = validateData(productFormData, productValidationRules);
@@ -50,42 +52,76 @@ const ProductDetail = () => {
       return;
     }
 
+    // Save product
     else {
-      // Save product
-      console.log('Save product to API');
+      // Prepare data for graphql request
+      const formattedData = formatProductFormData(productFormData);
+
+      if ( !formattedData.id ) {
+        setRedirectOnUpdate(true);
+        console.log({ formattedData });
+        addProduct(formattedData);
+      }
+      else {
+        updateProduct(formattedData);
+      }
     }
-  }, [ productFormData, productValidationRules ]);
+  }, [ productFormData, productValidationRules, updateProduct, addProduct ]);
+  
+  const formatProductFormData = useCallback((productFormData) => {
+    if ( productFormData.url_type ) {
+      productFormData.region = productFormData.url_type.region;
+      productFormData.source = productFormData.url_type.source;
+    }
+
+    productFormData.price = Number(productFormData.price);
+    productFormData.categories = [ productFormData.category ];
+
+    // Delete unnecessary props for graphql request
+    delete productFormData.url_type;
+    delete productFormData.category;
+
+    return productFormData;
+  });
 
   useEffect(() => {
-    if ( productData ) {
-      setTitle(productData.title);
-    }
-    else {
+    if ( !productData ) {
       setTitle('Create New Product');
+    }
+
+    else {
+      if ( redirectOnUpdate ) {
+        history.push('/plugins/ifind/products/' + productData.id);
+      }
+      else {
+        setTitle(productData.title);
+      }
     }
   }, [ productData ]);
 
   return (
-    <div className="container">
-      <div className="row">
-        <Header
-          title={{ label: title }}
-          actions={[
-            {
-              label: 'Save',
-              onClick: () => saveProduct(),
-              color: 'success',
-              type: 'button',
-              icon: (<FontAwesomeIcon icon={faSave} />)
-            },
-          ]}
+    <div className="product-detail">
+      <div className="container">
+        <div className="row">
+          <Header
+            title={{ label: title }}
+            actions={[
+              {
+                label: 'Save',
+                onClick: () => saveProduct(),
+                color: 'success',
+                type: 'button',
+                icon: (<FontAwesomeIcon icon={faSave} />)
+              },
+            ]}
+          />
+        </div>
+        <ProductForm
+          product={productData}
+          setProductFormData={setProductFormData}
+          formErrors={formErrors}
         />
       </div>
-      <ProductForm
-        product={productData}
-        setProductFormData={setProductFormData}
-        formErrors={formErrors}
-      />
     </div>
   )
 };
