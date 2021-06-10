@@ -42,6 +42,8 @@ export const validationRules = {
 export const validateData = (data, validationRules = {}) => {
   const validationErrors = {};
 
+  console.log('validating data', {...data});
+
   Object.entries(validationRules).forEach(([ field, rules ]) => {
     const ruleCheckers = Array.isArray(rules) ? rules : [ rules ];
 

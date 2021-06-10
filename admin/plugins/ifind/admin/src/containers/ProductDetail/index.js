@@ -6,7 +6,7 @@ import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 import { useProduct } from '../../helpers/product';
 import { validationRules, validateData } from '../../helpers/form';
-import ProductForm, { useProductFormData } from '../../components/ProductForm';
+import ProductForm from '../../components/ProductForm';
 
 const productValidationRules = {
   title: validationRules.required('Please provide a title'),
@@ -31,16 +31,18 @@ const productValidationRules = {
 };
 
 const ProductDetail = () => {
-  const {
+  const [
     productData,
     updateProduct,
     addProduct,
-   } = useProduct();
+  ] = useProduct();
   const history = useHistory();
   const [ title, setTitle ] = useState('');
   const [ formErrors, setFormErrors ] = useState({});
-  const [ productFormData, setProductFormData ] = useProductFormData();
+  const [ productFormData, setProductFormData ] = useState({});
   const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
+  const [ hasChanges, setHasChanges ] = useState(false);
+  const [ headerActions, setHeaderActions ] = useState([]);
 
   const saveProduct = useCallback(() => {
     const { success, errors } = validateData(productFormData, productValidationRules);
@@ -59,30 +61,29 @@ const ProductDetail = () => {
 
       if ( !formattedData.id ) {
         setRedirectOnUpdate(true);
-        console.log({ formattedData });
         addProduct(formattedData);
       }
       else {
         updateProduct(formattedData);
       }
     }
-  }, [ productFormData, productValidationRules, updateProduct, addProduct ]);
+  }, [ productFormData, updateProduct, addProduct ]);
   
-  const formatProductFormData = useCallback((productFormData) => {
-    if ( productFormData.url_type ) {
-      productFormData.region = productFormData.url_type.region;
-      productFormData.source = productFormData.url_type.source;
+  const formatProductFormData = useCallback((formData) => {
+    if ( formData.url_type ) {
+      formData.region = formData.url_type.region;
+      formData.source = formData.url_type.source;
     }
 
-    productFormData.price = Number(productFormData.price);
-    productFormData.categories = [ productFormData.category ];
+    formData.price = Number(formData.price);
+    formData.categories = [ formData.category ];
 
     // Delete unnecessary props for graphql request
-    delete productFormData.url_type;
-    delete productFormData.category;
+    delete formData.url_type;
+    delete formData.category;
 
-    return productFormData;
-  });
+    return formData;
+  }, []);
 
   useEffect(() => {
     if ( !productData ) {
@@ -99,6 +100,38 @@ const ProductDetail = () => {
     }
   }, [ productData ]);
 
+  useEffect(() => {
+    const rawProductData = productData || {};
+
+    // Check if there are changes
+    const hasChanged = Object.entries(productFormData).some(([ formKey, formValue ]) => {
+      switch (formKey) {
+        case 'category':
+          if ( productFormData[formKey] ) {
+            return !rawProductData.categories?.length
+              || rawProductData.categories.find(({ id }) => id !== productFormData[formKey]);
+          }
+          else {
+            return rawProductData.categories?.length;
+          }
+        case 'url_type':
+          return productFormData[formKey]?.region !== rawProductData.region?.id
+            || productFormData[formKey]?.source !== rawProductData.source?.id;
+        case 'title':
+        case 'url':
+        case 'website_tab':
+        case 'price':
+        case 'image':
+          return productFormData[formKey] !== rawProductData[formKey];
+        default:;
+      }
+
+      return false;
+    });
+
+    setHasChanges(hasChanged);
+  }, [ productFormData, productData ]);
+
   return (
     <div className="product-detail">
       <div className="container">
@@ -108,9 +141,10 @@ const ProductDetail = () => {
             actions={[
               {
                 label: 'Save',
-                onClick: () => saveProduct(),
+                onClick: saveProduct,
                 color: 'success',
                 type: 'button',
+                disabled: !hasChanges,
                 icon: (<FontAwesomeIcon icon={faSave} />)
               },
             ]}

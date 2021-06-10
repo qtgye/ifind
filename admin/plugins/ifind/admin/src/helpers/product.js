@@ -35,9 +35,10 @@ query GetProduct ($id: ID!) {
 }
 `;
 
-export const addProductMutation = `
+export const updateProductMutation = `
 ${productDataFragment}
 mutation CreateProduct (
+  $id: ID!
   $url: String!
   $image: String!
   $title: String!
@@ -46,8 +47,13 @@ mutation CreateProduct (
   $region: ID!
   $price: Float!
   $categories: [ID!]!
-  ){
-    createProduct (input: {
+)
+{
+  updateProduct (
+    input: {
+      where: {
+        id: $id
+      }
       data: {
         url: $url
         image: $image
@@ -58,13 +64,46 @@ mutation CreateProduct (
         categories: $categories
         price: $price
       }
-    }) {
-      product {
-        ... ProductDataFragment
-      }
+    }
+  )
+  {
+    product {
+      ... ProductDataFragment
     }
   }
-  `
+}
+`;
+
+export const addProductMutation = `
+${productDataFragment}
+mutation CreateProduct (
+$url: String!
+$image: String!
+$title: String!
+$website_tab: String!
+$source: ID!
+$region: ID!
+$price: Float!
+$categories: [ID!]!
+){
+  createProduct (input: {
+    data: {
+      url: $url
+      image: $image
+      title: $title
+      website_tab: $website_tab
+      source: $source
+      region: $region
+      categories: $categories
+      price: $price
+    }
+  }) {
+    product {
+      ... ProductDataFragment
+    }
+  }
+}
+`
 
 export const useProduct = () => {
   const { productId } = useParams();
@@ -95,14 +134,13 @@ export const useProduct = () => {
   });
   
   const updateProduct = useCallback((data) => {
-    if ( data ) {
-      console.log('Updating product', data);
+    if ( data?.id ) {
+      addOrUpdateProduct(updateProductMutation, data);
     }
   });
   
   useEffect(() => {
     if ( productId ) {
-      console.log({ productId });
       setGetProductQuery(productQuery);
     }
   }, [ productId, refetch, productQuery ]);
@@ -117,11 +155,14 @@ export const useProduct = () => {
     if ( mutationData?.createProduct?.product ) {
       setProductData(mutationData.createProduct.product);
     }
+    else if ( mutationData?.updateProduct?.product ) {
+      setProductData(mutationData.updateProduct.product);
+    }
   }, [ mutationData ]);
   
-  return {
+  return [
     productData,
     updateProduct,
     addProduct,
-  }
+  ]
 };

@@ -16,19 +16,9 @@ const _websiteTabOptions = [
   'find_tube',
 ];
 
-export const useProductFormData = () => {
-  const [ productFormData, setProductFormData ] = useState({});
-
-  return [
-    productFormData,
-    setProductFormData
-  ];
-}
-
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const { sources } = useSourceRegion();
   const [ categories ] = useCategories();
-  const [ productFormData ] = useProductFormData();
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
   const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
 
@@ -63,7 +53,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       price,
       image,
       url,
-      urlType
     }
   }, [
     id,
@@ -88,6 +77,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         };
       }
     }
+    // Process price to ensure Number type
+    if ( formData.price ) {
+      formData.price = Number(formData.price);
+    }
+
     // Process websiteTab
     formData.website_tab = formData.websiteTab;
 
@@ -100,7 +94,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   const onChange = useCallback(() => {
     const formData = collectFormData();
-    const processedData = processFormData(formData);
+    const processedData = processFormData({...formData});
     setProductFormData(processedData);
   }, [ collectFormData, setProductFormData, processFormData ]);
 
@@ -192,10 +186,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setCategoryOptions([]);
     }
   }, [ categories, urlType, urlTypeOptions ]);
-
-  useEffect(()=> {
-    console.log({ formErrors });
-  }, [formErrors]);
 
   return (
     <form className="row">
