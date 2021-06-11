@@ -1,0 +1,30 @@
+.products-list {
+  &__controls {
+    margin-bottom: 20px;
+
+    button + button {
+      margin-left: 20px;
+    }
+  }
+  &__thumbnail {
+    height: 30px;
+
+    img {
+      display: block;
+      height: 100%;
+    }
+  }
+
+  &__product-ctions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+  }
+
+  &__product-action {
+    & + & {
+      margin-left: 10px;
+    }
+  }
+}

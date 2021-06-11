@@ -10,12 +10,14 @@ const providers = [
   DragAndDropProvider,
 ];
 
-const Providers = ({ children }) => (
-  providers.reverse().reduce((all, ParentProvider) => (
+const Providers = ({ children }) => {
+  providers.reverse();
+  
+  return providers.reduce((all, ParentProvider) => (
     <ParentProvider>
       {all}
     </ParentProvider>
   ), children)
-);
+};
 
 export default Providers;

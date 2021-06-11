@@ -4,14 +4,17 @@
  *
  */
 
-import React, { memo, useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Switch, Route, useHistory } from 'react-router-dom';
 import pluginId from '../../pluginId';
 
 import { Header } from '@buffetjs/custom';
 
-import './styles.scss';
+import { composeComponents } from '../../helpers/composeComponents';
+import { ProductsListProvider } from '../../providers/productsListProvider';
+import ProductsList from '../../components/ProductsList';
 
+import './styles.scss';
 
 const ProductsListing = () => {
   const history = useHistory();
@@ -32,8 +35,9 @@ const ProductsListing = () => {
           ]}
         />
       </div>
+      <ProductsList />
     </div>
   );
 };
 
-export default memo(ProductsListing);
+export default memo(composeComponents(ProductsListProvider, ProductsListing));
