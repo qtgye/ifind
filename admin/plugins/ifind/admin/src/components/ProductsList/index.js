@@ -94,6 +94,7 @@ const ProductsList = () => {
     // setSortBy,
     // setSortOrder,
     refresh,
+    deleteProducts,
   } = useProductsList();
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
@@ -121,8 +122,17 @@ const ProductsList = () => {
     );
   }, []);
 
-  const deleteProducts = useCallback((productIDs) => {
-    console.log('Deleteing products', productIDs);
+  const removeProducts = useCallback((productIDs) => {
+    const noun = productIDs.length ? 'Products' : 'Product';
+
+    strapi.lockApp();
+    
+    deleteProducts(productIDs)
+    .then(() => strapi.unlockApp())
+    .then(() => strapi.notification.toggle({
+      title: `Deleted!`,
+      message: `Successfully removed ${productIDs.length} ${noun.toLocaleLowerCase()}`,
+    }));
   }, []);
 
   const confirmProductDelete = useCallback((productData) => {
@@ -131,9 +141,9 @@ const ProductsList = () => {
     `);
 
     if ( willDeleteProduct ) {
-      deleteProducts([productData.id]);
+      removeProducts([productData.id]);
     }
-  }, [ deleteProducts ]);
+  }, [ removeProducts ]);
 
   const confirmDeleteAll = useCallback(() => {
     const toDelete = rows.filter(({ selected }) => selected).map(({ id }) => id);
@@ -143,7 +153,7 @@ const ProductsList = () => {
     `);
 
     if ( willDeleteAll ) {
-      deleteProducts(toDelete);
+      removeProducts(toDelete);
     }
   }, [ rows ]);
 

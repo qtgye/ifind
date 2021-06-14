@@ -71,11 +71,11 @@ export const useMutation = () => {
   const { jwt } = useAuth();
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
-  const [ data, setData ] = useState(data);
+  const [ data, setData ] = useState(null);
 
   const callMutation = useCallback((query, variables) => {
     if ( jwt ) {
-      window.fetch(`/graphql`, {
+      return window.fetch(`/graphql`, {
         method: 'post',
         headers: {
           authorization: `Bearer ${jwt}`,
@@ -90,6 +90,8 @@ export const useMutation = () => {
       .then(({ data }) => setData(data))
       .catch(error => setError(error))
     }
+
+    return Promise.resolve(null);
   }, [ jwt ]);
 
   useEffect(() => {

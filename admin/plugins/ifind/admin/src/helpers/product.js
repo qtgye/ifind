@@ -162,7 +162,7 @@ export const useProduct = () => {
   
   return [
     productData,
-    updateProduct,
     addProduct,
+    updateProduct,
   ]
 };

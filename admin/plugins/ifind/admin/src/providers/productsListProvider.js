@@ -7,6 +7,7 @@ import React, {
   memo
 } from 'react';
 import { useQuery } from '../helpers/query';
+import { useGQLFetch } from '../helpers/gqlFetch';
 
 const ProductFragment = `
 fragment ProductFragment on Product {
@@ -52,9 +53,29 @@ query ProductsList (
     }
 `;
 
+const _deleteProductsMutation = (productIDs) => `
+mutation DeleteProducts {
+  ${
+    productIDs.map(id => `
+      deleteProduct${id}: deleteProduct (
+        input: {
+          where: { id: ${id}}
+        }
+      ) {
+        product {
+          id
+        }
+      }
+    `)
+  }
+}
+`;
+
 export const ProductsListContext = createContext({});
 
 export const ProductsListProvider = memo(({ children }) => {
+  const gqlFetch = useGQLFetch();
+
   // Query params states
   const [ sortBy, setSortBy ] = useState('id'); // Product field
   const [ sortOrder, setSortOrder ] = useState('desc'); // desc|asc
@@ -91,6 +112,11 @@ export const ProductsListProvider = memo(({ children }) => {
     }
   }, [ refetch, queryVars ]);
 
+  const deleteProducts = useCallback((productIDs) => {
+    return gqlFetch(_deleteProductsMutation(productIDs))
+    .then(data => console.log({ data }))
+  });
+
   // Update query on filters change
   useEffect(() => {
     const whereParams = filters.reduce((where, [ key, value]) => ({
@@ -125,7 +151,8 @@ export const ProductsListProvider = memo(({ children }) => {
       setPageSize,
       setSortBy,
       setSortOrder,
-      refresh
+      refresh,
+      deleteProducts,
     }}>
       {children}
     </ProductsListContext.Provider>
