@@ -8,6 +8,7 @@ import React, {
 } from 'react';
 import { useQuery } from '../helpers/query';
 import { useGQLFetch } from '../helpers/gqlFetch';
+import { useSearchParams } from '../helpers/url';
 
 const ProductFragment = `
 fragment ProductFragment on Product {
@@ -50,6 +51,11 @@ query ProductsList (
       ) {
         ... ProductFragment
       }
+      productsConnection {
+        aggregate {
+          totalCount
+        }
+      }
     }
 `;
 
@@ -75,14 +81,16 @@ export const ProductsListContext = createContext({});
 
 export const ProductsListProvider = memo(({ children }) => {
   const gqlFetch = useGQLFetch();
+  const searchParams = useSearchParams();
 
   // Query params states
-  const [ sortBy, setSortBy ] = useState('id'); // Product field
-  const [ sortOrder, setSortOrder ] = useState('desc'); // desc|asc
-  const [ pageSize, setPageSize ] = useState(10);
-  const [ page, setPage ] = useState(1);
+  const [ sortBy, setSortBy ] = useState(searchParams?.sort_by || 'id'); // Product field
+  const [ sortOrder, setSortOrder ] = useState(searchParams?.order || 'desc'); // desc|asc
+  const [ pageSize, setPageSize ] = useState(Number(searchParams?.page_size || 10));
+  const [ page, setPage ] = useState(Number(searchParams?.page || 1));
   const [ filters, setFilters ] = useState([]); // [{ fieldName: value }]
 
+  const [ totalPages, setTotalPages ] = useState(1);
   const [ productsQuery, setProductsQuery ] = useState(null);
   const [ queryVars, setQueryVars ] = useState({});
   const [ products, setProducts ] = useState([]);
@@ -117,6 +125,13 @@ export const ProductsListProvider = memo(({ children }) => {
     .then(data => console.log({ data }))
   });
 
+  const setProductsListData = useCallback(({ products, productsConnection }) => {
+    setProducts(products);
+
+    // Compute pagination
+    setTotalPages(Math.ceil(productsConnection?.aggregate?.totalCount / pageSize) || 1);
+  }, [ pageSize ]);
+
   // Update query on filters change
   useEffect(() => {
     const whereParams = filters.reduce((where, [ key, value]) => ({
@@ -139,18 +154,27 @@ export const ProductsListProvider = memo(({ children }) => {
 
   useEffect(() => {
     if ( data?.products ) {
-      setProducts(data.products);
+      setProductsListData(data);
     }
-  }, [ data ]);
+  }, [ data, setProductsListData ]);
 
   return (
     <ProductsListContext.Provider value={{
       products,
-      setFilters,
+      // Values
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
+      filters,
+      totalPages,
+      // Setters
       setPage,
       setPageSize,
       setSortBy,
       setSortOrder,
+      setFilters,
+      // Additionals
       refresh,
       deleteProducts,
     }}>

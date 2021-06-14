@@ -2,99 +2,37 @@ import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Table, Button } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Select, Label } from '@buffetjs/core';
 
 import { useSourceRegion } from '../../providers/sourceRegionProvider';
 import { useProductsList } from '../../providers/productsListProvider';
 import { generatePluginLink } from '../../helpers/url';
 
+import Pagination from '../Pagination';
+import CustomRow from './_custom-row';
+import ProductThumbnail from './_product-thumbnail';
+import headers from './_table-headers';
+
 import './styles.scss';
-
-const headers = [
-  {
-    name: '', // Checkboxes
-  },
-  {
-    name: 'Id',
-    value: 'id',
-    isSortEnabled: true,
-  },
-  {
-    name: 'Product Image',
-    value: 'image',
-    isSortEnabled: true,
-  },
-  {
-    name: 'Product Name',
-    value: 'title',
-    isSortEnabled: true,
-  },
-  {
-    name: 'Category',
-    value: 'category',
-    isSortEnabled: true,
-  },
-  {
-    name: '', // Actions
-  },
-];
-
-const ProductThumbnail = ({ src }) => (
-  <img src={src} alt="" className="products-list__thumbnail" />
-);
-
-const CustomRow = ({ row: {id, title, image, category, url, selected = false, confirmProductDelete }, onSelect }) => {
-  return (
-    <tr>
-      <td>
-        <input
-          className="products-list__product-checkbox"
-          type="checkbox"
-          checked={selected}
-          onChange={({ target }) => onSelect(id, !selected)}
-        />
-      </td>
-      <td>
-        <Link to={() => generatePluginLink(`products/${id}`)}>{id}</Link>
-      </td>
-      <td>
-        <Link to={() => generatePluginLink(`products/${id}`)}>{image}</Link>
-      </td>
-      <td>
-        <Link to={() => generatePluginLink(`products/${id}`)}>{title}</Link>
-      </td>
-      <td>
-        <Link to={() => generatePluginLink(`products/${id}`)}>{category}</Link>
-      </td>
-      <td>
-        <div className="products-list__product-actions">
-          {
-            url && (
-              <a href={url} className="products-list__product-action" target="_blank">
-                <FontAwesomeIcon icon='external-link-alt' color="gray" />
-              </a>
-            )
-          }
-          <button className="products-list__product-action" onClick={confirmProductDelete}>
-            <FontAwesomeIcon icon='trash-alt' color="orange" />
-          </button>
-        </div>
-      </td>
-    </tr>
-  )
-}
 
 const ProductsList = () => {
   const history = useHistory();
   const { sources } = useSourceRegion();
   const {
     products,
-    // setFilters,
-    // setPage,
-    // setPageSize,
-    // setSortBy,
-    // setSortOrder,
     refresh,
     deleteProducts,
+    // Values
+    page,
+    pageSize,
+    sortBy,
+    sortOrder,
+    filters,
+    totalPages,
+    // Setters
+    setSortBy,
+    setSortOrder,
+    setFilters,
   } = useProductsList();
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
@@ -193,6 +131,11 @@ const ProductsList = () => {
     console.log({ data });
   }, []);
 
+  // Page size select handler
+  const onPageSizeSelect = useCallback((page_size) => {
+    history.push(generatePluginLink(null, { page_size }));
+  });
+
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
   }, [ selectedItems ]);
@@ -232,6 +175,22 @@ const ProductsList = () => {
         onSelect={onSelectUnselect}
         onClickRow={onClickRow}
       />
+      <div className="products-list__page-controls">
+        <div className="products-list__page-size">
+          <Label htmlFor="page-size">Page Size</Label>
+          <Select
+            name="page-size"
+            id="page-size"
+            onChange={({ target: { value } }) => {
+              onPageSizeSelect(Number(value));
+            }}
+            options={[ 1, 2, 5, 10, 20, 50, 100]}
+            value={pageSize}
+          />
+        </div>
+        <Pagination totalPages={totalPages} />
+      </div>
+      
     </div>
   )
 };
