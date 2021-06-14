@@ -16,6 +16,8 @@ fragment ProductFragment on Product {
   title
   image
   url
+  created_at
+  updated_at
   source {
     id
   }

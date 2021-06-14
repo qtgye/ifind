@@ -23,6 +23,16 @@ export default [
     isSortEnabled: true,
   },
   {
+    name: 'Created',
+    value: 'created_at',
+    isSortEnabled: true,
+  },
+  {
+    name: 'Last Updated',
+    value: 'updated_at',
+    isSortEnabled: true,
+  },
+  {
     name: '', // Actions
   },
 ];

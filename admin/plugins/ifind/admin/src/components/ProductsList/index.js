@@ -9,11 +9,19 @@ import { useProductsList } from '../../providers/productsListProvider';
 import { generatePluginLink } from '../../helpers/url';
 
 import Pagination from '../Pagination';
+import SortControls from '../SortControls';
 import CustomRow from './_custom-row';
 import ProductThumbnail from './_product-thumbnail';
 import headers from './_table-headers';
 
 import './styles.scss';
+
+const sortOptions = [
+  'id',
+  'title',
+  'created_at',
+  'updated_at'
+];
 
 const ProductsList = () => {
   const history = useHistory();
@@ -133,7 +141,14 @@ const ProductsList = () => {
 
   // Page size select handler
   const onPageSizeSelect = useCallback((page_size) => {
-    history.push(generatePluginLink(null, { page_size }));
+    history.push(generatePluginLink('', { page_size }));
+  });
+
+  // Sort Control update handler
+  const onSortUpdate = useCallback(({ sort_by, order }) => {
+    if ( sort_by !== sortBy || order !== sortOrder ) {
+      history.push(generatePluginLink('', { sort_by, order }));
+    }
   });
 
   useEffect(() => {
@@ -152,20 +167,28 @@ const ProductsList = () => {
   return (
     <div className="products-list row">
       <div className="products-list__controls">
-        {
-          (rows.length && (
-            <Button onClick={toggleAllSelected} color="secondary">
-              { allSelected ? 'Unselect All' : 'Select All'}
-            </Button>
-          )) || ''
-        }
-        {
-          (selectedItems.length && (
-            <Button onClick={confirmDeleteAll} color="delete" icon={<FontAwesomeIcon icon='trash-alt' />}>
-              Delete all selected
-            </Button>
-          )) || ''
-        }
+        <div className="products-list__bulk-controls">
+          {
+            (rows.length && (
+              <Button onClick={toggleAllSelected} color="secondary">
+                { allSelected ? 'Unselect All' : 'Select All'}
+              </Button>
+            )) || ''
+          }
+          {
+            (selectedItems.length && (
+              <Button onClick={confirmDeleteAll} color="delete" icon={<FontAwesomeIcon icon='trash-alt' />}>
+                Delete all selected
+              </Button>
+            )) || ''
+          }
+        </div>
+        <div className="products-list__sort-controls">
+          <SortControls
+            options={sortOptions}
+            onSortUpdate={onSortUpdate}
+          />
+        </div>
       </div>
       <Table
         showActionCollapse
