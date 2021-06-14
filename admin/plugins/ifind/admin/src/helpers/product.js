@@ -37,7 +37,7 @@ query GetProduct ($id: ID!) {
 
 export const updateProductMutation = `
 ${productDataFragment}
-mutation CreateProduct (
+mutation UpdateProduct (
   $id: ID!
   $url: String!
   $image: String!
@@ -118,26 +118,20 @@ export const useProduct = () => {
       data: mutationData,
     }
   ] = useMutation();
-  const [
-    callMutation,
-    {
-      data: updateProductData,
-      error: updateProductError
-    }
-  ] = useMutation();
   const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
   
   const addProduct = useCallback((data) => {
     addOrUpdateProduct(addProductMutation, data);
-  });
+  }, [ addProductMutation ]);
   
   const updateProduct = useCallback((data) => {
+    console.log({ data });
     if ( data?.id ) {
       addOrUpdateProduct(updateProductMutation, data);
     }
-  });
+  }, [ addProductMutation ]);
   
   useEffect(() => {
     if ( productId ) {

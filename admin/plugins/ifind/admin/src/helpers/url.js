@@ -31,9 +31,9 @@ const toSearchParams = (paramsObject = {}) => {
   )
 }
 
-export const generatePluginLink = (relativeToPlugin = null, _searchParams = {}, withParentRoute = false) => {
+export const generatePluginLink = (relativeToPlugin = null, _searchParams = false, withParentRoute = false) => {
   const adminRoot = withParentRoute ? '/admin' : '';
-  const searchParams = toSearchParams(_searchParams);
+  const searchParams = _searchParams ? toSearchParams(_searchParams) : '';
 
   if ( !relativeToPlugin ) {
     return window.location.pathname.replace(/^\/admin/, adminRoot) + searchParams;

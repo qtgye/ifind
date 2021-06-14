@@ -33,8 +33,8 @@ const productValidationRules = {
 const ProductDetail = () => {
   const [
     productData,
-    updateProduct,
     addProduct,
+    updateProduct,
   ] = useProduct();
   const history = useHistory();
   const [ title, setTitle ] = useState('');

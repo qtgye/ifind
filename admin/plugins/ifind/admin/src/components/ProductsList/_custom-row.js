@@ -25,13 +25,13 @@ const CustomRow = ({ row: {id, title, image, category, url, created_at, updated_
         <Link to={generatePluginLink(`products/${id}`)}>{title}</Link>
       </td>
       <td>
+        <Link to={generatePluginLink(`products/${id}`)}>{category}</Link>
+      </td>
+      <td>
         <Link to={generatePluginLink(`products/${id}`)}>{created_at.slice(0, 10)}</Link>
       </td>
       <td>
         <Link to={generatePluginLink(`products/${id}`)}>{updated_at.slice(0, 10)}</Link>
-      </td>
-      <td>
-        <Link to={generatePluginLink(`products/${id}`)}>{category}</Link>
       </td>
       <td>
         <div className="products-list__product-actions">
