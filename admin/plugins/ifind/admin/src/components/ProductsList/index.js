@@ -1,19 +1,17 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Table, Button } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useSourceRegion } from '../../providers/sourceRegionProvider';
 import { useProductsList } from '../../providers/productsListProvider';
+import { generatePluginLink } from '../../helpers/url';
 
 import './styles.scss';
 
 const headers = [
   {
-    name: '',
-    value: () => (
-      <div className="test">TEST</div>
-    )
+    name: '', // Checkboxes
   },
   {
     name: 'Id',
@@ -35,6 +33,9 @@ const headers = [
     value: 'category',
     isSortEnabled: true,
   },
+  {
+    name: '', // Actions
+  },
 ];
 
 const ProductThumbnail = ({ src }) => (
@@ -53,16 +54,16 @@ const CustomRow = ({ row: {id, title, image, category, url, selected = false, co
         />
       </td>
       <td>
-        <p>{id}</p>
+        <Link to={() => generatePluginLink(`products/${id}`)}>{id}</Link>
       </td>
       <td>
-        <p>{image}</p>
+        <Link to={() => generatePluginLink(`products/${id}`)}>{image}</Link>
       </td>
       <td>
-        <p>{title}</p>
+        <Link to={() => generatePluginLink(`products/${id}`)}>{title}</Link>
       </td>
       <td>
-        <p>{category}</p>
+        <Link to={() => generatePluginLink(`products/${id}`)}>{category}</Link>
       </td>
       <td>
         <div className="products-list__product-actions">
@@ -73,9 +74,6 @@ const CustomRow = ({ row: {id, title, image, category, url, selected = false, co
               </a>
             )
           }
-          <a href={`/admin/plugins/ifind/products/${id}`} className="products-list__product-action">
-            <FontAwesomeIcon icon='pencil-alt' color="gray" />
-          </a>
           <button className="products-list__product-action" onClick={confirmProductDelete}>
             <FontAwesomeIcon icon='trash-alt' color="orange" />
           </button>
@@ -180,6 +178,11 @@ const ProductsList = () => {
     })));
   }, [ rows, allSelected ]);
 
+  // Row click handler
+  const onClickRow = useCallback((e, data) => {
+    console.log({ data });
+  }, []);
+
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
   }, [ selectedItems ]);
@@ -217,21 +220,7 @@ const ProductsList = () => {
         headers={headers}
         rows={rows}
         onSelect={onSelectUnselect}
-        rowLinks={[
-          {
-            icon: <FontAwesomeIcon icon='pencilAltl' />,
-            onClick: data => {
-              // history.push(`/admin/plugins/ifind/products/${}`);
-              console.log(data);
-            },
-          },
-          {
-            icon: <FontAwesomeIcon icon='trashAlt' />,
-            onClick: data => {
-              console.log(data);
-            },
-          },
-        ]}
+        onClickRow={onClickRow}
       />
     </div>
   )
