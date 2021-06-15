@@ -7,7 +7,7 @@ import { useSourceRegion } from '../../providers/sourceRegionProvider';
 const URLTypeSelect = ({
   region = null,
   source = null,
-  onSelect,
+  onChange,
   label = 'URL Type',
   name = 'url-type'
 }) => {
@@ -17,14 +17,11 @@ const URLTypeSelect = ({
   const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
 
   const onURLTypeSelect = useCallback(value => {
-    if ( typeof onSelect === 'function' ) {
+    if ( typeof onChange === 'function' ) {
       const matchedURLTypeOption = urlTypeOptions.find(({ label }) => label === value);
-
-      if ( matchedURLTypeOption ) {
-        onSelect(matchedURLTypeOption);
-      }
+      onChange(matchedURLTypeOption || null);
     }
-  }, [ onSelect ]);
+  }, [ onChange, urlTypeOptions ]);
 
   useEffect(() => {
     const urlTypeOptions = [''];

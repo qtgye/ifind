@@ -6,9 +6,10 @@ import React, {
   useCallback,
   memo
 } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useQuery } from '../helpers/query';
 import { useGQLFetch } from '../helpers/gqlFetch';
-import { useSearchParams } from '../helpers/url';
+import { getSearchParams, useSearchParams } from '../helpers/url';
 
 const ProductFragment = `
 fragment ProductFragment on Product {
@@ -36,30 +37,36 @@ fragment ProductFragment on Product {
 }
 `;
 
-const _productsQuery = (where) => `
-${ProductFragment}
-query ProductsList (
-  $limit: Int!,
-  $start: Int!,
-  $sort: String!
-  ) {
-    products (
-      limit: $limit,
-      start: $start,
-      sort:$sort,
-      where: {${
-        Object.entries(where).map(([ key, value ]) => `${key}: ${value}`).join(',')
-      }}
-      ) {
-        ... ProductFragment
-      }
-      productsConnection {
-        aggregate {
-          totalCount
+const _productsQuery = (where) => {
+  console.log({ where });
+  
+  return `
+  ${ProductFragment}
+  query ProductsList (
+    $limit: Int!,
+    $start: Int!,
+    $sort: String!
+    ) {
+      products (
+        limit: $limit,
+        start: $start,
+        sort:$sort,
+        where: {${
+          Object.entries(where).map(([ key, value ]) => (
+            `${key === 'category' ? 'categories_contains' : key}: ${value}`
+          )).join(',')
+        }}
+        ) {
+          ... ProductFragment
+        }
+        productsConnection {
+          aggregate {
+            totalCount
+          }
         }
       }
-    }
-`;
+  `
+};
 
 const _deleteProductsMutation = (productIDs) => `
 mutation DeleteProducts {
@@ -90,7 +97,7 @@ export const ProductsListProvider = memo(({ children }) => {
   const [ sortOrder, setSortOrder ] = useState(searchParams?.order || 'desc'); // desc|asc
   const [ pageSize, setPageSize ] = useState(Number(searchParams?.page_size || 10));
   const [ page, setPage ] = useState(Number(searchParams?.page || 1));
-  const [ filters, setFilters ] = useState([]); // [{ fieldName: value }]
+  const [ filters, setFilters ] = useState({}); // { fieldName: value }
 
   const [ totalPages, setTotalPages ] = useState(1);
   const [ productsQuery, setProductsQuery ] = useState(null);
@@ -134,13 +141,24 @@ export const ProductsListProvider = memo(({ children }) => {
     setTotalPages(Math.ceil(productsConnection?.aggregate?.totalCount / pageSize) || 1);
   }, [ pageSize ]);
 
+  const getFiltersObject = useCallback(() => {
+    if ( searchParams?.filters ) {
+      return searchParams.filters
+        .split(',')
+        .map(filterString => filterString.split(':'))
+        .reduce((all, [ key, value ]) => ({
+          ...all,
+          [key]: value
+        }), {});
+    }
+
+    return {};
+  }, [ searchParams ]);
+
   // Update query on filters change
   useEffect(() => {
-    const whereParams = filters.reduce((where, [ key, value]) => ({
-      ...where,
-      [key]: value,
-    }), {});
-    const newProductsQuery = _productsQuery(whereParams);
+    const newProductsQuery = _productsQuery(filters);
+    console.log({ newProductsQuery });
     setProductsQuery(newProductsQuery);
   }, [ filters ]);
 
@@ -149,6 +167,7 @@ export const ProductsListProvider = memo(({ children }) => {
     const _queryVars = buildQueryVars({ sortBy, sortOrder, pageSize, page });
     setQueryVars(_queryVars);
   }, [ sortBy, sortOrder, pageSize, page ]);
+
 
   useEffect(() => {
     refresh();
@@ -160,6 +179,16 @@ export const ProductsListProvider = memo(({ children }) => {
     }
   }, [ data, setProductsListData ]);
 
+  useEffect(() => {
+     setSortBy(searchParams?.sort_by || 'id');
+     setSortOrder(searchParams?.order || 'desc');
+     setPageSize(Number(searchParams?.page_size || 10));
+     setPage(Number(searchParams?.page || 1));
+
+     setFilters(getFiltersObject());
+
+  }, [ searchParams ]);
+
   return (
     <ProductsListContext.Provider value={{
       products,
@@ -170,12 +199,6 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder,
       filters,
       totalPages,
-      // Setters
-      setPage,
-      setPageSize,
-      setSortBy,
-      setSortOrder,
-      setFilters,
       // Additionals
       refresh,
       deleteProducts,

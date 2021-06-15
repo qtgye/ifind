@@ -6,6 +6,8 @@ import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../provi
 
 import NestedCategoryOption from '../NestedCategoryOption';
 
+import './styles.scss';
+
 const CategorySelect = ({
   source = null,
   region = null,
@@ -43,10 +45,6 @@ const CategorySelect = ({
     }
   }, [ category ]);
 
-  useEffect(() => {
-    console.log({ source, region, categories });
-  }, [ source, region, categories ]);
-
   return (
     <div className="category-select">
       <NestedCategoryOption
@@ -56,7 +54,7 @@ const CategorySelect = ({
           hasError={hasError}
         />
       {
-        ( categoryPath.length <= 1 && categoryOptions.length <= 1 ) ?
+        ( categoryPath.length <= 1 && categoryOptions.length < 1 ) ?
         <Text color="orange" className="col-md-12">Please select URL Type</Text> : 
         null
       }

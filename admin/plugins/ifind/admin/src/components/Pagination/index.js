@@ -2,16 +2,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import ReactPaginate from 'react-paginate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSearchParams, generatePluginLink } from '../../helpers/url'
+import { getSearchParams, generatePluginLink } from '../../helpers/url'
 
 import './styles.scss';
 
 const Pagination = ({ totalPages = 1, pageKey = 'page' }) => {
-  const searchParams = useSearchParams();
+  const searchParams = getSearchParams();
   const history = useHistory();
   const [ page, setPage ] = useState(Number(searchParams?.page || 1) - 1);
 
   const onPaginationPageSelect = useCallback(({ selected }) => {
+    console.log({ selected });
     history.push(generatePluginLink(null, { [pageKey]: selected + 1 }));
   });
 

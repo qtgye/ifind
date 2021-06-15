@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 import pluginId from '../pluginId';
 import { useLocation } from 'react-router-dom';
 
@@ -13,12 +13,23 @@ export const mapSearchParam = () => (
     }), {})
 );
 
-export const useSearchParams = () => {
+export const getSearchParams = () => {
   return mapSearchParam();
 }
 
+export const useSearchParams = () => {
+  const { search } = useLocation();
+  const [ searchParams, setSearchParams ] = useState(getSearchParams());
+
+  useEffect(() => {
+    setSearchParams(getSearchParams());
+  }, [ search ]);
+
+  return searchParams;
+};
+
 const toSearchParams = (paramsObject = {}) => {
-  const searchParams = useSearchParams();
+  const searchParams = getSearchParams();
   const entries = Object.entries({
     ...searchParams,
     ...paramsObject,

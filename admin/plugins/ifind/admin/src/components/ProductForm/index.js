@@ -19,7 +19,6 @@ const _websiteTabOptions = [
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
-  const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
 
   // Read-only fields
   const [ id, setId ] = useState(null);
@@ -37,7 +36,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ websiteTab, setWebsiteTab ] = useState('home');
   const [ title, setTitle ] = useState('');
   const [ category, setCategory ] = useState(null);
-  const [ urlType, setUrlType ] = useState('');
   const [ url, setUrl ] = useState('');
   const [ price, setPrice ] = useState(0);
   const [ image, setImage ] = useState('');
@@ -59,7 +57,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     websiteTab,
     title,
     category,
-    urlType,
     price,
     image,
     url,
@@ -68,8 +65,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   ]);
 
   const processFormData = useCallback((formData) => {
-    console.log({ formData });
-
     // Process price to ensure Number type
     if ( formData.price ) {
       formData.price = Number(formData.price);
@@ -83,7 +78,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.websiteTab;
 
     return formData;
-  }, [ urlTypeOptions ]);
+  }, []);
 
   const onChange = useCallback(() => {
     const formData = collectFormData();
@@ -95,9 +90,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setCategory(categoryID);
   }, [ setCategory ]);
 
-  const onURLTypeSelect = useCallback(({ source, region }) => {
-    setSource(source);
-    setRegion(region);
+  const onURLTypeSelect = useCallback((urlType) => {
+    setSource(urlType?.source || '');
+    setRegion(urlType?.region || '');
   }, []);
 
   useEffect(() => {
@@ -180,7 +175,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           <URLTypeSelect
             label="URL Type"
             name="url-type"
-            onSelect={value => onURLTypeSelect(value)}
+            onChange={value => onURLTypeSelect(value)}
             region={region}
             source={source}
           />

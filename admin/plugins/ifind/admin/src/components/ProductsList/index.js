@@ -10,6 +10,7 @@ import { generatePluginLink } from '../../helpers/url';
 
 import Pagination from '../Pagination';
 import SortControls from '../SortControls';
+import ProductFilters from '../ProductFilters';
 import CustomRow from './_custom-row';
 import ProductThumbnail from './_product-thumbnail';
 import headers from './_table-headers';
@@ -28,24 +29,18 @@ const ProductsList = () => {
   const { sources } = useSourceRegion();
   const {
     products,
-    refresh,
     deleteProducts,
     // Values
-    page,
     pageSize,
     sortBy,
     sortOrder,
     filters,
     totalPages,
-    // Setters
-    setSortBy,
-    setSortOrder,
-    setFilters,
   } = useProductsList();
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
   const [ selectedItems, setSelectedItems ] = useState([]);
-  const [ isFiltersVisible, setIsFiltersVisible ] = useState(false);
+  const [ isFiltersVisible, setIsFiltersVisible ] = useState(Object.keys(filters).length);
 
   const getUrlType = useCallback((sourceID, regionID) => {
     const matchedSource = sources.find(({ id }) => id === sourceID);
@@ -152,6 +147,11 @@ const ProductsList = () => {
     }
   });
 
+  // Filters handler
+  const onFiltersChange = useCallback((newFiltesr) => {
+    console.log({ newFilters });
+  });
+
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
   }, [ selectedItems ]);
@@ -201,8 +201,10 @@ const ProductsList = () => {
       </div>
       {
         (isFiltersVisible && (
-          <div className="products-list__filters">
-            Filters
+          <div className="products-list__filters col-md-12">
+            <ProductFilters
+              onChange={filters => onFiltersChange(filters)}
+            />
           </div>
         ) || '')
       }
