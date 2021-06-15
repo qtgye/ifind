@@ -18,7 +18,7 @@ const productValidationRules = {
   website_tab: [
     validationRules.required('Please select website tab'),
   ],
-  url_type: validationRules.required('Please select URL Type'),
+  has_url_type: validationRules.required('Please select URL Type'),
   url: validationRules.set([
     validationRules.required(),
     validationRules.url(),
@@ -45,6 +45,11 @@ const ProductDetail = () => {
   const [ headerActions, setHeaderActions ] = useState([]);
 
   const saveProduct = useCallback(() => {
+    // Format productFormData for validation
+    if ( productFormData.source && productFormData.region ) {
+      productFormData.has_url_type = true;
+    }
+
     const { success, errors } = validateData(productFormData, productValidationRules);
 
     setFormErrors(errors);

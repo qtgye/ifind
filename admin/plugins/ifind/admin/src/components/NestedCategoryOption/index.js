@@ -107,8 +107,6 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
       <InputBlock className={[ 'col-md-12', hasError ? 'input-block--error': '' ].join(' ')}>
         <Label htmlFor="category">{level > 1 ? 'Subcategory' : 'Category'}</Label>
         {
-          (level === 1 && categoryOptions.length <= 1) ?
-          <Text color="orange">Please select URL Type</Text> :
           <Select
             name="category"
             id="category"

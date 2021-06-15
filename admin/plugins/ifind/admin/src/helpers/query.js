@@ -3,16 +3,10 @@ import { useAuth } from '../providers/authProvider';
 
 export const useQuery = (query, variables) => {
   const { jwt } = useAuth();
-  const [ queryTemplate ] = useState({
-    loading: true,
-    data: null,
-    error: null,
-  });
-  const [ queries, setQueries ] = useState({});
 
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(null);
-  const [ data, setData ] = useState(data);
+  const [ data, setData ] = useState(null);
 
   const callQuery = useCallback(() => {
     if ( !query || !jwt ) {
@@ -87,7 +81,10 @@ export const useMutation = () => {
         })
       })
       .then(res => res.json())
-      .then(({ data }) => setData(data))
+      .then(({ data }) => {
+        console.log('data', data);
+        setData(data);
+      })
       .catch(error => setError(error))
     }
 

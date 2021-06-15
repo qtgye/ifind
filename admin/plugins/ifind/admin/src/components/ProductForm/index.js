@@ -8,7 +8,8 @@ import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../helpe
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
 import ImagePreview from '../ImagePreview';
-import NestedCategoryOption from '../NestedCategoryOption';
+import CategorySelect from '../CategorySelect';
+import URLTypeSelect from '../URLTypeSelect';
 
 const _websiteTabOptions = [
   'home',
@@ -17,8 +18,6 @@ const _websiteTabOptions = [
 ];
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
-  const { sources } = useSourceRegion();
-  const [ categories ] = useCategories();
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
   const [ urlTypeOptions, setUrlTypeOptions ] = useState([]);
 
@@ -30,9 +29,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ updatedAt, setUpdatedAt ] = useState('');
   const [ updatedBy, setUpdatedBy ] = useState('');
 
-  // Nested category data
-  const [ categoryPath, setCategoryPath ] = useState([]);
-  const [ categoryOptions, setCategoryOptions ] = useState([]); // source-region-filtered categories
+  // CategorySelect Data
+  const [ source, setSource ] = useState(null);
+  const [ region, setRegion ] = useState(null);
 
   // Field states
   const [ websiteTab, setWebsiteTab ] = useState('home');
@@ -49,10 +48,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       websiteTab,
       title,
       category,
-      urlType,
       price,
       image,
       url,
+      source,
+      region,
     }
   }, [
     id,
@@ -63,20 +63,13 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     price,
     image,
     url,
-    urlType
+    source,
+    region,
   ]);
 
   const processFormData = useCallback((formData) => {
-    // Process urlType into region and source
-    if ( formData.urlType ) {
-      const matchedUrlTypeOption = urlTypeOptions.find(({ label }) => label === formData.urlType);
-      if ( matchedUrlTypeOption ) {
-        formData.url_type = {
-          region: matchedUrlTypeOption.region,
-          source: matchedUrlTypeOption.source,
-        };
-      }
-    }
+    console.log({ formData });
+
     // Process price to ensure Number type
     if ( formData.price ) {
       formData.price = Number(formData.price);
@@ -102,12 +95,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setCategory(categoryID);
   }, [ setCategory ]);
 
-  const setInitialCategoryPath = useCallback(() => {
-    // Build category path
-    const categoryPath = buildCategoryPath(category, categories);
-    // Use only id's for path
-    setCategoryPath(categoryPath.map(({ id }) => id));
-  }, [ category, categories ]);
+  const onURLTypeSelect = useCallback(({ source, region }) => {
+    setSource(source);
+    setRegion(region);
+  }, []);
 
   useEffect(() => {
     if ( product ) {
@@ -120,15 +111,13 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setPosition(product.position);
       setCategory(product.categories[0]?.id);
 
-      // Find url_type based on source and region
+      // Update source and region based on product
       if ( product.source && product.region ) {
-        const matchedUrlType = urlTypeOptions.find(urlType => (
-          urlType.source === product.source.id && urlType.region === product.region.id
-        ));
-        matchedUrlType && setUrlType(matchedUrlType.label);
+        setSource(product.source?.id);
+        setRegion(product.region?.id);
       }
     }
-  }, [ product, urlTypeOptions ]);
+  }, [ product ]);
 
   useEffect(() => {
     onChange();
@@ -137,55 +126,12 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     websiteTab,
     title,
     category,
-    urlType,
+    source,
+    region,
     price,
     image,
     url,
   ]);
-
-  useEffect(() => {
-    if ( category ) {
-      setInitialCategoryPath();
-    }
-  }, [ category ]);
-
-  useEffect(() => {
-    const urlTypeOptions = [''];
-
-    if ( sources?.length ) {
-      const sourceRegionOptions = sources.reduce((sources, source) => ([
-        ...sources,
-        ...(source.regions || []).map(region => ({
-          source: source.id,
-          region: region.id,
-          label: `${source.name} ${region.name}`,
-        }))
-      ]), []);
-
-      urlTypeOptions.push(...sourceRegionOptions);
-    }
-
-    setUrlTypeOptions(urlTypeOptions);
-  }, [ sources ]);
-
-  useEffect(() => {
-    if ( urlType && categories?.length ) {
-      // Filter to use only categories with the selected urlType
-      const matchedUrlType = urlTypeOptions.find(urlTypeOption => (
-        urlTypeOption.label === urlType
-      ));
-      const filteredCateogories = (matchedUrlType && categories.filter(category => (
-        category.source?.id === matchedUrlType.source &&
-        category.region?.id === matchedUrlType.region
-      ))) || [];
-
-      const categoryTree = mapCategoriesTree(filteredCateogories);
-      setCategoryOptions(Object.values(categoryTree));
-    }
-    else {
-      setCategoryOptions([]);
-    }
-  }, [ categories, urlType, urlTypeOptions ]);
 
   return (
     <form className="row">
@@ -231,15 +177,12 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* URL Type */}
         <InputBlock className="col-md-3" error={formErrors.url_type}>
-          <Label htmlFor="url-type">URL Type</Label>
-          <Select
+          <URLTypeSelect
+            label="URL Type"
             name="url-type"
-            id="url-type"
-            onChange={({ target: { value } }) => {
-              setUrlType(value);
-            }}
-            options={urlTypeOptions.map((urlType) => (urlType && urlType.label) || '')}
-            value={urlType}
+            onSelect={value => onURLTypeSelect(value)}
+            region={region}
+            source={source}
           />
         </InputBlock>
 
@@ -289,12 +232,13 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           <ImagePreview url={image} />
         </InputBlock>
 
-        {/* Category Options */}
-        <NestedCategoryOption
-          categories={categoryOptions}
-          categoryPath={categoryPath}
+        <CategorySelect
+          source={source}
+          region={region}
+          category={category}
           onChange={onCategorySelect}
           hasError={formErrors.category}
+          emptyMessage="Please select URL Type"
         />
         { formErrors.category && (
           <Text className="col-sm-12" size="sm" color="red">{formErrors.category.join('<br />')}</Text>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { Table, Button } from '@buffetjs/core';
+import { Table, Button, Toggle } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Select, Label } from '@buffetjs/core';
 
@@ -45,6 +45,7 @@ const ProductsList = () => {
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
   const [ selectedItems, setSelectedItems ] = useState([]);
+  const [ isFiltersVisible, setIsFiltersVisible ] = useState(false);
 
   const getUrlType = useCallback((sourceID, regionID) => {
     const matchedSource = sources.find(({ id }) => id === sourceID);
@@ -189,7 +190,22 @@ const ProductsList = () => {
             onSortUpdate={onSortUpdate}
           />
         </div>
+        <div className="products-list__filter-toggle">
+          <Label>Filters:</Label>
+          <Toggle
+            name="toggle"
+            onChange={({ target: { value } }) => setIsFiltersVisible(value)}
+            value={isFiltersVisible}
+          />
+        </div>
       </div>
+      {
+        (isFiltersVisible && (
+          <div className="products-list__filters">
+            Filters
+          </div>
+        ) || '')
+      }
       <Table
         showActionCollapse
         customRow={CustomRow}

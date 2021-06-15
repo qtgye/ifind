@@ -1,6 +1,10 @@
+/**
+ * TO DO:
+ * 
+ * Drop this helper once categoryProvider is implemented
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../providers/authProvider';
-import { useLanguages } from './languages';
 import { useQuery, useMutation } from './query';
 
 const categoryFieldsOverviewFragment = `

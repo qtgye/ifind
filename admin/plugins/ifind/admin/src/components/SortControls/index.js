@@ -35,7 +35,7 @@ const SortControls = ({ options = [], onSortUpdate, sortByKey = 'sort_by', order
         />
       </div>
       <div className="sort-controls__control">
-        <Label for="sort-control-order">Sort By</Label>
+        <Label for="sort-control-order">Order</Label>
         <Select
           name="sort-order"
           id="sort-control-order"

@@ -49,6 +49,22 @@
     margin-bottom: 20px;
   }
 
+  &__bulk-controls{
+    margin-right: auto;
+  }
+
+  &__filter-toggle {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+    margin-left: 20px;
+
+    label {
+      margin-right: 5px;
+      margin-bottom: 0;
+    }
+  }
+
   &__page-size {
     display: flex;
     align-items: center;
