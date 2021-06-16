@@ -22,8 +22,8 @@ const generateChildCategory = (iterationsLeft) => {
 }
 
 const getCategoryTree = gql`
-query GetCategoryTree($region: String!, $language: String) {
-    categoryTree (region: $region, language: $language) {
+query GetCategoryTree($language: String) {
+    categoryTree (language: $language) {
         ${generateChildCategory(3)}
     }
 }

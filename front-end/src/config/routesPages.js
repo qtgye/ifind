@@ -10,6 +10,7 @@ import AboutUs from '@pages/AboutUs';
 
 import { PageContextProvider} from '@contexts/pageContext';
 import { HomepageContextProvider } from '@contexts/homepageContext';
+import { ProductComparisonContextProvider } from '@contexts/productComparisonContext';
 
 /**
  * Dynamic route pages
@@ -37,6 +38,7 @@ export const dynamicPages = [
 const providers = [
     PageContextProvider,
     HomepageContextProvider,
+    ProductComparisonContextProvider,
 ];
 
 const wrapWithProvider = (PageComponent) => {

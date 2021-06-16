@@ -13,6 +13,7 @@ import { ApolloLink } from "apollo-link";
 
 import { spriteContents } from 'ifind-icons';
 
+// TODO: Drop this once API Layer is no longer needed
 // API Link
 const apiLink = new HttpLink({
   uri: API_ROOT,
@@ -30,7 +31,7 @@ const adminAuthMiddleware = new ApolloLink((operation, forward) => {
   const currentContext = operation.getContext();
   const token = localStorage.getItem(userTokenHandle) || null;
 
-  if ( currentContext.apiSource === apiSourceHandle && token ) {
+  if ( token ) {
     operation.setContext({
       ...currentContext,
       headers: {
@@ -42,7 +43,9 @@ const adminAuthMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const client = new ApolloClient({
+  // link: adminApiLink,
   link: concat(
+    // adminApiLink,
     adminAuthMiddleware,
     ApolloLink.split(
       operation => operation.getContext().apiSource === apiSourceHandle, adminApiLink, apiLink

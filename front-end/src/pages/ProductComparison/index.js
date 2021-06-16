@@ -1,10 +1,32 @@
-import BasicPage from '@templates/BasicPage';
-import { withComponentName } from '@utilities/component';
+import GeneralTemplate from '@templates/GeneralTemplate';
+import { withComponentName, withProvider } from '@utilities/component';
+import { useProductComparison } from '@contexts/productComparisonContext';
 
-const ProductComparison = () => (
-  <BasicPage title="Product Comparison" >
-    Product Comparison works
-  </BasicPage >
-);
+import NaturalList from '@components/NaturalList';
 
-export default withComponentName('ProductComparisonPage')(ProductComparison);
+const ProductComparison = () => {
+  const { productComparisonList } = useProductComparison();
+
+  console.log({ productComparisonList });
+
+  return (
+    <GeneralTemplate>
+      <div className="product-comparison">
+          <div className="container" style={{ paddingLeft: '280px' }}>
+              <div className="product-comparison__list">
+                {
+                  productComparisonList.map(({ category, products }) => (
+                    <NaturalList
+                      key={category.id}
+                      items={products}
+                    />
+                  ))
+                }
+              </div>
+          </div>
+      </div>
+    </GeneralTemplate>
+  )
+};
+
+export default withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison));

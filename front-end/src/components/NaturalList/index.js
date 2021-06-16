@@ -5,7 +5,7 @@ import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = true }) => {
+const NaturalList = ({ items = [], loading = false }) => {
     const icon = '/images/loading.png';
     const { productDetail, fetchProductDetail } = useProductDetail();
     const [activeProduct, setActiveProduct] = useState(null);
@@ -22,16 +22,16 @@ const NaturalList = ({ items = [], loading = true }) => {
                 setDetailsHTML(activeProduct.detailsHTML);
                 setIsDetailsLoading(false);
             }
-            else if (activeProduct.detailURL) {
+            else if (activeProduct.url) {
                 setIsDetailsLoading(true);
-                fetchProductDetail(activeProduct.detailURL);
+                fetchProductDetail(activeProduct.url);
             }
         }
     }, [activeProduct, fetchProductDetail]);
 
     useEffect(() => {
         if (activeProduct && productDetail) {
-            if (productDetail.detailURL === activeProduct.detailURL) {
+            if (productDetail.detailURL === activeProduct.url) {
                 setActiveProduct({
                     ...activeProduct,
                     ...productDetail
@@ -60,7 +60,7 @@ const NaturalList = ({ items = [], loading = true }) => {
                         {items.map((item, index) => (
                             <Item
                                 {...item}
-                                active={activeProduct && activeProduct.detailURL === item.detailURL}
+                                active={activeProduct && activeProduct.url === item.url}
                                 withBadge={index === 0}
                                 onClick={() => onProductClick(item)}
                                 key={index}

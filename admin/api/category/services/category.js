@@ -28,21 +28,20 @@ const processCategory = (rawCategory, language = null) => {
 
 
 module.exports = {
-  async categoryTree(region,language = null) {
+  async categoryTree(language = null) {
 
+    // TODO: Remove once single category tree is implemented (no source/region needed)
     const matchedRegion = await strapi.services.region.findOne({
-      code: region
+      code: 'de'
     });
 
-    if ( !matchedRegion ) {
-      return [];
-    }
-
+    // Will use to select label for categories
     const matchedLanguage = await strapi.services.language.findOne({
       code: language
     });
+
     const matchedCategories = await this.find({
-      region: matchedRegion.id
+      region: matchedRegion.id // TODO: Remove once single category tree is implemented (no source/region needed)
     }) || [];
 
     // Sort by order first, ensures children are in order

@@ -11,7 +11,6 @@ export const PageContext = createContext({});
 
 export const PageContextProvider = ({ children }) => {
     const { slug } = useParams();
-    const { token } = useAuth();
     const {
         loading,
         error,
@@ -20,7 +19,6 @@ export const PageContextProvider = ({ children }) => {
         variables: { slug, language },
         context: {
             apiSource: apiSourceHandle,
-            token
         }
     });
 
