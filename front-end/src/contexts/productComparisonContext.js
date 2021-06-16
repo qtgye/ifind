@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useCallback, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 import { locale } from '@config/locale';
 import { apiSourceHandle } from '@config/adminApi'
@@ -9,10 +9,10 @@ export const ProductComparisonContext = createContext({});
 export const ProductComparisonContextProvider = ({ children }) => {
     const [ productComparisonList, setProductComparisonList ] = useState([]);
     const {
+        data,
         // loading,
         // error,
-        data,
-        refetch
+        // refetch
     } = useQuery(getProductComparisonListQuery, {
         variables: { language: locale },
         context: {

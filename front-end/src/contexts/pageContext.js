@@ -3,7 +3,6 @@ import { createContext, useContext } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 
 import pageBySlugQuery from '@gql/pageBySlugQuery';
-import { useAuth } from '@contexts/authContext';
 import { locale as language } from '@config/locale';
 import { apiSourceHandle } from '@config/adminApi'
 

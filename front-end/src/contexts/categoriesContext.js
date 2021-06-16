@@ -2,7 +2,6 @@ import { createContext, useEffect, useContext, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { apiSourceHandle } from '@config/adminApi';
 import getCategoryTree from '@gql/getCategoryTreeQuery';
-import { useAuth } from './authContext';
 import { locale as language } from '@config/locale';
 
 export const CategoriesContext = createContext({});
