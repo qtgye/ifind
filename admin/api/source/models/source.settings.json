@@ -26,6 +26,12 @@
     "products": {
       "via": "source",
       "collection": "product"
+    },
+    "selectors": {
+      "type": "component",
+      "repeatable": false,
+      "component": "entry-fields.source-selectors",
+      "required": true
     }
   }
 }

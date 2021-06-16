@@ -48,8 +48,8 @@
       "via": "products"
     },
     "source": {
-      "model": "source",
-      "via": "products"
+      "via": "products",
+      "model": "source"
     },
     "website_tab": {
       "type": "string",
