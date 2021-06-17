@@ -16,7 +16,11 @@ fragment ProductFragment on Product {
   id
   title
   image
-  url
+  url_list {
+    source { id  }
+    region { id }
+    url
+  }
   created_at
   updated_at
   source {

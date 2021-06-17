@@ -4,25 +4,25 @@ import { Header } from '@buffetjs/custom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 
-import { useProduct } from '../../helpers/product';
+import { useProduct, ProductProvider } from '../../providers/productProvider';
 import { validationRules, validateData } from '../../helpers/form';
 import ProductForm from '../../components/ProductForm';
 
 const productValidationRules = {
   title: validationRules.required('Please provide a title'),
-  price: validationRules.set([
-    validationRules.required(),
-    validationRules.number(),
-    validationRules.greaterThan(0),
-  ], 'Please provide a price above 0'),
+  // price: validationRules.set([
+  //   validationRules.required(),
+  //   validationRules.number(),
+  //   validationRules.greaterThan(0),
+  // ], 'Please provide a price above 0'),
   website_tab: [
     validationRules.required('Please select website tab'),
   ],
   has_url_type: validationRules.required('Please select URL Type'),
-  url: validationRules.set([
-    validationRules.required(),
-    validationRules.url(),
-  ], 'Please provide a URL in valid format'),
+  // url: validationRules.set([
+  //   validationRules.required(),
+  //   validationRules.url(),
+  // ], 'Please provide a URL in valid format'),
   image: validationRules.set([
     validationRules.required('Please provide an image'),
     validationRules.url('Image must be a valid URL'),
@@ -64,6 +64,8 @@ const ProductDetail = () => {
       // Prepare data for graphql request
       const formattedData = formatProductFormData(productFormData);
 
+      console.log({ formattedData });
+
       if ( !formattedData.id ) {
         setRedirectOnUpdate(true);
         addProduct(formattedData);
@@ -86,6 +88,7 @@ const ProductDetail = () => {
     // Delete unnecessary props for graphql request
     delete formData.url_type;
     delete formData.category;
+    delete formData.urlList;
 
     return formData;
   }, []);
@@ -119,11 +122,29 @@ const ProductDetail = () => {
           else {
             return rawProductData.categories?.length;
           }
-        case 'url_type':
-          return productFormData[formKey]?.region !== rawProductData.region?.id
-            || productFormData[formKey]?.source !== rawProductData.source?.id;
+        case 'url_list':
+          return (
+            (rawProductData.url_list?.length !== productFormData.url_list?.length)
+            || (
+              productFormData.url_list && productFormData.url_list.some((urlData, index) => (
+                !rawProductData.url_list || !rawProductData.url_list[index] ||
+                Object.entries(urlData).some(([ key, value ]) => (
+                  !rawProductData.url_list || !rawProductData.url_list[index]
+                  || !rawProductData.url_list[index][key] != urlData[key]
+                ))
+              ))
+            )
+            || (
+              rawProductData.url_list && rawProductData.url_list.some((urlData, index) => (
+                !productFormData.url_list || !productFormData.url_list[index] ||
+                Object.entries(urlData).some(([ key, value ]) => (
+                  !productFormData.url_list || !productFormData.url_list[index]
+                  || !productFormData.url_list[index][key] != urlData[key]
+                ))
+              ))
+            )
+          )
         case 'title':
-        case 'url':
         case 'website_tab':
         case 'price':
         case 'image':
@@ -165,4 +186,8 @@ const ProductDetail = () => {
   )
 };
 
-export default memo(ProductDetail);
+export default memo(() => (
+  <ProductProvider>
+    <ProductDetail />
+  </ProductProvider>
+));

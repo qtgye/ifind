@@ -1,0 +1,28 @@
+.product-form {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 20px;
+
+  &__panel {
+    &--general {
+      grid-column: 1 / span 8;
+    }
+
+    &--urls {
+      grid-column: 1 / span 8;
+    }
+
+    &--categories {
+      grid-column: 1 / span 8;
+    }
+
+    &--sidebar {
+      grid-column: 9 / -1;
+      grid-row: 1 / span 4;
+    }
+
+    &--meta {
+      grid-column: 1 / span 8;
+    }
+  }
+}

@@ -16,6 +16,7 @@ import ProductDetail from '../ProductDetail';
 
 // Providers
 import Providers from '../../providers';
+import { ProductProvider } from '../../providers/productProvider';
 
 import { spriteContents } from 'ifind-icons';
 

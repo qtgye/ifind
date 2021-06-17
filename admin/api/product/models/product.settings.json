@@ -11,11 +11,6 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "url": {
-      "type": "string",
-      "required": true,
-      "regex": "(https?:\\/\\/.+)?"
-    },
     "title": {
       "type": "string",
       "required": true
@@ -54,6 +49,13 @@
     "website_tab": {
       "type": "string",
       "required": true
+    },
+    "url_list": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.url-with-type",
+      "required": true,
+      "min": 1
     }
   }
 }

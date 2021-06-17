@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { InputText, Label, Select, Text } from '@buffetjs/core';
-import { Header } from '@buffetjs/custom';
-
-import { useSourceRegion } from '../../helpers/sourceRegion';
-import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../helpers/categories';
+import { Separator } from '@buffetjs/core';
 
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
 import ImagePreview from '../ImagePreview';
 import CategorySelect from '../CategorySelect';
-import URLTypeSelect from '../URLTypeSelect';
+import ProductURLInput from '../ProductURLInput';
+
+import './styles.scss';
 
 const _websiteTabOptions = [
   'home',
@@ -32,13 +31,15 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ source, setSource ] = useState(null);
   const [ region, setRegion ] = useState(null);
 
+  // Product URL Input Data
+  const [ urlList, setUrlList ] = useState([]);
+
   // Field states
   const [ websiteTab, setWebsiteTab ] = useState('home');
   const [ title, setTitle ] = useState('');
   const [ category, setCategory ] = useState(null);
-  const [ url, setUrl ] = useState('');
-  const [ price, setPrice ] = useState(0);
   const [ image, setImage ] = useState('');
+  const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
 
   const collectFormData = useCallback(() => {
     return {
@@ -46,32 +47,35 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       websiteTab,
       title,
       category,
-      price,
       image,
-      url,
       source,
       region,
+      urlList,
     }
   }, [
     id,
     websiteTab,
     title,
     category,
-    price,
     image,
-    url,
     source,
     region,
+    urlList,
   ]);
 
   const processFormData = useCallback((formData) => {
-    // Process price to ensure Number type
-    if ( formData.price ) {
-      formData.price = Number(formData.price);
-    }
+    // // Process price to ensure Number type
+    // if ( formData.price ) {
+    //   formData.price = Number(formData.price);
+    // }
 
     // Process websiteTab
     formData.website_tab = formData.websiteTab;
+
+    // Process urlList
+    formData.url_list = formData.urlList.map(({ source, region, is_base, price, url }) => ({
+      source, region, is_base, url, price
+    }));
 
     // Delete unnecessary props
     delete formData.urlType;
@@ -90,21 +94,28 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setCategory(categoryID);
   }, [ setCategory ]);
 
-  const onURLTypeSelect = useCallback((urlType) => {
-    setSource(urlType?.source || '');
-    setRegion(urlType?.region || '');
-  }, []);
+   const onProductURLsChange = useCallback((newUrlList) => {
+     console.log({ newUrlList });
+    setUrlList(newUrlList);
+   }, []);
 
   useEffect(() => {
     if ( product ) {
       setId(product.id);
       setWebsiteTab(product.website_tab);
       setTitle(product.title);
-      setUrl(product.url);
-      setPrice(product.price);
       setImage(product.image);
       setPosition(product.position);
       setCategory(product.categories[0]?.id);
+
+      // Format product url list to match ProductURLInput
+      setProductURLs((product.url_list || []).map(urlData => ({
+        source: urlData.source.id,
+        region: urlData.region.id,
+        url: urlData.url,
+        is_base: urlData.is_base,
+        price: urlData.price,
+      })));
 
       // Update source and region based on product
       if ( product.source && product.region ) {
@@ -123,14 +134,13 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     category,
     source,
     region,
-    price,
     image,
-    url,
+    urlList,
   ]);
 
   return (
-    <form className="row">
-      <Panel className="col-md-8">
+    <form className="product-form row">
+      <Panel className="product-form__panel product-form__panel--general">
 
         {/* Website Tab */}
         <InputBlock className="col-md-6" error={formErrors.website_tab}>
@@ -170,44 +180,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
             />
         </InputBlock>
 
-        {/* URL Type */}
-        <InputBlock className="col-md-3" error={formErrors.url_type}>
-          <URLTypeSelect
-            label="URL Type"
-            name="url-type"
-            onChange={value => onURLTypeSelect(value)}
-            region={region}
-            source={source}
-          />
-        </InputBlock>
-
-        {/* URL */}
-        <InputBlock className="col-md-9" error={formErrors.url}>
-          <Label htmlFor="url">URL</Label>
-          <InputText
-            id='url'
-            name='url'
-            onChange={({ target: { value } }) => setUrl(value)}
-            type="text"
-            value={url}
-          />
-        </InputBlock>
-
-        {/* Price */}
-        <InputBlock className="col-md-3" error={formErrors.price}>
-          <Label htmlFor="price">Price</Label>
-          <InputText
-            id='price'
-            name='price'
-            onChange={({ target: { value } }) => setPrice(value)}
-            step=".01"
-            type="number"
-            value={price}
-          />
-        </InputBlock>
-
         {/* Image */}
-        <InputBlock className="col-md-9" error={formErrors.image}>
+        <InputBlock className="col-md-12" error={formErrors.image}>
           <Label htmlFor="image">Image URL</Label>
           <InputText
             id='image'
@@ -220,13 +194,18 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
       </Panel>
 
-      <Panel className="col-md-4">
-        {/* Image Preview */}
-        <InputBlock className="col-md-12">
-          <Label>Image Preview</Label>
-          <ImagePreview url={image} />
-        </InputBlock>
+      <Panel className="product-form__panel product-form__panel--urls">
+        {/* URL List */}
+        <ProductURLInput
+          className="col-md-12"
+          urls={productURLs}
+          error={formErrors.url_list}
+          onChange={onProductURLsChange}
+        />
+      </Panel>
 
+      <Panel className="product-form__panel product-form__panel--categories">
+        {/* Category */}
         <CategorySelect
           source={source}
           region={region}
@@ -239,10 +218,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           <Text className="col-sm-12" size="sm" color="red">{formErrors.category.join('<br />')}</Text>
         )}
       </Panel>
+      
+      <Panel className="product-form__panel product-form__panel--sidebar">
+        {/* Image Preview */}
+        <InputBlock className="col-md-12">
+          <Label>Image Preview</Label>
+          <ImagePreview url={image} />
+        </InputBlock>
+      </Panel>
 
-      <hr />
-
-      <Panel className="col-md-12">
+      <Panel className="product-form__panel product-form__panel--meta">
         <div className="col-md-12">
           <Text size="lg"><strong>Meta</strong></Text>
           <br />

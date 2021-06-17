@@ -40,4 +40,8 @@ const ProductsListing = () => {
   );
 };
 
-export default memo(composeComponents(ProductsListProvider, ProductsListing));
+export default memo(() => (
+  <ProductsListProvider>
+    <ProductsListing />
+  </ProductsListProvider>
+));
