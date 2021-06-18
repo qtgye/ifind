@@ -9,7 +9,7 @@
     "develop:watch": "nodemon ./scripts/strapi-custom.js develop watch-plugin",
     "start": "node ./scripts/strapi-custom.js start",
     "build": "strapi build",
-    "strapi": "strapi",
+    "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
   },
@@ -39,6 +39,7 @@
     "memoize-one": "^5.2.1",
     "minimist": "^1.2.5",
     "mysql": "^2.18.1",
+    "puppeteer": "^10.0.0",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
     "react-paginate": "^7.1.3",

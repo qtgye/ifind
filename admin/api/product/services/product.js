@@ -1,5 +1,7 @@
 'use strict';
 
+const { fetchProductDetails } = appRequire('helpers/product');
+
 const extractEndpointCategories = (categoryTree) => {
   const endpointCategories = [];
 
@@ -41,5 +43,14 @@ module.exports = {
       ));
 
       return productsLists;
+  },
+
+  async getProductDetails(productID, language) {
+    if ( productID ) {
+      const productDetails = await fetchProductDetails(productID, language);
+      return productDetails;
+    }
+
+    return '';
   }
 };
