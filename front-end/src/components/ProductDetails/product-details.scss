@@ -3,4 +3,9 @@
     padding: 20px;
     text-align: left;
     overflow-y: auto;
+
+    // Amazon styles overrides
+    .twister-plus-darken-bg {
+        display: none;
+    }
 }

@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useProductDetail } from '@contexts/productContext';
+import { useFetchProductDetail } from '@contexts/productContext';
 import ProductDetails from '@components/ProductDetails';
 import Item from './item';
 
@@ -7,37 +7,43 @@ import './natural-list.scss';
 
 const NaturalList = ({ items = [], loading = false }) => {
     const icon = '/images/loading.png';
-    const { productDetail, fetchProductDetail } = useProductDetail();
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
+    const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
     }, [setActiveProduct]);
 
-    useEffect(() => {
-        if (activeProduct) {
-            if (activeProduct.detailsHTML) {
-                setDetailsHTML(activeProduct.detailsHTML);
-                setIsDetailsLoading(false);
-            }
-            else if (activeProduct.url) {
-                setIsDetailsLoading(true);
-                fetchProductDetail(activeProduct.url);
-            }
-        }
-    }, [activeProduct, fetchProductDetail]);
-
-    useEffect(() => {
+    const onProductDetailUpate = useCallback(() => {
+        console.log({ activeProduct, productDetail });
         if (activeProduct && productDetail) {
-            if (productDetail.detailURL === activeProduct.url) {
+            if (productDetail.id === activeProduct.id) {
                 setActiveProduct({
                     ...activeProduct,
                     ...productDetail
                 });
             }
         }
+    }, [ productDetail, activeProduct ])
+
+    useEffect(() => {
+        if (activeProduct) {
+            console.log({ activeProduct });
+            if (activeProduct.detailHTML) {
+                setDetailsHTML(activeProduct.detailHTML);
+                setIsDetailsLoading(false);
+            }
+            else {
+                setIsDetailsLoading(true);
+                // refetchProductDetail();
+            }
+        }
+    }, [activeProduct, refetchProductDetail]);
+
+    useEffect(() => {
+        onProductDetailUpate();
     }, [productDetail]); // eslint-disable-line react-hooks/exhaustive-deps
 
 
@@ -52,6 +58,7 @@ const NaturalList = ({ items = [], loading = false }) => {
                                 activeProduct &&
                                 <ProductDetails
                                     detailsHTML={detailsHTML}
+                                    title={activeProduct.title}
                                     isLoading={isDetailsLoading}
                                 />
                             }

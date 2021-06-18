@@ -15,10 +15,31 @@ const getProductDetail = async (productDetailURL) => {
   const browser = await startBrowser();
   const page = await browser.newPage();
   const detailSelector = '#centerCol';
+  const selectorsToRemove = [
+    '#title',
+    '#desktop_unifiedPrice',
+    '#productSupportAndReturnPolicy_feature_div',
+    '#alternativeOfferEligibilityMessaging_feature_div',
+    '#olp_feature_div',
+    '#seeMoreDetailsLink',
+    '#HLCXComparisonJumplink_feature_div',
+    '.caretnext',
+  ];
 
   await page.goto(productDetailURL);
   await page.waitForSelector(detailSelector);
-  const detailHTML = await page.$eval(detailSelector, detail => detail.textContent);
+  const detailHTML = await page.$eval(detailSelector, (detail, selectorsToRemove) => {
+    const allSelectorsToRemove = selectorsToRemove.join(',');
+
+    [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
+      try {
+        element.remove();
+      }
+      catch (err) { /**/ }
+    });
+
+    return detail.outerHTML;
+  }, selectorsToRemove);
 
   await browser.close();
 
@@ -71,7 +92,10 @@ const fetchProductDetails = async (productID, language = 'en') => {
 
   const urlWithLanguage = addURLParams(defaultURL.url, { language });
   const productDetails = await getProductDetail(urlWithLanguage);
-  return productDetails;
+  return {
+    ...productDetails,
+    id: productID,
+  };
 }
 
 

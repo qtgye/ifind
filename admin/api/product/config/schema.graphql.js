@@ -1,6 +1,7 @@
 module.exports = {
   definition: `
     type ProductDetails {
+      id: ID
       detailHTML: String
     }
     type ProductCategory {
