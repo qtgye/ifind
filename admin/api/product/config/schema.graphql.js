@@ -20,7 +20,6 @@ module.exports = {
     Query: {
       async productDetails(_, args) {
         const productDetails = await strapi.services.product.getProductDetails(args.id, args.language);
-        console.log(Object.keys(productDetails));
         return productDetails;
       },
 

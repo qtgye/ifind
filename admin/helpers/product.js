@@ -8,7 +8,6 @@ const startBrowser = async () => {
 }
 
 const getProductDetail = async (productDetailURL) => {
-  console.log({ productDetailURL });
   if ( !productDetailURL ) {
     return null;
   }
@@ -71,7 +70,6 @@ const fetchProductDetails = async (productID, language = 'en') => {
   if ( !defaultURL ) return null;
 
   const urlWithLanguage = addURLParams(defaultURL.url, { language });
-  console.log({ urlWithLanguage });
   const productDetails = await getProductDetail(urlWithLanguage);
   return productDetails;
 }
