@@ -15,10 +15,16 @@ const getProductComparisonList = gql`
             title
             image
             url_list {
-                source { id }
+                source {
+                    id
+                    button_logo {
+                        url
+                    }
+                }
                 region { id }
                 url
                 price
+                is_base
             }
             categories {
             label {

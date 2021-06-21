@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 import { locale } from '@config/locale';
-import { apiSourceHandle } from '@config/adminApi'
+import { apiSourceHandle } from '@config/adminApi';
 import getProductComparisonListQuery from '@gql/getProductComparisonListQuery';
 
 export const ProductComparisonContext = createContext({});

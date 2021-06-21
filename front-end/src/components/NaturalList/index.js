@@ -17,7 +17,6 @@ const NaturalList = ({ items = [], loading = false }) => {
     }, [setActiveProduct]);
 
     const onProductDetailUpate = useCallback(() => {
-        console.log({ activeProduct, productDetail });
         if (activeProduct && productDetail) {
             if (productDetail.id === activeProduct.id) {
                 setActiveProduct({
@@ -30,7 +29,6 @@ const NaturalList = ({ items = [], loading = false }) => {
 
     useEffect(() => {
         if (activeProduct) {
-            console.log({ activeProduct });
             if (activeProduct.detailHTML) {
                 setDetailsHTML(activeProduct.detailHTML);
                 setIsDetailsLoading(false);
@@ -58,6 +56,7 @@ const NaturalList = ({ items = [], loading = false }) => {
                                 activeProduct &&
                                 <ProductDetails
                                     detailsHTML={detailsHTML}
+                                    urlList={activeProduct?.url_list}
                                     title={activeProduct.title}
                                     isLoading={isDetailsLoading}
                                 />

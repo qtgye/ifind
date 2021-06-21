@@ -13,7 +13,11 @@ fragment ProductDataFragment on Product {
   clicks_count
   website_tab
   url_list {
-    source { id }
+    source {
+      button_logo {
+        url
+      }
+    }
     region { id }
     url
     price

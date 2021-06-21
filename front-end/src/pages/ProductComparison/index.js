@@ -7,8 +7,6 @@ import NaturalList from '@components/NaturalList';
 const ProductComparison = () => {
   const { productComparisonList } = useProductComparison();
 
-  console.log({ productComparisonList });
-
   return (
     <GeneralTemplate>
       <div className="product-comparison">
