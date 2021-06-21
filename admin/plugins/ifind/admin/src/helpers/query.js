@@ -35,7 +35,7 @@ export const useQuery = (query, variables) => {
 
   useEffect(() => {
     callQuery();
-  }, [ query ]);
+  }, [ query, callQuery ]);
 
   useEffect(() => {
     if ( data || error ) {
@@ -81,10 +81,7 @@ export const useMutation = () => {
         })
       })
       .then(res => res.json())
-      .then(({ data }) => {
-        console.log('data', data);
-        setData(data);
-      })
+      .then(({ data }) => setData(data))
       .catch(error => setError(error))
     }
 
@@ -93,7 +90,6 @@ export const useMutation = () => {
 
   useEffect(() => {
     if ( data || error ) {
-      console.log({ error });
       setLoading(false);
     }
   }, [ error, data ]);

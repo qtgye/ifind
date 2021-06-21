@@ -162,7 +162,6 @@ export const ProductsListProvider = memo(({ children }) => {
   // Update query on filters change
   useEffect(() => {
     const newProductsQuery = _productsQuery(filters);
-    console.log({ newProductsQuery });
     setProductsQuery(newProductsQuery);
   }, [ filters ]);
 
