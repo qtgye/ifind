@@ -11,7 +11,7 @@ export const AuthContext = createContext({});
 export const AuthContextProvider = ({ children }) => {
   const [ jwt ] = useState(( 
     window.sessionStorage.getItem('jwtToken')
-    || window.localStorage
+    || window.localStorage.getItem('jwtToken')
     || '' ).replace(/"/g, ''));
 
   return (
