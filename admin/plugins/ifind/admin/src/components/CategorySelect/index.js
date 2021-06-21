@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text } from '@buffetjs/core';
 
-import { useSourceRegion } from '../../providers/sourceRegionProvider';
 import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../providers/categoryProvider';
 
 import NestedCategoryOption from '../NestedCategoryOption';
@@ -9,8 +8,9 @@ import NestedCategoryOption from '../NestedCategoryOption';
 import './styles.scss';
 
 const CategorySelect = ({
-  source = null,
-  region = null,
+  // TODO: Clean up once single category tree is implemented
+  // source = null,
+  // region = null,
   category = null,
   onChange = null,
   hasError = false,
@@ -30,14 +30,18 @@ const CategorySelect = ({
   }, [ category, categories ]);
 
   useEffect(() => {
+    // Use Amazon Germany for now,
+    // TODO: Filter will be unnecessary once single category tree is implemented
     const filteredCategories = (categories && categories.filter(category => (
-      category.source?.id === source &&
-      category.region?.id === region
+      /amazon/i.test(category.source?.name) &&
+      category.region?.code === 'de'
     ))) || [];
+
+    console.log({ filteredCategories });
 
     const categoryTree = mapCategoriesTree(filteredCategories);
     setCategoryOptions(Object.values(categoryTree));
-  }, [ source, region, categories ]);
+  }, [ categories, /* source, region */ ]); // TODO: Clean up once single category tree is implemented
 
   useEffect(() => {
     if ( category ) {

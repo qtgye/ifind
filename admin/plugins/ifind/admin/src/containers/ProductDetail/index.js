@@ -18,7 +18,7 @@ const productValidationRules = {
   website_tab: [
     validationRules.required('Please select website tab'),
   ],
-  has_url_type: validationRules.required('Please select URL Type'),
+  // has_url_type: validationRules.required('Please select URL Type'),
   // url: validationRules.set([
   //   validationRules.required(),
   //   validationRules.url(),
@@ -42,14 +42,8 @@ const ProductDetail = () => {
   const [ productFormData, setProductFormData ] = useState({});
   const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
   const [ hasChanges, setHasChanges ] = useState(false);
-  const [ headerActions, setHeaderActions ] = useState([]);
 
   const saveProduct = useCallback(() => {
-    // Format productFormData for validation
-    if ( productFormData.source && productFormData.region ) {
-      productFormData.has_url_type = true;
-    }
-
     const { success, errors } = validateData(productFormData, productValidationRules);
 
     setFormErrors(errors);
@@ -64,8 +58,6 @@ const ProductDetail = () => {
       // Prepare data for graphql request
       const formattedData = formatProductFormData(productFormData);
 
-      console.log({ formattedData });
-
       if ( !formattedData.id ) {
         setRedirectOnUpdate(true);
         addProduct(formattedData);
@@ -77,11 +69,6 @@ const ProductDetail = () => {
   }, [ productFormData, updateProduct, addProduct ]);
   
   const formatProductFormData = useCallback((formData) => {
-    if ( formData.url_type ) {
-      formData.region = formData.url_type.region;
-      formData.source = formData.url_type.source;
-    }
-
     formData.price = Number(formData.price);
     formData.categories = [ formData.category ];
 

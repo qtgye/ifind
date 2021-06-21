@@ -10,6 +10,7 @@ fragment ProductDataFragment on Product {
   title
   image
   position
+  clicks_count
   website_tab
   url_list {
     source { id }
@@ -46,10 +47,8 @@ mutation UpdateProduct (
   $image: String!
   $title: String!
   $website_tab: String!
-  $source: ID!
-  $region: ID!
   $categories: [ID!]!
-  $url_list: [editComponentAtomsUrlWithTypeInput]
+  $url_list: [editComponentAtomsUrlWithTypeInput!]
 )
 {
   updateProduct (
@@ -61,8 +60,6 @@ mutation UpdateProduct (
         image: $image
         title: $title
         website_tab: $website_tab
-        source: $source
-        region: $region
         categories: $categories
         url_list: $url_list
       }
@@ -82,18 +79,14 @@ mutation CreateProduct (
 $image: String!
 $title: String!
 $website_tab: String!
-$source: ID!
-$region: ID!
 $categories: [ID!]!
-$url_list: [editComponentAtomsUrlWithTypeInput]
+$url_list: [ComponentAtomsUrlWithTypeInput!]
 ){
   createProduct (input: {
     data: {
       image: $image
       title: $title
       website_tab: $website_tab
-      source: $source
-      region: $region
       categories: $categories
       url_list: $url_list
     }
@@ -108,8 +101,7 @@ $url_list: [editComponentAtomsUrlWithTypeInput]
 export const ProductProvider = ({ children }) => {
   const { productId } = useParams();
   const [ getProductQuery, setGetProductQuery ] = useState(null);
-  const [ productMutationQuery, setProductMutationQuery ] = useState(null);
-  const { data: queryData, refetch } = useQuery(getProductQuery, { id: productId });
+  const { data: queryData } = useQuery(getProductQuery, { id: productId });
   const [
     addOrUpdateProduct,
     {
@@ -123,21 +115,18 @@ export const ProductProvider = ({ children }) => {
   const [ error, setError ] = useState(false);
   
   const addProduct = useCallback((data) => {
-    addOrUpdateProduct(addProductMutation(data), data);
-  }, [ addProductMutation ]);
+    addOrUpdateProduct(addProductMutation, data);
+  }, []);
   
   const updateProduct = useCallback((data) => {
-    console.log({ data });
     if ( data?.id ) {
       addOrUpdateProduct(updateProductMutation, data);
     }
   }, [ updateProductMutation ]);
   
   useEffect(() => {
-    if ( productId ) {
       setGetProductQuery(productQuery);
-    }
-  }, [ productId, refetch, productQuery ]);
+  }, [ productId ]);
   
   useEffect(() => {
     if ( queryData?.product ) {

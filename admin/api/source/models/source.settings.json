@@ -27,11 +27,15 @@
       "via": "source",
       "collection": "product"
     },
-    "selectors": {
-      "type": "component",
-      "repeatable": false,
-      "component": "entry-fields.source-selectors",
-      "required": true
+    "button_logo": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true,
+      "pluginOptions": {}
     }
   }
 }

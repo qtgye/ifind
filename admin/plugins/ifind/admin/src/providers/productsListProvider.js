@@ -42,8 +42,6 @@ fragment ProductFragment on Product {
 `;
 
 const _productsQuery = (where) => {
-  console.log({ where });
-  
   return `
   ${ProductFragment}
   query ProductsList (

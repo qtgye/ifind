@@ -21,11 +21,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   // Read-only fields
   const [ id, setId ] = useState(null);
-  const [ position, setPosition ] = useState(null);
-  const [ createdAt, setCreatedAt ] = useState('');
-  const [ createdBy, setCreatedBy ] = useState('');
-  const [ updatedAt, setUpdatedAt ] = useState('');
-  const [ updatedBy, setUpdatedBy ] = useState('');
+  const [ productPosition, setProductPosition ] = useState(null);
+  const [ clicksCount, setClicksCount ] = useState(null);
 
   // CategorySelect Data
   const [ source, setSource ] = useState(null);
@@ -105,8 +102,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setWebsiteTab(product.website_tab);
       setTitle(product.title);
       setImage(product.image);
-      setPosition(product.position);
       setCategory(product.categories[0]?.id);
+      setProductPosition(product.position);
+      setClicksCount(product.clicks_count);
 
       // Format product url list to match ProductURLInput
       setProductURLs((product.url_list || []).map(urlData => ({
@@ -155,18 +153,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
             value={websiteTab}
           />
         </InputBlock>
-        
-        {/* Position */}
-        <InputBlock className="col-md-6">
-          <Label htmlFor="website-tab">Position</Label>
-          <InputText
-              id='position'
-              name='position'
-              type="number"
-              value="0"
-              disabled
-            />
-        </InputBlock>
 
         {/* Title */}
         <InputBlock className="col-md-12" error={formErrors.title}>
@@ -192,6 +178,30 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           />
         </InputBlock>
 
+        {/* Position */}
+        <InputBlock className="col-md-6">
+          <Label htmlFor="website-tab">Position</Label>
+          <InputText
+              id='position'
+              name='position'
+              type="number"
+              value={productPosition}
+              disabled
+            />
+        </InputBlock>
+
+        {/* Clicks Count */}
+        <InputBlock className="col-md-6">
+          <Label htmlFor="clicks-count">Clicks Count</Label>
+          <InputText
+              id='clicks-count'
+              name='clicks-count'
+              type="number"
+              value={clicksCount}
+              disabled
+            />
+        </InputBlock>
+
       </Panel>
 
       <Panel className="product-form__panel product-form__panel--urls">
@@ -212,7 +222,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           category={category}
           onChange={onCategorySelect}
           hasError={formErrors.category}
-          emptyMessage="Please select URL Type"
         />
         { formErrors.category && (
           <Text className="col-sm-12" size="sm" color="red">{formErrors.category.join('<br />')}</Text>

@@ -30,12 +30,14 @@ export const useQuery = (query, variables) => {
   }, [ jwt, query, variables ]);
 
   const refetch = useCallback(() => {
+    console.log('refetch');
     callQuery();
   }, [ callQuery ]);
 
   useEffect(() => {
+    console.log('query change');
     callQuery();
-  }, [ query, callQuery ]);
+  }, [ query ]);
 
   useEffect(() => {
     if ( data || error ) {

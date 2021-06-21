@@ -43,10 +43,11 @@ const ProductURLInputItem = ({ is_base = false, source, region, url, price, onCh
         source: sourceInput,
         region: regionInput,
         price: priceInput,
+        is_base,
         softId,
       });
     }
-  }, [ regionInput, sourceInput, urlInput, priceInput ]);
+  }, [ regionInput, sourceInput, urlInput, priceInput, is_base ]);
 
   return (
     <div className="product-url-input__item row">

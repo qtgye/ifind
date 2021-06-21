@@ -35,9 +35,11 @@
    }
    source {
      id
+     name
    }
    region {
      id
+     code
    }
  }`;
  
