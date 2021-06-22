@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import ReactShadowRoot from 'react-shadow-root';
 import { toAdminURL } from '@utilities/url';
+import { v4 as uuid } from 'uuid';
 
 import './product-details.scss';
 
@@ -28,6 +29,7 @@ const ProductURLLink = ({ url, logo, price, isBase, basePrice }) => {
 
 const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
     const [ basePrice, setBasePrice ] = useState(0);
+    const [ urlItems, setURLItems ] = useState([]);
 
     useEffect(() => {
         const baseURLData = urlList.find(({ is_base }) => is_base);
@@ -35,6 +37,13 @@ const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
         if ( baseURLData ) {
             setBasePrice(Number(baseURLData.price));
         }
+
+        // Add keys to urlList
+        setURLItems(urlList.map(urlData => ({
+            ...urlData,
+            key: uuid(),
+        })))
+
     }, [ urlList ]);
 
 
@@ -48,9 +57,9 @@ const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
                         <h1 className="product-details__title">{title}</h1>
                         <div className="product-details__body" dangerouslySetInnerHTML={{ __html: detailsHTML }}></div>
                         <div className="product-details__links">
-                            {urlList.map(({ url, source, price, is_base }) => (
+                            {urlItems.map(({ key, url, source, price, is_base }) => (
                                 <ProductURLLink
-                                    key={url}
+                                    key={key}
                                     url={url}
                                     logo={source?.button_logo?.url}
                                     price={price}

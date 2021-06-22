@@ -92,7 +92,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   }, [ setCategory ]);
 
    const onProductURLsChange = useCallback((newUrlList) => {
-     console.log({ newUrlList });
     setUrlList(newUrlList);
    }, []);
 
