@@ -65,7 +65,7 @@ const NaturalList = ({ items = [], loading = false }) => {
                         {items.map((item, index) => (
                             <Item
                                 {...item}
-                                active={activeProduct && activeProduct.url === item.url}
+                                active={activeProduct && activeProduct.id === item.id}
                                 withBadge={index === 0}
                                 onClick={() => onProductClick(item)}
                                 key={item.id}
