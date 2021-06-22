@@ -68,7 +68,7 @@ const NaturalList = ({ items = [], loading = false }) => {
                                 active={activeProduct && activeProduct.url === item.url}
                                 withBadge={index === 0}
                                 onClick={() => onProductClick(item)}
-                                key={index}
+                                key={item.id}
                             />
                         ))}
                     </ul>
