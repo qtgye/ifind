@@ -1,4 +1,4 @@
-export default [
+module.exports = [
     {
         "name": "Bulgarian lev",
         "code": "BGN",

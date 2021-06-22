@@ -11,7 +11,8 @@
     "build": "node ./scripts/strapi-custom.js build",
     "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
-    "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"
+    "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
+    "currencies:import": "node scripts/currencies-import.js"
   },
   "devDependencies": {
     "colors": "^1.4.0",

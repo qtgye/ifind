@@ -39,8 +39,8 @@
       "required": true
     },
     "region": {
-      "model": "region",
-      "via": "products"
+      "via": "products",
+      "model": "region"
     },
     "source": {
       "via": "products",

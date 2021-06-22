@@ -31,6 +31,10 @@
     "products": {
       "via": "region",
       "collection": "product"
+    },
+    "currency": {
+      "via": "regions",
+      "model": "currency"
     }
   }
 }
