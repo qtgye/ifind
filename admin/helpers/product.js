@@ -72,6 +72,8 @@ const addURLParams = (url = '', paramsObject) => {
  * @returns Object
  */
 const fetchProductDetails = async (productID, language = 'en') => {
+  if ( !productID ) return null;
+
   const [
     amazonSource,
     product,
@@ -80,13 +82,13 @@ const fetchProductDetails = async (productID, language = 'en') => {
     await strapi.services.product.findOne({ id: productID }),
   ]);
 
-  if ( !productID ) return null;
+  if ( !product ) return null;
 
   // Extract default URL
-  const defaultURL = product.url_list.find(({ is_base, source }) => (
-                        is_base && source.id === amazonSource.id
+  const defaultURL = product.url_list?.find(({ is_base, source }) => (
+                        is_base && source?.id === amazonSource?.id
                       ))
-                    || product.url_list.find(({ source }) => source.id === amazonSource.id);
+                    || product.url_list.find(({ source }) => source?.id === amazonSource?.id);
 
   if ( !defaultURL ) return null;
 
