@@ -5,4 +5,19 @@
  * to customize this model
  */
 
-module.exports = {};
+ const processCurrencyData = async data => {
+  if ( data.name && data.symbol ) {
+    data.label_preview = `${data.symbol} - ${data.name}`;
+  }
+}
+
+module.exports = {
+  lifecycles: {
+    async beforeCreate(data) {
+      await processCurrencyData(data);
+    },
+    async beforeUpdate(params, data) {
+      await processCurrencyData(data);
+    }
+  }
+};

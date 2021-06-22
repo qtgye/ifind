@@ -28,6 +28,9 @@
     "regions": {
       "via": "currency",
       "collection": "region"
+    },
+    "label_preview": {
+      "type": "string"
     }
   }
 }

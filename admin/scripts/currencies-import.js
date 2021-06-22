@@ -43,7 +43,8 @@
    ...currency.symbol.split(/\s*\/\s*/).map(symbol => ({
      name: currency.name,
      code: currency.code,
-     symbol
+     symbol,
+     label_preview: `${symbol} - ${currency.name}`
    }))
  ]), []);
 
@@ -60,7 +61,7 @@
  (async () => {
 
   // Filter out existing currency symbols
-  const existingQuery = `SELECT * from ${TABLE_NAME} WHERE ${TABLE_NAME}.symbol IN (${currenciesList.map(({ symbol }) => `"${symbol}"`).join(',')})`;
+  const existingQuery = `SELECT * from ${TABLE_NAME} WHERE ${TABLE_NAME}.label_preview IN (${currenciesList.map(({ label_preview }) => `"${label_preview}"`).join(',')})`;
   const existing = await callQuery(existingQuery);
   const existingSymbols = existing.map(exists => exists.symbol);
   const toInsert = currenciesList.filter(currency => !existingSymbols.includes(currency.symbol));
@@ -72,7 +73,7 @@
     const entryValues = values.shift();
 
     try {
-      const result = await callQuery(`INSERT INTO ${TABLE_NAME} (name, code, symbol) VALUES (?);`, [entryValues]);
+      const result = await callQuery(`INSERT INTO ${TABLE_NAME} (name, code, symbol, label_preview) VALUES (?);`, [entryValues]);
       console.log(`Inserted: ${entryValues.join(', ')}`);
       inserted++;
     }
