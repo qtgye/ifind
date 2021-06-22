@@ -7,7 +7,7 @@ import './product-details.scss';
 
 import inlineStyles from './detail-styles';
 
-const ProductURLLink = ({ url, logo, price, isBase, basePrice }) => {
+const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
     const percentDifference = 100 * (price - basePrice ) / basePrice;
 
     return  (
@@ -15,7 +15,7 @@ const ProductURLLink = ({ url, logo, price, isBase, basePrice }) => {
             <a href={url} className="product-details__link" target="_blank" rel="noreferrer">
                 <img src={toAdminURL(logo)} alt="" className="product-details__link-image" />
             </a>
-            <span className="product-details__price">{price}</span>
+            <span className="product-details__price">{currency}&nbsp;{price}</span>
             {
                 !isBase && (
                     <span className={[ 'product-details__diff', percentDifference < 0 ? 'product-details__diff--lower' : 'product-details__diff--higher' ].join(' ')}>
@@ -57,7 +57,7 @@ const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
                         <h1 className="product-details__title">{title}</h1>
                         <div className="product-details__body" dangerouslySetInnerHTML={{ __html: detailsHTML }}></div>
                         <div className="product-details__links">
-                            {urlItems.map(({ key, url, source, price, is_base }) => (
+                            {urlItems.map(({ key, url, source, price, region, is_base }) => (
                                 <ProductURLLink
                                     key={key}
                                     url={url}
@@ -65,6 +65,7 @@ const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
                                     price={price}
                                     isBase={is_base}
                                     basePrice={basePrice}
+                                    currency={region?.currency?.symbol}
                                 />
                             ))}
                         </div>

@@ -21,7 +21,12 @@ const getProductComparisonList = gql`
                         url
                     }
                 }
-                region { id }
+                region {
+                    id
+                    currency {
+                        symbol
+                    }
+                }
                 url
                 price
                 is_base

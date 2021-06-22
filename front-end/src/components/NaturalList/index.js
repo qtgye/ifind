@@ -35,7 +35,6 @@ const NaturalList = ({ items = [], loading = false }) => {
             }
             else {
                 setIsDetailsLoading(true);
-                // refetchProductDetail();
             }
         }
     }, [activeProduct, refetchProductDetail]);
