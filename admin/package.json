@@ -8,7 +8,7 @@
     "develop:live": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
     "develop:watch": "nodemon ./scripts/strapi-custom.js develop watch-plugin",
     "start": "node ./scripts/strapi-custom.js start",
-    "build": "strapi build",
+    "build": "node ./scripts/strapi-custom.js build",
     "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json"

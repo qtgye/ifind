@@ -85,10 +85,12 @@ const fetchProductDetails = async (productID, language = 'en') => {
   if ( !product ) return null;
 
   // Extract default URL
-  const defaultURL = product.url_list?.find(({ is_base, source }) => (
-                        is_base && source?.id === amazonSource?.id
+  const defaultURL = (product.url_list || []).find(({ is_base, source }) => (
+                        is_base && source && amazonSource && source.id === amazonSource.id
                       ))
-                    || product.url_list.find(({ source }) => source?.id === amazonSource?.id);
+                    || product.url_list.find(({ source }) => (
+                      source && amazonSource && source.id === amazonSource.id
+                    ));
 
   if ( !defaultURL ) return null;
 
