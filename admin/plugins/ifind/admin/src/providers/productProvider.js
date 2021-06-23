@@ -154,12 +154,8 @@ export const ProductProvider = ({ children }) => {
 
   useEffect(() => {
     if ( mutationError ) {
-      strapi.notification.toggle({
-        type: 'warning',
-        title: 'Error',
-        message: mutationError.message,
-      });
       console.error(mutationError);
+      setError(mutationError);
     }
   }, [ mutationError ]);
 
@@ -168,6 +164,7 @@ export const ProductProvider = ({ children }) => {
       productData,
       addProduct,
       updateProduct,
+      error,
     ]}>
       {children}
     </ProductContext.Provider>

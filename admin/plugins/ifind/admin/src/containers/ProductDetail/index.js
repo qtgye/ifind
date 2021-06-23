@@ -25,6 +25,7 @@ const ProductDetail = () => {
     productData,
     addProduct,
     updateProduct,
+    error,
   ] = useProduct();
   const history = useHistory();
   const [ title, setTitle ] = useState('');
@@ -89,6 +90,17 @@ const ProductDetail = () => {
 
     setIsSaving(false);
   }, [ productData ]);
+
+  useEffect(() => {
+    if ( error ) {
+      strapi.notification.toggle({
+        type: 'warning',
+        title: 'Error',
+        message: error.message,
+      });
+      setIsSaving(false);
+    }
+  }, [ error ]);
 
   useEffect(() => {
     const rawProductData = productData || {};
