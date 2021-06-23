@@ -21,7 +21,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   // Read-only fields
   const [ id, setId ] = useState(null);
-  const [ productPosition, setProductPosition ] = useState(null);
   const [ clicksCount, setClicksCount ] = useState(null);
 
   // CategorySelect Data
@@ -36,6 +35,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ title, setTitle ] = useState('');
   const [ category, setCategory ] = useState(null);
   const [ image, setImage ] = useState('');
+  const [ position, setPosition ] = useState('');
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
 
   const collectFormData = useCallback(() => {
@@ -48,6 +48,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       source,
       region,
       urlList,
+      position,
     }
   }, [
     id,
@@ -58,14 +59,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     source,
     region,
     urlList,
+    position,
   ]);
 
   const processFormData = useCallback((formData) => {
-    // // Process price to ensure Number type
-    // if ( formData.price ) {
-    //   formData.price = Number(formData.price);
-    // }
-
     // Process websiteTab
     formData.website_tab = formData.websiteTab;
 
@@ -73,6 +70,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.url_list = formData.urlList.map(({ source, region, is_base, price, url }) => ({
       source, region, is_base, url, price
     }));
+
+    // Format Position
+    formData.position = Number(formData.position);
 
     // Delete unnecessary props
     delete formData.urlType;
@@ -102,8 +102,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setTitle(product.title);
       setImage(product.image);
       setCategory(product.categories[0]?.id);
-      setProductPosition(product.position);
       setClicksCount(product.clicks_count);
+      setPosition(product.position);
 
       // Format product url list to match ProductURLInput
       setProductURLs((product.url_list || []).map(urlData => ({
@@ -133,6 +133,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     region,
     image,
     urlList,
+    position,
   ]);
 
   return (
@@ -184,8 +185,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
               id='position'
               name='position'
               type="number"
-              value={productPosition}
-              disabled
+              value={position}
+              onChange={({ target: { value } }) => setPosition(value)}
             />
         </InputBlock>
 

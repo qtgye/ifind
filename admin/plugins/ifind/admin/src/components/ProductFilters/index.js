@@ -1,3 +1,9 @@
+/**
+ TODO:
+
+ Clean up URLType Select once removed from implementation
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from '@buffetjs/core';
@@ -14,23 +20,14 @@ const ProductFilters = ({ onChange }) => {
   const history = useHistory();
 
   // States
-  const [ region, setRegion ] = useState('');
-  const [ source, setSource ] = useState('');
   const [ category, setCategory ] = useState('');
-
-  const onURLTypeChange = useCallback((value) => {
-    setSource(value?.source || '');
-    setRegion(value?.region || '');
-  }, []);
 
   const onCategorySelect = useCallback((categoryID) => {
     setCategory(categoryID);
-  }, [ setCategory ]);
+  }, [  ]);
 
   const applyFilters = useCallback(() => {
-    const filters = Object.entries({
-        region, source, category
-      })
+    const filters = Object.entries({ category })
       .filter(([ key, value ]) => value)
       .map(([ key, value ]) => `${key}:${value}`)
       .join(',');
@@ -38,10 +35,10 @@ const ProductFilters = ({ onChange }) => {
     const targetURL = generatePluginLink('', { filters })
 
     history.push(targetURL);
-  }, [ region, source, category ])
+  }, [ category ])
 
   useEffect(() => {
-    const { filters = '' } = searchParams;
+    const { filters } = searchParams;
 
     // Extract filters
     const filtersMap = filters ?
@@ -53,25 +50,19 @@ const ProductFilters = ({ onChange }) => {
     }, {})
     : {};
 
-    setCategory(filtersMap?.category || '');
-    setSource(filtersMap?.source || '');
-    setRegion(filtersMap?.region || '');
+    if ( filtersMap?.category ) {
+      setCategory(filtersMap.category);
+    }
   }, [ searchParams ]);
-  
 
+  useEffect(() => {
+    console.log({ category });
+  }, [ category ]);
+  
   return (
     <div className="product-filters">
       <div className="product-filters__item">
-        <URLTypeSelect
-          region={region}
-          source={source}
-          onChange={onURLTypeChange}
-        />
-      </div>
-      <div className="product-filters__item">
         <CategorySelect
-          source={source}
-          region={region}
           category={category}
           onChange={onCategorySelect}
           emptyMessage="Please select URL Type"

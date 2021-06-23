@@ -53,6 +53,7 @@ mutation UpdateProduct (
   $title: String!
   $website_tab: String!
   $categories: [ID!]!
+  $position: Int
   $url_list: [editComponentAtomsUrlWithTypeInput!]
 )
 {
@@ -67,6 +68,7 @@ mutation UpdateProduct (
         website_tab: $website_tab
         categories: $categories
         url_list: $url_list
+        position: $position
       }
     }
   )
@@ -85,6 +87,7 @@ $image: String!
 $title: String!
 $website_tab: String!
 $categories: [ID!]!
+$position: Int
 $url_list: [ComponentAtomsUrlWithTypeInput!]
 ){
   createProduct (input: {
@@ -94,6 +97,7 @@ $url_list: [ComponentAtomsUrlWithTypeInput!]
       website_tab: $website_tab
       categories: $categories
       url_list: $url_list
+      position: $position
     }
   }) {
     product {
@@ -111,7 +115,7 @@ export const ProductProvider = ({ children }) => {
     addOrUpdateProduct,
     {
       // loading,
-      // error,
+      error: mutationError,
       data: mutationData,
     }
   ] = useMutation();
@@ -147,6 +151,17 @@ export const ProductProvider = ({ children }) => {
       setProductData(mutationData.updateProduct.product);
     }
   }, [ mutationData ]);
+
+  useEffect(() => {
+    if ( mutationError ) {
+      strapi.notification.toggle({
+        type: 'warning',
+        title: 'Error',
+        message: mutationError.message,
+      });
+      console.error(mutationError);
+    }
+  }, [ mutationError ]);
 
   return (
     <ProductContext.Provider value={[

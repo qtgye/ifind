@@ -28,14 +28,11 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
   ), []);
 
   const setFinalSelectedCategory = useCallback((categoryData) => {
+    console.log('setFinalSelectedCategory', categoryData, categoryData?.id);
     if ( typeof onChange === 'function' ) {
       onChange(categoryData?.id);
     }
   }, [ onChange ]);
-
-  const selectCategory = useCallback((categoryData) => {
-    setSelectedCategory(categoryLabel(categoryData));
-  }, []);
 
   const checkCategoryPath = useCallback(() => {
     if ( !categoryPath?.length ) {

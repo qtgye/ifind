@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { generatePluginLink } from '../../helpers/url';
 
-const CustomRow = ({ row: {id, title, image, category, url, created_at, updated_at, selected = false, confirmProductDelete }, onSelect }) => {
+const CustomRow = ({ row: {id, position, title, image, category, url, created_at, updated_at, selected = false, confirmProductDelete }, onSelect }) => {
   return (
     <tr>
       <td>
@@ -14,6 +14,11 @@ const CustomRow = ({ row: {id, title, image, category, url, created_at, updated_
           checked={selected}
           onChange={({ target }) => onSelect(id, !selected)}
         />
+      </td>
+      <td>
+        <Link to={generatePluginLink(`products/${id}`)}>
+          <strong>{position}</strong>
+        </Link>
       </td>
       <td>
         <Link to={generatePluginLink(`products/${id}`)}>{id}</Link>

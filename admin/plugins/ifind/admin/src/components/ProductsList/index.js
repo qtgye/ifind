@@ -18,6 +18,7 @@ import headers from './_table-headers';
 import './styles.scss';
 
 const sortOptions = [
+  'position',
   'id',
   'title',
   'created_at',
@@ -40,7 +41,7 @@ const ProductsList = () => {
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
   const [ selectedItems, setSelectedItems ] = useState([]);
-  const [ isFiltersVisible, setIsFiltersVisible ] = useState(Object.keys(filters).length);
+  const [ isFiltersVisible, setIsFiltersVisible ] = useState(false);
 
   const getUrlType = useCallback((sourceID, regionID) => {
     const matchedSource = sources.find(({ id }) => id === sourceID);
@@ -147,11 +148,6 @@ const ProductsList = () => {
     }
   });
 
-  // Filters handler
-  const onFiltersChange = useCallback((newFiltesr) => {
-    console.log({ newFilters });
-  });
-
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
   }, [ selectedItems ]);
@@ -164,6 +160,10 @@ const ProductsList = () => {
     const selectedItems = rows.filter(row => row.selected).map(({ id }) => id);
     setSelectedItems(selectedItems);
   }, [ rows ]);
+
+  useEffect(() => {
+    setIsFiltersVisible(Object.keys(filters).length);
+  }, [ filters ]);
 
   return (
     <div className="products-list row">
@@ -202,9 +202,7 @@ const ProductsList = () => {
       {
         (isFiltersVisible && (
           <div className="products-list__filters col-md-12">
-            <ProductFilters
-              onChange={filters => onFiltersChange(filters)}
-            />
+            <ProductFilters />
           </div>
         ) || '')
       }

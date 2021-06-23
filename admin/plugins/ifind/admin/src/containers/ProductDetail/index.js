@@ -10,19 +10,9 @@ import ProductForm from '../../components/ProductForm';
 
 const productValidationRules = {
   title: validationRules.required('Please provide a title'),
-  // price: validationRules.set([
-  //   validationRules.required(),
-  //   validationRules.number(),
-  //   validationRules.greaterThan(0),
-  // ], 'Please provide a price above 0'),
   website_tab: [
     validationRules.required('Please select website tab'),
   ],
-  // has_url_type: validationRules.required('Please select URL Type'),
-  // url: validationRules.set([
-  //   validationRules.required(),
-  //   validationRules.url(),
-  // ], 'Please provide a URL in valid format'),
   image: validationRules.set([
     validationRules.required('Please provide an image'),
     validationRules.url('Image must be a valid URL'),
@@ -42,6 +32,7 @@ const ProductDetail = () => {
   const [ productFormData, setProductFormData ] = useState({});
   const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
   const [ hasChanges, setHasChanges ] = useState(false);
+  const [ isSaving, setIsSaving ] = useState(false);
 
   const saveProduct = useCallback(() => {
     const { success, errors } = validateData(productFormData, productValidationRules);
@@ -57,6 +48,8 @@ const ProductDetail = () => {
     else {
       // Prepare data for graphql request
       const formattedData = formatProductFormData(productFormData);
+
+      setIsSaving(true);
 
       if ( !formattedData.id ) {
         setRedirectOnUpdate(true);
@@ -93,6 +86,8 @@ const ProductDetail = () => {
         setTitle(productData.title);
       }
     }
+
+    setIsSaving(false);
   }, [ productData ]);
 
   useEffect(() => {
@@ -153,12 +148,16 @@ const ProductDetail = () => {
             title={{ label: title }}
             actions={[
               {
-                label: 'Save',
+                label: isSaving ? 'Saving' : 'Save',
                 onClick: saveProduct,
-                color: 'success',
+                color: isSaving ? 'cancel' : 'success',
                 type: 'button',
                 disabled: !hasChanges,
-                icon: (<FontAwesomeIcon icon={faSave} />)
+                icon: (
+                  isSaving
+                  ? <FontAwesomeIcon icon="spinner" pulse />
+                  : <FontAwesomeIcon icon="save" />
+                )
               },
             ]}
           />

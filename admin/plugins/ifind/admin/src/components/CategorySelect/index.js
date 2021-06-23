@@ -25,6 +25,7 @@ const CategorySelect = ({
   const setInitialCategoryPath = useCallback(() => {
     // Build category path
     const _categoryPath = buildCategoryPath(category, categories);
+    console.log({ _categoryPath });
     // Use only id's for path
     setCategoryPath(_categoryPath.map(({ id }) => id));
   }, [ category, categories ]);
@@ -37,17 +38,19 @@ const CategorySelect = ({
       category.region?.code === 'de'
     ))) || [];
 
-    console.log({ filteredCategories });
-
     const categoryTree = mapCategoriesTree(filteredCategories);
     setCategoryOptions(Object.values(categoryTree));
-  }, [ categories, /* source, region */ ]); // TODO: Clean up once single category tree is implemented
+  }, [ categories ]);
 
   useEffect(() => {
     if ( category ) {
       setInitialCategoryPath();
     }
   }, [ category ]);
+
+  useEffect(() => {
+    console.log({ categoryPath });
+  }, [ categoryPath ]);
 
   return (
     <div className="category-select">
@@ -57,11 +60,11 @@ const CategorySelect = ({
           onChange={onChange}
           hasError={hasError}
         />
-      {
+      {/* {
         ( categoryPath.length <= 1 && categoryOptions.length < 1 ) ?
         <Text color="orange" className="col-md-12">Please select URL Type</Text> : 
         null
-      }
+      } */}
     </div>
   )
 }

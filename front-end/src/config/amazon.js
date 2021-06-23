@@ -9,4 +9,4 @@ export const tags = {
     smid: 'A3JWKAKR8XB7XF',
 };
 
-export const amazonURLPattern = /https?[:]\/\/[a-z]+\.amazon\.[a-z]+(\/.*)?/i;
+export const amazonURLPattern = /^https?[:]\/\/[a-z]+\.amazon\.[a-z]+(\/.*)?/i;

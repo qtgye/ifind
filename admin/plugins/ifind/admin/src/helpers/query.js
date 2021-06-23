@@ -30,12 +30,10 @@ export const useQuery = (query, variables) => {
   }, [ jwt, query, variables ]);
 
   const refetch = useCallback(() => {
-    console.log('refetch');
     callQuery();
   }, [ callQuery ]);
 
   useEffect(() => {
-    console.log('query change');
     callQuery();
   }, [ query ]);
 
@@ -83,7 +81,15 @@ export const useMutation = () => {
         })
       })
       .then(res => res.json())
-      .then(({ data }) => setData(data))
+      .then(({ data, errors }) => {
+        if ( errors ) {
+          setError(errors[0]);
+        }
+        else {
+          setData(data);
+          setError(null);
+        }
+      })
       .catch(error => setError(error))
     }
 

@@ -6,6 +6,7 @@ export const mapSearchParam = () => (
   window.location.search
     .slice(1)
     .split('&')
+    .filter(Boolean)
     .map(keyValue => keyValue.split('='))
     .reduce((all, [ key, value ]) => ({
       ...all,

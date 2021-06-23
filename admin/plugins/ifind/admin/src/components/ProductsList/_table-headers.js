@@ -3,6 +3,11 @@ export default [
     name: '', // Checkboxes
   },
   {
+    name: 'Position',
+    value: 'position',
+    isSortEnabled: true,
+  },
+  {
     name: 'Id',
     value: 'id',
     isSortEnabled: true,

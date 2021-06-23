@@ -249,7 +249,6 @@
   }, [ categories ]);
 
   const replaceCategories = useCallback((newCategories) => {
-    console.log({ newCategories });
     // Process and update categories
     const categoryTree = mapCategoriesTree(newCategories);
     const categoryList = flattenCategoriesTree(categoryTree);
@@ -259,7 +258,6 @@
   });
 
   useEffect(() => {
-    console.log({ data });
     if ( data ) {
       replaceCategories(data.categories);
     }
