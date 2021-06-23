@@ -13,3 +13,20 @@ export const toAdminURL = (relativeURL = '') => (
     relativeURL
         .replace(/^\/+/, '/')
 )
+
+export const addURLParams = (url = '', paramsObject) => {
+    const [ baseURL, searchParams = '' ] = url.split('?');
+    const searchParamsObject = searchParams.split('&').filter(Boolean).reduce((all, keyValue) => {
+      const [ key, value ] = keyValue.split('=');
+      all[key] = value;
+      return all;
+    }, {});
+    console.log({ searchParamsObject, paramsObject });
+    const newParams = {
+      ...searchParamsObject,
+      ...paramsObject,
+    };
+    const newParamsString = Object.entries(newParams).map(([ key, value ]) => `${key}=${value}`).join('&');
+  
+    return baseURL + '?' + newParamsString;
+  }

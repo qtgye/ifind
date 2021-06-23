@@ -1,4 +1,5 @@
 const puppeteer = require('puppeteer');
+const { addURLParams } = require('./url');
 
 const startBrowser = async () => {
   return puppeteer.launch({
@@ -47,22 +48,6 @@ const getProductDetail = async (productDetailURL) => {
     detailURL: productDetailURL,
     detailHTML: detailHTML,
   };
-}
-
-const addURLParams = (url = '', paramsObject) => {
-  const [ baseURL, searchParams = '' ] = url.split('?');
-  const searchParamsObject = searchParams.split('&').reduce((all, keyValue) => {
-    const [ key, value ] = keyValue.split('=');
-    all[key] = value;
-    return all;
-  }, {});
-  const newParams = {
-    ...searchParamsObject,
-    ...paramsObject,
-  };
-  const newParamsString = Object.entries(newParams).map(([ key, value ]) => `${key}=${value}`).join('&');
-
-  return baseURL + '?' + newParamsString;
 }
 
 

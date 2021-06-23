@@ -58,6 +58,7 @@ module.exports = {
         '^@config/(.*)$': '<rootDir>/src/config/$1',
         '^@mocks/(.*)$': '<rootDir>/src/mocks/$1',
         '^@contexts/(.*)$': '<rootDir>/src/contexts/$1',
+        '^@utilities/(.*)$': '<rootDir>/src/utilities/$1',
         '^@gql/(.*)$': '<rootDir>/src/gql/$1',
         '^@bootstrap(/.*)?$': '<rootDir>/node_modules/bootstrap/scss/bootstrap',
         

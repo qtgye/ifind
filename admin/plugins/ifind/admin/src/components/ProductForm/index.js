@@ -107,11 +107,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
       // Format product url list to match ProductURLInput
       setProductURLs((product.url_list || []).map(urlData => ({
-        source: urlData.source?.id,
-        region: urlData.region?.id,
-        url: urlData.url,
-        is_base: urlData.is_base,
-        price: urlData.price,
+        source: urlData?.source?.id,
+        region: urlData?.region?.id,
+        url: urlData?.url,
+        is_base: urlData?.is_base,
+        price: urlData?.price,
       })));
 
       // Update source and region based on product

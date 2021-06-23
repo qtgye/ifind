@@ -34,6 +34,11 @@ module.exports = {
     const matchedRegion = await strapi.services.region.findOne({
       code: 'de'
     });
+    const matchedSource = await strapi.services.source.findOne({
+      name_contains: 'amazon'
+    });
+
+    // console.log({ matchedSource });
 
     // Will use to select label for categories
     const matchedLanguage = await strapi.services.language.findOne({
