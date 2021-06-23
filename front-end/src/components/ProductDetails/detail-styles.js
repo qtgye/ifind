@@ -5,12 +5,14 @@ const outerStyles = `
     &__links {
         position: sticky;
         bottom: 0;
+        width: calc(100% + 40px);
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        padding-top: 30px;
+        padding: 30px 20px;
         border-top: 1px solid silver;
         background-color: white;
+        margin-left: -20px;
     }
 
     &__link-item {
