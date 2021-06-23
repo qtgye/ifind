@@ -161,10 +161,6 @@ const ProductsList = () => {
     setSelectedItems(selectedItems);
   }, [ rows ]);
 
-  useEffect(() => {
-    setIsFiltersVisible(Object.keys(filters).length);
-  }, [ filters ]);
-
   return (
     <div className="products-list row">
       <div className="products-list__controls">

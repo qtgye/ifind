@@ -1,7 +1,8 @@
 /**
  TODO:
 
- Clean up URLType Select once removed from implementation
+ - Clean up URLType Select once removed from implementation
+ - Determine issue where the CategorySelect is empty when initially shown when filters are present in searchParams
  */
 
 import React, { useState, useEffect, useCallback } from 'react';
@@ -54,10 +55,6 @@ const ProductFilters = ({ onChange }) => {
       setCategory(filtersMap.category);
     }
   }, [ searchParams ]);
-
-  useEffect(() => {
-    console.log({ category });
-  }, [ category ]);
   
   return (
     <div className="product-filters">

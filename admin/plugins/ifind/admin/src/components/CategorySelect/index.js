@@ -25,7 +25,6 @@ const CategorySelect = ({
   const setInitialCategoryPath = useCallback(() => {
     // Build category path
     const _categoryPath = buildCategoryPath(category, categories);
-    console.log({ _categoryPath });
     // Use only id's for path
     setCategoryPath(_categoryPath.map(({ id }) => id));
   }, [ category, categories ]);
@@ -47,10 +46,6 @@ const CategorySelect = ({
       setInitialCategoryPath();
     }
   }, [ category ]);
-
-  useEffect(() => {
-    console.log({ categoryPath });
-  }, [ categoryPath ]);
 
   return (
     <div className="category-select">
