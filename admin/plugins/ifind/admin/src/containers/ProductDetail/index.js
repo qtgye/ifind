@@ -74,21 +74,31 @@ const ProductDetail = () => {
     return formData;
   }, []);
 
-  useEffect(() => {
-    if ( !productData ) {
+  const onProductDataUpdate = useCallback((newProductData) => {
+    if ( !newProductData ) {
       setTitle('Create New Product');
     }
 
     else {
       if ( redirectOnUpdate ) {
-        history.push('/plugins/ifind/products/' + productData.id);
+        history.push('/plugins/ifind/products/' + newProductData.id);
       }
       else {
-        setTitle(productData.title);
+        setTitle(newProductData.title);
       }
     }
 
-    setIsSaving(false);
+    if ( isSaving ) {
+      strapi.notification.toggle({
+        type: 'success',
+        message: 'Product Saved.'
+      });
+      setIsSaving(false);
+    }
+  }, [ redirectOnUpdate, isSaving ]);
+
+  useEffect(() => {
+    onProductDataUpdate(productData);
   }, [ productData ]);
 
   useEffect(() => {
