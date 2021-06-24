@@ -5,9 +5,9 @@ import { useGlobal } from '../../providers/globalProvider';
 import './styles.scss';
 
 const LoadingOverlay = () => {
-  const { loading } = useGlobal();
+  const { isLoading } = useGlobal();
 
-  return loading
+  return isLoading
   ? (
     <div className="loading-overlay">
       <FontAwesomeIcon icon="spinner" size='lg' pulse />

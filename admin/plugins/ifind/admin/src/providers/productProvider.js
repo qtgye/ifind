@@ -112,7 +112,7 @@ $url_list: [ComponentAtomsUrlWithTypeInput!]
 export const ProductProvider = ({ children }) => {
   const { productId } = useParams();
   const [ getProductQuery, setGetProductQuery ] = useState(null);
-  const { data: queryData } = useQuery(getProductQuery, { id: productId });
+  const { data: queryData, loading: queryLoading } = useQuery(getProductQuery, { id: productId });
   const [
     addOrUpdateProduct,
     {
@@ -167,6 +167,7 @@ export const ProductProvider = ({ children }) => {
       addProduct,
       updateProduct,
       error,
+      queryLoading,
     ]}>
       {children}
     </ProductContext.Provider>

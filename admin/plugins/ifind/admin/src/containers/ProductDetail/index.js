@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 import { useProduct, ProductProvider } from '../../providers/productProvider';
+import { useGlobal } from '../../providers/globalProvider';
 import { validationRules, validateData } from '../../helpers/form';
 import ProductForm from '../../components/ProductForm';
 
@@ -26,7 +27,9 @@ const ProductDetail = () => {
     addProduct,
     updateProduct,
     error,
+    loading,
   ] = useProduct();
+  const { isLoading, setIsLoading } = useGlobal();
   const history = useHistory();
   const [ title, setTitle ] = useState('');
   const [ formErrors, setFormErrors ] = useState({});
@@ -161,6 +164,10 @@ const ProductDetail = () => {
 
     setHasChanges(hasChanged);
   }, [ productFormData, productData ]);
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [ loading ]);
 
   return (
     <div className="product-detail">
