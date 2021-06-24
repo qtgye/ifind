@@ -51,5 +51,5 @@ export const generatePluginLink = (relativeToPlugin = null, _searchParams = fals
     return window.location.pathname.replace(/^\/admin/, adminRoot) + searchParams;
   }
 
-  return `${adminRoot}/plugins/${pluginId}/${relativeToPlugin}${searchParams}`;
+  return `${adminRoot}/plugins/${pluginId}/${relativeToPlugin.replace(/^\//,'')}${searchParams}`;
 };

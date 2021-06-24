@@ -177,7 +177,7 @@ export const groupCategoriesBySourceRegion = (categoriesList, sourcesRegions) =>
 
 
 export const useCategories = () => {
-  const { data } = useQuery(categoriesQuery);
+  const { data, loading } = useQuery(categoriesQuery);
   const [
     callMutation,
     {
@@ -186,7 +186,6 @@ export const useCategories = () => {
     }
   ] = useMutation();
   const [ categories, setCategories ] = useState([]);
-  const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
 
   const updateCategoriesQuery = useCallback((updatedCategories) => {
@@ -217,8 +216,6 @@ export const useCategories = () => {
     // Process and update categories
     const categoryTree = mapCategoriesTree(newCategories);
     const categoryList = flattenCategoriesTree(categoryTree);
-
-    setLoading(false);
     setCategories(categoryList);
   });
 
@@ -244,6 +241,7 @@ export const useCategories = () => {
     categories,
     updateCategoriesQuery,
     error,
+    loading,
   ];
 }
 

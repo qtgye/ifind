@@ -4,18 +4,21 @@ import { DragAndDropProvider } from './dragAndDropProvider';
 import { AuthContextProvider } from './authProvider';
 import { CategoryProvider } from './categoryProvider';
 import { SourceRegionProvider } from './sourceRegionProvider';
+import { GlobalContextProvider } from './globalProvider';
 
 const Providers = ({ children }) => {
   return (
-    <AuthContextProvider>
-      <SourceRegionProvider>
-        <CategoryProvider>
-          <DragAndDropProvider>
-            {children}
-          </DragAndDropProvider>
-        </CategoryProvider>
-      </SourceRegionProvider>
-    </AuthContextProvider>
+    <GlobalContextProvider>
+      <AuthContextProvider>
+        <SourceRegionProvider>
+          <CategoryProvider>
+            <DragAndDropProvider>
+              {children}
+            </DragAndDropProvider>
+          </CategoryProvider>
+        </SourceRegionProvider>
+      </AuthContextProvider>
+    </GlobalContextProvider>
   )
 };
 

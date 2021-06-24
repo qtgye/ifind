@@ -13,6 +13,8 @@ export const useQuery = (query, variables) => {
       return Promise.resolve({ data: null });
     }
 
+    setLoading(true);
+
     return window.fetch(`/graphql`, {
       method: 'post',
       headers: {
@@ -25,7 +27,10 @@ export const useQuery = (query, variables) => {
       })
     })
     .then(res => res.json())
-    .then(({ data }) => setData(data))
+    .then(({ data }) => {
+      setError(null);
+      setData(data);
+    })
     .catch(error => setError(error));
   }, [ jwt, query, variables ]);
 

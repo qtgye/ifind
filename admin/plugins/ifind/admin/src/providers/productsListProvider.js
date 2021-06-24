@@ -205,6 +205,7 @@ export const ProductsListProvider = memo(({ children }) => {
       filters: listOptions.filters,
       totalPages,
       // Additionals
+      loading,
       refresh,
       deleteProducts,
     }}>

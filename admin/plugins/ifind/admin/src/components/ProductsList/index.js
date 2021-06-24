@@ -6,6 +6,7 @@ import { Select, Label } from '@buffetjs/core';
 
 import { useSourceRegion } from '../../providers/sourceRegionProvider';
 import { useProductsList } from '../../providers/productsListProvider';
+import { useGlobal } from '../../providers/globalProvider';
 import { generatePluginLink } from '../../helpers/url';
 
 import Pagination from '../Pagination';
@@ -27,15 +28,16 @@ const sortOptions = [
 
 const ProductsList = () => {
   const history = useHistory();
+  const { setIsLoading } = useGlobal();
   const { sources } = useSourceRegion();
   const {
     products,
+    loading,
     deleteProducts,
     // Values
     pageSize,
     sortBy,
     sortOrder,
-    filters,
     totalPages,
   } = useProductsList();
   const [ rows, setRows ] = useState([]); // Processed products
@@ -160,6 +162,10 @@ const ProductsList = () => {
     const selectedItems = rows.filter(row => row.selected).map(({ id }) => id);
     setSelectedItems(selectedItems);
   }, [ rows ]);
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [ loading ]);
 
   return (
     <div className="products-list row">

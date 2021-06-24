@@ -13,10 +13,11 @@ import pluginId from '../../pluginId';
 import Categories from '../Categories';
 import ProductsListing from '../ProductsListing';
 import ProductDetail from '../ProductDetail';
+// Components
+import LoadingOverlay from '../../components/LoadingOverlay';
 
 // Providers
 import Providers from '../../providers';
-import { ProductProvider } from '../../providers/productProvider';
 
 import { spriteContents } from 'ifind-icons';
 
@@ -37,6 +38,7 @@ const App = () => {
             <Route path={`/plugins/${pluginId}/products/:productId`} component={ProductDetail} />
             <Route component={NotFound} />
           </Switch>
+          <LoadingOverlay />
         </Providers>
     </div>
   )

@@ -38,6 +38,12 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ position, setPosition ] = useState('');
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
 
+  // Meta states
+  const [ createdOn, setCreatedOn ] = useState(false);
+  const [ createdBy, setCreatedBy ] = useState(false);
+  const [ lastModified, setLastModified ] = useState(false);
+  const [ lastModifiedBy, setLastModifiedBy ] = useState(false);
+
   const collectFormData = useCallback(() => {
     return {
       id,
@@ -118,6 +124,12 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       if ( product.source && product.region ) {
         setSource(product.source?.id);
         setRegion(product.region?.id);
+      }
+
+      // Set meta
+      if ( product.created_at ) {
+        setCreatedOn(product.created_at);
+        setLastModified(product.updated_at);
       }
     }
   }, [ product ]);
@@ -240,8 +252,17 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         <div className="col-md-12">
           <Text size="lg"><strong>Meta</strong></Text>
           <br />
-          <Text size="sm" color="gray">Last Modified on <strong>last_modified</strong> by <strong><em>author_name</em></strong></Text>
-          <Text size="sm" color="gray">Created on <strong>date_created</strong> by <strong><em>author_name</em></strong></Text>
+          
+          {
+            lastModified ?
+            <Text size="sm" color="gray">Last Modified on <strong>{lastModified}</strong></Text>
+            : null
+          }
+          {
+            createdOn ?
+            <Text size="sm" color="gray">Created on <strong>{createdOn}</strong></Text>
+            : null
+          }
         </div>
       </Panel>
 

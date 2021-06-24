@@ -7,12 +7,12 @@ import {
   groupCategoriesBySourceRegion,
 } from '../../helpers/categories';
 import { useSourceRegion } from '../../helpers/sourceRegion';
+import { useGlobal } from '../../providers/globalProvider';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faSave, faPen, faSpinner, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
-import { Button, Select } from '@buffetjs/core';
+import { Button } from '@buffetjs/core';
 import { Header } from '@buffetjs/custom';
-import { LoadingIndicator } from '@buffetjs/styles';
 
 import './styles.scss';
 
@@ -84,7 +84,8 @@ const SaveButton = ({ save, loading }) => {
 };
 
 const CategoryTree = () => {
-  const { sources } = useSourceRegion();
+  const { setIsLoading } = useGlobal();
+  const { sources, loading: sourcesLoading } = useSourceRegion();
   const [ sourcesRegions, setSourcesRegions ] = useState([]);
   const [ currentSourceRegion, setCurrentSourceRegion ] = useState(null); // e.g., "amazon international"
   const [ isSaving, setIsSaving ] = useState(false);
@@ -93,7 +94,8 @@ const CategoryTree = () => {
   const [
     categories,
     updateCategories,
-    error
+    error,
+    categoriesLoading,
   ] = useCategories();
 
   // Local data
@@ -224,6 +226,8 @@ const CategoryTree = () => {
    */
   useEffect(() => {
     if ( sources?.length ) {
+      // TODO:
+      // Remove once single category is implemented
       const flatSourcesRegions = sources.reduce((list, source) => {
         (source.regions || []).forEach(region => {
           list.push({
@@ -237,7 +241,13 @@ const CategoryTree = () => {
       }, []);
 
       setSourcesRegions(flatSourcesRegions);
-      setCurrentSourceRegion(flatSourcesRegions[0].label);
+
+      // Use Amazon Germany for now,
+      // Remove option once single category list is implemented
+      const amazonGermany = flatSourcesRegions.find(sourceRegion => (
+        /germany/i.test(sourceRegion.label) && /amazon/i.test(sourceRegion.label)
+      ));
+      setCurrentSourceRegion(amazonGermany.label);
 
       if ( categories?.length ) {
         const categoriesBySourceRegion = groupCategoriesBySourceRegion(categories, flatSourcesRegions);
@@ -279,18 +289,32 @@ const CategoryTree = () => {
     }
   }, [ error ]);
 
+  useEffect(() => {
+    setIsLoading(sourcesLoading || categoriesLoading);
+  }, [ sourcesLoading, categoriesLoading ]);
+
   return <>
+    {/* <Header
+      title={{ label: 'Categories' }}
+      actions={[
+        changedItems.length ? {
+          label: isSaving ? 'Saving' : 'Save',
+          onClick: () => saveChanges(),
+          type: 'button',
+          color: isSaving ? 'cancel' : 'secondary',
+          icon: isSaving ? 'spinner' : 'save',
+          pulse: isSaving,
+        } : {},
+        {
+          label: 'Add Category',
+          onClick: () => history.push(`/admin/plugins/content-manager/collectionType/application::category.category/create`),
+          color: 'primary',
+          type: 'button',
+          icon: 'plus'
+        },
+      ]}
+    /> */}
     <div className="row category-tree__header">
-      {
-        sourcesRegions.length &&
-        <Select
-          name='source_region'
-          onChange={({ target: { value } }) => setCurrentSourceRegion(value)}
-          options={sourcesRegions.map(({label}) => label)}
-          value={currentSourceRegion}
-          className="col-sm-2"
-        />
-      }
       <div className="category-tree__controls">
         {changedItems.length ? <SaveButton save={saveChanges} loading={isSaving} /> : null}
         <AddCategoryButton />

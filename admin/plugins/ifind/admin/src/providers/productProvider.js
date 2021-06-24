@@ -33,6 +33,8 @@ fragment ProductDataFragment on Product {
   region {
     id
   }
+  created_at
+  updated_at
 }
 `;
 
