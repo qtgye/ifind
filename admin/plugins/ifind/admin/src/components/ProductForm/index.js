@@ -39,10 +39,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
 
   // Meta states
-  const [ createdOn, setCreatedOn ] = useState(false);
-  const [ createdBy, setCreatedBy ] = useState(false);
-  const [ lastModified, setLastModified ] = useState(false);
-  const [ lastModifiedBy, setLastModifiedBy ] = useState(false);
+  const [ createdOn, setCreatedOn ] = useState('');
+  const [ createdBy, setCreatedBy ] = useState('');
+  const [ lastModified, setLastModified ] = useState('');
+  const [ lastModifiedBy, setLastModifiedBy ] = useState('');
 
   const collectFormData = useCallback(() => {
     return {
@@ -129,6 +129,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       // Set meta
       if ( product.created_at ) {
         setCreatedOn(product.created_at);
+      }
+      if ( product.updated_at ) {
         setLastModified(product.updated_at);
       }
     }
@@ -163,6 +165,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
             }}
             options={websiteTabOptions}
             value={websiteTab}
+          />
+        </InputBlock>
+
+        <InputBlock className="col-md-6" >
+          <Label htmlFor="change-date">Change Date</Label>
+          <InputText
+            name="change-date"
+            id="change-date"
+            value={lastModified.slice(0, 10)}
+            disabled
           />
         </InputBlock>
 
