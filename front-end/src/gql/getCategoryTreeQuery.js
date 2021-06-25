@@ -4,11 +4,9 @@ const generateChildCategory = (iterationsLeft) => {
     return `
         id
         icon
+        order
         label {
             label
-        }
-        region {
-            code
         }
         ${
             (iterationsLeft &&
@@ -24,7 +22,7 @@ const generateChildCategory = (iterationsLeft) => {
 const getCategoryTree = gql`
 query GetCategoryTree($language: String) {
     categoryTree (language: $language) {
-        ${generateChildCategory(3)}
+        ${generateChildCategory(5)}
     }
 }
 `;

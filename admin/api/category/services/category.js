@@ -29,28 +29,16 @@ const processCategory = (rawCategory, language = null) => {
 
 module.exports = {
   async categoryTree(language = null) {
-
-    // TODO: Remove once single category tree is implemented (no source/region needed)
-    const matchedRegion = await strapi.services.region.findOne({
-      code: 'de'
-    });
-    const matchedSource = await strapi.services.source.findOne({
-      name_contains: 'amazon'
-    });
-
-    // console.log({ matchedSource });
-
     // Will use to select label for categories
     const matchedLanguage = await strapi.services.language.findOne({
       code: language
     });
 
+    // Get categories sorted by order
+    // ensures children are in order
     const matchedCategories = await this.find({
-      region: matchedRegion.id // TODO: Remove once single category tree is implemented (no source/region needed)
+      _sort: 'order:ASC'
     }) || [];
-
-    // Sort by order first, ensures children are in order
-    matchedCategories.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
 
     // Build categoryTree object
     const categoryTree = {};
@@ -80,6 +68,9 @@ module.exports = {
 
     // Convert categoryTree into array
     const categoryTreeArray = Object.values(categoryTree);
+
+    // Re-sort root categories
+    categoryTreeArray.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
 
     return categoryTreeArray;
   }
