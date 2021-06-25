@@ -37,6 +37,7 @@ module.exports = {
               categories: [ category.id ],
               website_tab: 'product_comparison',
               _limit: 5,
+              _sort: 'position:ASC',
             })
           }
         ))
