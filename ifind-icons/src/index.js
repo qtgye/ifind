@@ -1,9 +1,14 @@
+require('colors');
 const fs = require('fs-extra');
 const path = require('path');
 const glob = require('glob');
 const SVGSpriter = require('svg-sprite');
 
+const MARKDOWN_TABLE_COLUMNS = 5;
+
 const resolveApp = (relativePath) => path.resolve(__dirname, '../', relativePath);
+
+const readMeTemplate = fs.readFileSync(resolveApp('src/README.template.md')).toString();
 
 // Create spriter instance (see below for `config` examples)
 var spriter = new SVGSpriter({
@@ -50,9 +55,28 @@ spriter.compile((error, result) => {
 const componentsStubContents = fs.readFileSync(resolveApp('src/components.stub')).toString();
 const spriteContents = fs.readFileSync(resolveApp('dist/ifind-icons-sprite.svg')).toString();
 const iconsListString = iconsList.map(iconName => `'${iconName}'`).join(',');
+const iconsTableMd = (
+    Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('').concat(
+        Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('---')
+    )
+).concat(iconsList).reduce((chunks, icon, index) => {
+    const group = Math.floor(index / 5);
+        chunks[group] = chunks[group] || [];
+        chunks[group].push(icon || '');
+        return chunks;
+}, []).map(row => `| ${row.join(' | ')} |`).join('  \n');
 
 const componentsContent = componentsStubContents
                             .replace(/%sprite_contents%/, spriteContents)
                             .replace(/%icons_list%/, iconsListString);
 
-fs.outputFileSync(resolveApp('index.js'), componentsContent);
+Promise.all([
+    (() => fs.outputFileSync(resolveApp('index.js'), componentsContent))(),
+    (() => fs.outputFileSync(resolveApp('dist/icons.md'), iconsTableMd))(),
+    (() => fs.outputFileSync(resolveApp('README.md'), (
+        readMeTemplate.replace('{iconsTable}', iconsTableMd)
+    )))(),
+]).then(() => {
+    console.log('Generated icons:'.green.bold);
+    console.log(iconsList.slice(1).join(', ').green);
+});
