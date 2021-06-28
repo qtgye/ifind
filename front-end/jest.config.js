@@ -1,3 +1,16 @@
+const path = require('path');
+const { webpackAliases } = require('./config/paths');
+
+const projectRoot = process.cwd();
+
+// Convert our custom webpack aliases into jest moduleNameMapper
+const pathAliases = Object.entries(webpackAliases)
+    .filter(([alias, modulePath]) => !/node_modules/.test(modulePath))
+    .reduce((mapper, [ alias, modulePath ]) => {
+        mapper[`^${alias}/(.*)$`] = modulePath.replace(projectRoot, '<rootDir>') + '/$1';
+        return mapper;
+    }, {});
+
 module.exports = {
     "roots": [
         "<rootDir>/src"
@@ -51,15 +64,8 @@ module.exports = {
         /**
         * should match webpack aliases from paths.js
         */
-        '^@components/(.*)$': '<rootDir>/src/components/$1',
-        '^@templates/(.*)$': '<rootDir>/src/templates/$1',
-        '^@pages/(.*)$': '<rootDir>/src/pages/$1',
-        '^@assets/(.*)$': '<rootDir>/src/assets/$1',
-        '^@config/(.*)$': '<rootDir>/src/config/$1',
-        '^@mocks/(.*)$': '<rootDir>/src/mocks/$1',
-        '^@contexts/(.*)$': '<rootDir>/src/contexts/$1',
-        '^@utilities/(.*)$': '<rootDir>/src/utilities/$1',
-        '^@gql/(.*)$': '<rootDir>/src/gql/$1',
+        ...pathAliases,
+        
         '^@bootstrap(/.*)?$': '<rootDir>/node_modules/bootstrap/scss/bootstrap',
         
         /**
