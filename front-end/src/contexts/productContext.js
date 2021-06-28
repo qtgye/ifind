@@ -1,19 +1,9 @@
 import { createContext, useContext, useEffect, useCallback, useState } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 import { apiSourceHandle } from '@config/adminApi'
-// import getProductDetailQuery from '@gql/getProductDetailQuery';
+import getProductDetailQuery from '@gql/getProductDetailQuery';
 
 import { locale } from '@config/locale';
-
-import { gql } from "apollo-boost";
-const getProductDetailQuery = gql`
-query GetProductDetailQuery ($id: ID!, $language:String) {
-    productDetails ( id: $id, language: $language ) {
-        id
-        detailHTML
-    }
-}
-`;
 
 export const ProductContext = createContext({});
 

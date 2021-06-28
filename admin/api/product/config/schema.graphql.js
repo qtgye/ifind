@@ -2,7 +2,9 @@ module.exports = {
   definition: `
     type ProductDetails {
       id: ID
-      detailHTML: String
+      details_html: String
+      price: Float
+      image: String
     }
     type ProductCategory {
       label: ComponentAtomsTranslateableLabel
