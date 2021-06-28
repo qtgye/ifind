@@ -44,6 +44,7 @@
         z-index: $z-index-sidenav-list;
         cursor: default;
         height: 525px;
+        scroll-behavior: smooth;
         overflow-y: scroll;
 
         &::-webkit-scrollbar {
@@ -75,7 +76,6 @@
             font-weight: 400;
             color: $gray-900;
             padding: 13px 25px 13px 0;
-            //display: block;
             border-bottom: 1px solid $gray-300;
 
             &:hover {
@@ -83,7 +83,7 @@
                 background-color: #eaeaea;
             }
 
-            &:focus, &:active {
+            &:focus, &.current {
                 color: $red;
                 background-color: #eaeaea;
                 text-decoration: underline;
@@ -91,6 +91,26 @@
 
         }
     }
+
+    .list {
+
+        &.active {
+
+            a {  
+                color: $red;
+                text-decoration: underline;
+                background-color: #eaeaea;         
+            }
+
+            ul a {
+                background-color: white;
+                color: black;
+                text-decoration: none;
+            }
+            
+        }
+    }
+
 
     &__sub-list {
         a {
@@ -181,4 +201,28 @@
         margin-right: 5px;
     }
 
+    .arrow {
+        margin-top: 588px;
+        margin-left: -58%;
+        display: inline-block;
+        padding: 6px;
+        cursor: pointer;
+        animation: arrow 0.5s infinite alternate ease-in-out;
+
+        i {
+            font-size: 25px;
+        }
+   
+    }
+
+    @keyframes arrow {
+        0% { 
+            transform: translateY(0.1em);
+            opacity: 0.5;
+        }
+        100% { 
+            transform: translateY(0.5em); 
+            opacity: 0.9;
+        }
+    }
 }

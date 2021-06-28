@@ -1,32 +1,75 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect, useContext, useCallback, useRef } from 'react';
+import { GlobalStateContext } from '@contexts/globalStateContext';
+import eventBus from '@utilities/EventBus';
 import IfindIcon from '@components/IfindIcon';
 
-const HeaderSideNavSubMenu = ({ item, index, checked, ref }) => {
+const HeaderSideNavSubMenu = ({ item, index, checked, triggerScroll }) => {
 
+    const { on } = eventBus;
     const [subCategories, setSubCategories] = useState(false);
-
     const showSubCategories = () => setSubCategories(!subCategories);
+    //const [withColor, setWithColor] = useState(true);
+    const categoryRef = useRef();
+
+    const { activeIndex, onCategoryClick } = useContext(GlobalStateContext);
+
+    const onCategorySelect = () => {
+        item.subCategories && showSubCategories();
+    }
+
+    const handleScroll = useCallback(() => {
+        on('scrollPanelScroll', triggerScroll)
+    }, [on, triggerScroll]);
+
+    const onItemClick = useCallback((index) => {
+        onCategoryClick(index);
+    }, []);
+
+    useEffect(() => {
+        if (activeIndex === index) {
+            onCategorySelect();
+        }
+        else {
+            setSubCategories(false);
+        }
+        console.log(activeIndex, index);
+    }, [activeIndex, index])
+
+    // useEffect(() => {
+    //     let handleClick = (event) => {
+    //         if (categoryRef.current && !categoryRef.current.contains(event.target)) {
+    //             setSubCategories(false);
+    //         }
+    //     };
+
+    //     window.addEventListener("click", handleClick);
+    //     return () => {
+    //         window.removeEventListener("click", handleClick);
+    //     }
+    // }, [categoryRef, subCategories, setSubCategories])
+
+    useEffect(() => {
+        handleScroll();
+    }, []);
 
     return (
         <>
-            <li key={index}>
-                <div ref={ref} />
-                <Link onClick={item.children && showSubCategories} to="#">
-                    <IfindIcon icon={item.icon} className="header-side-nav__icon" />
-                    <span>{item.label}</span>
+            <li ref={categoryRef} key={index} className={["list", activeIndex === index ? "active" : ""].join(" ")}>
+                <Link onClick={() => { onItemClick(index); }} to="#">
+                    {/* <IfindIcon icon={item.icon} className="header-side-nav__icon" /> */}
+                    {item.categoryIcon}
+                    <span>{item.categoryLabel}</span>
                 </Link>
-                {console.log(ref)}
-
                 <ul className="header-side-nav__sub-list">
                     {checked ? (
-                        subCategories && item.children.map((item, index) => {
+                        subCategories && item.subCategories.map((item, index) => {
                             return (
                                 <li key={index}>
-                                    <Link to="#">
+                                    <Link to={item.categoryURL}>
                                         {/* <IfindIcon icon={item.icon} className="header-side-nav__icon" /> */}
-                                        <span>{item.label}</span>
+                                        <span>{item.categoryLabel}</span>
                                     </Link>
                                 </li>
                             );
