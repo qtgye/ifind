@@ -9,7 +9,7 @@ import ProductURLInputItem from '../ProductURLInputItem';
 import './styles.scss';
 
 const ProductURLInput = ({
-  label = 'Product URLs',
+  label = '',
   urls = [],
   error = '',
   className = '',
@@ -48,15 +48,6 @@ const ProductURLInput = ({
     setUrlList([...newList]);
   }, [ urlList ]);
 
-  const onItemSelect = useCallback((softId) => {
-    const newList = urlList.map((urlData) => ({
-      ...urlData,
-      is_base: softId === urlData.softId
-    }));
-
-    setUrlList(newList);
-  }, [ urlList ]);
-
   useEffect(() => {
     if ( typeof onChange === 'function' ) {
       onChange(urlList);
@@ -72,7 +63,7 @@ const ProductURLInput = ({
 
   return (
     <InputBlock className={[ 'product-url-input', className ].join(' ')} error={error}>
-      <Text color="mediumBlue" fontWeight="bold">{label}</Text>
+      {label ? <Text color="mediumBlue" fontWeight="bold">{label}</Text> : ''}
       <div className="product-url-input__list">
         {urlList.map((urlData) => (
           <ProductURLInputItem
@@ -80,7 +71,6 @@ const ProductURLInput = ({
             {...urlData}
             onChange={onURLDataChange}
             onDelete={onItemDelete}
-            onSelect={onItemSelect}
           />
         ))}
         <div className="product-url-input__control col-md-6 row">

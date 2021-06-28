@@ -12,6 +12,8 @@ fragment ProductDataFragment on Product {
   position
   clicks_count
   website_tab
+  amazon_url
+  price
   url_list {
     source {
       id
@@ -25,9 +27,6 @@ fragment ProductDataFragment on Product {
     is_base
   }
   categories {
-    id
-  }
-  source {
     id
   }
   region {
@@ -47,16 +46,33 @@ query GetProduct ($id: ID!) {
 }
 `;
 
+export const productMutationCommonAguments = `
+$image: String!
+$title: String!
+$website_tab: String!
+$categories: [ID!]!
+$position: Int
+$amazon_url: String!
+$price: Float
+`;
+
+export const productMutationCommonInput = `
+image: $image
+title: $title
+website_tab: $website_tab
+categories: $categories
+amazon_url: $amazon_url
+price: $price
+url_list: $url_list
+position: $position
+`;
+
 export const updateProductMutation = `
 ${productDataFragment}
 mutation UpdateProduct (
   $id: ID!
-  $image: String!
-  $title: String!
-  $website_tab: String!
-  $categories: [ID!]!
-  $position: Int
-  $url_list: [editComponentAtomsUrlWithTypeInput!]
+  ${productMutationCommonAguments}
+  $url_list: [editComponentAtomsUrlWithTypeInput]
 )
 {
   updateProduct (
@@ -65,12 +81,7 @@ mutation UpdateProduct (
         id: $id
       }
       data: {
-        image: $image
-        title: $title
-        website_tab: $website_tab
-        categories: $categories
-        url_list: $url_list
-        position: $position
+        ${productMutationCommonInput}
       }
     }
   )
@@ -85,21 +96,12 @@ mutation UpdateProduct (
 export const addProductMutation = `
 ${productDataFragment}
 mutation CreateProduct (
-$image: String!
-$title: String!
-$website_tab: String!
-$categories: [ID!]!
-$position: Int
-$url_list: [ComponentAtomsUrlWithTypeInput!]
+  ${productMutationCommonAguments}
+  $url_list: [ComponentAtomsUrlWithTypeInput]
 ){
   createProduct (input: {
     data: {
-      image: $image
-      title: $title
-      website_tab: $website_tab
-      categories: $categories
-      url_list: $url_list
-      position: $position
+      ${productMutationCommonInput}
     }
   }) {
     product {
