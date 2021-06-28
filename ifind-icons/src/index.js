@@ -10,6 +10,10 @@ const resolveApp = (relativePath) => path.resolve(__dirname, '../', relativePath
 
 const readMeTemplate = fs.readFileSync(resolveApp('src/README.template.md')).toString();
 
+// Ensure output dirs are present
+fs.mkdirpSync(resolveApp('dist'), { recursive :true });
+fs.outputFileSync(resolveApp('dist/ifind-icons-sprite.svg'), '');
+
 // Create spriter instance (see below for `config` examples)
 var spriter = new SVGSpriter({
     svg: {
@@ -46,8 +50,12 @@ iconFiles.forEach(iconFile => {
 });
 
 // Compile the sprite
-spriter.compile((error, result) => {
-    for (var mode in result) {
+let res = spriter.compile((error, result) => {
+    if ( error ) {
+        console.error(error);
+        process.exit(2);
+    }
+    for (let mode in result) {
         fs.outputFileSync(resolveApp('dist/ifind-icons-sprite.svg'), result.symbol.sprite.contents.toString());
     }
 });
