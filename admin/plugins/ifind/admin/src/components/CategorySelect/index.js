@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Text } from '@buffetjs/core';
 
-import { useCategories, mapCategoriesTree, buildCategoryPath } from '../../providers/categoryProvider';
+import { useCategoriesListing, mapCategoriesTree, buildCategoryPath } from '../../providers/categoriesListingProvider';
 
 import NestedCategoryOption from '../NestedCategoryOption';
 
@@ -16,7 +16,7 @@ const CategorySelect = ({
   hasError = false,
   emptyMessage = 'No category options available'
 }) => {
-  const { categories } = useCategories();
+  const { categories } = useCategoriesListing();
 
   // Nested category data
   const [ categoryPath, setCategoryPath ] = useState([]);
