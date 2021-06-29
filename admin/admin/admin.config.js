@@ -3,6 +3,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const sassRegex = /\.scss$/i;
 
+const PROJECT_ROOT = process.cwd();
+
 module.exports = {
   webpack: (config, webpack) => {
 
@@ -62,6 +64,13 @@ module.exports = {
         }
       ].filter(Boolean)
     });
+
+    config.resolve = config.resolve || {};
+
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@plugins': path.resolve(PROJECT_ROOT, 'plugins'),
+    }
 
     return config;
   },

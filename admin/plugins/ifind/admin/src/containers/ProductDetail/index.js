@@ -1,48 +1,208 @@
-import React, { memo, useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Header } from '@buffetjs/custom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faSave, faPen, faSpinner, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 
-import { useProduct } from '../../helpers/product';
+import { useProduct, ProductProvider } from '../../providers/productProvider';
+import { useGlobal } from '../../providers/globalProvider';
+import { validationRules, validateData } from '../../helpers/form';
 import ProductForm from '../../components/ProductForm';
 
-const ProductDetail = () => {
-  const {
-    productData,
-   } = useProduct();
-  const [ title, setTitle ] = useState('');
+const productValidationRules = {
+  title: validationRules.required('Please provide a title'),
+  website_tab: [
+    validationRules.required('Please select website tab'),
+  ],
+  image: validationRules.set([
+    validationRules.required('Please provide an image'),
+    validationRules.url('Image must be a valid URL'),
+  ], 'Please provide an image in a valid URL format'),
+  category: validationRules.required('Please select a category'),
+};
 
-  useEffect(() => {
-    if ( productData ) {
-      setTitle(productData.title);
+const ProductDetail = () => {
+  const [
+    productData,
+    addProduct,
+    updateProduct,
+    error,
+    loading,
+  ] = useProduct();
+  const { isLoading, setIsLoading } = useGlobal();
+  const history = useHistory();
+  const [ title, setTitle ] = useState('');
+  const [ formErrors, setFormErrors ] = useState({});
+  const [ productFormData, setProductFormData ] = useState({});
+  const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
+  const [ hasChanges, setHasChanges ] = useState(false);
+  const [ isSaving, setIsSaving ] = useState(false);
+
+  const saveProduct = useCallback(() => {
+    const { success, errors } = validateData(productFormData, productValidationRules);
+
+    setFormErrors(errors);
+
+    // Don't save if validation fails
+    if ( !success ) {
+      return;
     }
+
+    // Save product
     else {
+      // Prepare data for graphql request
+      const formattedData = formatProductFormData(productFormData);
+
+      setIsSaving(true);
+
+      if ( !formattedData.id ) {
+        setRedirectOnUpdate(true);
+        addProduct(formattedData);
+      }
+      else {
+        updateProduct(formattedData);
+      }
+    }
+  }, [ productFormData, updateProduct, addProduct ]);
+  
+  const formatProductFormData = useCallback((formData) => {
+    formData.price = Number(formData.price);
+    formData.categories = [ formData.category ];
+
+    // Delete unnecessary props for graphql request
+    delete formData.url_type;
+    delete formData.category;
+    delete formData.urlList;
+
+    return formData;
+  }, []);
+
+  const onProductDataUpdate = useCallback((newProductData) => {
+    if ( !newProductData ) {
       setTitle('Create New Product');
     }
-  }, [productData]);
+
+    else {
+      if ( redirectOnUpdate ) {
+        history.push('/plugins/ifind/products/' + newProductData.id);
+      }
+      else {
+        setTitle(newProductData.title);
+      }
+    }
+
+    if ( isSaving ) {
+      strapi.notification.toggle({
+        type: 'success',
+        message: 'Product Saved.'
+      });
+      setIsSaving(false);
+    }
+  }, [ redirectOnUpdate, isSaving ]);
+
+  useEffect(() => {
+    onProductDataUpdate(productData);
+  }, [ productData ]);
+
+  useEffect(() => {
+    if ( error ) {
+      strapi.notification.toggle({
+        type: 'warning',
+        title: 'Error',
+        message: error.message,
+      });
+      setIsSaving(false);
+    }
+  }, [ error ]);
+
+  useEffect(() => {
+    const rawProductData = productData || {};
+
+    // Check if there are changes
+    const hasChanged = Object.entries(productFormData).some(([ formKey, formValue ]) => {
+      switch (formKey) {
+        case 'category':
+          if ( productFormData[formKey] ) {
+            return !rawProductData.categories?.length
+              || rawProductData.categories.find(({ id }) => id !== productFormData[formKey]);
+          }
+          else {
+            return rawProductData.categories?.length;
+          }
+        case 'url_list':
+          return (
+            (rawProductData.url_list?.length !== productFormData.url_list?.length)
+            || (
+              productFormData.url_list && productFormData.url_list.some((urlData, index) => (
+                !rawProductData.url_list || !rawProductData.url_list[index] ||
+                Object.entries(urlData).some(([ key, value ]) => (
+                  !rawProductData.url_list || !rawProductData.url_list[index]
+                  || !rawProductData.url_list[index][key] != urlData[key]
+                ))
+              ))
+            )
+            || (
+              rawProductData.url_list && rawProductData.url_list.some((urlData, index) => (
+                !productFormData.url_list || !productFormData.url_list[index] ||
+                Object.entries(urlData).some(([ key, value ]) => (
+                  !productFormData.url_list || !productFormData.url_list[index]
+                  || !productFormData.url_list[index][key] != urlData[key]
+                ))
+              ))
+            )
+          )
+        case 'title':
+        case 'website_tab':
+        case 'price':
+        case 'image':
+          return productFormData[formKey] !== rawProductData[formKey];
+        default:;
+      }
+
+      return false;
+    });
+
+    setHasChanges(hasChanged);
+  }, [ productFormData, productData ]);
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [ loading ]);
 
   return (
-    <div className="container">
-      <div className="row">
-        <Header
-          title={{ label: title }}
-          actions={[
-            {
-              label: 'Save',
-              onClick: () => history.push(`/plugins/${pluginId}/products/create`),
-              color: 'success',
-              type: 'button',
-              icon: (<FontAwesomeIcon icon={faSave} />)
-            },
-          ]}
+    <div className="product-detail">
+      <div className="container">
+        <div className="row">
+          <Header
+            title={{ label: title }}
+            actions={[
+              {
+                label: isSaving ? 'Saving' : 'Save',
+                onClick: saveProduct,
+                color: isSaving ? 'cancel' : 'success',
+                type: 'button',
+                disabled: !hasChanges,
+                icon: (
+                  isSaving
+                  ? <FontAwesomeIcon icon="spinner" pulse />
+                  : <FontAwesomeIcon icon="save" />
+                )
+              },
+            ]}
+          />
+        </div>
+        <ProductForm
+          product={productData}
+          setProductFormData={setProductFormData}
+          formErrors={formErrors}
         />
-      </div>
-      <div className="row">
-        <ProductForm />
       </div>
     </div>
   )
 };
 
-export default memo(ProductDetail);
+export default memo(() => (
+  <ProductProvider>
+    <ProductDetail />
+  </ProductProvider>
+));

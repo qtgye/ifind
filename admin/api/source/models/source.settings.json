@@ -20,8 +20,22 @@
       "collection": "region"
     },
     "categories": {
-      "collection": "category",
-      "via": "source"
+      "via": "source",
+      "collection": "category"
+    },
+    "products": {
+      "via": "source",
+      "collection": "product"
+    },
+    "button_logo": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true,
+      "pluginOptions": {}
     }
   }
 }

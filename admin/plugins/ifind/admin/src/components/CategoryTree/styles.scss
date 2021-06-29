@@ -13,10 +13,12 @@
 .category-tree__item {
   padding: 5px;
   position: relative;
-}
 
-.category-tree__item[data-has-parent="true"] {
-  left: 30px;
+  @for $i from 1 through 5 {
+    &[data-depth="#{$i}"] {
+      left: #{30px * $i};
+    }
+  }
 }
 
 .category-tree__item[data-hovered="true"] {

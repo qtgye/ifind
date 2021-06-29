@@ -3,7 +3,6 @@ import GeneralTemplate from '@templates/GeneralTemplate';
 import { withComponentName, withProvider } from '@utilities/component';
 import { useHomepageData } from '@contexts/homepageContext';
 
-// import HeroSlider from '@components/HeroSlider';
 import NaturalList from '@components/NaturalList';
 
 const Home = () => {

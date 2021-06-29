@@ -7,8 +7,8 @@ export const GlobalStateContextProvider = ({ children }) => {
     const [activeIndex, setActiveIndex] = useState(null);
     const [focusedIndex, setFocusedIndex] = useState(0);
 
-    const onCategoryClick = useCallback((index) => {
-        setFocusedIndex(index);
+    const onCategoryClick = useCallback((id) => {
+        setFocusedIndex(id);
     }, []);
 
     return (

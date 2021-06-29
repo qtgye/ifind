@@ -1,18 +1,28 @@
 import { gql } from "apollo-boost";
 
-const getCategoryTree = gql`
-query GetCategoryTree($language: String!) {
-    categoryTree (language: $language) {
-        categories {
-            id
+const generateChildCategory = (iterationsLeft) => {
+    return `
+        id
+        icon
+        order
+        label {
             label
-            icon
-            children {
-                id
-                label
-                icon
-            }
         }
+        ${
+            (iterationsLeft &&
+            `
+                children {
+                    ${generateChildCategory(--iterationsLeft)}
+                }
+            `) || ''
+        }
+    `
+}
+
+const getCategoryTree = gql`
+query GetCategoryTree($language: String) {
+    categoryTree (language: $language) {
+        ${generateChildCategory(5)}
     }
 }
 `;

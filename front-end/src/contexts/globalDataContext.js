@@ -1,10 +1,12 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useCallback } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 
 import { locale } from '@config/locale';
+import { tags as amazonTags, amazonURLPattern } from '@config/amazon';
 import globalDataQuery from '@gql/globalDataQuery';
 import { apiSourceHandle } from '@config/adminApi'
 import { useAuth } from '@contexts/authContext';
+import { addURLParams } from '@utilities/url';
 
 /**
  * This context should contain global data:
@@ -28,11 +30,18 @@ export const GlobalContextProvider = ({ children }) => {
         }
     });
 
+    const withAmazonTags = useCallback((url = '') => (
+        amazonURLPattern.test(url)
+            ? addURLParams(url, amazonTags)
+            : url
+    ), []);
+
     return (
         <GlobalContext.Provider value={{
             contactInfo: globalData?.contactDetail,
             footerSetting: globalData?.footerSettingsByLanguage,
-            socialNetwork: globalData?.socialNetwork
+            socialNetwork: globalData?.socialNetwork,
+            withAmazonTags,
         }}>
             {children}
         </GlobalContext.Provider>

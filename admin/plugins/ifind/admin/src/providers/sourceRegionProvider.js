@@ -39,12 +39,12 @@ export const SourceRegionProvider = ({ children }) => {
       setSources(data.sources);
     }
     if ( data?.regions ) {
-      setSources(data.regions);
+      setRegions(data.regions);
     }
   }, [ data ]);
 
   return (
-    <SourceRegionContext.Provider value={{ sources, regions }}>
+    <SourceRegionContext.Provider value={{ sources, regions, loading }}>
       {children}
     </SourceRegionContext.Provider>
   );

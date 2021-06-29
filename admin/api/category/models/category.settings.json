@@ -11,9 +11,6 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "label": {
-      "type": "string"
-    },
     "slug": {
       "type": "string"
     },
@@ -81,17 +78,24 @@
     "label_preview": {
       "type": "string"
     },
-    "products": {
-      "via": "category",
-      "collection": "product"
-    },
     "region": {
-      "model": "region",
-      "via": "categories"
+      "via": "categories",
+      "model": "region"
     },
     "source": {
       "via": "categories",
       "model": "source"
+    },
+    "label": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.translateable-label",
+      "required": true,
+      "min": 1
+    },
+    "products": {
+      "via": "categories",
+      "collection": "product"
     }
   }
 }

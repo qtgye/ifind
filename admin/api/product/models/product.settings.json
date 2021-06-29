@@ -11,46 +11,8 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "url": {
-      "type": "string",
-      "required": true,
-      "regex": "(https?:\\/\\/.+)?"
-    },
-    "image": {
-      "model": "file",
-      "via": "related",
-      "allowedTypes": [
-        "images"
-      ],
-      "plugin": "upload",
-      "required": false,
-      "pluginOptions": {}
-    },
-    "category": {
-      "via": "products",
-      "model": "category"
-    },
     "title": {
       "type": "string",
-      "required": true
-    },
-    "website_tab": {
-      "type": "enumeration",
-      "enum": [
-        "tab_1",
-        "tab_2"
-      ],
-      "required": true,
-      "default": "tab_1"
-    },
-    "url_type": {
-      "type": "enumeration",
-      "enum": [
-        "amazon",
-        "alibaba",
-        "ebay"
-      ],
-      "default": "amazon",
       "required": true
     },
     "position": {
@@ -66,6 +28,34 @@
       "type": "integer",
       "min": 0,
       "default": 0
+    },
+    "categories": {
+      "collection": "category",
+      "via": "products",
+      "dominant": true
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    },
+    "region": {
+      "via": "products",
+      "model": "region"
+    },
+    "source": {
+      "via": "products",
+      "model": "source"
+    },
+    "website_tab": {
+      "type": "string",
+      "required": true
+    },
+    "url_list": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.url-with-type",
+      "required": true,
+      "min": 1
     }
   }
 }

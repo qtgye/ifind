@@ -3,7 +3,6 @@ import { createContext, useContext } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 
 import pageBySlugQuery from '@gql/pageBySlugQuery';
-import { useAuth } from '@contexts/authContext';
 import { locale as language } from '@config/locale';
 import { apiSourceHandle } from '@config/adminApi'
 
@@ -11,7 +10,6 @@ export const PageContext = createContext({});
 
 export const PageContextProvider = ({ children }) => {
     const { slug } = useParams();
-    const { token } = useAuth();
     const {
         loading,
         error,
@@ -20,7 +18,6 @@ export const PageContextProvider = ({ children }) => {
         variables: { slug, language },
         context: {
             apiSource: apiSourceHandle,
-            token
         }
     });
 

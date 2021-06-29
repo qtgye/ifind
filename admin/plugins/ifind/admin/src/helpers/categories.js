@@ -1,11 +1,15 @@
+/**
+ * TO DO:
+ * 
+ * Drop this helper once categoryProvider is implemented
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
-import { useAuth } from '../providers/authProvider';
-import { useLanguages } from './languages';
 import { useQuery, useMutation } from './query';
 
 const categoryFieldsOverviewFragment = `
 fragment CategoryFieldsOverview on Category {
-  label
+  label: label_preview
   id
   order
   icon
@@ -16,7 +20,7 @@ fragment CategoryFieldsDetails on Category {
   url
   parent {
     id
-    label
+    label: label_preview
   }
   language {
     id
@@ -26,6 +30,12 @@ fragment CategoryFieldsDetails on Category {
   products {
     id
     title
+  }
+  source {
+    id
+  }
+  region {
+    id
   }
 }`;
 
@@ -84,13 +94,20 @@ const categoriesMutation = (categories) => (
 );
 
 export const flattenCategoriesTree = (tree, currentDepth = 0) => {
-  const list = Object.values(tree).reduce((list, currentNode) => {
+  const list = Object.values(tree)
+  // Sort items first
+  .sort((catA, catB) => catA.order > catB.order ? 1 : -1)
+  // Process each item
+  .reduce((list, currentNode) => {
     currentNode.depth = currentDepth;
-    
+
     list.push(currentNode);
-    
+
+    // Flat-append this item's children
     if ( currentNode.children ) {
       list.push(...flattenCategoriesTree(currentNode.children, currentDepth + 1));
+      // Remove this item's children prop to avoid confusion
+      delete currentNode.children;
     }
     
     return list;
@@ -99,6 +116,11 @@ export const flattenCategoriesTree = (tree, currentDepth = 0) => {
   return list;
 };
 
+/**
+ * Creates an object tree of categories
+ * @param {array} rawCategories 
+ * @returns object
+ */
 export const mapCategoriesTree = (rawCategories) => {
   const categoryTree = {};
   const byId = rawCategories.reduce(( all, category) => ({
@@ -106,39 +128,37 @@ export const mapCategoriesTree = (rawCategories) => {
     [category.id]: category,
   }), {});
 
-
   if ( rawCategories ) {
-
-    // Get parent categories first
-    rawCategories
-    .filter(category => category.parent)
-    .forEach(childCategory => {
-      categoryTree[childCategory.parent.id] = categoryTree[childCategory.parent.id] || {
-        ...byId[childCategory.parent.id],
-        children: {}
-      };
-    });
-
-    // Add child categories
     rawCategories.forEach(category => {
-      // Check if category parent exists in categoryTree
-      if ( category.parent && category.parent.id in categoryTree ) {
-        categoryTree[category.parent.id].children[category.id] = category;
+      // Check if category has existing parent
+      if ( category.parent && category.parent.id in byId ) {
+        // Append to the parent's children
+        byId[category.parent.id].children = byId[category.parent.id].children || {};
+        byId[category.parent.id].children[category.id] = category;
+
+        // Determine depth acc. to parent
+        let currentDepthCount = 1;
+        let currentParent = category.parent;
+        while ( currentParent.parent ) {
+          currentDepthCount++;
+          currentParent = currentParent.parent;
+        }
+        category.depth = currentDepthCount;
       }
+      // Treat this category as a root
       else {
-        categoryTree[category.id] = categoryTree[category.id] || {
-          ...category,
-          children: {}
-        };
+        categoryTree[category.id] = category;
+        category.depth = 0;
+        // Remove non-existing parent prop to avoid confusion
+        delete category.parent;
       }
     });
   }
 
   return categoryTree;
-  
 };
 
-
+// NOTE: Will deprecate once source region is implemented
 export const groupCategoriesByLanguage = (categoriesList, languages) => {
   return languages.map(language => ({
     language,
@@ -146,9 +166,18 @@ export const groupCategoriesByLanguage = (categoriesList, languages) => {
   }));
 };
 
+export const groupCategoriesBySourceRegion = (categoriesList, sourcesRegions) => {
+  return sourcesRegions.map(sourceRegion => ({
+    ...sourceRegion,
+    categories: categoriesList.filter(category => (
+      category.source?.id === sourceRegion.source && category.region?.id === sourceRegion.region
+    )),
+  }))
+}
+
 
 export const useCategories = () => {
-  const { data } = useQuery(categoriesQuery);
+  const { data, loading } = useQuery(categoriesQuery);
   const [
     callMutation,
     {
@@ -157,7 +186,6 @@ export const useCategories = () => {
     }
   ] = useMutation();
   const [ categories, setCategories ] = useState([]);
-  const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
 
   const updateCategoriesQuery = useCallback((updatedCategories) => {
@@ -188,8 +216,6 @@ export const useCategories = () => {
     // Process and update categories
     const categoryTree = mapCategoriesTree(newCategories);
     const categoryList = flattenCategoriesTree(categoryTree);
-
-    setLoading(false);
     setCategories(categoryList);
   });
 
@@ -215,5 +241,37 @@ export const useCategories = () => {
     categories,
     updateCategoriesQuery,
     error,
+    loading,
   ];
+}
+
+/**
+ * Given a category id,
+ * this will generate the ancestral path towards the category,
+ * with the given category id being the last item in the array
+ * Like so: [ grandParent, parent, child, grandChild, ...soOn ]
+ */
+export const buildCategoryPath = (categoryID, categories = []) => {
+  const byId = categories.reduce(( all, category) => ({
+    ...all,
+    [category.id]: category,
+  }), {});
+
+  const categoryPath = [];
+  const matchedCategory = byId[categoryID];
+
+  if ( !matchedCategory ) {
+    return categoryPath;
+  }
+
+  let lastCategoryEntry = matchedCategory;
+  while ( lastCategoryEntry ) {
+    categoryPath.push(lastCategoryEntry);
+    lastCategoryEntry = lastCategoryEntry.parent ? byId[lastCategoryEntry.parent.id] : null;
+  }
+
+  // From granparent -> grandchild
+  categoryPath.reverse();
+
+  return categoryPath;
 }

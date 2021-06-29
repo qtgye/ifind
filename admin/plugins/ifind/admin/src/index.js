@@ -28,38 +28,38 @@ export default strapi => {
     trads,
     menu: {
       pluginsSectionLinks: [
-        {
-          destination: `/plugins/${pluginId}/categories`,
-          icon: 'sitemap',
-          label: {
-            id: `${pluginId}.plugin.name`,
-            defaultMessage: 'Categories Management',
-          },
-          name,
-          permissions: [
-            // Uncomment to set the permissions of the plugin here
-            // {
-            //   action: '', // the action name should be plugins::plugin-name.actionType
-            //   subject: null,
-            // },
-          ],
-        },
-        {
-          destination: `/plugins/${pluginId}/products`,
-          icon: 'tag',
-          label: {
-            id: `${pluginId}.plugin.name`,
-            defaultMessage: 'Products Management',
-          },
-          name,
-          permissions: [
-            // Uncomment to set the permissions of the plugin here
-            // {
-            //   action: '', // the action name should be plugins::plugin-name.actionType
-            //   subject: null,
-            // },
-          ],
-        },
+        // {
+        //   destination: `/plugins/${pluginId}/categories`,
+        //   icon: 'sitemap',
+        //   label: {
+        //     id: `${pluginId}.plugin.name`,
+        //     defaultMessage: 'Categories Management',
+        //   },
+        //   name,
+        //   permissions: [
+        //     // Uncomment to set the permissions of the plugin here
+        //     // {
+        //     //   action: '', // the action name should be plugins::plugin-name.actionType
+        //     //   subject: null,
+        //     // },
+        //   ],
+        // },
+        // {
+        //   destination: `/plugins/${pluginId}/products`,
+        //   icon: 'tag',
+        //   label: {
+        //     id: `${pluginId}.plugin.name`,
+        //     defaultMessage: 'Products Management',
+        //   },
+        //   name,
+        //   permissions: [
+        //     // Uncomment to set the permissions of the plugin here
+        //     // {
+        //     //   action: '', // the action name should be plugins::plugin-name.actionType
+        //     //   subject: null,
+        //     // },
+        //   ],
+        // },
       ],
     },
   };

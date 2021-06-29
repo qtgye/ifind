@@ -73,8 +73,8 @@ const HeaderSideNav = ({ withSideNav }) => {
 
                             </div>
                             <div>
-                                {/* {categoryTree.map((item, index) => { */}
-                                {data.map((item, index) => {
+                                {categoryTree.map((item, index) => {
+                                    // {data.map((item, index) => {
                                     return (
                                         <HeaderSideNavSubMenu item={item} index={index}
                                             checked={checked} key={index}

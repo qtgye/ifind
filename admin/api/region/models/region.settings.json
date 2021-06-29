@@ -23,6 +23,18 @@
     "categories": {
       "via": "region",
       "collection": "category"
+    },
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "products": {
+      "via": "region",
+      "collection": "product"
+    },
+    "currency": {
+      "via": "regions",
+      "model": "currency"
     }
   }
 }

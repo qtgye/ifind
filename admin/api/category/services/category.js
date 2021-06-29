@@ -5,57 +5,73 @@
  * to customize this service
  */
 
-module.exports = {
-  async categoryTree(language) {
 
+const processCategory = (rawCategory, language = null) => {
+  /**
+  Process label
+
+  Label logic:
+    1. If there is/are label entries
+      1.1. If language is given, get label with matching language
+      1.2 Get english label
+      1.3 Get first label
+    2. Use empty label
+   */
+  rawCategory.label = rawCategory.label ?
+    rawCategory.label.find(label => language && label.language.code === language.code)
+    || rawCategory.label.find(label => label.language.code === 'en')
+    || rawCategory.label[0]
+    : '';
+
+  return rawCategory;
+};
+
+
+module.exports = {
+  async categoryTree(language = null) {
+    // Will use to select label for categories
     const matchedLanguage = await strapi.services.language.findOne({
       code: language
     });
 
-    if ( !matchedLanguage ) {
-      return null;
-    }
-
+    // Get categories sorted by order
+    // ensures children are in order
     const matchedCategories = await this.find({
-      language: matchedLanguage.id
-    });
+      _sort: 'order:ASC'
+    }) || [];
 
-    // Build category tree
+    // Build categoryTree object
     const categoryTree = {};
-
-    // Sort by order first, ensures children are in order
-    matchedCategories.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+    const byId = matchedCategories.reduce(( all, category) => ({
+      ...all,
+      [category.id]: category,
+    }), {});
 
     matchedCategories.forEach(category => {
 
-      // If child category
-      if ( category.parent ) {
-        // Check if parent is already mapped in the tree
-        // otherwise add a placeholder for it
-        if ( !(category.parent.id in categoryTree) ) {
-          categoryTree[category.parent.id] = { children: [] };
-        }
+      const processedCategory = processCategory(category, matchedLanguage);
 
-        // Add this category to parent's children
-        categoryTree[category.parent.id].children.push(category);
+      // Check if category has existing parent
+      if ( processedCategory.parent && processedCategory.parent.id in byId ) {
+        // Append to the parent's children
+        byId[processedCategory.parent.id].children = byId[processedCategory.parent.id].children || [];
+        byId[processedCategory.parent.id].children.push(processedCategory);
       }
-
-      // Treat as parent category if no parent prop
+      // Treat this category as a root
       else {
-        categoryTree[category.id] = {
-          // Merge with placeholder if there is one
-          ...(categoryTree[category.id] || { children: [] }),
-          ...category
-        }
+        categoryTree[category.id] = processedCategory;
+        processedCategory.depth = 0;
+        // Remove non-existing parent prop to avoid confusion
+        delete processedCategory.parent;
       }
     });
 
-    // Re-sort again, this time for parent
-    const categories = Object.values(categoryTree).sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+    // Convert categoryTree into array
+    const categoryTreeArray = Object.values(categoryTree);
 
-    return {
-      language: matchedLanguage,
-      categories,
-    }
+    // Re-sort root categories
+    categoryTreeArray.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+
+    return categoryTreeArray;
   }
 };

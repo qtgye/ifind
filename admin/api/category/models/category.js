@@ -6,10 +6,11 @@
  */
 
 const processCategoryData = async data => {
-  if ( data.language ) {
-    // console.log('strapi.services', strapi.services);
-    const language = await strapi.services.language.findOne({ id: data.language });
-    data.label_preview = `(${language.code}) ${data.label}`;
+  if ( data.label && data.label.length ) {
+    const englishLanguage = await strapi.services.language.findOne({ code: 'en' });
+    const englishLabel = data.label.find(label => label.language == englishLanguage.id);
+    const selectedLabel = englishLabel || data.label[0];
+    data.label_preview = selectedLabel.label;
   }
 }
 

@@ -1,21 +1,25 @@
-import React from 'react';
+import React, { useEffect, memo } from 'react';
 
 import { DragAndDropProvider } from './dragAndDropProvider';
 import { AuthContextProvider } from './authProvider';
+import { CategoryProvider } from './categoryProvider';
 import { SourceRegionProvider } from './sourceRegionProvider';
+import { GlobalContextProvider } from './globalProvider';
 
-const providers = [
-  AuthContextProvider,
-  SourceRegionProvider,
-  DragAndDropProvider,
-];
+const Providers = ({ children }) => {
+  return (
+    <GlobalContextProvider>
+      <AuthContextProvider>
+        <SourceRegionProvider>
+          <CategoryProvider>
+            <DragAndDropProvider>
+              {children}
+            </DragAndDropProvider>
+          </CategoryProvider>
+        </SourceRegionProvider>
+      </AuthContextProvider>
+    </GlobalContextProvider>
+  )
+};
 
-const Providers = ({ children }) => (
-  providers.reverse().reduce((all, ParentProvider) => (
-    <ParentProvider>
-      {all}
-    </ParentProvider>
-  ), children)
-);
-
-export default Providers;
+export default memo(Providers);

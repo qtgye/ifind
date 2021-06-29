@@ -3,21 +3,17 @@ import { useAuth } from '../providers/authProvider';
 
 export const useQuery = (query, variables) => {
   const { jwt } = useAuth();
-  const [ queryTemplate ] = useState({
-    loading: true,
-    data: null,
-    error: null,
-  });
-  const [ queries, setQueries ] = useState({});
 
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(null);
-  const [ data, setData ] = useState(data);
+  const [ data, setData ] = useState(null);
 
-  const callQuery = useCallback((query, variables) => {
-    if ( !query ) {
+  const callQuery = useCallback(() => {
+    if ( !query || !jwt ) {
       return Promise.resolve({ data: null });
     }
+
+    setLoading(true);
 
     return window.fetch(`/graphql`, {
       method: 'post',
@@ -30,16 +26,21 @@ export const useQuery = (query, variables) => {
         variables: variables || {}
       })
     })
-    .then(res => res.json());
-  });
+    .then(res => res.json())
+    .then(({ data }) => {
+      setError(null);
+      setData(data);
+    })
+    .catch(error => setError(error));
+  }, [ jwt, query, variables ]);
+
+  const refetch = useCallback(() => {
+    callQuery();
+  }, [ callQuery ]);
 
   useEffect(() => {
-    if ( jwt ) {
-      callQuery(query, variables)
-      .then(({ data }) => setData(data))
-      .catch(error => setError(error))
-    }
-  }, [ jwt, query, variables ]);
+    callQuery();
+  }, [ query ]);
 
   useEffect(() => {
     if ( data || error ) {
@@ -60,19 +61,20 @@ export const useQuery = (query, variables) => {
     loading,
     error,
     data,
+    refetch
   };
 
-}
+};
 
 export const useMutation = () => {
   const { jwt } = useAuth();
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
-  const [ data, setData ] = useState(data);
+  const [ data, setData ] = useState(null);
 
   const callMutation = useCallback((query, variables) => {
     if ( jwt ) {
-      window.fetch(`/graphql`, {
+      return window.fetch(`/graphql`, {
         method: 'post',
         headers: {
           authorization: `Bearer ${jwt}`,
@@ -84,14 +86,23 @@ export const useMutation = () => {
         })
       })
       .then(res => res.json())
-      .then(({ data }) => setData(data))
+      .then(({ data, errors }) => {
+        if ( errors ) {
+          setError(errors[0]);
+        }
+        else {
+          setData(data);
+          setError(null);
+        }
+      })
       .catch(error => setError(error))
     }
+
+    return Promise.resolve(null);
   }, [ jwt ]);
 
   useEffect(() => {
     if ( data || error ) {
-      console.log({ error });
       setLoading(false);
     }
   }, [ error, data ]);
