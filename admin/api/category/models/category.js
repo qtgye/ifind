@@ -6,11 +6,20 @@
  */
 
 const processCategoryData = async data => {
+  const productAttributes = await strapi.services['product-attribute'].getCommon();
+
   if ( data.label && data.label.length ) {
     const englishLanguage = await strapi.services.language.findOne({ code: 'en' });
     const englishLabel = data.label.find(label => label.language == englishLanguage.id);
     const selectedLabel = englishLabel || data.label[0];
     data.label_preview = selectedLabel.label;
+  }
+
+  if ( data.product_attrs && data.product_attrs.length ) {
+    data.product_attrs.forEach(catProductAttr => {
+      const matchedProductAttr = productAttributes.find(({ id }) => id === catProductAttr.product_attribute);
+      catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
+    });
   }
 }
 
@@ -21,6 +30,13 @@ module.exports = {
     },
     async beforeUpdate(params, data) {
       await processCategoryData(data);
-    }
+    },
+    // async afterFind(results, params, populate) {
+    //   console.log({ params });
+    //   return results;
+    // },
+    async afterFindOne(result, params, populate) {
+      return await strapi.services.category.prepopulateProductAttributes(result);
+    },
   }
 };

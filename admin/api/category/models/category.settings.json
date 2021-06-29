@@ -207,6 +207,11 @@
     "products": {
       "via": "categories",
       "collection": "product"
+    },
+    "product_attrs": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.product-attr"
     }
   }
 }

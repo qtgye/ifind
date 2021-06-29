@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "product_attributes",
   "info": {
-    "name": "Product Attribute"
+    "name": "Product Attribute",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -12,12 +13,16 @@
   "attributes": {
     "name": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "code": {
       "type": "string",
-      "required": true,
-      "regex": "[a-z_-]+"
+      "required": false
+    },
+    "is_common": {
+      "type": "boolean",
+      "default": true,
+      "required": false
     }
   }
 }
