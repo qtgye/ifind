@@ -5,4 +5,10 @@
  * to customize this service
  */
 
-module.exports = {};
+module.exports = {
+  async getCommon() {
+    return await this.find({
+      is_common: true,
+    });
+  }
+};
