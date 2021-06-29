@@ -11,7 +11,9 @@
  */
 export const validationRules = {
   required: (message) => (value) => (
-    !Boolean(value) && (message || 'Field is required')
+    (
+      !Boolean(value) || (Array.isArray(value) && !value.length)
+    ) && (message || 'Field is required')
   ),
   number: (message) => (value) => (
     // isNaN(null) returns true, so String(value) is needed

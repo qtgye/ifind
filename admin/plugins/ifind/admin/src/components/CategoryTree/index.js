@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Sortly from 'react-sortly';
 import {
-  useCategories,
-  groupCategoriesBySourceRegion,
-} from '../../helpers/categories';
+  useCategoriesListing,
+} from '../../providers/categoriesListingProvider';
 import { useSourceRegion } from '../../helpers/sourceRegion';
 import { useGlobal } from '../../providers/globalProvider';
 
@@ -22,12 +21,12 @@ const CategoryTree = () => {
   const [ isSaving, setIsSaving ] = useState(false);
 
   // Original category data
-  const [
+  const {
     categories,
     updateCategories,
     error,
-    categoriesLoading,
-  ] = useCategories();
+    loading: categoriesLoading,
+  } = useCategoriesListing();
 
   // Local data
   const [ itemsInView, setItemsInView ] = useState([]);

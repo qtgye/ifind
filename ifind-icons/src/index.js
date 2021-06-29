@@ -14,6 +14,10 @@ const readMeTemplate = fs.readFileSync(resolveApp('src/README.template.md')).toS
 fs.mkdirpSync(resolveApp('dist'), { recursive :true });
 fs.outputFileSync(resolveApp('dist/ifind-icons-sprite.svg'), '');
 
+// Allows for delay to ensure compiler generates the SVG sprite before we access it
+// For some reason, spriter.compile runs late in the process
+let compilerTimeAllowance = 0;
+
 // Create spriter instance (see below for `config` examples)
 var spriter = new SVGSpriter({
     svg: {
@@ -47,10 +51,11 @@ const iconsList = [];
 iconFiles.forEach(iconFile => {
     spriter.add(iconFile, null, fs.readFileSync(iconFile, {encoding: 'utf-8'}));
     iconsList.push(iconFile.split(/[\\\/]/g).pop().replace(/\..+$/, ''));
+    compilerTimeAllowance += 25;
 });
 
 // Compile the sprite
-let res = spriter.compile((error, result) => {
+spriter.compile((error, result) => {
     if ( error ) {
         console.error(error);
         process.exit(2);
@@ -60,31 +65,34 @@ let res = spriter.compile((error, result) => {
     }
 });
 
-const componentsStubContents = fs.readFileSync(resolveApp('src/components.stub')).toString();
-const spriteContents = fs.readFileSync(resolveApp('dist/ifind-icons-sprite.svg')).toString();
-const iconsListString = iconsList.map(iconName => `'${iconName}'`).join(',');
-const iconsTableMd = (
-    Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('').concat(
-        Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('---')
-    )
-).concat(iconsList).reduce((chunks, icon, index) => {
-    const group = Math.floor(index / 5);
-        chunks[group] = chunks[group] || [];
-        chunks[group].push(icon || '');
-        return chunks;
-}, []).map(row => `| ${row.join(' | ')} |`).join('  \n');
+setTimeout(() => {
+    const componentsStubContents = fs.readFileSync(resolveApp('src/components.stub')).toString();
+    const spriteContents = fs.readFileSync(resolveApp('dist/ifind-icons-sprite.svg')).toString();
+    const iconsListString = iconsList.map(iconName => `'${iconName}'`).join(',');
+    const iconsTableMd = (
+        Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('').concat(
+            Array.from({ length: MARKDOWN_TABLE_COLUMNS }).fill('---')
+        )
+    ).concat(iconsList).reduce((chunks, icon, index) => {
+        const group = Math.floor(index / 5);
+            chunks[group] = chunks[group] || [];
+            chunks[group].push(icon || '');
+            return chunks;
+    }, []).map(row => `| ${row.join(' | ')} |`).join('  \n');
 
-const componentsContent = componentsStubContents
-                            .replace(/%sprite_contents%/, spriteContents)
-                            .replace(/%icons_list%/, iconsListString);
+    const componentsContent = componentsStubContents
+                                .replace(/%sprite_contents%/, spriteContents)
+                                .replace(/%icons_list%/, iconsListString);
 
-Promise.all([
-    (() => fs.outputFileSync(resolveApp('index.js'), componentsContent))(),
-    (() => fs.outputFileSync(resolveApp('dist/icons.md'), iconsTableMd))(),
-    (() => fs.outputFileSync(resolveApp('README.md'), (
-        readMeTemplate.replace('{iconsTable}', iconsTableMd)
-    )))(),
-]).then(() => {
-    console.log('Generated icons:'.green.bold);
-    console.log(iconsList.slice(1).join(', ').green);
-});
+    Promise.all([
+        (() => fs.outputFileSync(resolveApp('index.js'), componentsContent))(),
+        (() => fs.outputFileSync(resolveApp('dist/icons.md'), iconsTableMd))(),
+        (() => fs.outputFileSync(resolveApp('README.md'), (
+            readMeTemplate.replace('{iconsTable}', iconsTableMd)
+        )))(),
+    ]).then(() => {
+        console.log('Generated icons:'.green.bold);
+        console.log(iconsList.slice(1).join(', ').green);
+    });
+
+}, compilerTimeAllowance);

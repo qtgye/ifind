@@ -2,7 +2,7 @@ import { generatePluginLink } from '@plugins/ifind/admin/src/helpers/url';
 
 export const leftCollectionMenu = [
   {
-    pattern: /product/,
+    pattern: /product\.product/,
     override: {
       icon: 'shopping-bag',
       destination: generatePluginLink('/products'),
@@ -13,6 +13,12 @@ export const leftCollectionMenu = [
     override: {
       icon: 'sitemap',
       destination: generatePluginLink('/categories'),
+    }
+  },
+  {
+    pattern: /attribute/,
+    override: {
+      icon: 'star',
     }
   },
   {

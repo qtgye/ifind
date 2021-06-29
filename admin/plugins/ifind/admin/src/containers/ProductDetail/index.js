@@ -1,8 +1,7 @@
 import React, { memo, useState, useEffect, useRef, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { Header } from '@buffetjs/custom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 import { useProduct, ProductProvider } from '../../providers/productProvider';
 import { useGlobal } from '../../providers/globalProvider';
@@ -10,15 +9,19 @@ import { validationRules, validateData } from '../../helpers/form';
 import ProductForm from '../../components/ProductForm';
 
 const productValidationRules = {
-  title: validationRules.required('Please provide a title'),
+  // title: validationRules.required('Please provide a title'),
   website_tab: [
     validationRules.required('Please select website tab'),
   ],
-  image: validationRules.set([
-    validationRules.required('Please provide an image'),
-    validationRules.url('Image must be a valid URL'),
-  ], 'Please provide an image in a valid URL format'),
-  category: validationRules.required('Please select a category'),
+  amazon_url: validationRules.set([
+    validationRules.required(),
+    validationRules.url(),
+  ], 'Please provide a valid Amazon Product URL'),
+  // image: validationRules.set([
+  //   validationRules.required('Please provide an image'),
+  //   validationRules.url('Image must be a valid URL'),
+  // ], 'Please provide an image in a valid URL format'),
+  categories: validationRules.required('Please select a category'),
 };
 
 const ProductDetail = () => {
@@ -29,6 +32,7 @@ const ProductDetail = () => {
     error,
     loading,
   ] = useProduct();
+  const { productId } = useParams();
   const { isLoading, setIsLoading } = useGlobal();
   const history = useHistory();
   const [ title, setTitle ] = useState('');
@@ -39,6 +43,7 @@ const ProductDetail = () => {
   const [ isSaving, setIsSaving ] = useState(false);
 
   const saveProduct = useCallback(() => {
+    // Prepare data for graphql request
     const { success, errors } = validateData(productFormData, productValidationRules);
 
     setFormErrors(errors);
@@ -50,32 +55,17 @@ const ProductDetail = () => {
 
     // Save product
     else {
-      // Prepare data for graphql request
-      const formattedData = formatProductFormData(productFormData);
-
       setIsSaving(true);
 
-      if ( !formattedData.id ) {
+      if ( !productFormData.id ) {
         setRedirectOnUpdate(true);
-        addProduct(formattedData);
+        addProduct(productFormData);
       }
       else {
-        updateProduct(formattedData);
+        updateProduct(productFormData);
       }
     }
   }, [ productFormData, updateProduct, addProduct ]);
-  
-  const formatProductFormData = useCallback((formData) => {
-    formData.price = Number(formData.price);
-    formData.categories = [ formData.category ];
-
-    // Delete unnecessary props for graphql request
-    delete formData.url_type;
-    delete formData.category;
-    delete formData.urlList;
-
-    return formData;
-  }, []);
 
   const onProductDataUpdate = useCallback((newProductData) => {
     if ( !newProductData ) {
@@ -87,7 +77,7 @@ const ProductDetail = () => {
         history.push('/plugins/ifind/products/' + newProductData.id);
       }
       else {
-        setTitle(newProductData.title);
+        setTitle(newProductData.title || '[ No Title ]');
       }
     }
 
@@ -99,6 +89,10 @@ const ProductDetail = () => {
       setIsSaving(false);
     }
   }, [ redirectOnUpdate, isSaving ]);
+
+  const determineLoading = useCallback(() => {
+    setIsLoading(loading && productId);
+  }, [ loading, productId ]);
 
   useEffect(() => {
     onProductDataUpdate(productData);
@@ -166,7 +160,7 @@ const ProductDetail = () => {
   }, [ productFormData, productData ]);
 
   useEffect(() => {
-    setIsLoading(loading);
+    determineLoading();
   }, [ loading ]);
 
   return (

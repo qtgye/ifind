@@ -7,7 +7,7 @@
  import React, { createContext, useContext, useState, useEffect, useCallback, memo } from 'react';
  import { useQuery, useMutation } from '../helpers/query';
 
- const CategoryContext = createContext({});
+ const CategoriesListingContext = createContext({});
  
  const categoryFieldsOverviewFragment = `
  fragment CategoryFieldsOverview on Category {
@@ -211,7 +211,7 @@
  }
 
 
- export const CategoryProvider = memo(({ children }) => {
+ export const CategoriesListingProvider = memo(({ children }) => {
   const { data } = useQuery(categoriesQuery);
   const [
     callMutation,
@@ -224,7 +224,7 @@
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
 
-  const updateCategoriesQuery = useCallback((updatedCategories) => {
+  const updateCategories = useCallback((updatedCategories) => {
     callMutation(categoriesMutation(updatedCategories));
   }, [ callMutation ]);
 
@@ -276,14 +276,15 @@
   }, [ updateCategoriesError ]);
 
   return (
-    <CategoryContext.Provider value={{
+    <CategoriesListingContext.Provider value={{
       categories,
-      updateCategoriesQuery,
+      updateCategories,
       error,
+      loading,
     }}>
       {children}
-    </CategoryContext.Provider>
+    </CategoriesListingContext.Provider>
   )
 });
 
- export const useCategories = () => useContext(CategoryContext);
+ export const useCategoriesListing = () => useContext(CategoriesListingContext);

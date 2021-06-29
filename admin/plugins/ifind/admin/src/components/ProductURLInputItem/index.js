@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import InputBlock from '../InputBlock';
 import URLTypeSelect from '../URLTypeSelect';
 
-const ProductURLInputItem = ({ is_base = false, source, region, url, price, onChange, onDelete, onSelect, softId }) => {
+const ProductURLInputItem = ({ source, region, url, price, onChange, onDelete, softId }) => {
   const [ regionInput, setRegionInput ] = useState(region);
   const [ sourceInput, setSourceInput ] = useState(source);
   const [ urlInput, setUrlInput ] = useState(url);
@@ -30,12 +30,6 @@ const ProductURLInputItem = ({ is_base = false, source, region, url, price, onCh
     }
   }, [onDelete, softId]);
 
-  const onCheckClick = useCallback(() => {
-    if ( typeof onSelect == 'function' ) {
-      onSelect(softId);
-    }
-  }, [ onSelect, softId ])
-
   useEffect(() => {
     if ( typeof onChange === 'function' ) {
       onChange({
@@ -43,11 +37,10 @@ const ProductURLInputItem = ({ is_base = false, source, region, url, price, onCh
         source: sourceInput,
         region: regionInput,
         price: priceInput,
-        is_base,
         softId,
       });
     }
-  }, [ regionInput, sourceInput, urlInput, priceInput, is_base ]);
+  }, [ regionInput, sourceInput, urlInput, priceInput ]);
 
   return (
     <div className="product-url-input__item row">
@@ -59,7 +52,7 @@ const ProductURLInputItem = ({ is_base = false, source, region, url, price, onCh
           source={sourceInput}
         />
       </InputBlock>
-      <InputBlock className="col-md-2">
+      <InputBlock className="col-md-3">
         <Label>Price</Label>
         <InputNumber
           onChange={({ target: { value }}) => onPriceInput(value)}
@@ -73,15 +66,9 @@ const ProductURLInputItem = ({ is_base = false, source, region, url, price, onCh
           value={urlInput}
         />
       </InputBlock>
-      <InputBlock className="col-md-2">
+      <InputBlock className="col-md-1">
         <Label>&nbsp;</Label>
         <div className="product-url-input__item-controls">
-          <Button
-            className="product-url-input__item-check"
-            color={ is_base ? 'success' : 'cancel' }
-            icon={<FontAwesomeIcon icon="check" />}
-            onClick={onCheckClick}
-          ></Button>
           <Button
             className="product-url-input__item-delete"
             color="cancel"

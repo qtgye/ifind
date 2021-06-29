@@ -1,12 +1,14 @@
 import { gql } from "apollo-boost";
 
-const getProductDetail = gql`
-    query GetProductDetailQuery($productDetailURL: String!) {
-        productDetail ( productDetailURL: $productDetailURL ) {
-            detailURL
-            detailsHTML
-        }
+const getProductDetailQuery = gql`
+query GetProductDetailQuery ($id: ID!, $language:String) {
+    productDetails ( id: $id, language: $language ) {
+        id
+        details_html
+        price
+        image
     }
+}
 `;
 
-export default getProductDetail;
+export default getProductDetailQuery;

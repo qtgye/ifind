@@ -2,7 +2,7 @@ import React, { useEffect, memo } from 'react';
 
 import { DragAndDropProvider } from './dragAndDropProvider';
 import { AuthContextProvider } from './authProvider';
-import { CategoryProvider } from './categoryProvider';
+import { CategoriesListingProvider } from './categoriesListingProvider';
 import { SourceRegionProvider } from './sourceRegionProvider';
 import { GlobalContextProvider } from './globalProvider';
 
@@ -11,11 +11,11 @@ const Providers = ({ children }) => {
     <GlobalContextProvider>
       <AuthContextProvider>
         <SourceRegionProvider>
-          <CategoryProvider>
+          <CategoriesListingProvider>
             <DragAndDropProvider>
               {children}
             </DragAndDropProvider>
-          </CategoryProvider>
+          </CategoriesListingProvider>
         </SourceRegionProvider>
       </AuthContextProvider>
     </GlobalContextProvider>

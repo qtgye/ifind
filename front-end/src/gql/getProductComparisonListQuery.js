@@ -13,6 +13,8 @@ const getProductComparisonList = gql`
         products {
             id
             title
+            amazon_url
+            price
             image
             url_list {
                 source {

@@ -32,8 +32,8 @@ const NaturalList = ({ items = [], loading = false, observeItem, id }) => {
 
     useEffect(() => {
         if (activeProduct) {
-            if (activeProduct.detailHTML) {
-                setDetailsHTML(activeProduct.detailHTML);
+            if (activeProduct.details_html) {
+                setDetailsHTML(activeProduct.details_html);
                 setIsDetailsLoading(false);
             }
             else {

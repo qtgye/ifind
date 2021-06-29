@@ -14,11 +14,13 @@ const sourcesRegionsQuery = `
       regions {
         id
         name
+        code
       }
     }
     regions {
       id
       name
+      code
     }
   }
 `;
