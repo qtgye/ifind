@@ -7,6 +7,8 @@ import ImagePreview from '../ImagePreview';
 import CategorySelect from '../CategorySelect';
 import ProductURLInput from '../ProductURLInput';
 import RegionSelect from '../RegionSelect';
+import TextInput from '../TextInput';
+import NumberInput from '../NumberInput';
 
 import './styles.scss';
 
@@ -209,49 +211,45 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           error={formErrors.region}
         />
 
-        <InputBlock className="col-md-4" >
-          <Label htmlFor="change-date">Change Date</Label>
-          <InputText
-            name="change-date"
-            id="change-date"
-            value={lastModified.slice(0, 10)}
-            disabled
-          />
-        </InputBlock>
+        {/* Change Date */}
+        <TextInput
+          className="col-md-4"
+          label='Change Date'
+          id='change-date'
+          value={lastModified.slice(0, 10)}
+          disabled
+        />
 
         {/* Amazon URL */}
-        <InputBlock className="col-md-12" error={formErrors.amazon_url}>
-          <Label htmlFor="amazon-url">Amazon URL</Label>
-          <InputText
-            onChange={({ target: { value }}) => setAmazonURL(value)}
-            id="amazon-url"
-            value={amazonURL}
-          />
-        </InputBlock>
+        <TextInput
+          className="col-md-12"
+          error={formErrors.amazon_url}
+          label='Amazon URL'
+          id='amazon-url'
+          name='amazon-url'
+          onChange={(value) => setAmazonURL(value)}
+          value={amazonURL}
+        />
 
         {/* Position */}
-        <InputBlock className="col-md-6">
-          <Label htmlFor="website-tab">Position</Label>
-          <InputText
-              id='position'
-              name='position'
-              type="number"
-              value={position}
-              onChange={({ target: { value } }) => setPosition(value)}
-            />
-        </InputBlock>
+        <NumberInput
+          className='col-md-6'
+          label='Position'
+          id='position'
+          name='position'
+          value={position}
+          onChange={(value) => setPosition(value)}
+        />
 
         {/* Clicks Count */}
-        <InputBlock className="col-md-6">
-          <Label htmlFor="clicks-count">Clicks Count</Label>
-          <InputText
-              id='clicks-count'
-              name='clicks-count'
-              type="number"
-              value={clicksCount}
-              disabled
-            />
-        </InputBlock>
+        <NumberInput
+          className='col-md-6'
+          label='Clicks Count'
+          id='clicks-count'
+          name='clicks-count'
+          value={clicksCount}
+          disabled
+        />
 
         {/* Category */}
         <CategorySelect
@@ -269,37 +267,33 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
       <Panel title='Scrapable Fields' className="product-form__panel product-form__panel--urls">
         {/* Title */}
-        <InputBlock className="col-md-12" error={formErrors.title}>
-          <Label htmlFor="product-title">Title</Label>
-          <InputText
-              id='product-title'
-              name='product-title'
-              onChange={({ target: { value } }) => setTitle(value)}
-              type="text"
-              value={title}
-            />
-        </InputBlock>
+        <TextInput
+          className="col-md-12"
+          label='Title'
+          id='product-title'
+          onChange={(value) => setTitle(value)}
+          error={formErrors.title}
+          value={title}
+        />
 
         {/* Image */}
-        <InputBlock className="col-md-9" error={formErrors.image}>
-          <Label htmlFor="image">Image URL</Label>
-          <InputText
-            id='image'
-            name='image'
-            onChange={({ target: { value } }) => setImage(value)}
-            type="text"
-            value={image}
-          />
-        </InputBlock>
+        <TextInput
+          className="col-md-9"
+          label='Image URL'
+          id='product-image'
+          onChange={(value) => setImage(value)}
+          error={formErrors.image}
+          value={image}
+        />
 
         {/* Price */}
-        <InputBlock className="col-md-3">
-          <Label>Price</Label>
-          <InputNumber
-            onChange={({ target: { value }}) => setPrice(value)}
-            value={price}
-          />
-        </InputBlock>
+        <NumberInput
+          className='col-md-3'
+          label='Price'
+          id='price'
+          onChange={(value) => setPrice(value)}
+          value={price}
+        />
 
         {/* Details HTML */}
         <InputBlock className="col-md-12">
