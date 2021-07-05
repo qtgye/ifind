@@ -30,14 +30,7 @@ const CategorySelect = ({
   }, [ category, categories ]);
 
   useEffect(() => {
-    // Use Amazon Germany for now,
-    // TODO: Filter will be unnecessary once single category tree is implemented
-    const filteredCategories = (categories && categories.filter(category => (
-      /amazon/i.test(category.source?.name) &&
-      category.region?.code === 'de'
-    ))) || [];
-
-    const categoryTree = mapCategoriesTree(filteredCategories);
+    const categoryTree = mapCategoriesTree(categories);
     setCategoryOptions(Object.values(categoryTree));
   }, [ categories ]);
 
