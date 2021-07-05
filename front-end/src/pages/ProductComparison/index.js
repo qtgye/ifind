@@ -16,6 +16,7 @@ const ProductComparison = () => {
                   productComparisonList.map(({ category, products }) => (
                     <NaturalList
                       key={category.id}
+                      category={category}
                       items={products}
                     />
                   ))

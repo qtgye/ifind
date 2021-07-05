@@ -1,5 +1,15 @@
 import { gql } from "apollo-boost";
 
+const generateParentCategoryFragment = (iterationsLeft) => (iterationsLeft && `
+    parent {
+        id
+        label {
+            label
+        }
+        ${generateParentCategoryFragment(--iterationsLeft)}
+    }
+`) || '';
+
 const generateChildCategory = (iterationsLeft) => {
     return `
         id
@@ -8,6 +18,7 @@ const generateChildCategory = (iterationsLeft) => {
         label {
             label
         }
+        ${generateParentCategoryFragment(10)}
         ${
             (iterationsLeft &&
             `
