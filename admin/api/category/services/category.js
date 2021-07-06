@@ -18,12 +18,14 @@ const processCategory = (rawCategory, language = null) => {
     2. Use empty label
    */
   rawCategory.label = rawCategory.label ?
-    rawCategory.label.find(label => language && label.language.code === language.code)
-    || rawCategory.label.find(label => label.language.code === 'en')
+    rawCategory.label.find(label => language && label.language && label.language.code === language.code)
+    || rawCategory.label.find(label => label.language && label.language.code === 'en')
     || rawCategory.label[0]
     : '';
 
-  return rawCategory;
+  const processedCategory = strapi.services.category.prepopulateProductAttributes(rawCategory);
+
+  return processedCategory;
 };
 
 
@@ -37,7 +39,8 @@ module.exports = {
     // Get categories sorted by order
     // ensures children are in order
     const matchedCategories = await this.find({
-      _sort: 'order:ASC'
+      _sort: 'order:ASC',
+      _limit: 1000,
     }) || [];
 
     // Build categoryTree object
