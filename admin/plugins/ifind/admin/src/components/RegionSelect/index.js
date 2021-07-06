@@ -34,8 +34,6 @@ const RegionSelect = ({ label = 'Region', onChange, value, disabled, id = 'regio
   useEffect(() => {
     const matchedRegion = regionOptions.find(({ id }) => id === value) || 
                           regionOptions.find(({ code }) => /de/.test(code));
-
-    console.log({ matchedRegion });
     setSelectedRegion(matchedRegion);
   }, [ value, regionOptions ]);
   

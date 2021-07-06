@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../providers/authProvider';
 
+/**
+ * TODO:
+ * 
+ * Use this in replacement of our custom useQuery implementation
+ */
 export const useGQLFetch = () => {
   const { jwt } = useAuth();
 

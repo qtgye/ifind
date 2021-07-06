@@ -47,6 +47,6 @@ module.exports = {
     },
     async beforeUpdate(params, data) {
       await processProductData(data, params.id);
-    }
+    },
   }
 };

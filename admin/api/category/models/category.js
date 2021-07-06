@@ -31,10 +31,6 @@ module.exports = {
     async beforeUpdate(params, data) {
       await processCategoryData(data);
     },
-    // async afterFind(results, params, populate) {
-    //   console.log({ params });
-    //   return results;
-    // },
     async afterFindOne(result, params, populate) {
       return await strapi.services.category.prepopulateProductAttributes(result);
     },

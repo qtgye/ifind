@@ -16,6 +16,10 @@
       grid-column: 1 / span 8;
     }
 
+    &--gen-prod-attrs {
+      grid-column: 1 / span 8;
+    }
+
     &--sidebar {
       grid-column: 9 / -1;
       grid-row: 1 / span 4;

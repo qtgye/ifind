@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
 import { InputText, InputNumber, Label, Select, Text, Textarea } from '@buffetjs/core';
 
+import { useCategoriesListing } from '../../providers/categoriesListingProvider';
+import { useProductAttributes } from '../../providers/productAttributesProvider';
+
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
 import ImagePreview from '../ImagePreview';
@@ -9,6 +12,7 @@ import ProductURLInput from '../ProductURLInput';
 import RegionSelect from '../RegionSelect';
 import TextInput from '../TextInput';
 import NumberInput from '../NumberInput';
+import ProductAttributesRating from '../ProductAttributesRating';
 
 import './styles.scss';
 
@@ -20,13 +24,12 @@ const _websiteTabOptions = [
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
+  const { categories } = useCategoriesListing();
+  const { productAttributes } = useProductAttributes();
 
   // Read-only fields
   const [ id, setId ] = useState(null);
   const [ clicksCount, setClicksCount ] = useState(null);
-
-  // CategorySelect Data
-  const [ source, setSource ] = useState(null);
 
   // Product URL Input Data
   const [ urlList, setUrlList ] = useState([]);
@@ -42,6 +45,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ price, setPrice ] = useState('');
   const [ detailsHTML, setDetailsHTML ] = useState('');
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
+  const [ attrsRating, setAttrsRating ] = useState([]);
 
   // Meta states
   const [ createdOn, setCreatedOn ] = useState('');
@@ -56,7 +60,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       title,
       category,
       image,
-      source,
       region,
       urlList,
       position,
@@ -71,7 +74,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     title,
     category,
     image,
-    source,
     region,
     urlList,
     position,
@@ -87,8 +89,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.details_html = formData.detailsHTML;
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
-
-    console.log('formData.urlList', formData.urlList);
 
     // Process urlList
     if ( formData.urlList?.length ) {
@@ -114,7 +114,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const onChange = useCallback(() => {
     const formData = collectFormData();
     const processedData = processFormData(formData);
-    console.log({ processedData });
     setProductFormData(processedData);
   }, [ collectFormData, setProductFormData, processFormData ]);
 
@@ -122,9 +121,13 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setCategory(categoryID);
   }, [ setCategory ]);
 
-   const onProductURLsChange = useCallback((newUrlList) => {
+  const onProductURLsChange = useCallback((newUrlList) => {
     setUrlList(newUrlList);
-   }, []);
+  }, []);
+
+  const onProductAttrsChange = useCallback((newRatings) => {
+    setAttrsRating(newRatings);
+  }, []);
 
   useEffect(() => {
     if ( product ) {
@@ -149,11 +152,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         price: urlData?.price,
       })));
 
-      // Update source and region based on product
-      if ( product.source && product.region ) {
-        setSource(product.source?.id);
-        setRegion(product.region?.id);
-      }
+      // Format product attributes to match Product Attributes Input
+      // if ( product.attrs_rating ) {
+      //   setAttrsRating()
+      // }
 
       // Set meta
       if ( product.created_at ) {
@@ -172,7 +174,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     websiteTab,
     title,
     category,
-    source,
     region,
     image,
     urlList,
@@ -253,8 +254,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Category */}
         <CategorySelect
-          source={source}
-          region={region}
           category={category}
           onChange={onCategorySelect}
           hasError={formErrors.categories?.length}
@@ -318,10 +317,18 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         />
       </Panel>
 
-      <Panel className="product-form__panel product-form__panel--sidebar">
+      <Panel title='General Product Attributes' className="product-form__panel product-form__panel--gen-prod-attrs">
+        <ProductAttributesRating
+          category={category}
+          attributesRatings={attrsRating}
+          onChange={onProductAttrsChange}
+          className="col-md-12"
+        />
+      </Panel>
+
+      <Panel className="product-form__panel product-form__panel--sidebar" title="Image Preview">
         {/* Image Preview */}
         <InputBlock className="col-md-12">
-          <Label>Image Preview</Label>
           <ImagePreview url={image} />
         </InputBlock>
       </Panel>

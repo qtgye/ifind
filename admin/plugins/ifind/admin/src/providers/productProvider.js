@@ -32,6 +32,15 @@ fragment ProductDataFragment on Product {
   region {
     id
   }
+  attrs_rating {
+    id
+    product_attribute {
+      id
+      name
+    }
+    rating
+    points
+  }
   created_at
   updated_at
 }
