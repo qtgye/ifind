@@ -94,6 +94,7 @@ const ProductComparison = () => {
                   items={products}
                   observeItem={observeItem}
                   id={category.id}
+                  label={category.label.label}
                 />
               ))
             }

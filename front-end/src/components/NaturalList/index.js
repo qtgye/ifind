@@ -6,7 +6,7 @@ import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false, observeItem, id }) => {
+const NaturalList = ({ items = [], loading = false, observeItem, id, label }) => {
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
@@ -65,12 +65,16 @@ const NaturalList = ({ items = [], loading = false, observeItem, id }) => {
 
     return (
         <div className="natural-list">
+            <div className="natural-list__separator">
+                <strong>{label}</strong>
+            </div>
+            <div className="natural-list__mfd">Q1/2021</div>
             {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
-            <div className="natural-list__content" ref={itemRef} data-index={id}>
+            <div className="natural-list__content" ref={itemRef}>
                 {!loading && (
                     <ul className="natural-list__grid">
                         <li className="natural-list__item">
-                            CategoryID: {id}
+                            {/* CategoryID: {id} */}
                             {
                                 activeProduct &&
                                 <ProductDetails

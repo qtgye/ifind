@@ -6,6 +6,7 @@ module.exports = {
       order: Int!
       icon: String
       region: Region
+      parent: Category
       children: [ CategoryWithChild ]
     }
   `,
