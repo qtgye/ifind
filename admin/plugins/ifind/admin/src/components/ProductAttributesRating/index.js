@@ -65,10 +65,7 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
     ));
 
     if ( typeof onAttributesChange === 'function' ) {
-      onAttributesChange({
-        totalRating,
-        attributeRatings: newAttrDetails,
-      });
+      onAttributesChange(newAttrDetails);
     }
   }, [ attrsDetails, totalRating ]);
 

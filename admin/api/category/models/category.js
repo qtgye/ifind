@@ -34,5 +34,11 @@ module.exports = {
     async afterFindOne(result, params, populate) {
       return await strapi.services.category.prepopulateProductAttributes(result);
     },
+    async afterCreate(result, data) {
+      console.log('afterCreate', {result, data});
+    },
+    async afterUpdate(result, params, data) {
+      console.log('afterUpdate', {result, params, data});
+    }
   }
 };
