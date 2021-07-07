@@ -1,17 +1,12 @@
 .rating-warps {
-  display: flex;
-
-  &__graphic {
-    position: relative;
-    height: 30px;
-    margin: 0 10px;
-  }
+  display: inline-flex;
+  position: relative;
+  height: 30px;
 
   &__warps {
     display: flex;
     flex-wrap: nowrap;
     height: 30px;
-    margin-left: 10px;
     overflow: hidden;
 
     &--fg {
@@ -29,25 +24,6 @@
       height: 30px;
       fill: red;
       flex-shrink: 0;
-    }
-  }
-
-  &__control {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
-    border-radius: 100px;
-    overflow: hidden;
-    border: 1px solid currentColor;
-
-    &--add {
-      color: green;
-    }
-
-    &--subtract {
-      color: red;
     }
   }
 }

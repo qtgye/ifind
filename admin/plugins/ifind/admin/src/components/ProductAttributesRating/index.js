@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import { useCategoriesListing } from '../../providers/categoriesListingProvider';
 import { useProductAttributes } from '../../providers/productAttributesProvider';
-import IFINDIcon from '../IFINDIcon';
+import RatingWarpsControl from '../RatingWarpsControl';
 import RatingWarps from '../RatingWarps';
 
 import './styles.scss';
@@ -10,9 +10,11 @@ import './styles.scss';
 const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChange }) => {
   const onRatingChange = useCallback((newRating) => {
     if ( typeof onChange === 'function' ) {
+      const rating = Number(Number(newRating).toFixed(3));
+
       onChange({
-        rating: newRating,
-        points: Number(factor) * newRating,
+        rating: rating,
+        points: Number(factor) * rating,
         product_attribute,
       });
     }
@@ -23,7 +25,7 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
       <td>{product_attribute.name}</td>
       <td><strong>{Number(rating.toFixed(2))}</strong></td>
       <td>
-        <RatingWarps
+        <RatingWarpsControl
           rating={rating}
           onChange={newRating => onRatingChange(newRating)} />
       </td>
@@ -37,6 +39,7 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onChange, c
   const { categories } = useCategoriesListing();
   const { productAttributes } = useProductAttributes();
   const [ attrsDetails, setAttrsDetails ] = useState([]);
+  const [ totalRating, setTotalRating ] = useState(1);
 
   const onAttrRatingChange = useCallback((changedAttrRating) => {
     // Updated changed attrDetail
@@ -94,11 +97,37 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onChange, c
     setAttrsDetails([...attrsWithWithRatings]);
   }, [ categories, productAttributes, category, attributesRatings ]);
 
+  // Set total points according to product attributes factors
+  useEffect(() => {
+    if ( attrsDetails.length ) {
+      let totalPoints = 0;
+      let totalRating = 0;
+
+      attrsDetails.forEach((attrDetail) => {
+        totalPoints += Number(attrDetail.factor) * 10;
+        totalRating += attrDetail.points;
+      });
+
+      setTotalRating(Number((10 * totalRating / totalPoints).toFixed(2)));
+    }
+  }, [ attrsDetails ]);
+
+
   return (
     <div className={[
       'product-attributes-rating',
       className
     ].join(' ')}>
+
+      {/* Totals */}
+      <div className="product-attributes-rating__total">
+        <strong>Rating:</strong>
+        <div className="product-attributes-rating__figure">
+          <RatingWarps percentage={100 * totalRating / 10} />
+          <strong className="product-attributes-rating__ratio">{totalRating}/10</strong>
+        </div>
+      </div>
+
       <table className="product-attributes-rating__table">
         <thead>
           <th>Attribute</th>
@@ -107,15 +136,17 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onChange, c
           <th>Factor</th>
           <th>Points</th>
         </thead>
-        {
-          attrsDetails.map(attrRating => (
-            <AttributeRating
-              {...attrRating}
-              key={attrRating.product_attribute.id}
-              onChange={changedRating => onAttrRatingChange(changedRating)}
-              />
-          ))
-        }
+        <tbody>
+          {
+            attrsDetails.map(attrRating => (
+              <AttributeRating
+                {...attrRating}
+                key={attrRating.product_attribute.id}
+                onChange={changedRating => onAttrRatingChange(changedRating)}
+                />
+            ))
+          }
+        </tbody>
       </table>
     </div>
   )
