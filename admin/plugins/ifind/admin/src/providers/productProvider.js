@@ -74,6 +74,7 @@ amazon_url: $amazon_url
 price: $price
 url_list: $url_list
 position: $position
+attrs_rating: $attrs_rating
 `;
 
 export const updateProductMutation = `
@@ -82,6 +83,7 @@ mutation UpdateProduct (
   $id: ID!
   ${productMutationCommonAguments}
   $url_list: [editComponentAtomsUrlWithTypeInput]
+  $attrs_rating: [editComponentAtomsProductAttrRatingInput]
 )
 {
   updateProduct (
@@ -107,6 +109,7 @@ ${productDataFragment}
 mutation CreateProduct (
   ${productMutationCommonAguments}
   $url_list: [ComponentAtomsUrlWithTypeInput]
+  $attrs_rating: [ComponentAtomsProductAttrRatingInput]
 ){
   createProduct (input: {
     data: {

@@ -67,6 +67,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       price,
       detailsHTML,
       region,
+      attrsRating,
     }
   }, [
     id,
@@ -81,6 +82,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     price,
     detailsHTML,
     region,
+    attrsRating,
   ]);
 
   const processFormData = useCallback((formData) => {
@@ -97,6 +99,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       }));
     }
 
+    // Process attrs_rating
+    if ( formData.attrsRating ) {
+      formData.attrs_rating = formData.attrsRating.map(attrRating => ({
+        product_attribute: attrRating.product_attribute.id,
+        points: attrRating.points,
+        rating: attrRating.rating,
+        id: attrRating.id,
+      }));
+    }
+
     // Format Position
     formData.position = Number(formData.position);
 
@@ -107,6 +119,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.detailsHTML;
     delete formData.websiteTab;
     delete formData.urlList;
+    delete formData.attrsRating;
 
     return formData;
   }, []);
@@ -152,10 +165,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         price: urlData?.price,
       })));
 
-      // Format product attributes to match Product Attributes Input
-      // if ( product.attrs_rating ) {
-      //   setAttrsRating()
-      // }
+      // Product attrs
+      if ( product.attrs_rating?.length ) {
+        setAttrsRating(product.attrs_rating);
+      }
 
       // Set meta
       if ( product.created_at ) {
@@ -182,6 +195,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     price,
     detailsHTML,
     region,
+    attrsRating,
   ]);
 
   return (
