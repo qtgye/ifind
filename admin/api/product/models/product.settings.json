@@ -67,6 +67,9 @@
       "type": "component",
       "repeatable": true,
       "component": "atoms.product-attr-rating"
+    },
+    "final_rating": {
+      "type": "decimal"
     }
   }
 }

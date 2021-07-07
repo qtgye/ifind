@@ -41,6 +41,7 @@ fragment ProductDataFragment on Product {
     rating
     points
   }
+  final_rating
   created_at
   updated_at
 }
@@ -63,6 +64,7 @@ $categories: [ID!]!
 $position: Int
 $amazon_url: String!
 $price: Float
+$final_rating: Float
 `;
 
 export const productMutationCommonInput = `
@@ -75,6 +77,7 @@ price: $price
 url_list: $url_list
 position: $position
 attrs_rating: $attrs_rating
+final_rating: $final_rating
 `;
 
 export const updateProductMutation = `

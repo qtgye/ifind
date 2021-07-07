@@ -46,6 +46,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ detailsHTML, setDetailsHTML ] = useState('');
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
   const [ attrsRating, setAttrsRating ] = useState([]);
+  const [ finalRating, setFinalRating ] = useState(0); // Don't pass into ProductAttributesRating
 
   // Meta states
   const [ createdOn, setCreatedOn ] = useState('');
@@ -68,6 +69,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       detailsHTML,
       region,
       attrsRating,
+      finalRating,
     }
   }, [
     id,
@@ -83,6 +85,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     detailsHTML,
     region,
     attrsRating,
+    finalRating,
   ]);
 
   const processFormData = useCallback((formData) => {
@@ -109,6 +112,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       }));
     }
 
+    // Process final_rating
+    if ( formData.finalRating ) {
+      formData.final_rating = formData.finalRating;
+    }
+
     // Format Position
     formData.position = Number(formData.position);
 
@@ -120,6 +128,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.websiteTab;
     delete formData.urlList;
     delete formData.attrsRating;
+    delete formData.finalRating;
 
     return formData;
   }, []);
@@ -140,6 +149,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   const onProductAttrsChange = useCallback((newRatings) => {
     setAttrsRating(newRatings);
+  }, []);
+
+  const onFinalRatingChange = useCallback((newFinalRating) => {
+    setFinalRating(newFinalRating);
   }, []);
 
   useEffect(() => {
@@ -196,6 +209,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     detailsHTML,
     region,
     attrsRating,
+    finalRating,
   ]);
 
   return (
@@ -336,6 +350,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           category={category}
           attributesRatings={attrsRating}
           onChange={onProductAttrsChange}
+          onAttributesChange={onProductAttrsChange}
+          onFinalRatingChange={onFinalRatingChange}
           className="col-md-12"
         />
       </Panel>

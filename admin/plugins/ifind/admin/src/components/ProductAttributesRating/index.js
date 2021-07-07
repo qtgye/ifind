@@ -47,7 +47,7 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
   )
 }
 
-const ProductAttributesRating = ({ category, attributesRatings = [], onChange, className }) => {
+const ProductAttributesRating = ({ category, attributesRatings = [], onAttributesChange, onFinalRatingChange, className }) => {
   const { categories } = useCategoriesListing();
   const { productAttributes } = useProductAttributes();
   const [ attrsDetails, setAttrsDetails ] = useState([]);
@@ -64,10 +64,13 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onChange, c
       attrDetail
     ));
 
-    if ( typeof onChange === 'function' ) {
-      onChange(newAttrDetails);
+    if ( typeof onAttributesChange === 'function' ) {
+      onAttributesChange({
+        totalRating,
+        attributeRatings: newAttrDetails,
+      });
     }
-  }, [ attrsDetails ]);
+  }, [ attrsDetails, totalRating ]);
 
   useEffect(() => {
     // - Get category product attrs
@@ -120,7 +123,12 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onChange, c
         totalRating += attrDetail.points;
       });
 
-      setTotalRating(Number((10 * totalRating / totalPoints).toFixed(2)));
+      const finalRating = Number((10 * totalRating / totalPoints).toFixed(2));
+      setTotalRating(finalRating);
+
+      if ( typeof onFinalRatingChange === 'function' ) {
+        onFinalRatingChange(finalRating);
+      }
     }
   }, [ attrsDetails ]);
 

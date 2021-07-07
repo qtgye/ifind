@@ -44,8 +44,6 @@ const ProductDetail = () => {
   const [ isSaving, setIsSaving ] = useState(false);
 
   const saveProduct = useCallback(() => {
-    console.log({ productFormData });
-
     // Prepare data for graphql request
     const { success, errors } = validateData(productFormData, productValidationRules);
 
