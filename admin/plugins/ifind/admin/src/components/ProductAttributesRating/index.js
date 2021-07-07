@@ -4,6 +4,7 @@ import { useCategoriesListing } from '../../providers/categoriesListingProvider'
 import { useProductAttributes } from '../../providers/productAttributesProvider';
 import RatingWarpsControl from '../RatingWarpsControl';
 import RatingWarps from '../RatingWarps';
+import NumberInput from '../NumberInput';
 
 import './styles.scss';
 
@@ -11,9 +12,12 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
   const onRatingChange = useCallback((newRating) => {
     if ( typeof onChange === 'function' ) {
       const rating = Number(Number(newRating).toFixed(3));
+      const normalizedRating = rating >= 10 ? 10 :
+                               rating <= 0 ? 0 :
+                               rating;
 
       onChange({
-        rating: rating,
+        rating: normalizedRating,
         points: Number(factor) * rating,
         product_attribute,
       });
@@ -23,7 +27,15 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
   return (
     <tr className="attribute-rating">
       <td>{product_attribute.name}</td>
-      <td><strong>{Number(rating.toFixed(2))}</strong></td>
+      <td>
+        <NumberInput
+          className="attribute-rating__input"
+          value={Number(rating.toFixed(2))}
+          onChange={value => onRatingChange(value)}
+          max={10}
+          step={0.2}
+        />
+      </td>
       <td>
         <RatingWarpsControl
           rating={rating}

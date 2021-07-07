@@ -34,4 +34,10 @@ $light-gray: #eee;
       padding: 10px;
     }
   }
+
+  .attribute-rating {
+    &__input {
+      margin-top: 0;
+    }
+  }
 }

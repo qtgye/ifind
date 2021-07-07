@@ -4,7 +4,7 @@ import { Label, InputText } from '@buffetjs/core';
 
 import InputBlock from '../InputBlock';
 
-const NumberInput = ({ label, id, value, name = null, step = 1, disabled = false, error = null, onChange = () => {}, className = '' }) => {
+const NumberInput = ({ label, id, value, name = null, step = 1, disabled = false, error = null, onChange = () => {}, className = '', max = 9999, min = 0 }) => {
   const classNames = [
     className,
     'text-input',
@@ -12,7 +12,7 @@ const NumberInput = ({ label, id, value, name = null, step = 1, disabled = false
 
   return (
     <InputBlock className={classNames} error={error}>
-      <Label htmlFor={id}>{label}</Label>
+      { label ? <Label htmlFor={id}>{label}</Label> : '' }
       <InputText
         type='number'
         step={step}
@@ -21,6 +21,8 @@ const NumberInput = ({ label, id, value, name = null, step = 1, disabled = false
         value={value}
         disabled={disabled}
         onChange={({ target: { value }}) => typeof onChange === 'function' && onChange(value)}
+        max={max}
+        min={min}
       />
     </InputBlock>
   )
