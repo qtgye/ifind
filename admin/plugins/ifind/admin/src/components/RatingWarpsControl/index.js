@@ -4,20 +4,22 @@ import RatingWarps from '../RatingWarps';
 
 import './styles.scss';
 
+const RATING_INCREMENTS = 0.5;
+
 const RatingWarpsControl = ({ rating = 0, onChange }) => {
   const percentage = rating / 10 * 100;
 
   const onSubtract = useCallback((e) => {
     e.preventDefault();
     if ( typeof onChange === 'function' ) {
-      onChange( rating - 0.2 );
+      onChange( rating - RATING_INCREMENTS );
     }
   }, [ rating, onChange ]);
 
   const onAdd = useCallback((e) => {
     e.preventDefault();
     if ( typeof onChange === 'function' ) {
-      onChange( rating + 0.2 );
+      onChange( rating + RATING_INCREMENTS );
     }
   }, [ rating, onChange ]);
 

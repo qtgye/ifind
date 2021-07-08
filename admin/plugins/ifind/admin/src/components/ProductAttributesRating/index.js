@@ -6,6 +6,8 @@ import RatingWarpsControl from '../RatingWarpsControl';
 import RatingWarps from '../RatingWarps';
 import NumberInput from '../NumberInput';
 
+const RATING_INCREMENTS = 0.5;
+
 import './styles.scss';
 
 const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChange }) => {
@@ -33,7 +35,7 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
           value={Number(rating.toFixed(2))}
           onChange={value => onRatingChange(value)}
           max={10}
-          step={0.2}
+          step={RATING_INCREMENTS}
         />
       </td>
       <td>

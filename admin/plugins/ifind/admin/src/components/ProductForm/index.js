@@ -104,7 +104,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
     // Process attrs_rating
     if ( formData.attrsRating ) {
-      console.log('formData.attrsRating', formData.attrsRating);
       formData.attrs_rating = formData.attrsRating.map(attrRating => ({
         product_attribute: attrRating.product_attribute.id,
         points: attrRating.points,
