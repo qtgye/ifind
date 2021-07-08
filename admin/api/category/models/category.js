@@ -23,6 +23,39 @@ const processCategoryData = async data => {
   }
 }
 
+const afterSave = async (data) => {
+  const totalAttrsPoints = data.product_attrs.reduce((sum, attrData) => (
+    sum + (attrData.factor * 10)
+  ), 0);
+
+  // Update ratings for related products
+  Promise.all(data.products.map(async (productData) => {
+    let totalProductPoints = 0;
+
+    const updatedProductAttrs = productData.attrs_rating.map(attrRating => {
+      const matchedAttribute = data.product_attrs.find(({ product_attribute }) => (
+        product_attribute.id === attrRating.product_attribute.id
+      ));
+
+      const newPoints = matchedAttribute.factor * attrRating.rating;
+      totalProductPoints += newPoints;
+
+      return {
+        id: attrRating.id,
+        points: newPoints,
+      };
+    });
+
+    const final_rating = totalProductPoints / totalAttrsPoints * 10;
+
+    // Save product
+    await strapi.query('product').update({ id: productData.id }, {
+      attrs_rating: updatedProductAttrs,
+      final_rating,
+    });
+  }));
+}
+
 module.exports = {
   lifecycles: {
     async beforeCreate(data) {
@@ -34,11 +67,13 @@ module.exports = {
     async afterFindOne(result, params, populate) {
       return await strapi.services.category.prepopulateProductAttributes(result);
     },
-    async afterCreate(result, data) {
-      console.log('afterCreate', {result, data});
+    async afterCreate(result) {
+      // Consider update ratings computations for each related products
+      afterSave(result);
     },
     async afterUpdate(result, params, data) {
-      console.log('afterUpdate', {result, params, data});
+      // Consider update ratings computations for each related products
+      afterSave(result);
     }
   }
 };
