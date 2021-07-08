@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
-import { InputText, InputNumber, Label, Select, Text, Textarea } from '@buffetjs/core';
+import { Button, Label, Select, Text, Textarea } from '@buffetjs/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@buffetjs/styles';
 
 import { useCategoriesListing } from '../../providers/categoriesListingProvider';
 import { useProductAttributes } from '../../providers/productAttributesProvider';
+import { amazonLink } from '../../helpers/url';
 
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
@@ -155,6 +158,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setFinalRating(newFinalRating);
   }, []);
 
+  const generateAmazonLink = useCallback(() => {
+    setAmazonURL(amazonLink(amazonURL));
+  }, [ amazonURL ]);
+
   useEffect(() => {
     if ( product ) {
       setId(product.id);
@@ -251,7 +258,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Amazon URL */}
         <TextInput
-          className="col-md-12"
+          className="col-md-10"
           error={formErrors.amazon_url}
           label='Amazon URL'
           id='amazon-url'
@@ -259,6 +266,19 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           onChange={(value) => setAmazonURL(value)}
           value={amazonURL}
         />
+
+        {/* Generate Amazon link with tag */}
+        <InputBlock className='col-md-2'>
+          <Label>&nbsp;</Label>
+          <Button
+            data-for="amazon-url-tag"
+            data-tip={'Generate Link'}
+            color='secondary'
+            icon={<FontAwesomeIcon icon='link' />}
+            onClick={generateAmazonLink}
+          />
+          <Tooltip id='amazon-url-tag' />
+        </InputBlock>
 
         {/* Position */}
         <NumberInput

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { InputText, InputNumber, Label, Button } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { amazonLink } from '../../helpers/url';
 import InputBlock from '../InputBlock';
 import URLTypeSelect from '../URLTypeSelect';
 
@@ -29,6 +30,11 @@ const ProductURLInputItem = ({ source, region, url, price, onChange, onDelete, s
       onDelete(softId);
     }
   }, [onDelete, softId]);
+
+  const generateLink = useCallback(() => {
+    console.log({ sourceInput });
+    // setUrlInput(amazonLink(urlInput));
+  }, [ urlInput, sourceInput ]);
 
   useEffect(() => {
     if ( typeof onChange === 'function' ) {
@@ -59,16 +65,22 @@ const ProductURLInputItem = ({ source, region, url, price, onChange, onDelete, s
           value={priceInput}
         />
       </InputBlock>
-      <InputBlock className="col-md-6">
+      <InputBlock className="col-md-5">
         <Label>URL</Label>
         <InputText
           onChange={({ target: { value }}) => onURLInput(value)}
           value={urlInput}
         />
       </InputBlock>
-      <InputBlock className="col-md-1">
+      <InputBlock className="col-md-2">
         <Label>&nbsp;</Label>
         <div className="product-url-input__item-controls">
+          <Button
+            className="product-url-input__item-link"
+            color="secondary"
+            icon={<FontAwesomeIcon icon="link" />}
+            onClick={generateLink}
+          ></Button>
           <Button
             className="product-url-input__item-delete"
             color="cancel"
