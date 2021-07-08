@@ -45,62 +45,43 @@ const getProductDetails = async (productURL, language) => {
   ]);
 
   const [
-    title,
     details_html,
     price,
+    title,
     image,
-  ] = await Promise.all([
-    extractTitleFromPage(detailPage, titleSelector),
-    extractDetailHTMLFromPage(detailPage, detailSelector, selectorsToRemove),
-    extractPriceFromPage(pricePage, priceSelector),
-    extractImageFromPage(detailPage, imageSelector),
-  ]);
+  ] = await extractDetailsFromPage(detailPage, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector);
 
   await browser.close();
 
   return {
     details_html,
     price,
+    title,
     image,
-    title
   };
 }
 
-const extractDetailHTMLFromPage = async (page, selector, selectorsToRemove) => (
-  page.$eval(selector, (detail, selectorsToRemove) => {
-    const allSelectorsToRemove = selectorsToRemove.join(',');
+const extractDetailsFromPage = async (page, selector, selectorsToRemove, titleSelector, priceSelector, imageSelector) => (
+  Promise.all([
+    page.$eval(selector, (detail, selectorsToRemove) => {
+      const allSelectorsToRemove = selectorsToRemove.join(',');
+      [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
+        try {
+          element.remove();
+        }
+        catch (err) { /**/ }
+      });
 
-    [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
-      try {
-        element.remove();
-      }
-      catch (err) { /**/ }
-    });
-
-    return detail.outerHTML;
-  }, selectorsToRemove)
+      return detail.outerHTML;
+    }, selectorsToRemove),
+    page.$eval(priceSelector, (priceElement) => {
+      const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
+      return price && price[0] || 0;
+    }),
+    page.$eval(titleSelector, (titleElement) => titleElement && titleElement.textContent.trim()),
+    page.$eval(imageSelector, (imgElement) => imgElement && imgElement.getAttribute('data-old-hires')),
+  ])
 );
-
-const extractPriceFromPage = async (page, selector) => (
-  page.$eval(selector, (priceElement) => {
-    const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
-    return price && price[0] || 0;
-  })
-)
-
-const extractImageFromPage = async (page, selector) => (
-  page.$eval(selector, (imgElement) => {
-    const image = imgElement && imgElement.getAttribute('data-old-hires');
-    return image;
-  })
-);
-
-const extractTitleFromPage = async (page, selector) => (
-  page.$eval(selector, (titleElement) => {
-    const title = titleElement && titleElement.textContent;
-    return title;
-  })
-)
 
 /**
  * Fetches product details using google puppeteer
