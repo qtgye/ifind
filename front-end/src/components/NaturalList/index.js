@@ -1,48 +1,27 @@
 import { useState, useCallback, useEffect } from 'react';
-import { useFetchProductDetail } from '@contexts/productContext';
 import ProductDetails from '@components/ProductDetails';
 import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false }) => {
+const NaturalList = ({ items = [], loading = false, category }) => {
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
-    const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
     }, [setActiveProduct]);
 
-    const onProductDetailUpate = useCallback(() => {
-        if (activeProduct && productDetail) {
-            if (productDetail.id === activeProduct.id) {
-                setActiveProduct({
-                    ...activeProduct,
-                    ...productDetail
-                });
-            }
-        }
-    }, [ productDetail, activeProduct ])
-
     useEffect(() => {
         if (activeProduct) {
             if (activeProduct.details_html) {
                 setDetailsHTML(activeProduct.details_html);
-                setIsDetailsLoading(false);
             }
-            else {
-                setIsDetailsLoading(true);
-            }
+            setIsDetailsLoading(false);
         }
-    }, [activeProduct, refetchProductDetail]);
-
-    useEffect(() => {
-        onProductDetailUpate();
-    }, [productDetail]); // eslint-disable-line react-hooks/exhaustive-deps
-
+    }, [activeProduct]);
 
     return (
         <div className="natural-list">
