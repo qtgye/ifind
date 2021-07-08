@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const { addURLParams } = require('./url');
-const TIMEOUT = 10000;
+const TIMEOUT = 60000;
 
 const startBrowser = async () => {
   return puppeteer.launch({
@@ -38,8 +38,10 @@ const getProductDetails = async (productURL, language) => {
   const titleSelector = '#productTitle';
 
   await Promise.all([
-    detailPage.goto(urlWithLanguage, { timeout: TIMEOUT }).then(() => detailPage.waitForSelector(detailSelector)),
-    pricePage.goto(englishPageURL, { timeout: TIMEOUT }).then(() => pricePage.waitForSelector(priceSelector)),
+    detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
+      .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT })),
+    pricePage.goto(englishPageURL, { timeout: TIMEOUT })
+      .then(() => pricePage.waitForSelector(priceSelector, { timeout: TIMEOUT })),
   ]);
 
   const [
