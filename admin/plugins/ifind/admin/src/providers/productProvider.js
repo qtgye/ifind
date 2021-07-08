@@ -14,6 +14,7 @@ fragment ProductDataFragment on Product {
   website_tab
   amazon_url
   price
+  details_html
   url_list {
     source {
       id

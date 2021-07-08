@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const { addURLParams } = require('./url');
+const TIMEOUT = 10000;
 
 const startBrowser = async () => {
   return puppeteer.launch({
@@ -34,17 +35,20 @@ const getProductDetails = async (productURL, language) => {
   ];
   const priceSelector = '#priceblock_ourprice';
   const imageSelector = '#landingImage[data-old-hires]';
+  const titleSelector = '#productTitle';
 
   await Promise.all([
-    detailPage.goto(urlWithLanguage).then(() => detailPage.waitForSelector(detailSelector)),
-    pricePage.goto(englishPageURL).then(() => pricePage.waitForSelector(priceSelector)),
+    detailPage.goto(urlWithLanguage, { timeout: TIMEOUT }).then(() => detailPage.waitForSelector(detailSelector)),
+    pricePage.goto(englishPageURL, { timeout: TIMEOUT }).then(() => pricePage.waitForSelector(priceSelector)),
   ]);
 
   const [
+    title,
     details_html,
     price,
     image,
   ] = await Promise.all([
+    extractTitleFromPage(detailPage, titleSelector),
     extractDetailHTMLFromPage(detailPage, detailSelector, selectorsToRemove),
     extractPriceFromPage(pricePage, priceSelector),
     extractImageFromPage(detailPage, imageSelector),
@@ -52,16 +56,11 @@ const getProductDetails = async (productURL, language) => {
 
   await browser.close();
 
-  console.log({
-    details_html,
-    price,
-    image
-  });
-
   return {
     details_html,
     price,
     image,
+    title
   };
 }
 
@@ -94,6 +93,13 @@ const extractImageFromPage = async (page, selector) => (
   })
 );
 
+const extractTitleFromPage = async (page, selector) => (
+  page.$eval(selector, (titleElement) => {
+    const title = titleElement && titleElement.textContent;
+    return title;
+  })
+)
+
 /**
  * Fetches product details using google puppeteer
  * @param {ID} productID -  The product data matching Product type
@@ -120,4 +126,5 @@ const fetchProductDetails = async (productID, language = 'en') => {
 
 module.exports = {
   fetchProductDetails,
+  getProductDetails,
 };
