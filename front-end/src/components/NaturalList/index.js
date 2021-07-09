@@ -1,50 +1,61 @@
+// <<<<<<< HEAD
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { useFetchProductDetail } from '@contexts/productContext';
+// import { useFetchProductDetail } from '@contexts/productContext';
+// =======
+// import { useState, useCallback, useEffect } from 'react';
+// >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false, observeItem, id, label }) => {
+// <<<<<<< HEAD
+const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
+    // =======
+    // const NaturalList = ({ items = [], loading = false, category }) => {
+    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
-    const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
+    // <<<<<<< HEAD
+    //     const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
     const { focusedCategory } = useContext(GlobalStateContext);
     const itemRef = useRef();
+    // =======
+    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
     }, [setActiveProduct]);
 
-    const onProductDetailUpate = useCallback(() => {
-        if (activeProduct && productDetail) {
-            if (productDetail.id === activeProduct.id) {
-                setActiveProduct({
-                    ...activeProduct,
-                    ...productDetail
-                });
-            }
-        }
-    }, [productDetail, activeProduct])
+    // <<<<<<< HEAD
+    //     const onProductDetailUpate = useCallback(() => {
+    //         if (activeProduct && productDetail) {
+    //             if (productDetail.id === activeProduct.id) {
+    //                 setActiveProduct({
+    //                     ...activeProduct,
+    //                     ...productDetail
+    //                 });
+    //             }
+    //         }
+    //     }, [productDetail, activeProduct])
 
+    // =======
+    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
     useEffect(() => {
         if (activeProduct) {
             if (activeProduct.details_html) {
                 setDetailsHTML(activeProduct.details_html);
-                setIsDetailsLoading(false);
             }
-            else {
-                setIsDetailsLoading(true);
-            }
+            setIsDetailsLoading(false);
         }
-    }, [activeProduct, refetchProductDetail]);
+    }, [activeProduct]);
 
-    useEffect(() => {
-        onProductDetailUpate();
-    }, [productDetail]); // eslint-disable-line react-hooks/exhaustive-deps
+    // useEffect(() => {
+    //     onProductDetailUpate();
+    // }, [productDetail]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (observeItem && itemRef) {

@@ -62,6 +62,14 @@
     },
     "details_html": {
       "type": "text"
+    },
+    "attrs_rating": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.product-attr-rating"
+    },
+    "final_rating": {
+      "type": "decimal"
     }
   }
 }

@@ -1,5 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
-import { InputText, InputNumber, Label, Select, Text, Textarea } from '@buffetjs/core';
+import { Button, Label, Select, Text, Textarea } from '@buffetjs/core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Tooltip } from '@buffetjs/styles';
+
+import { useCategoriesListing } from '../../providers/categoriesListingProvider';
+import { useProductAttributes } from '../../providers/productAttributesProvider';
+import { amazonLink } from '../../helpers/url';
 
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
@@ -9,6 +15,7 @@ import ProductURLInput from '../ProductURLInput';
 import RegionSelect from '../RegionSelect';
 import TextInput from '../TextInput';
 import NumberInput from '../NumberInput';
+import ProductAttributesRating from '../ProductAttributesRating';
 
 import './styles.scss';
 
@@ -20,13 +27,12 @@ const _websiteTabOptions = [
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
+  const { categories } = useCategoriesListing();
+  const { productAttributes } = useProductAttributes();
 
   // Read-only fields
   const [ id, setId ] = useState(null);
   const [ clicksCount, setClicksCount ] = useState(null);
-
-  // CategorySelect Data
-  const [ source, setSource ] = useState(null);
 
   // Product URL Input Data
   const [ urlList, setUrlList ] = useState([]);
@@ -42,6 +48,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ price, setPrice ] = useState('');
   const [ detailsHTML, setDetailsHTML ] = useState('');
   const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
+  const [ attrsRating, setAttrsRating ] = useState([]);
+  const [ finalRating, setFinalRating ] = useState(0); // Don't pass into ProductAttributesRating
 
   // Meta states
   const [ createdOn, setCreatedOn ] = useState('');
@@ -56,7 +64,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       title,
       category,
       image,
-      source,
       region,
       urlList,
       position,
@@ -64,6 +71,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       price,
       detailsHTML,
       region,
+      attrsRating,
+      finalRating,
     }
   }, [
     id,
@@ -71,7 +80,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     title,
     category,
     image,
-    source,
     region,
     urlList,
     position,
@@ -79,6 +87,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     price,
     detailsHTML,
     region,
+    attrsRating,
+    finalRating,
   ]);
 
   const processFormData = useCallback((formData) => {
@@ -88,13 +98,26 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
 
-    console.log('formData.urlList', formData.urlList);
-
     // Process urlList
     if ( formData.urlList?.length ) {
       formData.url_list = formData.urlList.map(({ source, region, is_base, price, url }) => ({
         source, region, is_base, url, price
       }));
+    }
+
+    // Process attrs_rating
+    if ( formData.attrsRating ) {
+      formData.attrs_rating = formData.attrsRating.map(attrRating => ({
+        product_attribute: attrRating.product_attribute.id,
+        points: attrRating.points,
+        rating: attrRating.rating,
+        id: attrRating.id,
+      }));
+    }
+
+    // Process final_rating
+    if ( formData.finalRating ) {
+      formData.final_rating = formData.finalRating;
     }
 
     // Format Position
@@ -107,6 +130,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.detailsHTML;
     delete formData.websiteTab;
     delete formData.urlList;
+    delete formData.attrsRating;
+    delete formData.finalRating;
 
     return formData;
   }, []);
@@ -114,7 +139,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const onChange = useCallback(() => {
     const formData = collectFormData();
     const processedData = processFormData(formData);
-    console.log({ processedData });
     setProductFormData(processedData);
   }, [ collectFormData, setProductFormData, processFormData ]);
 
@@ -122,9 +146,21 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setCategory(categoryID);
   }, [ setCategory ]);
 
-   const onProductURLsChange = useCallback((newUrlList) => {
+  const onProductURLsChange = useCallback((newUrlList) => {
     setUrlList(newUrlList);
-   }, []);
+  }, []);
+
+  const onProductAttrsChange = useCallback((newRatings) => {
+    setAttrsRating(newRatings);
+  }, []);
+
+  const onFinalRatingChange = useCallback((newFinalRating) => {
+    setFinalRating(newFinalRating);
+  }, []);
+
+  const generateAmazonLink = useCallback(() => {
+    setAmazonURL(amazonLink(amazonURL));
+  }, [ amazonURL ]);
 
   useEffect(() => {
     if ( product ) {
@@ -149,10 +185,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         price: urlData?.price,
       })));
 
-      // Update source and region based on product
-      if ( product.source && product.region ) {
-        setSource(product.source?.id);
-        setRegion(product.region?.id);
+      // Product attrs
+      if ( product.attrs_rating?.length ) {
+        setAttrsRating(product.attrs_rating);
       }
 
       // Set meta
@@ -172,7 +207,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     websiteTab,
     title,
     category,
-    source,
     region,
     image,
     urlList,
@@ -181,6 +215,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     price,
     detailsHTML,
     region,
+    attrsRating,
+    finalRating,
   ]);
 
   return (
@@ -222,7 +258,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Amazon URL */}
         <TextInput
-          className="col-md-12"
+          className="col-md-10"
           error={formErrors.amazon_url}
           label='Amazon URL'
           id='amazon-url'
@@ -230,6 +266,19 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           onChange={(value) => setAmazonURL(value)}
           value={amazonURL}
         />
+
+        {/* Generate Amazon link with tag */}
+        <InputBlock className='col-md-2'>
+          <Label>&nbsp;</Label>
+          <Button
+            data-for="amazon-url-tag"
+            data-tip={'Generate Link'}
+            color='secondary'
+            icon={<FontAwesomeIcon icon='link' />}
+            onClick={generateAmazonLink}
+          />
+          <Tooltip id='amazon-url-tag' />
+        </InputBlock>
 
         {/* Position */}
         <NumberInput
@@ -253,8 +302,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Category */}
         <CategorySelect
-          source={source}
-          region={region}
           category={category}
           onChange={onCategorySelect}
           hasError={formErrors.categories?.length}
@@ -318,10 +365,20 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         />
       </Panel>
 
-      <Panel className="product-form__panel product-form__panel--sidebar">
+      <Panel title='General Product Attributes' className="product-form__panel product-form__panel--gen-prod-attrs">
+        <ProductAttributesRating
+          category={category}
+          attributesRatings={attrsRating}
+          onChange={onProductAttrsChange}
+          onAttributesChange={onProductAttrsChange}
+          onFinalRatingChange={onFinalRatingChange}
+          className="col-md-12"
+        />
+      </Panel>
+
+      <Panel className="product-form__panel product-form__panel--sidebar" title="Image Preview">
         {/* Image Preview */}
         <InputBlock className="col-md-12">
-          <Label>Image Preview</Label>
           <ImagePreview url={image} />
         </InputBlock>
       </Panel>

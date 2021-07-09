@@ -61,8 +61,8 @@ const ProductsList = () => {
 
     return (
       productCategoryData.label?.length
-      ? productCategoryData.label.find(label => label.language.code === 'en')?.label
-        || productCategoryData.label[0].label
+      ? productCategoryData.label.find(label => label?.language?.code === 'en')?.label
+        || productCategoryData.label[0]?.label
       : ''
     );
   }, []);

@@ -41,6 +41,14 @@
      id
      code
    }
+   product_attrs {
+    id
+    product_attribute {
+      id
+      name
+    }
+    factor
+  }
  }`;
  
  const categoryFieldsCompleteFragment = `

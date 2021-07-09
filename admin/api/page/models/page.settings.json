@@ -28,6 +28,11 @@
     },
     "language": {
       "model": "language"
+    },
+    "product_attr_ratings": {
+      "type": "component",
+      "repeatable": true,
+      "component": "atoms.product-attr-rating"
     }
   }
 }

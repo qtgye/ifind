@@ -4,6 +4,7 @@ import { Header } from '@buffetjs/custom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { useProduct, ProductProvider } from '../../providers/productProvider';
+import { ProductAttributesProvider } from '../../providers/productAttributesProvider';
 import { useGlobal } from '../../providers/globalProvider';
 import { validationRules, validateData } from '../../helpers/form';
 import ProductForm from '../../components/ProductForm';
@@ -196,7 +197,9 @@ const ProductDetail = () => {
 };
 
 export default memo(() => (
-  <ProductProvider>
-    <ProductDetail />
-  </ProductProvider>
+  <ProductAttributesProvider>
+    <ProductProvider>
+      <ProductDetail />
+    </ProductProvider>
+  </ProductAttributesProvider>
 ));

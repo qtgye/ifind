@@ -2,6 +2,8 @@ import { useCallback, useState, useEffect } from 'react';
 import pluginId from '../pluginId';
 import { useLocation } from 'react-router-dom';
 
+const TAG = 'ifind01-21';
+
 export const mapSearchParam = () => (
   window.location.search
     .slice(1)
@@ -53,3 +55,8 @@ export const generatePluginLink = (relativeToPlugin = null, _searchParams = fals
 
   return `${adminRoot}/plugins/${pluginId}/${relativeToPlugin.replace(/^\//,'')}${searchParams}`;
 };
+
+export const amazonLink = (originalLink = '') => {
+  const [ baseURL ] = originalLink.split('?');
+  return baseURL + toSearchParams({ tag: TAG });
+}

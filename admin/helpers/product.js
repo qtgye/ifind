@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const { addURLParams } = require('./url');
+const TIMEOUT = 60000;
 
 const startBrowser = async () => {
   return puppeteer.launch({
@@ -34,65 +35,58 @@ const getProductDetails = async (productURL, language) => {
   ];
   const priceSelector = '#priceblock_ourprice';
   const imageSelector = '#landingImage[data-old-hires]';
+  const titleSelector = '#productTitle';
 
-  await Promise.all([
-    detailPage.goto(urlWithLanguage).then(() => detailPage.waitForSelector(detailSelector)),
-    pricePage.goto(englishPageURL).then(() => pricePage.waitForSelector(priceSelector)),
-  ]);
+  await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
+          .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT }));
+
+  console.log('Navigated to specific pages, querying contents...');
 
   const [
     details_html,
-    price,
     image,
-  ] = await Promise.all([
-    extractDetailHTMLFromPage(detailPage, detailSelector, selectorsToRemove),
-    extractPriceFromPage(pricePage, priceSelector),
-    extractImageFromPage(detailPage, imageSelector),
-  ]);
+    title,
+    price,
+  ] = await extractDetailsFromPage(detailPage, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector);
+
+  console.log('Contents queried.');
 
   await browser.close();
-
-  console.log({
-    details_html,
-    price,
-    image
-  });
 
   return {
     details_html,
     price,
+    title,
     image,
   };
 }
 
-const extractDetailHTMLFromPage = async (page, selector, selectorsToRemove) => (
-  page.$eval(selector, (detail, selectorsToRemove) => {
-    const allSelectorsToRemove = selectorsToRemove.join(',');
+const extractDetailsFromPage = async (page, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector) => {
+  const $detail = await page.$(detailSelector);
+  const $image = await page.$(imageSelector);
+  const $title = await page.$(titleSelector);
+  const $price = await page.$(priceSelector);
 
-    [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
-      try {
-        element.remove();
-      }
-      catch (err) { /**/ }
-    });
+  return await Promise.all([
+    $detail.evaluate((detail, selectorsToRemove) => {
+      const allSelectorsToRemove = selectorsToRemove.join(',');
+      [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
+        try {
+          element.remove();
+        }
+        catch (err) { /**/ }
+      });
 
-    return detail.outerHTML;
-  }, selectorsToRemove)
-);
-
-const extractPriceFromPage = async (page, selector) => (
-  page.$eval(selector, (priceElement) => {
-    const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
-    return price && price[0] || 0;
-  })
-)
-
-const extractImageFromPage = async (page, selector) => (
-  page.$eval(selector, (imgElement) => {
-    const image = imgElement && imgElement.getAttribute('data-old-hires');
-    return image;
-  })
-);
+      return detail.outerHTML;
+    }, selectorsToRemove),
+    $image.evaluate((imgElement) => imgElement && imgElement.getAttribute('data-old-hires')),
+    $title.evaluate((titleElement) => titleElement && titleElement.textContent.trim()),
+    $price.evaluate((priceElement) => {
+      const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
+      return price && price[0] || 0;
+    }),
+  ]);
+};
 
 /**
  * Fetches product details using google puppeteer
@@ -120,4 +114,5 @@ const fetchProductDetails = async (productID, language = 'en') => {
 
 module.exports = {
   fetchProductDetails,
+  getProductDetails,
 };

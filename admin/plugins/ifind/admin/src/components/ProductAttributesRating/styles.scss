@@ -1,0 +1,43 @@
+$light-gray: #eee;
+
+.product-attributes-rating {
+  &__total {
+    margin-top: 10px;
+  }
+
+  &__figure {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  &__ratio {
+    margin-left: 20px;
+    font-size: 1.5em;
+  }
+
+  &__table {
+    width: 100%;
+    margin-top: 20px;
+
+    th {
+      background-color: $light-gray;
+      color: gray;
+    }
+
+    td {
+      border-bottom: 1px solid $light-gray;
+    }
+
+    th,
+    td {
+      padding: 10px;
+    }
+  }
+
+  .attribute-rating {
+    &__input {
+      margin-top: 0;
+    }
+  }
+}

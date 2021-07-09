@@ -6,7 +6,7 @@
  */
 
 
-const processCategory = (rawCategory, language = null) => {
+const processCategory = async (rawCategory, language = null) => {
   /**
   Process label
 
@@ -23,7 +23,7 @@ const processCategory = (rawCategory, language = null) => {
     || rawCategory.label[0]
     : '';
 
-  const processedCategory = strapi.services.category.prepopulateProductAttributes(rawCategory);
+  const processedCategory = await strapi.services.category.prepopulateProductAttributes(rawCategory);
 
   return processedCategory;
 };
@@ -50,9 +50,9 @@ module.exports = {
       [category.id]: category,
     }), {});
 
-    matchedCategories.forEach(category => {
+    await Promise.all(matchedCategories.map(async (category) => {
 
-      const processedCategory = processCategory(category, matchedLanguage);
+      const processedCategory = await processCategory(category, matchedLanguage);
 
       // Check if category has existing parent
       if ( processedCategory.parent && processedCategory.parent.id in byId ) {
@@ -67,7 +67,7 @@ module.exports = {
         // Remove non-existing parent prop to avoid confusion
         delete processedCategory.parent;
       }
-    });
+    }));
 
     // Convert categoryTree into array
     const categoryTreeArray = Object.values(categoryTree);

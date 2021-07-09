@@ -14,6 +14,7 @@ fragment ProductDataFragment on Product {
   website_tab
   amazon_url
   price
+  details_html
   url_list {
     source {
       id
@@ -32,6 +33,16 @@ fragment ProductDataFragment on Product {
   region {
     id
   }
+  attrs_rating {
+    id
+    product_attribute {
+      id
+      name
+    }
+    rating
+    points
+  }
+  final_rating
   created_at
   updated_at
 }
@@ -54,6 +65,7 @@ $categories: [ID!]!
 $position: Int
 $amazon_url: String!
 $price: Float
+$final_rating: Float
 `;
 
 export const productMutationCommonInput = `
@@ -65,6 +77,8 @@ amazon_url: $amazon_url
 price: $price
 url_list: $url_list
 position: $position
+attrs_rating: $attrs_rating
+final_rating: $final_rating
 `;
 
 export const updateProductMutation = `
@@ -73,6 +87,7 @@ mutation UpdateProduct (
   $id: ID!
   ${productMutationCommonAguments}
   $url_list: [editComponentAtomsUrlWithTypeInput]
+  $attrs_rating: [editComponentAtomsProductAttrRatingInput]
 )
 {
   updateProduct (
@@ -98,6 +113,7 @@ ${productDataFragment}
 mutation CreateProduct (
   ${productMutationCommonAguments}
   $url_list: [ComponentAtomsUrlWithTypeInput]
+  $attrs_rating: [ComponentAtomsProductAttrRatingInput]
 ){
   createProduct (input: {
     data: {
