@@ -1,4 +1,9 @@
+/**
+ * Use puppeteer to get the HTML contents of a page
+ * Use JSDOM to scrape the HTML for needed data
+ */
 const puppeteer = require('puppeteer');
+const { JSDOM } = require('jsdom');
 const { addURLParams } = require('./url');
 const TIMEOUT = 60000;
 
@@ -21,6 +26,8 @@ const getProductDetails = async (productURL, language) => {
   const browser = await startBrowser();
   const detailPage = await browser.newPage();
 
+  const productSectionSelector = '#dp-container';
+
   const detailSelector = '#centerCol';
   const selectorsToRemove = [
     '#title',
@@ -37,18 +44,34 @@ const getProductDetails = async (productURL, language) => {
   const titleSelector = '#productTitle';
 
   await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-        .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT }));
+        .then(() => detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT }));
 
-  const [
-    details_html,
-    image,
-    title,
-    price,
-  ] = await extractDetailsFromPage(detailPage, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector);
-
-  console.log('Contents queried.');
+  const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
 
   await browser.close();
+  console.log('Page parsed');
+
+  const dom = new JSDOM(detailPageHTML);
+  const titleElement = dom.window.document.querySelector(titleSelector);
+  const priceElement = dom.window.document.querySelector(priceSelector);
+  const imageElement = dom.window.document.querySelector(imageSelector);
+  const detailElement = dom.window.document.querySelector(detailSelector);
+
+  const title = titleElement && titleElement.textContent.trim();
+  let price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
+      price = price && price[0] || 0;
+  const image = imageElement && imageElement.getAttribute('data-old-hires');
+
+  const allSelectorsToRemove = selectorsToRemove.join(',');
+  [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(element => {
+    try {
+      element.remove();
+    }
+    catch (err) { /**/ }
+  });
+  const details_html = detailElement.outerHTML;
+
+  console.log('Contents queried.');
 
   return {
     details_html,

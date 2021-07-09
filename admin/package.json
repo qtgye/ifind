@@ -36,6 +36,7 @@
     "glob": "^7.1.7",
     "ifind-icons": "file:../ifind-icons",
     "immutability-helper": "^3.1.1",
+    "jsdom": "^16.6.0",
     "knex": "0.21.18",
     "memoize-one": "^5.2.1",
     "minimist": "^1.2.5",
