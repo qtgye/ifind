@@ -45,7 +45,7 @@ const processProductData = async (data, id) => {
 
     // Scrape other fields
     (async() => {
-      const productDetails = await getProductDetails(data.amazon_url, 'en');
+      const productDetails = await getProductDetails(data.amazon_url, 'de');
 
       if ( productDetails ) {
         data.title = productDetails.title.trim();

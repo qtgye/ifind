@@ -41,25 +41,32 @@ const getProductDetails = async (productURL, language) => {
   ];
   const priceSelector = '#priceblock_ourprice';
   const imageSelector = '#landingImage[data-old-hires]';
-  const titleSelector = '#productTitle';
+  const titleSelector = '#title';
 
   await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
         .then(() => detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT }));
 
   const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
 
-  await browser.close();
   console.log('Page parsed');
 
   const dom = new JSDOM(detailPageHTML);
   const titleElement = dom.window.document.querySelector(titleSelector);
-  const priceElement = dom.window.document.querySelector(priceSelector);
   const imageElement = dom.window.document.querySelector(imageSelector);
   const detailElement = dom.window.document.querySelector(detailSelector);
 
-  const title = titleElement && titleElement.textContent.trim();
-  let price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
-      price = price && price[0] || 0;
+  // Go to english site for price
+  await detailPage.goto(englishPageURL, { timeout: TIMEOUT })
+        .then(() => detailPage.waitForSelector(priceSelector, { timeout: TIMEOUT }));
+
+  const price = await detailPage.$eval(priceSelector, priceElement => {
+    let price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
+    return price && price[0] || 0;
+  });
+
+  await browser.close();
+
+  const title = titleElement ? titleElement.textContent.trim() : '';
   const image = imageElement && imageElement.getAttribute('data-old-hires');
 
   const allSelectorsToRemove = selectorsToRemove.join(',');
