@@ -12,7 +12,7 @@ const NaturalList = ({ items = [], loading = false, observeItem, id, label }) =>
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
     const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
-    const { focusedIndex } = useContext(GlobalStateContext);
+    const { focusedCategory } = useContext(GlobalStateContext);
     const itemRef = useRef();
 
     const onProductClick = useCallback((product) => {
@@ -54,27 +54,30 @@ const NaturalList = ({ items = [], loading = false, observeItem, id, label }) =>
     }, [observeItem, itemRef]);
 
     useEffect(() => {
-        if (focusedIndex === id && itemRef.current) {
+        if (focusedCategory === id && itemRef.current) {
             const currentScroll = window.pageYOffset;
             const { top } = itemRef.current.getBoundingClientRect();
             const targetScroll = currentScroll + top;
 
             window.scrollTo(0, targetScroll);
+            console.log(label)
         }
-    }, [focusedIndex, id]);
+        // console.log(focusedCategory);
+        // console.log(id);
+    }, [focusedCategory, id]);
 
     return (
         <div className="natural-list">
-            <div className="natural-list__separator">
+            <div className="natural-list__separator" ref={itemRef}>
                 <strong>{label}</strong>
             </div>
             <div className="natural-list__mfd">Q1/2021</div>
             {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
-            <div className="natural-list__content" ref={itemRef}>
+            <div className="natural-list__content" >
                 {!loading && (
                     <ul className="natural-list__grid">
                         <li className="natural-list__item">
-                            {/* CategoryID: {id} */}
+                            CategoryID: {id}
                             {
                                 activeProduct &&
                                 <ProductDetails

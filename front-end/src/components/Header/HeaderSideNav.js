@@ -35,7 +35,6 @@ const HeaderSideNav = ({ withSideNav }) => {
 
     //     window.scrollTo(0, targetScroll);
     // }
-
     return withSideNav ?
         (
             <div className="header-side-nav">
@@ -60,7 +59,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                         </div>
                         ) : (<div>
 
-                            <div className="header-side-nav__label" id="top">
+                            <div className="header-side-nav__label">
 
                                 <label className="label">Scroll with Subcategories</label>
                                 <label className="switch">
@@ -72,7 +71,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                                 </label>
 
                             </div>
-                            <div>
+                            {/* <div>
                                 {categoryTree.map((item, index) => {
                                     // {data.map((item, index) => {
                                     return (
@@ -83,6 +82,10 @@ const HeaderSideNav = ({ withSideNav }) => {
                                     )
                                 })}
 
+                            </div> */}
+
+                            <div>
+                                <HeaderSideNavSubMenu categories={categoryTree} checked={checked} triggerScroll={triggerScroll} />
                             </div>
 
 

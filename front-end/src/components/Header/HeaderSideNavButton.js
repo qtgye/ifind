@@ -15,7 +15,7 @@ const HeaderSideNavButton = () => {
 
 
     useEffect(() => {
-        if (pageYOffset > 7000) {
+        if (pageYOffset === document.body) {
             setIsVisible(false);
         }
         else {
