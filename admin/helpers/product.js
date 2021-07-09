@@ -20,7 +20,6 @@ const getProductDetails = async (productURL, language) => {
 
   const browser = await startBrowser();
   const detailPage = await browser.newPage();
-  const pricePage = await browser.newPage();
 
   const detailSelector = '#centerCol';
   const selectorsToRemove = [
@@ -38,9 +37,7 @@ const getProductDetails = async (productURL, language) => {
   const titleSelector = '#productTitle';
 
   await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-          .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT }));
-
-  console.log('Navigated to specific pages, querying contents...');
+        .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT }));
 
   const [
     details_html,

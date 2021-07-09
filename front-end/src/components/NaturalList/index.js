@@ -33,6 +33,7 @@ const NaturalList = ({ items = [], loading = false, category }) => {
                             {
                                 activeProduct &&
                                 <ProductDetails
+                                    productData={activeProduct}
                                     detailsHTML={detailsHTML}
                                     urlList={activeProduct?.url_list}
                                     title={activeProduct.title}
