@@ -37,19 +37,19 @@ const getProductDetails = async (productURL, language) => {
   const imageSelector = '#landingImage[data-old-hires]';
   const titleSelector = '#productTitle';
 
-  await Promise.all([
-    detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-      .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT })),
-    pricePage.goto(englishPageURL, { timeout: TIMEOUT })
-      .then(() => pricePage.waitForSelector(priceSelector, { timeout: TIMEOUT })),
-  ]);
+  await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
+          .then(() => detailPage.waitForSelector(detailSelector, { timeout: TIMEOUT }));
+
+  console.log('Navigated to specific pages, querying contents...');
 
   const [
     details_html,
-    price,
-    title,
     image,
+    title,
+    price,
   ] = await extractDetailsFromPage(detailPage, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector);
+
+  console.log('Contents queried.');
 
   await browser.close();
 
@@ -61,9 +61,14 @@ const getProductDetails = async (productURL, language) => {
   };
 }
 
-const extractDetailsFromPage = async (page, selector, selectorsToRemove, titleSelector, priceSelector, imageSelector) => (
-  Promise.all([
-    page.$eval(selector, (detail, selectorsToRemove) => {
+const extractDetailsFromPage = async (page, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector) => {
+  const $detail = await page.$(detailSelector);
+  const $image = await page.$(imageSelector);
+  const $title = await page.$(titleSelector);
+  const $price = await page.$(priceSelector);
+
+  return await Promise.all([
+    $detail.evaluate((detail, selectorsToRemove) => {
       const allSelectorsToRemove = selectorsToRemove.join(',');
       [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
         try {
@@ -74,14 +79,14 @@ const extractDetailsFromPage = async (page, selector, selectorsToRemove, titleSe
 
       return detail.outerHTML;
     }, selectorsToRemove),
-    page.$eval(priceSelector, (priceElement) => {
+    $image.evaluate((imgElement) => imgElement && imgElement.getAttribute('data-old-hires')),
+    $title.evaluate((titleElement) => titleElement && titleElement.textContent.trim()),
+    $price.evaluate((priceElement) => {
       const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
       return price && price[0] || 0;
     }),
-    page.$eval(titleSelector, (titleElement) => titleElement && titleElement.textContent.trim()),
-    page.$eval(imageSelector, (imgElement) => imgElement && imgElement.getAttribute('data-old-hires')),
-  ])
-);
+  ]);
+};
 
 /**
  * Fetches product details using google puppeteer
