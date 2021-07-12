@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '../helpers/query';
+import { useAdminUser } from './adminUserProvider';
 
 export const ProductContext = createContext([]);
 
@@ -45,6 +46,10 @@ fragment ProductDataFragment on Product {
   final_rating
   created_at
   updated_at
+  product_changes {
+    state
+    date_time
+  }
 }
 `;
 
@@ -58,6 +63,7 @@ query GetProduct ($id: ID!) {
 `;
 
 export const productMutationCommonAguments = `
+$user: ID!
 $image: String!
 $title: String!
 $website_tab: String!
@@ -97,6 +103,7 @@ mutation UpdateProduct (
       }
       data: {
         ${productMutationCommonInput}
+        updated_by: $user
       }
     }
   )
@@ -118,6 +125,7 @@ mutation CreateProduct (
   createProduct (input: {
     data: {
       ${productMutationCommonInput}
+      created_by: $user
     }
   }) {
     product {
@@ -128,6 +136,7 @@ mutation CreateProduct (
 `
 
 export const ProductProvider = ({ children }) => {
+  const { adminUser } = useAdminUser();
   const { productId } = useParams();
   const [ getProductQuery, setGetProductQuery ] = useState(null);
   const { data: queryData, loading: queryLoading } = useQuery(getProductQuery, { id: productId });
@@ -142,16 +151,24 @@ export const ProductProvider = ({ children }) => {
   const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
+
+  useEffect(() => {
+    console.log({ adminUser });
+  }, [ adminUser ]);
   
   const addProduct = useCallback((data) => {
+    data.user = adminUser?.id;
+
     addOrUpdateProduct(addProductMutation, data);
-  }, []);
+  }, [ adminUser, addProductMutation ]);
   
   const updateProduct = useCallback((data) => {
     if ( data?.id ) {
+      data.user = adminUser?.id;
+
       addOrUpdateProduct(updateProductMutation, data);
     }
-  }, [ updateProductMutation ]);
+  }, [ updateProductMutation, adminUser ]);
   
   useEffect(() => {
       setGetProductQuery(productQuery);

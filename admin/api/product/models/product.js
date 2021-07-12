@@ -59,13 +59,32 @@ const processProductData = async (data, id) => {
   return data;
 };
 
+/**
+ * TODO:
+ * Figure out how to get updatedBy
+ */
+const saveProductChange = async (id, productData, datetime, updatedBy) => {
+  await strapi.query('product-change').create({
+    state: productData,
+    date_time: datetime,
+    product: id,
+  });
+}
+
 module.exports = {
   lifecycles: {
     async beforeCreate(data) {
       await processProductData(data);
     },
     async beforeUpdate(params, data) {
+      console.log('beforeupdate', data);
       await processProductData(data, params.id);
     },
+    async afterCreate(result, data) {
+      await saveProductChange(result.id, data, result.created_at, result.created_by);
+    },
+    async afterUpdate(result, params, data) {
+      await saveProductChange(result.id, data, result.updated_at, result.updated_by);
+    }
   }
 };

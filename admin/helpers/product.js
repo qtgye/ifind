@@ -44,7 +44,7 @@ const getProductDetails = async (productURL, language) => {
   const titleSelector = '#title';
 
   await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-        .then(() => detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT }));
+  await detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT });
 
   const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
 
@@ -56,8 +56,9 @@ const getProductDetails = async (productURL, language) => {
   const detailElement = dom.window.document.querySelector(detailSelector);
 
   // Go to english site for price
+  console.log({ englishPageURL });
   await detailPage.goto(englishPageURL, { timeout: TIMEOUT })
-        .then(() => detailPage.waitForSelector(priceSelector, { timeout: TIMEOUT }));
+  await detailPage.waitForSelector(priceSelector, { timeout: TIMEOUT });
 
   const price = await detailPage.$eval(priceSelector, priceElement => {
     let price = priceElement && priceElement.textContent.match(/[1-9.,]+/);

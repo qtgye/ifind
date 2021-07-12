@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "product_changes",
+  "info": {
+    "name": "Product Change",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "state": {
+      "type": "json"
+    },
+    "admin_user": {
+      "plugin": "admin",
+      "model": "user"
+    },
+    "date_time": {
+      "type": "datetime"
+    },
+    "product": {
+      "model": "product",
+      "via": "product_changes"
+    }
+  }
+}
