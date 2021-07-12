@@ -6,6 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { useGlobalData } from '@contexts/globalDataContext';
 import { useSourceRegion } from '@contexts/sourceRegionContext';
 
+import PriceChangeGraph from '@components/PriceChangeGraph';
+
 import './product-details.scss';
 
 import inlineStyles from './detail-styles';
@@ -50,13 +52,17 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
 
     return (
         <div className="product-details">
-            <ReactShadowRoot>
-                { isLoading && (<h1>Loading...</h1>) }
-                { !isLoading && (
-                    <div className="product-details__content">
-                        <style>{inlineStyles}</style>
-                        <h1 className="product-details__title">{title}</h1>
-                        <div className="product-details__body" dangerouslySetInnerHTML={{ __html: productData.details_html,  }}></div>
+            { isLoading && (<h1>Loading...</h1>) }
+            { !isLoading && (
+                <div className="product-details__content">
+                    <h1 className="product-details__title">{title}</h1>
+                    <div className="product-details__body">
+                        <ReactShadowRoot>
+                            <style>{inlineStyles}</style>
+                            <div dangerouslySetInnerHTML={{ __html: productData.details_html }}></div>
+                        </ReactShadowRoot>
+                    </div>
+                    <div className="product-details__additional">
                         <div className="product-details__links">
                             <ProductURLLink
                                 key={productData.amazon_url}
@@ -77,9 +83,20 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                                 />
                             ))}
                         </div>
+                        {/* Price Change */}
+                        {
+                            productData?.product_changes?.length ?
+                            <PriceChangeGraph
+                                priceChanges={productData.product_changes.map(({ state, date_time }) => ({
+                                    price: state.price,
+                                    date_time,
+                                }))}
+                            />
+                            : null
+                        }
                     </div>
-                )}
-            </ReactShadowRoot>
+                </div>
+            )}
         </div>
     )
 }

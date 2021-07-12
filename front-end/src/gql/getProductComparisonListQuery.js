@@ -1,8 +1,8 @@
 import { gql } from "apollo-boost";
 
 const getProductComparisonList = gql`
-    query ProductComparisonList {
-        productComparisonList(language: "en") {
+query ProductComparisonList {
+    productComparisonList(language: "en") {
         category {
             id
             label {
@@ -17,6 +17,10 @@ const getProductComparisonList = gql`
             price
             image
             details_html
+            product_changes {
+                state
+                date_time
+            }
             url_list {
                 source {
                     id
@@ -35,17 +39,17 @@ const getProductComparisonList = gql`
                 is_base
             }
             categories {
-            label {
-                label
-                language {
+                label {
+                    label
+                    language {
                         id
                         name
                     }
                 }
             }
         }
-        }
     }
+}
 `;
 
 export default getProductComparisonList;
