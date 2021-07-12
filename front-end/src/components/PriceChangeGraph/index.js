@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import './styles.scss';
 
 const PriceChangeGraph = ({ priceChanges }) => {
-    const today = dayjs().valueOf();
     const thirtyDaysBefore = dayjs().subtract(30, 'days').valueOf;
     const defaultChartOptions = {
         title: {
