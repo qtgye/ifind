@@ -1,0 +1,23 @@
+.product-rating {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    &:hover &__tooltip {
+        display: block;
+    }
+
+    &__tooltip {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        padding: 20px 10px;
+        background-color: white;
+        box-shadow: 0 0 3px rgba(0,0,0,.3);
+        display: none;
+    }
+
+    .rating-warps {
+        margin: 0 10px;
+    }
+}

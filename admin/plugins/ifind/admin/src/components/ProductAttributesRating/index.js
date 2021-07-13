@@ -22,6 +22,7 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
         rating: normalizedRating,
         points: Number(factor) * rating,
         product_attribute,
+        factor,
       });
     }
   }, [ onChange ]);
@@ -53,18 +54,19 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
   const { categories } = useCategoriesListing();
   const { productAttributes } = useProductAttributes();
   const [ attrsDetails, setAttrsDetails ] = useState([]);
-  const [ totalRating, setTotalRating ] = useState(1);
+  const [ totalRating, setTotalRating ] = useState(0);
 
   const onAttrRatingChange = useCallback((changedAttrRating) => {
     // Updated changed attrDetail
-    const newAttrDetails = attrsDetails.map(attrDetail => (
-      attrDetail.product_attribute.id === changedAttrRating.product_attribute.id ?
+    const newAttrDetails = attrsDetails.map(attrDetail => {
+      console.log({ attrDetail });
+      return attrDetail.product_attribute.id === changedAttrRating.product_attribute.id ?
       {
         ...attrDetail,
         ...changedAttrRating,
       } : 
       attrDetail
-    ));
+    });
 
     if ( typeof onAttributesChange === 'function' ) {
       onAttributesChange(newAttrDetails);
@@ -99,7 +101,7 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
       // Else, apply defaults
       else {
         delete attrWithFactor.id;
-        attrWithFactor.rating = 1;
+        attrWithFactor.rating = 0;
       }
 
       // Compute points

@@ -17,6 +17,15 @@ query ProductComparisonList {
             price
             image
             details_html
+            final_rating
+            attrs_rating {
+                points
+                product_attribute {
+                    name
+                }
+                rating
+                factor
+            }
             product_changes {
                 state
                 date_time

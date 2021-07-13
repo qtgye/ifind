@@ -7,6 +7,7 @@ import { useGlobalData } from '@contexts/globalDataContext';
 import { useSourceRegion } from '@contexts/sourceRegionContext';
 
 import PriceChangeGraph from '@components/PriceChangeGraph';
+import ProductRating from '@components/ProductRating';
 
 import './product-details.scss';
 
@@ -47,9 +48,6 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
 
     }, [ productData ]);
 
-    console.log({ amazonSource });
-
-
     return (
         <div className="product-details">
             { isLoading && (<h1>Loading...</h1>) }
@@ -83,7 +81,6 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                                 />
                             ))}
                         </div>
-                        {/* Price Change */}
                         {
                             productData?.product_changes?.length ?
                             <PriceChangeGraph
@@ -93,6 +90,14 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                                 }))}
                             />
                             : null
+                        }
+                        {
+                            productData.final_rating ?
+                            <ProductRating
+                                finalRating={productData.final_rating}
+                                attributes={productData.attrs_rating}
+                            />
+                            :null
                         }
                     </div>
                 </div>

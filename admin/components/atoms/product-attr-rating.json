@@ -18,6 +18,9 @@
     },
     "points": {
       "type": "decimal"
+    },
+    "factor": {
+      "type": "decimal"
     }
   }
 }

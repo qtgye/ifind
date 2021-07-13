@@ -43,6 +43,7 @@ const afterSave = async (data) => {
       return {
         id: attrRating.id,
         points: newPoints,
+        factor: matchedAttribute.factor,
       };
     });
 
