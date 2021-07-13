@@ -56,12 +56,11 @@ const getProductDetails = async (productURL, language) => {
   const detailElement = dom.window.document.querySelector(detailSelector);
 
   // Go to english site for price
-  console.log({ englishPageURL });
   await detailPage.goto(englishPageURL, { timeout: TIMEOUT })
   await detailPage.waitForSelector(priceSelector, { timeout: TIMEOUT });
 
   const price = await detailPage.$eval(priceSelector, priceElement => {
-    let price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
+    let price = priceElement && priceElement.textContent.match(/[0-9.,]+/);
     return price && price[0] || 0;
   });
 
@@ -88,33 +87,6 @@ const getProductDetails = async (productURL, language) => {
     image,
   };
 }
-
-const extractDetailsFromPage = async (page, detailSelector, selectorsToRemove, titleSelector, priceSelector, imageSelector) => {
-  const $detail = await page.$(detailSelector);
-  const $image = await page.$(imageSelector);
-  const $title = await page.$(titleSelector);
-  const $price = await page.$(priceSelector);
-
-  return await Promise.all([
-    $detail.evaluate((detail, selectorsToRemove) => {
-      const allSelectorsToRemove = selectorsToRemove.join(',');
-      [...detail.querySelectorAll(allSelectorsToRemove)].forEach(element => {
-        try {
-          element.remove();
-        }
-        catch (err) { /**/ }
-      });
-
-      return detail.outerHTML;
-    }, selectorsToRemove),
-    $image.evaluate((imgElement) => imgElement && imgElement.getAttribute('data-old-hires')),
-    $title.evaluate((titleElement) => titleElement && titleElement.textContent.trim()),
-    $price.evaluate((priceElement) => {
-      const price = priceElement && priceElement.textContent.match(/[1-9.,]+/);
-      return price && price[0] || 0;
-    }),
-  ]);
-};
 
 /**
  * Fetches product details using google puppeteer

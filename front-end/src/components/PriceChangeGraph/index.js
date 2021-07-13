@@ -41,7 +41,6 @@ const PriceChangeGraph = ({ priceChanges }) => {
         },
         tooltip: {
             formatter() {
-                console.log('this', this);
                 return `${dayjs(this.point.x).format('MMM DD')}: <strong>${this.point.y}</strong>`;
             },
             useHTML: true,
@@ -55,8 +54,6 @@ const PriceChangeGraph = ({ priceChanges }) => {
             const min = Math.min(...prices);
             const max = Math.max(...prices);
             const ave = prices.reduce((sum, price) => sum + price, 0) / prices.length;
-
-            console.log({ ave });
 
             defaultChartOptions.yAxis.min = min / 4;
             defaultChartOptions.yAxis.max = max * 1.25;
@@ -85,7 +82,6 @@ const PriceChangeGraph = ({ priceChanges }) => {
             <HighchartsReact
                 highcharts={Highcharts}
                 options={highChartsOptions}
-                callback={chart => console.log({ chart })}
             />
         </div>
     ): null;
