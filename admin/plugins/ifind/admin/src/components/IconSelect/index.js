@@ -32,8 +32,6 @@ const IconSelect = ({ label = 'Icon', value, onChange, id = '' , name = '', clas
     })))
   }, [ iconsList ]);
 
-  console.log({ iconsList });
-
   return (
     <InputBlock className={classNames}>
       <Label htmlFor={id}>{label}</Label>
