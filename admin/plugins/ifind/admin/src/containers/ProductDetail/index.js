@@ -95,6 +95,10 @@ const ProductDetail = () => {
     setIsLoading(loading && productId);
   }, [ loading, productId ]);
 
+  const redirectToAddProduct = useCallback(() => {
+    history.push('/plugins/ifind/products/create');
+  }, []);
+
   useEffect(() => {
     onProductDataUpdate(productData);
   }, [ productData ]);
@@ -182,6 +186,14 @@ const ProductDetail = () => {
                   ? <FontAwesomeIcon icon="spinner" pulse />
                   : <FontAwesomeIcon icon="save" />
                 )
+              },
+              {
+                label: 'Add Product',
+                onClick: redirectToAddProduct,
+                color: 'primary',
+                type: 'button',
+                disabled: !productData?.id,
+                icon: <FontAwesomeIcon icon="plus" />
               },
             ]}
           />

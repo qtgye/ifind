@@ -5,18 +5,21 @@ import { AuthContextProvider } from './authProvider';
 import { CategoriesListingProvider } from './categoriesListingProvider';
 import { SourceRegionProvider } from './sourceRegionProvider';
 import { GlobalContextProvider } from './globalProvider';
+import { AdminUserProvider } from './adminUserProvider';
 
 const Providers = ({ children }) => {
   return (
     <GlobalContextProvider>
       <AuthContextProvider>
-        <SourceRegionProvider>
-          <CategoriesListingProvider>
-            <DragAndDropProvider>
-              {children}
-            </DragAndDropProvider>
-          </CategoriesListingProvider>
-        </SourceRegionProvider>
+        <AdminUserProvider>
+          <SourceRegionProvider>
+            <CategoriesListingProvider>
+              <DragAndDropProvider>
+                {children}
+              </DragAndDropProvider>
+            </CategoriesListingProvider>
+          </SourceRegionProvider>
+        </AdminUserProvider>
       </AuthContextProvider>
     </GlobalContextProvider>
   )

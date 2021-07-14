@@ -21,7 +21,6 @@ export const addURLParams = (url = '', paramsObject) => {
       all[key] = value;
       return all;
     }, {});
-    console.log({ searchParamsObject, paramsObject });
     const newParams = {
       ...searchParamsObject,
       ...paramsObject,

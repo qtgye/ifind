@@ -112,6 +112,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         points: attrRating.points,
         rating: attrRating.rating,
         id: attrRating.id,
+        factor: attrRating.factor,
       }));
     }
 

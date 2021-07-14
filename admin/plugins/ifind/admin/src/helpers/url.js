@@ -57,6 +57,23 @@ export const generatePluginLink = (relativeToPlugin = null, _searchParams = fals
 };
 
 export const amazonLink = (originalLink = '') => {
-  const [ baseURL ] = originalLink.split('?');
-  return baseURL + toSearchParams({ tag: TAG });
+  const [ baseURL, searchParamsString ] = originalLink.split('?');
+  console.log({ searchParamsString });
+
+  const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
+    const [ key, value ] = param.split('=');
+
+    if ( key && value ) {
+      obj[key] = value;
+    }
+
+    return obj;
+  }, {});
+
+  console.log({ searchParamsObj });
+
+  return baseURL + toSearchParams({
+    ...searchParamsObj,
+    tag: TAG
+  });
 }

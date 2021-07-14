@@ -56,10 +56,6 @@
       "component": "atoms.url-with-type",
       "required": false
     },
-    "amazon_url": {
-      "type": "string",
-      "required": true
-    },
     "details_html": {
       "type": "text"
     },
@@ -70,6 +66,14 @@
     },
     "final_rating": {
       "type": "decimal"
+    },
+    "amazon_url": {
+      "type": "text",
+      "required": true
+    },
+    "product_changes": {
+      "via": "product",
+      "collection": "product-change"
     }
   }
 }

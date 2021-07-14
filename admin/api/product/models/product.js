@@ -45,7 +45,7 @@ const processProductData = async (data, id) => {
 
     // Scrape other fields
     (async() => {
-      const productDetails = await getProductDetails(data.amazon_url, 'en');
+      const productDetails = await getProductDetails(data.amazon_url, 'de');
 
       if ( productDetails ) {
         data.title = productDetails.title.trim();
@@ -59,6 +59,18 @@ const processProductData = async (data, id) => {
   return data;
 };
 
+/**
+ * TODO:
+ * Figure out how to get updatedBy
+ */
+const saveProductChange = async (id, productData, datetime, updatedBy) => {
+  await strapi.query('product-change').create({
+    state: productData,
+    date_time: datetime,
+    product: id,
+  });
+}
+
 module.exports = {
   lifecycles: {
     async beforeCreate(data) {
@@ -67,5 +79,11 @@ module.exports = {
     async beforeUpdate(params, data) {
       await processProductData(data, params.id);
     },
+    async afterCreate(result, data) {
+      await saveProductChange(result.id, data, result.created_at, result.created_by);
+    },
+    async afterUpdate(result, params, data) {
+      await saveProductChange(result.id, data, result.updated_at, result.updated_by);
+    }
   }
 };

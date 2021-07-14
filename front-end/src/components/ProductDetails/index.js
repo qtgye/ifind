@@ -4,6 +4,10 @@ import { toAdminURL } from '@utilities/url';
 import { v4 as uuid } from 'uuid';
 
 import { useGlobalData } from '@contexts/globalDataContext';
+import { useSourceRegion } from '@contexts/sourceRegionContext';
+
+import PriceChangeGraph from '@components/PriceChangeGraph';
+import ProductRating from '@components/ProductRating';
 
 import './product-details.scss';
 
@@ -30,51 +34,74 @@ const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
     )
 }
 
-const ProductDetails = ({ detailsHTML, title, urlList = [], isLoading }) => {
-    const [ basePrice, setBasePrice ] = useState(0);
+const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoading }) => {
+    const { sources } = useSourceRegion();
+    const amazonSource = sources.find(source => /amazon/i.test(source.name));
     const [ urlItems, setURLItems ] = useState([]);
 
     useEffect(() => {
-        const baseURLData = urlList.find(({ is_base }) => is_base);
-
-        if ( baseURLData ) {
-            setBasePrice(Number(baseURLData.price));
-        }
-
         // Add keys to urlList
-        setURLItems(urlList.map(urlData => ({
+        setURLItems(productData.url_list?.map(urlData => ({
             ...urlData,
             key: uuid(),
         })))
 
-    }, [ urlList ]);
-
+    }, [ productData ]);
 
     return (
         <div className="product-details">
-            <ReactShadowRoot>
-                { isLoading && (<h1>Loading...</h1>) }
-                { !isLoading && (
-                    <div className="product-details__content">
-                        <style>{inlineStyles}</style>
-                        <h1 className="product-details__title">{title}</h1>
-                        <div className="product-details__body" dangerouslySetInnerHTML={{ __html: detailsHTML }}></div>
+            { isLoading && (<h1>Loading...</h1>) }
+            { !isLoading && (
+                <div className="product-details__content">
+                    <h1 className="product-details__title">{title}</h1>
+                    <div className="product-details__body">
+                        <ReactShadowRoot>
+                            <style>{inlineStyles}</style>
+                            <div dangerouslySetInnerHTML={{ __html: productData.details_html }}></div>
+                        </ReactShadowRoot>
+                    </div>
+                    <div className="product-details__additional">
                         <div className="product-details__links">
+                            <ProductURLLink
+                                key={productData.amazon_url}
+                                url={productData.amazon_url}
+                                logo={amazonSource?.button_logo?.url}
+                                price={productData.price}
+                                isBase={true}
+                                currency={productData.region?.currency?.symbol}
+                            />
                             {urlItems.map(({ key, url, source, price, region, is_base }) => (
                                 <ProductURLLink
                                     key={key}
                                     url={url}
                                     logo={source?.button_logo?.url}
                                     price={price}
-                                    isBase={is_base}
-                                    basePrice={basePrice}
-                                    currency={region?.currency?.symbol}
+                                    basePrice={productData.price}
+                                    currency={productData.region?.currency?.symbol}
                                 />
                             ))}
                         </div>
+                        {
+                            productData?.product_changes?.length ?
+                            <PriceChangeGraph
+                                priceChanges={productData.product_changes.map(({ state, date_time }) => ({
+                                    price: state.price,
+                                    date_time,
+                                }))}
+                            />
+                            : null
+                        }
+                        {
+                            productData.final_rating ?
+                            <ProductRating
+                                finalRating={productData.final_rating}
+                                attributes={productData.attrs_rating}
+                            />
+                            :null
+                        }
                     </div>
-                )}
-            </ReactShadowRoot>
+                </div>
+            )}
         </div>
     )
 }

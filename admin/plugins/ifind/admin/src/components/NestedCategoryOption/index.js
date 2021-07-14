@@ -1,6 +1,10 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
 import { Label, Select, Text } from '@buffetjs/core';
 import InputBlock from '../InputBlock';
+import CustomSelect from '../CustomSelect';
+import IFINDIcon from '../IFINDIcon';
+
+import './styles.scss';
 
 /*
 
@@ -27,9 +31,9 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
     `[${categoryData.id}] ${categoryData.label}`
   ), []);
 
-  const setFinalSelectedCategory = useCallback((categoryData) => {
+  const setFinalSelectedCategory = useCallback((categoryOption) => {
     if ( typeof onChange === 'function' ) {
-      onChange(categoryData?.id);
+      onChange(categoryOption?.value);
     }
   }, [ onChange ]);
 
@@ -39,10 +43,10 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
     }
 
     const [ rootCategory ] = categoryPath;
-    const matchedCategory = categoryOptions.find(({ id }) => id === rootCategory);
+    const matchedCategory = categoryOptions.find(({ value }) => value === rootCategory);
 
     if ( matchedCategory ) {
-      setSelectedCategory(matchedCategory.label);
+      setSelectedCategory(matchedCategory.value);
     }
     else {
       // Clear everything
@@ -58,8 +62,8 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
     }
 
     if ( categoryOptions?.length && categories?.length ) {
-      const matchedCategoryOption = categoryOptions.find(categoryOption => categoryOption.label === selectedCategory);
-      const matchedCategory = matchedCategoryOption && categories.find(({ id }) => matchedCategoryOption.id === id);
+      const matchedCategoryOption = categoryOptions.find(categoryOption => categoryOption.value === selectedCategory);
+      const matchedCategory = matchedCategoryOption && categories.find(({ id }) => matchedCategoryOption.value === id);
 
       if ( !matchedCategory ) {
         setChildren(null);
@@ -78,14 +82,19 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
   }, [ categories, categoryOptions, selectedCategory ]);
 
   useEffect(() => {
-    const processedCategories = categories.map(category => ({
-      label: categoryLabel(category),
-      id: category.id,
-      category
-    }));
+    const processedCategories = categories.map(category => {
+      return {
+        value: category.id,
+        label: (
+          <div className="nested-category-option__option">
+            <IFINDIcon icon={category.icon.replace('_','-')} />
+            {categoryLabel(category)}
+          </div>
+        ),
+      }
+    });
 
     setCategoryOptions([
-      '',
       ...processedCategories
     ]);
   }, [ categories ]);
@@ -103,14 +112,12 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
       <InputBlock className={[ 'col-md-12', hasError ? 'input-block--error': '' ].join(' ')}>
         <Label htmlFor="category">{level > 1 ? 'Subcategory' : 'Category'}</Label>
         {
-          <Select
+          <CustomSelect
             name="category"
             id="category"
-            onChange={({ target: { value } }) => {
-              setSelectedCategory(value);
-            }}
-            options={categoryOptions.map(option => option?.label || '')}
             value={selectedCategory}
+            options={categoryOptions}
+            onChange={(option) => setSelectedCategory(option.value)}
           />
         }
       </InputBlock>
