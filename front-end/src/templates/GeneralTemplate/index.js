@@ -7,7 +7,7 @@ const GeneralTemplate = ({ children }) => {
     // Scroll to top of page on mount
     useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    }, []);
 
     return (
         <>

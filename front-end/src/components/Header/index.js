@@ -14,10 +14,10 @@ import './header.scss';
 const Header = () => {
     const { pathname } = useLocation();
     const { contactInfo } = useGlobalData();
-    const [ isSticky, setIsSticky ] = useState(false);
-    const [ classNames, setClassNames ] = useState('header');
+    const [isSticky, setIsSticky] = useState(false);
+    const [classNames, setClassNames] = useState('header');
 
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path );
+    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
 
     /**
@@ -28,16 +28,16 @@ const Header = () => {
         setIsSticky(!isInterSected);
     }, []);
 
-    // Apply necessary classnames for sticky state
-    useEffect(() => {
-        const updatedClassNames = ['header'];
+    // // Apply necessary classnames for sticky state
+    // useEffect(() => {
+    //     const updatedClassNames = ['header'];
 
-        if ( isSticky ) {
-            updatedClassNames.push('header--sticked');
-        }
+    //     if (isSticky) {
+    //         updatedClassNames.push('header--sticked');
+    //     }
 
-        setClassNames(updatedClassNames.join(' '));
-    }, [ isSticky ]);
+    //     setClassNames(updatedClassNames.join(' '));
+    // }, [isSticky]);
 
     return (
         <header className={classNames}>

@@ -1,14 +1,23 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useContext, useState, useCallback, useEffect, useRef } from 'react';
+import { find } from 'lodash';
+import { useLocation } from 'react-router-dom';
+import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
+import { GlobalStateContext } from '@contexts/globalStateContext';
 import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false, category }) => {
+const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
+
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
+    const { pathname } = useLocation();
+    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const { focusedCategory } = useContext(GlobalStateContext);
+    const itemRef = useRef();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
@@ -23,13 +32,43 @@ const NaturalList = ({ items = [], loading = false, category }) => {
         }
     }, [activeProduct]);
 
+    useEffect(() => {
+        if (observeItem && itemRef) {
+            const unObserve = observeItem(itemRef.current);
+            return unObserve;
+        }
+    }, [observeItem, itemRef]);
+
+    useEffect(() => {
+        if (focusedCategory === id && itemRef.current) {
+            const currentScroll = window.pageYOffset;
+            const { top } = itemRef.current.getBoundingClientRect();
+            const targetScroll = currentScroll + (top - 63);
+
+            window.scrollTo(0, targetScroll);
+            //console.log(label)
+            //console.log(category);
+        }
+        // console.log(focusedCategory);
+        //console.log(category);
+    }, [focusedCategory, id]);
+
     return (
         <div className="natural-list">
-            { loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
-            <div className="natural-list__content">
+            {currentRouteConfig.path === '/' ? null :
+                <>
+                    <div className="natural-list__separator" ref={itemRef} data-category={id}>
+                        <strong>{label}</strong>
+                    </div>
+                    <div className="natural-list__mfd">Q1/2021</div>
+                </>
+            }
+            {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
+            <div className="natural-list__content" >
                 {!loading && (
                     <ul className="natural-list__grid">
                         <li className="natural-list__item">
+                            {/* CategoryID: {id} */}
                             {
                                 activeProduct &&
                                 <ProductDetails

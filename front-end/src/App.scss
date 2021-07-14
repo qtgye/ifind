@@ -3641,3 +3641,24 @@
 /*=============================
 	End Footer CSS
 ===============================*/
+/*=============================
+	Product Comparison CSS
+===============================*/
+.prodcomp-area {
+	margin-left: 280px;
+	margin-top: -6%;
+	background-color: $red;
+	padding: 10px;
+}
+
+.prodcomp-area-list {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: 700px;
+  	margin: 20px;
+	font-size: 50px;
+	font-weight: bold;
+	background-color:$white;
+}
