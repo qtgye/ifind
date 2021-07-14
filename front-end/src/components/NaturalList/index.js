@@ -46,11 +46,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
             const targetScroll = currentScroll + (top - 63);
 
             window.scrollTo(0, targetScroll);
-            //console.log(label)
-            //console.log(category);
         }
-        // console.log(focusedCategory);
-        //console.log(category);
     }, [focusedCategory, id]);
 
     return (
@@ -68,7 +64,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                 {!loading && (
                     <ul className="natural-list__grid">
                         <li className="natural-list__item">
-                            {/* CategoryID: {id} */}
                             {
                                 activeProduct &&
                                 <ProductDetails

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState } from 'react';
+//import { useState } from 'react';
 import { navigationRoutes } from '@config/routes';
 import routes from '@config/routes';
 
@@ -11,15 +11,15 @@ const navigationItems = navigationRoutes.map(path => routes.find(route => route.
 
 const HeaderNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
-    let time = new Date().toLocaleTimeString();
-    const [currentTime, setCurrentTime] = useState(time);
+    // let time = new Date().toLocaleTimeString();
+    // const [currentTime, setCurrentTime] = useState(time);
 
-    const runningTime = () => {
-        time = new Date().toLocaleTimeString();
-        setCurrentTime(time);
-    }
+    // const runningTime = () => {
+    //     currentTime = new Date().toLocaleTimeString();
+    //     setCurrentTime(currentTime);
+    // }
 
-    setInterval(runningTime, 1000);
+    // setInterval(runningTime, 1000);
 
     return (
         <div className="header-nav">

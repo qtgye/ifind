@@ -14,11 +14,11 @@ const HeaderSideNavMenuItem = ({ category, checked, checkChange }) => {
 
     const onItemClick = useCallback((id) => {
         onCategoryClick(id);
-        console.log(id);
-    }, []);
+        //console.log(id);
+    }, [onCategoryClick]);
 
     const onActiveCategory = useCallback((activeCategory) => {
-        if (grandChildren.find((category) => category.id == activeCategory)) {
+        if (grandChildren.find((category) => category.id === activeCategory.toString())) {
             setSubCategories(true);
         }
         else {
@@ -28,8 +28,8 @@ const HeaderSideNavMenuItem = ({ category, checked, checkChange }) => {
 
     useEffect(() => {
         onActiveCategory(activeCategory);
-        console.log(activeCategory, grandChildren);
-    }, [activeCategory])
+        //console.log(activeCategory, grandChildren);
+    }, [activeCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const categoryClick = () => {
         if (!category.children) {
@@ -37,21 +37,9 @@ const HeaderSideNavMenuItem = ({ category, checked, checkChange }) => {
         }
         showSubCategories();
     }
-    // useEffect(() => {
-    //     let handleClick = (event) => {
-    //         if (categoryRef.current && !categoryRef.current.contains(event.target)) {
-    //             setSubCategories(false);
-    //         }
-    //     };
-
-    //     window.addEventListener("click", handleClick);
-    //     return () => {
-    //         window.removeEventListener("click", handleClick);
-    //     }
-    // }, [categoryRef, subCategories, setSubCategories])
 
     return (
-        <div ref={categoryRef} key={category.id} className={["list", activeCategory == category.id ? "active" : ""].join(" ")}>
+        <div ref={categoryRef} key={category.id} className={["list", activeCategory.toString() === category.id ? "active" : ""].join(" ")}>
             <button onClick={categoryClick}>
                 <IfindIcon icon={category.icon} className="header-side-nav__icon" />
                 {category.label.label}
