@@ -59,7 +59,6 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
   const onAttrRatingChange = useCallback((changedAttrRating) => {
     // Updated changed attrDetail
     const newAttrDetails = attrsDetails.map(attrDetail => {
-      console.log({ attrDetail });
       return attrDetail.product_attribute.id === changedAttrRating.product_attribute.id ?
       {
         ...attrDetail,
