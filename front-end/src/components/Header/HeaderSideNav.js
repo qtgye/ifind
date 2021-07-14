@@ -31,7 +31,7 @@ const HeaderSideNav = ({ withSideNav }) => {
 
     useEffect(() => {
         handleScroll();
-    }, []);
+    });
 
     return withSideNav ?
         (
@@ -69,30 +69,6 @@ const HeaderSideNav = ({ withSideNav }) => {
                                 </label>
 
                             </div>
-                            {/* <div>
-                                {categoryTree.map((cat, index) => {
-
-                                    return <HeaderSideNavSubMenu cat={cat} index={index}
-                                        checked={checked} key={index}
-                                        triggerScroll={triggerScroll}
-                                    />
-
-                                })}
-
-                            </div> */}
-
-                            {/* <div>
-                                {categoryTree.map((category) => {
-                                    return (
-                                        <HeaderSideNavSubMenu
-                                            key={category}
-                                            categories={category}
-                                            checked={checked}
-                                            triggerScroll={triggerScroll}
-                                        />
-                                    )
-                                })}
-                            </div> */}
                             <div>
 
                                 <HeaderSideNavSubMenu
