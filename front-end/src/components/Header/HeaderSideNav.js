@@ -1,17 +1,12 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
-
-import { homedata } from '@mocks/components/homesidenav';
-import { data } from '@mocks/components/prodcompsidenav';
-
 import routes from '@config/routes';
 import { useCategoryTree } from '@contexts/categoriesContext';
-// import { GlobalStateContext } from '@contexts/globalStateContext';
+import { homedata } from '@mocks/components/homesidenav';
+import eventBus from '@utilities/EventBus';
 
 import './header-side-nav.scss';
-
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import HeaderSideNavButton from './HeaderSideNavButton';
 
@@ -20,40 +15,43 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const categoryTree = useCategoryTree();
+    const { on } = eventBus;
     const listRef = useRef();
 
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
 
     const triggerScroll = useCallback(() => {
-        listRef.current.scrollTop += listRef.current.offsetHeight / 2;
+        listRef.current.scrollTop += listRef.current.offsetHeight;
     }, [listRef]);
-    // const scroll = () => {
-    //     const currentScroll = window.pageYOffset;
-    //     const { top } = listRef.current.getBoundingClientRect();
-    //     const targetScroll = currentScroll + top;
 
-    //     window.scrollTo(0, targetScroll);
-    // }
+    const handleScroll = useCallback(() => {
+        on('scrollPanelScroll', triggerScroll)
+    }, [on, triggerScroll]);
+
+    useEffect(() => {
+        handleScroll();
+    }, []);
+
     return withSideNav ?
         (
             <div className="header-side-nav">
                 <h3 className="header-side-nav__heading"><i aria-hidden="true"
                     className="fa fa-bars"></i>CATEGORIES</h3>
-                <ul ref={listRef} className="header-side-nav__list">
+                <div ref={listRef} className="header-side-nav__list">
 
                     {currentRouteConfig.path === '/' ?
                         (<div>
                             {homedata.map((item, index) => {
                                 return (
-                                    <li key={index}
+                                    <div key={index}
                                         className={["list", index === 0 ? "active" : ""].join(" ")}
                                     >
-                                        <Link to="#">
+                                        <button>
                                             {item.categoryIcon}
                                             <span>{item.categoryLabel}</span>
-                                        </Link>
-                                    </li>
+                                        </button>
+                                    </div>
                                 )
                             })}
                         </div>
@@ -72,52 +70,46 @@ const HeaderSideNav = ({ withSideNav }) => {
 
                             </div>
                             {/* <div>
-                                {categoryTree.map((item, index) => {
-                                    // {data.map((item, index) => {
-                                    return (
-                                        <HeaderSideNavSubMenu item={item} index={index}
-                                            checked={checked} key={index}
-                                            triggerScroll={triggerScroll}
-                                        />
-                                    )
+                                {categoryTree.map((cat, index) => {
+
+                                    return <HeaderSideNavSubMenu cat={cat} index={index}
+                                        checked={checked} key={index}
+                                        triggerScroll={triggerScroll}
+                                    />
+
                                 })}
 
                             </div> */}
 
+                            {/* <div>
+                                {categoryTree.map((category) => {
+                                    return (
+                                        <HeaderSideNavSubMenu
+                                            key={category}
+                                            categories={category}
+                                            checked={checked}
+                                            triggerScroll={triggerScroll}
+                                        />
+                                    )
+                                })}
+                            </div> */}
                             <div>
-                                <HeaderSideNavSubMenu categories={categoryTree} checked={checked} triggerScroll={triggerScroll} />
+
+                                <HeaderSideNavSubMenu
+                                    id={categoryTree}
+                                    categories={categoryTree}
+                                    checked={checked}
+                                    checkChange={checkChange}
+                                    triggerScroll={triggerScroll}
+                                />
+
                             </div>
-
-
 
                         </div>)
 
                     }
 
-                    {/* {(() => {
-                        switch (currentRouteConfig.path) {
-                            case '/':
-                                return (proddata.map((item, index) => {
-                                    return (
-                                        <li key={index}><a>{item.categoryLabel}</a></li>
-                                    )
-                                }));
-                            case '/productcomparison':
-                                return <HeaderSwitch /> && data.map((item, index) => {
-                                    return (
-                                        <HeaderSideNavSubMenu item={item} key={index} />
-                                    )
-                                });
-
-                            default:
-                                return 'null';
-                        }
-
-                    })
-
-                    } */}
-
-                </ul>
+                </div>
 
                 {
                     currentRouteConfig.path === '/productcomparison' ?

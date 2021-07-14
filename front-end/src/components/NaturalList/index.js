@@ -1,49 +1,28 @@
-// <<<<<<< HEAD
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
-// import { useFetchProductDetail } from '@contexts/productContext';
-// =======
-// import { useState, useCallback, useEffect } from 'react';
-// >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
+import { find } from 'lodash';
+import { useLocation } from 'react-router-dom';
+import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import Item from './item';
 
 import './natural-list.scss';
 
-// <<<<<<< HEAD
 const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
-    // =======
-    // const NaturalList = ({ items = [], loading = false, category }) => {
-    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
+
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
     const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
-    // <<<<<<< HEAD
-    //     const { productDetail, refetchProductDetail } = useFetchProductDetail(activeProduct?.id);
+    const { pathname } = useLocation();
+    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { focusedCategory } = useContext(GlobalStateContext);
     const itemRef = useRef();
-    // =======
-    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
     }, [setActiveProduct]);
 
-    // <<<<<<< HEAD
-    //     const onProductDetailUpate = useCallback(() => {
-    //         if (activeProduct && productDetail) {
-    //             if (productDetail.id === activeProduct.id) {
-    //                 setActiveProduct({
-    //                     ...activeProduct,
-    //                     ...productDetail
-    //                 });
-    //             }
-    //         }
-    //     }, [productDetail, activeProduct])
-
-    // =======
-    // >>>>>>> dd3704312a7e066fbb2cbf3607a66bd3ed0d52d7
     useEffect(() => {
         if (activeProduct) {
             if (activeProduct.details_html) {
@@ -52,10 +31,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
             setIsDetailsLoading(false);
         }
     }, [activeProduct]);
-
-    // useEffect(() => {
-    //     onProductDetailUpate();
-    // }, [productDetail]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (observeItem && itemRef) {
@@ -68,27 +43,32 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         if (focusedCategory === id && itemRef.current) {
             const currentScroll = window.pageYOffset;
             const { top } = itemRef.current.getBoundingClientRect();
-            const targetScroll = currentScroll + top;
+            const targetScroll = currentScroll + (top - 63);
 
             window.scrollTo(0, targetScroll);
-            console.log(label)
+            //console.log(label)
+            //console.log(category);
         }
         // console.log(focusedCategory);
-        // console.log(id);
+        //console.log(category);
     }, [focusedCategory, id]);
 
     return (
         <div className="natural-list">
-            <div className="natural-list__separator" ref={itemRef}>
-                <strong>{label}</strong>
-            </div>
-            <div className="natural-list__mfd">Q1/2021</div>
+            {currentRouteConfig.path === '/' ? null :
+                <>
+                    <div className="natural-list__separator" ref={itemRef} data-category={id}>
+                        <strong>{label}</strong>
+                    </div>
+                    <div className="natural-list__mfd">Q1/2021</div>
+                </>
+            }
             {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
             <div className="natural-list__content" >
                 {!loading && (
                     <ul className="natural-list__grid">
                         <li className="natural-list__item">
-                            CategoryID: {id}
+                            {/* CategoryID: {id} */}
                             {
                                 activeProduct &&
                                 <ProductDetails

@@ -4,7 +4,7 @@ export const GlobalStateContext = createContext({});
 
 export const GlobalStateContextProvider = ({ children }) => {
 
-    const [activeIndex, setActiveIndex] = useState(null);
+    const [activeCategory, setActiveCategory] = useState(null);
     const [focusedCategory, setFocusedCategory] = useState(0);
 
     const onCategoryClick = useCallback((id) => {
@@ -13,8 +13,8 @@ export const GlobalStateContextProvider = ({ children }) => {
 
     return (
         <GlobalStateContext.Provider value={{
-            activeIndex: parseInt(activeIndex, 10),
-            setActiveIndex,
+            activeCategory: parseInt(activeCategory, 10),
+            setActiveCategory,
             focusedCategory,
             onCategoryClick,
         }}>

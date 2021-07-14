@@ -67,7 +67,6 @@
         }
 
         button {
-            
             display: flex;
             flex-wrap: wrap;
             align-content: center;
@@ -81,7 +80,6 @@
             color: black;
             border: none;
             background-color: white;
-            // padding: 15px 20px 15px 15px;
             border-bottom: 1px solid $gray-300;
 
             &:hover {
@@ -89,11 +87,11 @@
                 background-color: #eaeaea;
             }
 
-            &:focus, &.current {
-                color: $red;
-                background-color: #eaeaea;
-                text-decoration: underline;
-            }
+            // &:focus {
+            //     color: $red;
+            //     background-color: #eaeaea;
+            //     text-decoration: underline;
+            // }
 
         }
     }
@@ -106,18 +104,20 @@
 
         &.active {
 
-            a {  
+            button {  
                 color: $red;
                 text-decoration: underline;
                 background-color: #eaeaea;         
             }
-
-            ul a {
-                background-color: white;
-                color: black;
-                text-decoration: none;
-            }
             
+        }
+
+        &.focus {
+            button {  
+                color: $red;
+                text-decoration: underline;
+                background-color: #eaeaea;         
+            }
         }
     }
 

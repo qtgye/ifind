@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
 import { navigationRoutes } from '@config/routes';
 import routes from '@config/routes';
 
@@ -10,6 +11,15 @@ const navigationItems = navigationRoutes.map(path => routes.find(route => route.
 
 const HeaderNav = ({ withSideNav }) => {
     const { pathname } = useLocation();
+    let time = new Date().toLocaleTimeString();
+    const [currentTime, setCurrentTime] = useState(time);
+
+    const runningTime = () => {
+        time = new Date().toLocaleTimeString();
+        setCurrentTime(time);
+    }
+
+    setInterval(runningTime, 1000);
 
     return (
         <div className="header-nav">
@@ -26,6 +36,9 @@ const HeaderNav = ({ withSideNav }) => {
                                 </li>
                             ))}
                         </ul>
+                        {/* <div className="clock">
+                            <span>{time}</span>
+                        </div> */}
                     </div>
                 </div>
             </div>
