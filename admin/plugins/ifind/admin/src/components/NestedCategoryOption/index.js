@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
+import PropTypes from 'prop-types';
 import { Label, Select, Text } from '@buffetjs/core';
 import InputBlock from '../InputBlock';
 import CustomSelect from '../CustomSelect';
@@ -21,65 +22,46 @@ import './styles.scss';
 
 */
 
-const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, level = 1, hasError = false}) => {
+/**
+ * 
+ * @param {bool} param0 props.allowParent - Whether to allow non-grandhildren category
+ */
+const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, level = 1, hasError = false, allowParent }) => {
   const [ id ] = useState(Math.random() * 1000);
   const [ categoryOptions, setCategoryOptions ] = useState([]);
   const [ selectedCategory, setSelectedCategory ] = useState(null);
-  const [ children, setChildren  ] = useState(null);
+  const [ children, setChildren  ] = useState(null); // Array of categories data
 
   const categoryLabel = useCallback((categoryData) => (
     `[${categoryData.id}] ${categoryData.label}`
   ), []);
 
-  const setFinalSelectedCategory = useCallback((categoryOption) => {
+  // setFinalSelectedCategory
+  const onCategorySelect = useCallback(categoryID => {
     if ( typeof onChange === 'function' ) {
-      onChange(categoryOption?.value);
+      onChange(categoryID);
     }
   }, [ onChange ]);
 
-  const checkCategoryPath = useCallback(() => {
-    if ( !categoryPath?.length ) {
-      return;
+  useEffect(() => {
+    const [ _currentCategory ] = categoryPath;
+
+    // Set current category
+    if ( _currentCategory ) {
+      setSelectedCategory(_currentCategory);
     }
 
-    const [ rootCategory ] = categoryPath;
-    const matchedCategory = categoryOptions.find(({ value }) => value === rootCategory);
+    // Set children
+    const matchedCategory = categories.find(({ id }) => _currentCategory === id);
 
-    if ( matchedCategory ) {
-      setSelectedCategory(matchedCategory.value);
+    // Check for children
+    if ( matchedCategory?.children ) {
+      setChildren(Object.values(matchedCategory.children));
     }
     else {
-      // Clear everything
-      setSelectedCategory(null);
       setChildren(null);
     }
-  }, [ categoryPath, categoryOptions ]);
-
-  const onCategorySelect = useCallback(() => {
-    if ( !selectedCategory ) {
-      setFinalSelectedCategory(null);
-      return;
-    }
-
-    if ( categoryOptions?.length && categories?.length ) {
-      const matchedCategoryOption = categoryOptions.find(categoryOption => categoryOption.value === selectedCategory);
-      const matchedCategory = matchedCategoryOption && categories.find(({ id }) => matchedCategoryOption.value === id);
-
-      if ( !matchedCategory ) {
-        setChildren(null);
-        return;
-      }
-
-      if ( matchedCategory.children ) {
-        setChildren(Object.values(matchedCategory.children));
-        setFinalSelectedCategory(null)
-      }
-      else {
-        setChildren(null);
-        setFinalSelectedCategory(matchedCategory);
-      }
-    }
-  }, [ categories, categoryOptions, selectedCategory ]);
+  }, [ categoryPath, categories ]);
 
   useEffect(() => {
     const processedCategories = categories.map(category => {
@@ -99,13 +81,6 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
     ]);
   }, [ categories ]);
 
-  useEffect(() => {
-    checkCategoryPath();
-  }, [ categoryOptions, checkCategoryPath ]);
-
-  useEffect(() => {
-    onCategorySelect();
-  }, [ selectedCategory, onCategorySelect ]);
 
   return (
     <>
@@ -117,7 +92,7 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
             id="category"
             value={selectedCategory}
             options={categoryOptions}
-            onChange={(option) => setSelectedCategory(option.value)}
+            onChange={(option) => onCategorySelect(option.value)}
           />
         }
       </InputBlock>
@@ -129,6 +104,7 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
             level={++level}
             categoryPath={categoryPath.slice(1)}
             hasError={hasError}
+            allowParent={allowParent}
             />
         ))
       }
@@ -136,4 +112,22 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
   )
 };
 
-export default memo(NestedCategoryOption);
+NestedCategoryOption.propTypes = {
+  categories: PropTypes.array, // Category objects
+  categoryPath: PropTypes.arrayOf(PropTypes.number), // Category IDs
+  onChange: PropTypes.func,
+  level: PropTypes.number,
+  hasError: PropTypes.bool,
+  allowParent: PropTypes.bool,
+};
+
+NestedCategoryOption.defaultProps = {
+  categories: [],
+  categoryPath: [],
+  onChange: () => {},
+  level: 1,
+  hasError: false,
+  allowParent: false,
+};
+
+export default NestedCategoryOption;

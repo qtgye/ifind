@@ -6,7 +6,7 @@ const IFINDIcon = ({ icon, className = '' }) => {
       'ifind-icon',
       className
     ].join(' ')}>
-      <use xlinkHref={`#${icon}`} />
+      <use xlinkHref={`#${icon.replace('_', '-')}`} />
     </svg>
   )
 };
