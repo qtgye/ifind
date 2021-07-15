@@ -1,12 +1,10 @@
 .category-form {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: 8fr 4fr;
   grid-gap: 20px;
   width: 100%;
 
   &__panel {
-    &--general {
-      grid-column: auto / span 8;
-    }
+    
   }
 }

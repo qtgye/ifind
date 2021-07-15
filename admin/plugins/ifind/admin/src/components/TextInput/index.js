@@ -4,7 +4,7 @@ import { Label, InputText } from '@buffetjs/core';
 
 import InputBlock from '../InputBlock';
 
-const TextInput = ({ label, id, value, name = null, disabled = false, error = null, onChange = () => {}, className = '' }) => {
+const TextInput = ({ label, id, value = '', name = null, disabled = false, error = null, onChange = () => {}, className = '' }) => {
   const classNames = [
     className,
     'text-input',

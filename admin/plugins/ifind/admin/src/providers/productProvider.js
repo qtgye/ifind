@@ -165,13 +165,17 @@ export const ProductProvider = ({ children }) => {
   const updateProduct = useCallback((data) => {
     if ( data?.id ) {
       data.user = adminUser?.id;
-
       addOrUpdateProduct(updateProductMutation, data);
     }
   }, [ updateProductMutation, adminUser ]);
   
   useEffect(() => {
+    if ( productId ) {
       setGetProductQuery(productQuery);
+    }
+    else {
+      setProductData(null);
+    }
   }, [ productId ]);
   
   useEffect(() => {

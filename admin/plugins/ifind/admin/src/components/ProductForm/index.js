@@ -27,7 +27,6 @@ const _websiteTabOptions = [
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [ websiteTabOptions ] = useState(_websiteTabOptions);
-  const { categories } = useCategoriesListing();
   const { productAttributes } = useProductAttributes();
 
   // Read-only fields
@@ -198,6 +197,26 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       if ( product.updated_at ) {
         setLastModified(product.updated_at);
       }
+
+    // Reset to defaults
+    } else {
+      setId(null);
+      setWebsiteTab('home');
+      setTitle('');
+      setImage('');
+      setCategory(null);
+      setClicksCount(0);
+      setPosition('');
+      setAmazonURL('');
+      setPrice('');
+      setDetailsHTML('');
+      setRegion(null);
+      setProductURLs([]);
+      setAttrsRating([]);
+      setFinalRating(0);
+      // Meta
+      setCreatedOn(null);
+      setLastModified(null);
     }
   }, [ product ]);
 
@@ -253,7 +272,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           className="col-md-4"
           label='Change Date'
           id='change-date'
-          value={lastModified.slice(0, 10)}
+          value={lastModified?.slice(0, 10)}
           disabled
         />
 
