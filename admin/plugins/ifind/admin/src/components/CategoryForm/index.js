@@ -25,7 +25,7 @@ const CategoryForm = ({ category, setProductFormData, formErrors }) => {
 
   return (
     <form className='category-form row'>
-      <Panel title='Category Form' className='category-form__panel category-form__panel--general'>
+      <Panel title='General' className='category-form__panel category-form__panel--general'>
         <IconSelect
           id='icon'
           name='icon'

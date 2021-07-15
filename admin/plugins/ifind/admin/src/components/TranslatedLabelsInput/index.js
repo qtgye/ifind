@@ -1,16 +1,17 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { v4 as uuid } from 'uuid';
 import { Label, Button } from '@buffetjs/core';
+
 import FontAwesomeIcon from '../FontAwesomeIcon';
 
-import InputBlock from '../InputBlock';
-import TextInput from '../TextInput';
+import { useTranslatedInput, TranslatedLabelsInputProvider } from './provider';
 import Item from './item';
 
 import './styles.scss';
 
 const TranslatedLabelsInput = ({ label, labels, onChange, className }) => {
+  const { availableLanguages, setUsedLanguages } = useTranslatedInput();
   const [ labelInputs, setLabelInputs ] = useState([]);
 
   const onItemChange = useCallback((itemData) => {
@@ -43,13 +44,28 @@ const TranslatedLabelsInput = ({ label, labels, onChange, className }) => {
     }
   }, [ labelInputs, onChange ]);
 
+  const deleteItem = useCallback(itemKey => {
+    if ( typeof onChange === 'function' ) {
+      const filteredLabelInputs = labelInputs.filter(({ key }) => key !== itemKey);
+      onChange(filteredLabelInputs);
+    }
+  }, [ labels, labelInputs, onChange ])
+
   useEffect(() => {
     setLabelInputs(labels.map(label => ({
       ...label,
       key: label.key || uuid(),
-    })))
+    })));
+
+    console.log({ labels });
+
+    const usedLanguages = labels
+      .filter(label => label.language)
+      .map(({ language }) => language);
+
+    setUsedLanguages(usedLanguages);
   }, [labels]);
-  
+
   const classNames = [
     'translated-labels-input',
     className
@@ -63,14 +79,20 @@ const TranslatedLabelsInput = ({ label, labels, onChange, className }) => {
           <Item
             {...labelInput}
             itemKey={labelInput.key}
-            onChange={onItemChange} />
+            onChange={onItemChange}
+            deleteItem={deleteItem}
+          />
         ))
       }
-      <Button
-        className='translated-labels-input__add'
-        label='Add Label'
-        icon={<FontAwesomeIcon icon='plus' />}
-        onClick={onAddClick} />
+      {
+        availableLanguages.length ?
+        <Button
+          className='translated-labels-input__add'
+          label='Add Label'
+          icon={<FontAwesomeIcon icon='plus' />}
+          onClick={onAddClick} />
+        : null
+      }
     </div>
   );
 };
@@ -91,4 +113,8 @@ TranslatedLabelsInput.defaultProps = {
   onChange: () => {},
 };
 
-export default TranslatedLabelsInput;
+export default (props) => (
+  <TranslatedLabelsInputProvider>
+    <TranslatedLabelsInput {...props} />
+  </TranslatedLabelsInputProvider>
+);
