@@ -7,7 +7,7 @@ const BasicPage = ({ title, children }) => {
     // Scroll to top of page on mount
     useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    }, []);
 
     return (
         <>
@@ -21,14 +21,14 @@ const BasicPage = ({ title, children }) => {
                                     <div className="shop-section-title" id="1">
                                         <br />
                                         <br />
-                                        <h1>{ title }</h1>
+                                        <h1>{title}</h1>
                                     </div>
 
 
                                 </div>
-                                
+
                                 <div className="content">
-                                    { children }
+                                    {children}
                                 </div>
                             </div>
                         </div>

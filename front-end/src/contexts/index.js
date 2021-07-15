@@ -2,6 +2,7 @@ import { GlobalContextProvider } from './globalDataContext';
 import { RegionContextProvider } from '@contexts/regionContext';
 import { ProductContextProvider } from './productContext';
 import { CategoriesContextProvider } from '@contexts/categoriesContext';
+import { GlobalStateContextProvider } from '@contexts/globalStateContext';
 import { SourceRegionProvider } from '@contexts/sourceRegionContext';
 import { useAuth } from '@contexts/authContext';
 
@@ -10,15 +11,17 @@ export const Providers = ({ children }) => {
 
     return token && (
         <GlobalContextProvider>
-            <SourceRegionProvider>
-                <RegionContextProvider>
-                    <CategoriesContextProvider>
-                        <ProductContextProvider>
-                            {children}
-                        </ProductContextProvider>
-                    </CategoriesContextProvider>
-                </RegionContextProvider>
-            </SourceRegionProvider>
+            <GlobalStateContextProvider>
+                <SourceRegionProvider>
+                    <RegionContextProvider>
+                        <CategoriesContextProvider>
+                            <ProductContextProvider>
+                                {children}
+                            </ProductContextProvider>
+                        </CategoriesContextProvider>
+                    </RegionContextProvider>
+                </SourceRegionProvider>
+            </GlobalStateContextProvider>
         </GlobalContextProvider>
     )
 };

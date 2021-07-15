@@ -70,6 +70,7 @@
     "react-icons": "^4.2.0",
     "react-refresh": "^0.8.3",
     "react-router-dom": "^5.2.0",
+    "react-use": "^17.2.4",
     "react-shadow-root": "^5.0.4",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
