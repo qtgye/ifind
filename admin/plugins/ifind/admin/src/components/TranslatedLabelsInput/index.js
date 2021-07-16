@@ -57,8 +57,6 @@ const TranslatedLabelsInput = ({ label, labels, onChange, className }) => {
       key: label.key || uuid(),
     })));
 
-    console.log({ labels });
-
     const usedLanguages = labels
       .filter(label => label.language)
       .map(({ language }) => language);
