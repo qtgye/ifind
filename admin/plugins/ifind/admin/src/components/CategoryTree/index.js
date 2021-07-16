@@ -15,9 +15,6 @@ import './styles.scss';
 
 const CategoryTree = () => {
   const { setIsLoading } = useGlobal();
-  const { sources, loading: sourcesLoading } = useSourceRegion();
-  const [ sourcesRegions, setSourcesRegions ] = useState([]);
-  const [ currentSourceRegion, setCurrentSourceRegion ] = useState(null); // e.g., "amazon international"
   const [ isSaving, setIsSaving ] = useState(false);
 
   // Original category data

@@ -151,10 +151,6 @@ export const ProductProvider = ({ children }) => {
   const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
-
-  useEffect(() => {
-    console.log({ adminUser });
-  }, [ adminUser ]);
   
   const addProduct = useCallback((data) => {
     data.user = adminUser?.id;
