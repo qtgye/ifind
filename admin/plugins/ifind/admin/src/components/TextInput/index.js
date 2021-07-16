@@ -12,7 +12,9 @@ const TextInput = ({ label, id, value = '', name = null, disabled = false, error
 
   return (
     <InputBlock className={classNames} error={error}>
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        <span dangerouslySetInnerHTML={{ __html: label || '&nbsp;' }} />
+      </Label>
       <InputText
         name={name || id}
         id={id}

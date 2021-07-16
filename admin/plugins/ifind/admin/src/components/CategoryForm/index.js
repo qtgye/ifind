@@ -1,17 +1,32 @@
 import React, { useEffect, useCallback, useState } from 'react';
+import PropTypes from 'prop-types';
 
 import Panel from '../Panel';
 import IconSelect from '../IconSelect';
 import TranslatedLabelsInput from '../TranslatedLabelsInput';
 import CategorySelect from '../CategorySelect';
+import TextInput from '../TextInput';
+
+import { useLanguages } from '../../providers/languageProvider';
 
 import './styles.scss';
 
-const CategoryForm = ({ category, setProductFormData, formErrors }) => {
+const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
+  const languages = useLanguages();
+
   // Form states
   const [ icon, setIcon ] = useState(null);
   const [ translatedLabels, setTranslatedLabels ] = useState([]);
   const [ parent, setParent ] = useState(null);
+  const [ labelPreview , setLabelPreview] = useState('');
+
+  const onChange = useCallback((newData) => {
+    console.log({ newData });
+
+    if ( typeof setCategoryFormData === 'function' ) {
+      setCategoryFormData(newData);
+    }
+  }, []);
 
   const onIconSelect = useCallback((value) => {
     setIcon(value);
@@ -22,8 +37,34 @@ const CategoryForm = ({ category, setProductFormData, formErrors }) => {
   }, []);
 
   const onParentSelect = useCallback((parent) => {
-    console.log({ parent });
+    setParent(parent)
   }, []);
+
+  useEffect(() => {
+    const englishLabel = languages.find(({ code }) => code === 'en');
+
+    // Build label_preview
+    const selectedLabel = translatedLabels.find((label) => (
+      englishLabel ? 
+      englishLabel.id === label.language :
+      label.label
+    ))?.label || translatedLabels.find(({ label }) => label)?.label || '';
+
+    setLabelPreview(selectedLabel);
+
+    onChange({
+      icon,
+      translatedLabels,
+      parent,
+      labelPreview: selectedLabel,
+    })
+  }, [
+    languages,
+    // form data
+    icon,
+    translatedLabels,
+    parent,
+  ]);
 
   useEffect(() => {
     console.log({ category });
@@ -40,6 +81,12 @@ const CategoryForm = ({ category, setProductFormData, formErrors }) => {
           label='Icon'
           onChange={onIconSelect}
         />
+        <TextInput
+          label='Label Preview'
+          className='col-md-6'
+          value={labelPreview}
+          disabled={true}
+        />
         <TranslatedLabelsInput
           className='col-md-12'
           labels={translatedLabels}
@@ -48,7 +95,7 @@ const CategoryForm = ({ category, setProductFormData, formErrors }) => {
       </Panel>
       <Panel title='Parent Category' className="category-form__panel category-form__panel--parent">
         <CategorySelect
-            category={category}
+            category={parent}
             onChange={onParentSelect}
             exclude={category?.id ? [category?.id] : []}
             allowParent={true}
@@ -59,5 +106,10 @@ const CategoryForm = ({ category, setProductFormData, formErrors }) => {
     </form>
   )
 };
+
+CategoryForm.propTypes = {
+  category: PropTypes.object, // categoryData
+  setCategoryFormData: PropTypes.func,
+}
 
 export default CategoryForm;
