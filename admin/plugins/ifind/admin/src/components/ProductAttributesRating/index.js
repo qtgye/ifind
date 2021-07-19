@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import { Toggle } from '@buffetjs/core';
 
 import { useCategoriesListing } from '../../providers/categoriesListingProvider';
 import { useProductAttributes } from '../../providers/productAttributesProvider';
@@ -10,7 +12,27 @@ const RATING_INCREMENTS = 0.5;
 
 import './styles.scss';
 
-const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChange }) => {
+const AttributeRating = ({ product_attribute, factor, rating = 0, points, enabled, onChange }) => {
+  const onItemChange = useCallback((changes) => {
+    if ( typeof onChange === 'function' ) {
+      onChange({
+        product_attribute,
+        factor,
+        rating,
+        points,
+        enabled,
+        ...changes,
+      });
+    }
+  }, [
+    onChange,
+    product_attribute,
+    factor,
+    rating,
+    points,
+    enabled,
+  ]);
+
   const onRatingChange = useCallback((newRating) => {
     if ( typeof onChange === 'function' ) {
       const rating = Number(Number(newRating).toFixed(3));
@@ -18,18 +40,33 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
                                rating <= 0 ? 0 :
                                rating;
 
-      onChange({
+      onItemChange({
         rating: normalizedRating,
         points: Number(factor) * rating,
-        product_attribute,
-        factor,
       });
     }
-  }, [ onChange ]);
+  }, [ onItemChange ]);
+
+  const onEnabledChange = useCallback((isEnabled) => {
+    onItemChange({
+      enabled: isEnabled,
+    });
+  }, [ onItemChange ]);
+
+  const classNames = [
+    'attribute-rating',
+    !enabled ? 'attribute-rating--disabled' : '',
+  ].filter(Boolean).join(' ');
 
   return (
-    <tr className="attribute-rating">
-      <td>{product_attribute.name}</td>
+    <tr className={classNames}>
+      <td>
+        <Toggle
+          onChange={({ target: { value } }) => onEnabledChange(value)}
+          value={enabled}
+        />
+      </td>
+      <td><strong>{product_attribute.name}</strong></td>
       <td>
         <NumberInput
           className="attribute-rating__input"
@@ -48,7 +85,15 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, onChan
       <td>{Number(points.toFixed(2))}</td>
     </tr>
   )
-}
+};
+
+AttributeRating.propTypes = {
+  enabled: PropTypes.bool,
+};
+
+AttributeRating.defaultProps = {
+  enabled: true,
+};
 
 const ProductAttributesRating = ({ category, attributesRatings = [], onAttributesChange, onFinalRatingChange, className }) => {
   const { categories } = useCategoriesListing();
@@ -96,11 +141,13 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
       if ( matchedProductRating ) {
         attrWithFactor.id = matchedProductRating.id;
         attrWithFactor.rating = matchedProductRating.rating;
+        attrWithFactor.enabled = matchedProductRating.enabled;
       }
       // Else, apply defaults
       else {
         delete attrWithFactor.id;
         attrWithFactor.rating = 0;
+        attrWithFactor.enabled = true;
       }
 
       // Compute points
@@ -119,8 +166,10 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
       let totalRating = 0;
 
       attrsDetails.forEach((attrDetail) => {
-        totalPoints += Number(attrDetail.factor) * 10;
-        totalRating += attrDetail.points;
+        if ( attrDetail.enabled ) {
+          totalPoints += Number(attrDetail.factor) * 10;
+          totalRating += attrDetail.points;
+        }
       });
 
       const finalRating = Number((10 * totalRating / totalPoints).toFixed(2));
@@ -150,6 +199,7 @@ const ProductAttributesRating = ({ category, attributesRatings = [], onAttribute
 
       <table className="product-attributes-rating__table">
         <thead>
+          <th></th>
           <th>Attribute</th>
           <th>Rating</th>
           <th></th>

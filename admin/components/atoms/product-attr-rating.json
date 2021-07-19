@@ -21,6 +21,10 @@
     },
     "factor": {
       "type": "decimal"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
     }
   }
 }

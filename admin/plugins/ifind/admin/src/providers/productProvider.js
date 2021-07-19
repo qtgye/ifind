@@ -42,6 +42,7 @@ fragment ProductDataFragment on Product {
     }
     rating
     points
+    enabled
   }
   final_rating
   created_at
