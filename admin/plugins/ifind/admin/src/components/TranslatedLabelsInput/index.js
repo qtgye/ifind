@@ -71,7 +71,7 @@ const TranslatedLabelsInput = ({ label, labels, onChange, className }) => {
 
   return (
     <div className={classNames}>
-      <Label className=''>{label}</Label>
+      <Label className='translated-labels-input__label'>{label}</Label>
       {
         labelInputs.map(labelInput => (
           <Item

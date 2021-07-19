@@ -6,6 +6,7 @@ import IconSelect from '../IconSelect';
 import TranslatedLabelsInput from '../TranslatedLabelsInput';
 import CategorySelect from '../CategorySelect';
 import TextInput from '../TextInput';
+import AttributesFactorInput from '../AttributesFactorInput';
 
 import { useLanguages } from '../../providers/languageProvider';
 
@@ -102,6 +103,9 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
           // hasError
           // emptyMessage
         />
+      </Panel>
+      <Panel title='Attributes Factoring' className="category-form__panel category-form__panel--factoring">
+        <AttributesFactorInput />
       </Panel>
     </form>
   )
