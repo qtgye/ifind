@@ -180,7 +180,7 @@ const ProductDetail = () => {
                 onClick: saveProduct,
                 color: isSaving ? 'cancel' : 'success',
                 type: 'button',
-                disabled: !hasChanges,
+                // disabled: !hasChanges, // Improve logic, some fields are not checked for changes
                 icon: (
                   isSaving
                   ? <FontAwesomeIcon icon="spinner" pulse />
