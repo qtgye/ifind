@@ -73,7 +73,7 @@ module.exports = {
     const categoryTreeArray = Object.values(categoryTree);
 
     // Re-sort root categories
-    // categoryTreeArray.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+    categoryTreeArray.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
 
     return categoryTreeArray;
   },
