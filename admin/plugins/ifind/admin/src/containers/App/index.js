@@ -11,6 +11,7 @@ import { BackHeader, NotFound } from 'strapi-helper-plugin';
 import pluginId from '../../pluginId';
 // Containers
 import Categories from '../Categories';
+import CategoryDetail from '../CategoryDetail';
 import ProductsListing from '../ProductsListing';
 import ProductDetail from '../ProductDetail';
 // Components
@@ -33,6 +34,7 @@ const App = () => {
         <Providers>
           <Switch>
             <Route path={`/plugins/${pluginId}/categories`} component={Categories} exact />
+            <Route path={`/plugins/${pluginId}/categories/create`} component={CategoryDetail} exact />
             <Route path={`/plugins/${pluginId}/products`} component={ProductsListing} exact />
             <Route path={`/plugins/${pluginId}/products/create`} component={ProductDetail} exact />
             <Route path={`/plugins/${pluginId}/products/:productId`} component={ProductDetail} />

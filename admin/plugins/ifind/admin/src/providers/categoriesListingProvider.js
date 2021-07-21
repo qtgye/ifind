@@ -150,10 +150,10 @@
  
          // Determine depth acc. to parent
          let currentDepthCount = 1;
-         let currentParent = category.parent;
-         while ( currentParent.parent ) {
+         let currentParent = byId[category.parent.id];
+         while ( currentParent?.parent ) {
            currentDepthCount++;
-           currentParent = currentParent.parent;
+           currentParent = byId[currentParent.parent.id];
          }
          category.depth = currentDepthCount;
        }

@@ -6,19 +6,22 @@ import { CategoriesListingProvider } from './categoriesListingProvider';
 import { SourceRegionProvider } from './sourceRegionProvider';
 import { GlobalContextProvider } from './globalProvider';
 import { AdminUserProvider } from './adminUserProvider';
+import { LanguageProvider } from './languageProvider';
 
 const Providers = ({ children }) => {
   return (
     <GlobalContextProvider>
       <AuthContextProvider>
         <AdminUserProvider>
-          <SourceRegionProvider>
-            <CategoriesListingProvider>
-              <DragAndDropProvider>
-                {children}
-              </DragAndDropProvider>
-            </CategoriesListingProvider>
-          </SourceRegionProvider>
+          <LanguageProvider>
+            <SourceRegionProvider>
+              <CategoriesListingProvider>
+                <DragAndDropProvider>
+                  {children}
+                </DragAndDropProvider>
+              </CategoriesListingProvider>
+            </SourceRegionProvider>
+          </LanguageProvider>
         </AdminUserProvider>
       </AuthContextProvider>
     </GlobalContextProvider>

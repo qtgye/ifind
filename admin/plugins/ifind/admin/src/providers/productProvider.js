@@ -42,6 +42,7 @@ fragment ProductDataFragment on Product {
     }
     rating
     points
+    enabled
   }
   final_rating
   created_at
@@ -151,10 +152,6 @@ export const ProductProvider = ({ children }) => {
   const [ productData, setProductData ] = useState(null);
   const [ loading, setLoading ] = useState(true);
   const [ error, setError ] = useState(false);
-
-  useEffect(() => {
-    console.log({ adminUser });
-  }, [ adminUser ]);
   
   const addProduct = useCallback((data) => {
     data.user = adminUser?.id;
@@ -165,13 +162,17 @@ export const ProductProvider = ({ children }) => {
   const updateProduct = useCallback((data) => {
     if ( data?.id ) {
       data.user = adminUser?.id;
-
       addOrUpdateProduct(updateProductMutation, data);
     }
   }, [ updateProductMutation, adminUser ]);
   
   useEffect(() => {
+    if ( productId ) {
       setGetProductQuery(productQuery);
+    }
+    else {
+      setProductData(null);
+    }
   }, [ productId ]);
   
   useEffect(() => {

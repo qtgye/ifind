@@ -1,23 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import Sortly from 'react-sortly';
+import { Header } from '@buffetjs/custom';
+
 import {
   useCategoriesListing,
 } from '../../providers/categoriesListingProvider';
-import { useSourceRegion } from '../../helpers/sourceRegion';
 import { useGlobal } from '../../providers/globalProvider';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SaveButton from '../SaveButton';
-import AddCategoryButton from './add-category-button';
+import { addCategoryText, addCategoryDetailURL } from './add-category-button';
 import ItemRenderer from './item-renderer';
 
 import './styles.scss';
 
-const CategoryTree = () => {
+const CategoryTree = (onChange) => {
+  const history = useHistory();
   const { setIsLoading } = useGlobal();
-  const { sources, loading: sourcesLoading } = useSourceRegion();
-  const [ sourcesRegions, setSourcesRegions ] = useState([]);
-  const [ currentSourceRegion, setCurrentSourceRegion ] = useState(null); // e.g., "amazon international"
   const [ isSaving, setIsSaving ] = useState(false);
 
   // Original category data
@@ -165,12 +165,32 @@ const CategoryTree = () => {
     setIsLoading(categoriesLoading);
   }, [ categoriesLoading ]);
 
+  useEffect(() => {
+    if ( typeof onChange === 'function' ) {
+      onChange(changedItems);
+    }
+  }, [ changedItems ]);
+
   return <>
     <div className="row category-tree__header">
-      <div className="category-tree__controls">
-        {changedItems.length ? <SaveButton save={saveChanges} loading={isSaving} /> : null}
-        <AddCategoryButton />
-      </div>
+      <Header
+        title={{ label: 'Categories Management' }}
+        actions={[
+          changedItems.length ? {
+            label: isSaving ? 'Saving' : 'Save',
+            color: isSaving ? 'cancel' : 'success',
+            icon: <FontAwesomeIcon icon={isSaving ? 'spinner' : 'save'} pulse={isSaving} />,
+            onClick: saveChanges,
+          } : null,
+          {
+            label: addCategoryText,
+            onClick: () => history.push(addCategoryDetailURL),
+            color: 'primary',
+            type: 'button',
+            icon: <FontAwesomeIcon icon='plus' />
+          }
+        ].filter(Boolean)}
+      />
     </div>
     <div className="row">
       <div className="category-tree col-md-6">
@@ -186,6 +206,14 @@ const CategoryTree = () => {
       </div>
     </div>
   </>
+};
+
+CategoryTree.PropTypes = {
+  onChange: PropTypes.func,
+};
+
+CategoryTree.defaultProps = {
+  onChange: () => {}
 };
 
 export default CategoryTree;

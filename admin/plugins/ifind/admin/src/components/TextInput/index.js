@@ -4,7 +4,7 @@ import { Label, InputText } from '@buffetjs/core';
 
 import InputBlock from '../InputBlock';
 
-const TextInput = ({ label, id, value, name = null, disabled = false, error = null, onChange = () => {}, className = '' }) => {
+const TextInput = ({ label, id, value = '', name = null, disabled = false, error = null, onChange = () => {}, className = '' }) => {
   const classNames = [
     className,
     'text-input',
@@ -12,7 +12,9 @@ const TextInput = ({ label, id, value, name = null, disabled = false, error = nu
 
   return (
     <InputBlock className={classNames} error={error}>
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        <span dangerouslySetInnerHTML={{ __html: label || '&nbsp;' }} />
+      </Label>
       <InputText
         name={name || id}
         id={id}
