@@ -26,12 +26,22 @@ export const useQuery = (query, variables) => {
         variables: variables || {}
       })
     })
-    .then(res => res.json())
+    .then(res => {
+      if ( res.ok ) {
+        return res.json()
+      }
+      console.warn(`Original Response:`, res);
+      const errorType = res.status < 500 ? 'Request Error' : 'Server Error';
+      throw new Error(`${errorType} (${res.status}): ${res.statusText}`);
+    })
     .then(({ data }) => {
       setError(null);
       setData(data);
     })
-    .catch(error => setError(error));
+    .catch(error => {
+      console.error(error);
+      setError(error.message);
+    });
   }, [ jwt, query, variables ]);
 
   const refetch = useCallback(() => {
@@ -85,7 +95,14 @@ export const useMutation = () => {
           variables: variables || {}
         })
       })
-      .then(res => res.json())
+      .then(res => {
+        if ( res.ok ) {
+          return res.json()
+        }
+        console.warn(`Original Response:`, res);
+        const errorType = res.status < 500 ? 'Request Error' : 'Server Error';
+        throw new Error(`${errorType} (${res.status}): ${res.statusText}`);
+      })
       .then(({ data, errors }) => {
         if ( errors ) {
           setError(errors[0]);
