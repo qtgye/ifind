@@ -27,12 +27,11 @@ export const useQuery = (query, variables) => {
       })
     })
     .then(res => {
-      if ( res.ok ) {
+      if ( res.status < 500 ) {
         return res.json()
       }
       console.warn(`Original Response:`, res);
-      const errorType = res.status < 500 ? 'Request Error' : 'Server Error';
-      throw new Error(`${errorType} (${res.status}): ${res.statusText}`);
+      throw new Error(`Server Error (${res.status}): ${res.statusText}`);
     })
     .then(({ data }) => {
       setError(null);
@@ -96,12 +95,11 @@ export const useMutation = () => {
         })
       })
       .then(res => {
-        if ( res.ok ) {
+        if ( res.status < 500 ) {
           return res.json()
         }
         console.warn(`Original Response:`, res);
-        const errorType = res.status < 500 ? 'Request Error' : 'Server Error';
-        throw new Error(`${errorType} (${res.status}): ${res.statusText}`);
+        throw new Error(`Server Error (${res.status}): ${res.statusText}`);
       })
       .then(({ data, errors }) => {
         if ( errors ) {

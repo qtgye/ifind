@@ -38,7 +38,7 @@ const toSearchParams = (paramsObject = {}) => {
 }
 
 const amazonLink = (originalLink = '') => {
-  const [ baseURL, searchParamsString ] = originalLink.split('?');
+  const [ baseURL, searchParamsString = '' ] = originalLink.split('?');
 
   const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
     const [ key, value ] = param.split('=');
