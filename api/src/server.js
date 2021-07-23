@@ -37,14 +37,14 @@ app.get(config.ebay.marketplaceEndpoint, (req, res) => {
   const hash = createHash('sha256');
   const endpoint = `https://www.ifindilu.com/api${config.ebay.marketplaceEndpoint}`;
   const { verificationToken } = config.ebay;
-  const { challengeCode } = req.query;
+  const { challenge_code } = req.query;
 
-  hash.update(String(challengeCode));
+  hash.update(String(challenge_code));
   hash.update(verificationToken);
   hash.update(endpoint);
 
   console.log('Building challengeResponse for eBay verification...');
-  console.log({ challengeCode, verificationToken, endpoint });
+  console.log({ challenge_code, verificationToken, endpoint });
 
   const responseHash = hash.digest('hex');
   const challengeResponse = new Buffer.from(responseHash).toString();
