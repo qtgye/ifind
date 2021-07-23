@@ -43,8 +43,13 @@ app.get(config.ebay.marketplaceEndpoint, (req, res) => {
   hash.update(verificationToken);
   hash.update(endpoint);
 
+  console.log('Building challengeResponse for eBay verification...');
+  console.log({ challengeCode, verificationToken, endpoint });
+
   const responseHash = hash.digest('hex');
   const challengeResponse = new Buffer.from(responseHash).toString();
+
+  console.log('Generated challengeResponse:', challengeResponse);
 
   res.json({ challengeResponse });
 });
