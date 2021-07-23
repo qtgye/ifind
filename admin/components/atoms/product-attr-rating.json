@@ -21,6 +21,20 @@
     },
     "factor": {
       "type": "decimal"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "use_custom_formula": {
+      "type": "boolean",
+      "default": false
+    },
+    "min": {
+      "type": "string"
+    },
+    "max": {
+      "type": "string"
     }
   }
 }

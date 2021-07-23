@@ -1,6 +1,6 @@
 'use strict';
 
-const { removeURLParams } = appRequire('helpers/url');
+const { removeURLParams, amazonLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
 
 /**
@@ -45,14 +45,22 @@ const processProductData = async (data, id) => {
 
     // Scrape other fields
     (async() => {
-      const productDetails = await getProductDetails(data.amazon_url, 'de');
+      // Using only image and title for checking
+      // For some reason, details_html is not passed on update
+      const scapePriceOnly = data.title && data.image && true;
+      const productDetails = await getProductDetails(data.amazon_url, 'de', scapePriceOnly);
 
       if ( productDetails ) {
-        data.title = productDetails.title.trim();
-        data.details_html = productDetails.details_html.trim();
-        data.price = productDetails.price;
-        data.image = productDetails.image;
+        data.title = productDetails.title ? productDetails.title.trim() : data.title;
+        data.details_html = productDetails.details_html ? productDetails.details_html.trim() : data.details_html;
+        data.price = productDetails.price ? productDetails.price : data.price;
+        data.image = productDetails.image ? productDetails.image : data.image;
       }
+    })(),
+
+    // Add Affiliate links
+    (async() => {
+      data.amazon_url = amazonLink(data.amazon_url);
     })(),
   ]);
 
