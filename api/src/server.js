@@ -35,7 +35,7 @@ app.get(config.ebay.marketplaceEndpoint, (req, res) => {
   // eBay Marketplace Account Deletion/Closure Notifications
   // https://developer.ebay.com/marketplace-account-deletion
   const hash = createHash('sha256');
-  const endpoint = `https://ifindilu.com/api${config.ebay.marketplaceEndpoint}`;
+  const endpoint = `https://www.ifindilu.com/api${config.ebay.marketplaceEndpoint}`;
   const { verificationToken } = config.ebay;
   const { challengeCode } = req.query;
 
