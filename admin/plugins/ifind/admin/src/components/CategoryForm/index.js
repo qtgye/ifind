@@ -41,6 +41,10 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
     setParent(parent)
   }, []);
 
+  const onFactorsChange = useCallback((attributesFactos) => {
+    console.log({ attributesFactors });
+  }, []);
+
   useEffect(() => {
     const englishLabel = languages.find(({ code }) => code === 'en');
 
@@ -105,7 +109,10 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
         />
       </Panel>
       <Panel title='Attributes Factoring' className="category-form__panel category-form__panel--factoring">
-        <AttributesFactorInput />
+        <AttributesFactorInput
+          className='col-md-12'
+          onChange={onFactorsChange}
+        />
       </Panel>
     </form>
   )

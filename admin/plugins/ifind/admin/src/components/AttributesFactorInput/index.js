@@ -4,9 +4,10 @@ import { Label } from '@buffetjs/core';
 import { v4 as uuid } from 'uuid';
 
 import { useProductAttributes } from '../../providers/productAttributesProvider';
+import Item from './item';
 
 const AttributesFactorInput = ({ label, factors, onChange, className }) => {
-  const productAttributes = useProductAttributes();
+  const { productAttributes } = useProductAttributes();
   const [ factorsInputs, setFactorInputs ] = useState([]);
 
   const classNames = [
@@ -14,9 +15,11 @@ const AttributesFactorInput = ({ label, factors, onChange, className }) => {
     className
   ].filter(Boolean).join(' ');
 
-  useEffect(() => {
-    console.log({ productAttributes });
+  const onItemChange = useCallback((changedItemData) => {
+    console.log({ changedItemData });
+  }, []);
 
+  useEffect(() => {
     // Map productAttributes
     // Match category's factorInputs
     const attributesWithFactors = productAttributes.map(productAttribute => {
@@ -39,19 +42,33 @@ const AttributesFactorInput = ({ label, factors, onChange, className }) => {
     setFactorInputs(attributesWithFactors)
   }, [ factors, productAttributes ]);
 
+  useEffect(() => {
+    console.log({ factorsInputs });
+  }, [ factorsInputs ]);
+
   return (
     <div className={classNames}>
-      <Label className='attributes-factor-input__label'>{label}</Label>
-      {/* {
-        factors.map(labelInput => (
-          <Item
-            {...labelInput}
-            itemKey={labelInput.key}
-            onChange={onItemChange}
-            deleteItem={deleteItem}
-          />
-        ))
-      } */}
+      { (label && <Label className='attributes-factor-input__label'>{label}</Label>) || ''}
+      <table className="attributes-factor-input__table">
+        <thead>
+          <th>Attribute</th>
+          <th>Factor</th>
+        </thead>
+        <tbody>
+          {
+            factorsInputs.map(attrWithFactor => (
+              <tr>
+                <td>
+                  {attrWithFactor.label_preview}
+                </td>
+                <td>
+                  {attrWithFactor.factor}
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
     </div>
   )
 };
@@ -64,7 +81,6 @@ AttributesFactorInput.propTypes = {
 };
 
 AttributesFactorInput.defaultProps = {
-  label: 'Attribute Factors',
   factors: [],
   onChange: () => {},
   className: '',

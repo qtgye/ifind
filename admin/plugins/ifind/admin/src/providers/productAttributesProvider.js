@@ -16,7 +16,7 @@ export const ProductAttributesContext = createContext({});
 
 export const ProductAttributesProvider = ({ children }) => {
   const gqlFetch = useGQLFetch();
-  const [ productAttributes, setProductAttributes ] = useState(null);
+  const [ productAttributes, setProductAttributes ] = useState([]);
 
   useEffect(() => {
     gqlFetch(producttAttributesQuery)
