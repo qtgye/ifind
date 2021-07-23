@@ -72,6 +72,11 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
         }, product_attribute.data_type);
       }
 
+      // Round rating to 1 decimal digit
+      if ( newData.rating ) {
+        newData.rating = Number(Number(newData.rating).toFixed(1));
+      }
+
       onChange(newData);
     }
   }, [
@@ -136,7 +141,7 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
       <td>
         <NumberInput
           className="attribute-rating__input"
-          value={Number(rating.toFixed(2))}
+          value={Number(rating)}
           onChange={value => onRatingChange(value)}
           max={10}
           step={RATING_INCREMENTS}
