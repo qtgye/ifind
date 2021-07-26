@@ -54,11 +54,6 @@ jobs:
           npm install && npm run config:import && npm run currencies:import && pm2 restart admin && \
 
           echo "/=============================/" && \
-          echo "/==== PROCESSING API ====/" && \
-          cd ../api && \
-          npm install && npm run build && pm2 restart api && \
-
-          echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd ../front-end && \
           echo "/==== INSTALLING PACKAGES ====/" && \
