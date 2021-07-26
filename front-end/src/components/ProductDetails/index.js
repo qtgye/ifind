@@ -3,9 +3,7 @@ import ReactShadowRoot from 'react-shadow-root';
 import { toAdminURL } from '@utilities/url';
 import { v4 as uuid } from 'uuid';
 
-import { useGlobalData } from '@contexts/globalDataContext';
 import { useSourceRegion } from '@contexts/sourceRegionContext';
-
 import PriceChangeGraph from '@components/PriceChangeGraph';
 import ProductRating from '@components/ProductRating';
 
@@ -15,11 +13,12 @@ import inlineStyles from './detail-styles';
 
 const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
     const percentDifference = 100 * (price - basePrice ) / basePrice;
-    const { withAmazonTags } = useGlobalData();
+
+    console.log({ price });
 
     return  (
         <div className="product-details__link-item">
-            <a href={withAmazonTags(url)} className="product-details__link" target="_blank" rel="noreferrer">
+            <a href={url} className="product-details__link" target="_blank" rel="noreferrer">
                 <img src={toAdminURL(logo)} alt="" className="product-details__link-image" />
             </a>
             <span className="product-details__price">{currency}&nbsp;{price}</span>

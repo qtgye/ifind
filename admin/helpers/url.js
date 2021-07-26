@@ -1,4 +1,5 @@
 const AMAZON_TAG = 'ifind01-21';
+const EBAY_CAMPAIGN_ID = '5338787715';
 
 const addURLParams = (url = '', paramsObject) => {
   const [ baseURL, searchParams = '' ] = url.split('?');
@@ -56,8 +57,18 @@ const amazonLink = (originalLink = '') => {
   });
 }
 
+const ebayLink = (originalLink = '') => {
+  // Remove unnecessary params
+  const [ baseURL ] = originalLink.split('?');
+
+  return baseURL + toSearchParams({
+    campid: EBAY_CAMPAIGN_ID,
+  });
+}
+
 module.exports = {
   addURLParams,
   removeURLParams,
   amazonLink,
+  ebayLink,
 };

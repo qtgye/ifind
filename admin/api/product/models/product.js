@@ -1,6 +1,6 @@
 'use strict';
 
-const { removeURLParams, amazonLink } = appRequire('helpers/url');
+const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
 
 /**
@@ -9,13 +9,20 @@ const { getProductDetails } = appRequire('helpers/product');
  */
 
 const processProductData = async (data, id) => {
+  const ebaySource = await strapi.services.source.findOne({
+    name_contains: 'ebay'
+  });
+
   await Promise.all([
 
-    // Remove unnecessary params in the url
+    // Add necessary params in the url
     (() => {
       if ( data && data.url_list && data.url_list.length ) {
         data.url_list = data.url_list.map(urlData => {
-          urlData.url = removeURLParams(urlData.url);
+          if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
+            urlData.url = ebayLink(urlData.url);
+          }
+
           return urlData;
         });
       }
