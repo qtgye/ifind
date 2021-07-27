@@ -14,9 +14,7 @@ import inlineStyles from './detail-styles';
 const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
     const percentDifference = 100 * (price - basePrice ) / basePrice;
 
-    console.log({ price });
-
-    return  (
+    return (
         <div className="product-details__link-item">
             <a href={url} className="product-details__link" target="_blank" rel="noreferrer">
                 <img src={toAdminURL(logo)} alt="" className="product-details__link-image" />
@@ -24,7 +22,7 @@ const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
             <span className="product-details__price">{currency}&nbsp;{price}</span>
             {
                 !isBase && (
-                    <span className={[ 'product-details__diff', percentDifference < 0 ? 'product-details__diff--lower' : 'product-details__diff--higher' ].join(' ')}>
+                    <span className={['product-details__diff', percentDifference < 0 ? 'product-details__diff--lower' : 'product-details__diff--higher'].join(' ')}>
                         {percentDifference.toFixed(2)}%
                     </span>
                 )
@@ -36,7 +34,8 @@ const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
 const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoading }) => {
     const { sources } = useSourceRegion();
     const amazonSource = sources.find(source => /amazon/i.test(source.name));
-    const [ urlItems, setURLItems ] = useState([]);
+    const [urlItems, setURLItems] = useState([]);
+    // const icon = '/images/loading.png';
 
     useEffect(() => {
         // Add keys to urlList
@@ -45,12 +44,22 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
             key: uuid(),
         })))
 
-    }, [ productData ]);
+    }, [productData]);
+
+    // useEffect(() => {
+    //     if (!isLoading) {
+    //         isLoading = true;
+    //     }
+    //     setTimeout(() => {
+    //         isLoading = false;
+    //     }, 8000);
+    // }, [isLoading])
 
     return (
         <div className="product-details">
-            { isLoading && (<h1>Loading...</h1>) }
-            { !isLoading && (
+            {isLoading && (<h1>Loading...</h1>)}
+            {/* {isLoading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>} */}
+            {!isLoading && (
                 <div className="product-details__content">
                     <h1 className="product-details__title">{title}</h1>
                     <div className="product-details__body">
@@ -82,21 +91,21 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                         </div>
                         {
                             productData?.product_changes?.length ?
-                            <PriceChangeGraph
-                                priceChanges={productData.product_changes.map(({ state, date_time }) => ({
-                                    price: state.price,
-                                    date_time,
-                                }))}
-                            />
-                            : null
+                                <PriceChangeGraph
+                                    priceChanges={productData.product_changes.map(({ state, date_time }) => ({
+                                        price: state.price,
+                                        date_time,
+                                    }))}
+                                />
+                                : null
                         }
                         {
                             productData.final_rating ?
-                            <ProductRating
-                                finalRating={productData.final_rating}
-                                attributes={productData.attrs_rating}
-                            />
-                            :null
+                                <ProductRating
+                                    finalRating={productData.final_rating}
+                                    attributes={productData.attrs_rating}
+                                />
+                                : null
                         }
                     </div>
                 </div>
