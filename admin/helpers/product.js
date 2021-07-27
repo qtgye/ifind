@@ -78,7 +78,7 @@ const getProductDetails = async (productURL, language, scrapePriceOnly = false) 
 
   scrapedData.price = await detailPage.$eval(priceSelector, priceElement => {
     let price = priceElement && priceElement.textContent.match(/[0-9.,]+/);
-    return price && price[0] || 0;
+    return price && price[0].replace(',', '') || 0;
   });
 
   await browser.close();

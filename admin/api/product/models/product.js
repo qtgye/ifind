@@ -63,6 +63,11 @@ const processProductData = async (data, id) => {
         data.price = productDetails.price ? productDetails.price : data.price;
         data.image = productDetails.image ? productDetails.image : data.image;
       }
+
+      console.log(`Scraped product data:`, {
+        ...data,
+        details_html: data.details_html ? data.details_html.substr(0, 20) : '',
+      });
     })(),
 
     // Add Affiliate links
