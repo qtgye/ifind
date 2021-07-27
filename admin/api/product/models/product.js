@@ -55,19 +55,15 @@ const processProductData = async (data, id) => {
       // Using only image and title for checking
       // For some reason, details_html is not passed on update
       const scapePriceOnly = data.title && data.image && true;
-      const productDetails = await getProductDetails(data.amazon_url, 'de', scapePriceOnly);
+      const productDetails = await getProductDetails(data, 'de', scapePriceOnly);
 
       if ( productDetails ) {
         data.title = productDetails.title ? productDetails.title.trim() : data.title;
         data.details_html = productDetails.details_html ? productDetails.details_html.trim() : data.details_html;
         data.price = productDetails.price ? productDetails.price : data.price;
         data.image = productDetails.image ? productDetails.image : data.image;
+        data.url_list = productDetails.url_list ? productDetails.url_list : data.url_list;
       }
-
-      console.log(`Scraped product data:`, {
-        ...data,
-        details_html: data.details_html ? data.details_html.substr(0, 20) : '',
-      });
     })(),
 
     // Add Affiliate links
