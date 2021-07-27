@@ -7,7 +7,8 @@ import NaturalList from '@components/NaturalList';
 
 
 const ProductComparison = () => {
-  const { productComparisonList } = useProductComparison();
+  const { productComparisonList, loading } = useProductComparison();
+  const icon = '/images/loading.png';
   // const [isLoading, setIsLoading] = useState(true);
 
   const { setActiveCategory } = useContext(GlobalStateContext);
@@ -48,8 +49,9 @@ const ProductComparison = () => {
     <GeneralTemplate>
       <div className="product-comparison">
         <div className="container" style={{ paddingLeft: '280px' }}>
+          {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
           <div className="product-comparison__list">
-            {
+            {!loading &&
               productComparisonList.map(({ category, products }) => (
                 <NaturalList
                   key={category.id}

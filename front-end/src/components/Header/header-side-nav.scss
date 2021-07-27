@@ -124,6 +124,7 @@
     .num-of-elements {
         align-items: right;
         text-align: center;
+        margin-right: 5px;
         margin-left: auto;
         font-size: 10px;
         font-weight: bold;
@@ -131,8 +132,8 @@
         line-height: 16px;
         width: 20px;
         color: $white;
-        background-color: $red;
-        border: 2px solid $red;
+        background-color: $gray-500;
+        border: 2px solid $gray-500;
         border-radius: 10px;
     }
 

@@ -7,10 +7,10 @@ import getProductComparisonListQuery from '@gql/getProductComparisonListQuery';
 export const ProductComparisonContext = createContext({});
 
 export const ProductComparisonContextProvider = ({ children }) => {
-    const [ productComparisonList, setProductComparisonList ] = useState([]);
+    const [productComparisonList, setProductComparisonList] = useState([]);
     const {
         data,
-        // loading,
+        loading,
         // error,
         // refetch
     } = useQuery(getProductComparisonListQuery, {
@@ -21,13 +21,13 @@ export const ProductComparisonContextProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        if ( data?.productComparisonList ) {
+        if (data?.productComparisonList) {
             setProductComparisonList(data.productComparisonList);
         }
-    }, [ data ]);
+    }, [data]);
 
     return (
-        <ProductComparisonContext.Provider value={{ productComparisonList }}>
+        <ProductComparisonContext.Provider value={{ productComparisonList, loading }}>
             {children}
         </ProductComparisonContext.Provider>
     )
