@@ -37,7 +37,7 @@ const removeURLParams = (url = '') => {
   return segments.join('/');
 }
 
-const paramsToObject = (paramsString = '') {
+const paramsToObject = (paramsString = '') => {
   const searchParamsObj = paramsString.split('&').reduce((obj, param) => {
     const [ key, value ] = param.split('=');
 
