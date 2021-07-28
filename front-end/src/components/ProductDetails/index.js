@@ -49,15 +49,6 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
 
     }, [productData]);
 
-    // useEffect(() => {
-    //     if (!isLoading) {
-    //         isLoading = true;
-    //     }
-    //     setTimeout(() => {
-    //         isLoading = false;
-    //     }, 8000);
-    // }, [isLoading])
-
     return (
         <div className="product-details">
             {isLoading && (<h1>Loading...</h1>)}
