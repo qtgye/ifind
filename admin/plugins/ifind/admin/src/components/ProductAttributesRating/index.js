@@ -28,7 +28,7 @@ const ProductAttributesRating = ({ category, productData, attributesRatings = []
     if ( typeof onAttributesChange === 'function' ) {
       onAttributesChange(newAttrDetails);
     }
-  }, [ attrsDetails, totalRating ]);
+  }, [ attrsDetails, onAttributesChange ]);
 
   useEffect(() => {
     // - Get category product attrs
@@ -103,7 +103,6 @@ const ProductAttributesRating = ({ category, productData, attributesRatings = []
       }
     }
   }, [ attrsDetails ]);
-
 
   return (
     <div className={[
