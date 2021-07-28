@@ -288,19 +288,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           value={amazonURL}
         />
 
-        {/* Generate Amazon link with tag */}
-        {/* <InputBlock className='col-md-2'>
-          <Label>&nbsp;</Label>
-          <Button
-            data-for="amazon-url-tag"
-            data-tip={'Generate Link'}
-            color='secondary'
-            icon={<FontAwesomeIcon icon='link' />}
-            onClick={generateAmazonLink}
-          />
-          <Tooltip id='amazon-url-tag' />
-        </InputBlock> */}
-
         {/* Position */}
         <NumberInput
           className='col-md-4'
@@ -366,4 +353,62 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         {/* Details HTML */}
         <InputBlock className="col-md-12">
           <Label>Details HTML</Label>
+          <Textarea
+            name="details-html"
+            id="details-html"
+            onChange={({ target: { value } }) => setDetailsHTML(value)}
+            value={detailsHTML}
+            disabled
+          />
+        </InputBlock>
+      </Panel>
 
+      <Panel title='Other Site URLs' className="product-form__panel product-form__panel--urls">
+        {/* URL List */}
+        <ProductURLInput
+          className="col-md-12"
+          urls={productURLs}
+          error={formErrors.url_list}
+          onChange={onProductURLsChange}
+        />
+      </Panel>
+
+      <Panel title='General Product Attributes' className="product-form__panel product-form__panel--gen-prod-attrs">
+        <ProductAttributesRating
+          category={category}
+          productData={trimmedProductData}
+          attributesRatings={attrsRating}
+          onAttributesChange={onProductAttrsChange}
+          onFinalRatingChange={onFinalRatingChange}
+          className="col-md-12"
+        />
+      </Panel>
+
+      <Panel className="product-form__panel product-form__panel--sidebar" title="Image Preview">
+        {/* Image Preview */}
+        <InputBlock className="col-md-12">
+          <ImagePreview url={image} />
+        </InputBlock>
+      </Panel>
+
+      <Panel title='Other Information' className="product-form__panel product-form__panel--meta">
+        <div className="col-md-12">
+          {
+            lastModified ?
+              <Text size="sm" color="gray">Last Modified on <strong>{lastModified}</strong></Text>
+              : null
+          }
+          {
+            createdOn ?
+              <Text size="sm" color="gray">Created on <strong>{createdOn}</strong></Text>
+              : null
+          }
+        </div>
+      </Panel>
+
+    </form>
+  )
+};
+
+
+export default memo(ProductForm);
