@@ -12,7 +12,7 @@ const Item = ({ active, image, title, withBadge, onClick }) => {
                     <span className="natural-list__badge">Best Seller</span>
                 )}
 
-                <img className="img natural-list__image" src={image} />
+                <img className="img natural-list__image" src={image} alt="" />
                 {/* <img className="img natural-list__image" src={image} alt={`${title}`} />
                 <figcaption className="natural-list__title">{title}</figcaption> */}
 
