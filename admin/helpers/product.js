@@ -42,7 +42,7 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
       const detailPage = await browser.newPage();
       const productSectionSelector = '#dp-container';
       const priceSelector = '#priceblock_ourprice, [data-action="show-all-offers-display"] .a-color-price';
-      const imageSelector = '#landingImage[data-old-hires]';
+      const imageSelector = '#landingImage[data-a-dynamic-image]';
       const titleSelector = '#title';
 
       const detailSelector = '#centerCol';
@@ -60,7 +60,7 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
       // Scrape for all details if applicable
       if ( !scrapePriceOnly ) {
         await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-        await detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT });
+        await detailPage.waitForSelector(productSectionSelector, { timeout: 5000 });
 
         const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
 
@@ -71,9 +71,15 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
         const imageElement = dom.window.document.querySelector(imageSelector);
         const detailElement = dom.window.document.querySelector(detailSelector);
 
-        scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
-        scrapedData.image = imageElement && imageElement.getAttribute('data-old-hires');
+        // Select highres image from dynamic image data
+        const imageData = scrapedData.image = imageElement ? JSON.parse(imageElement.dataset.aDynamicImage) || {} : {};
+        const highResImage = Object.entries(imageData).reduce((selectedEntry, [ url, dimensions ]) => (
+          !selectedEntry ? [ url, dimensions ]
+            : dimensions[0] > selectedEntry[1][0] ? [ url, dimensions ]
+              : selectedEntry
+        ), null);
 
+        // Remove unnecessary elements from detail section
         const allSelectorsToRemove = selectorsToRemove.join(',');
         [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(element => {
           try {
@@ -81,6 +87,10 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
           }
           catch (err) { /**/ }
         });
+
+        // Apply scraped details
+        scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
+        scrapedData.image = highResImage ? highResImage[0] : '';
         scrapedData.details_html = detailElement.outerHTML;
       }
 
