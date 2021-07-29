@@ -1,7 +1,9 @@
 'use strict';
+const moment = require('moment');
 
 const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
+const { applyCustomFormula } = appRequire('helpers/productAttribute');
 
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
@@ -9,23 +11,31 @@ const { getProductDetails } = appRequire('helpers/product');
  */
 
 const processProductData = async (data, id) => {
-  const ebaySource = await strapi.services.source.findOne({
-    name_contains: 'ebay'
-  });
+  const [
+    ebaySource,
+    productAttributes,
+  ] = await Promise.all([
+    strapi.services.source.findOne({
+      name_contains: 'ebay'
+    }),
+    strapi.services['product-attribute'].find(),
+  ]);
 
   await Promise.all([
 
     // Add necessary params in the url
     (() => {
-      if ( data && data.url_list && data.url_list.length ) {
+      data.url_list = data && data.url_list && data.url_list.length ?
+      (
         data.url_list = data.url_list.map(urlData => {
           if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
             urlData.url = ebayLink(urlData.url);
           }
 
           return urlData;
-        });
-      }
+        })
+      )
+      : [];
     })(),
 
     // Add dynamic position if not yet given
@@ -63,6 +73,9 @@ const processProductData = async (data, id) => {
         data.price = productDetails.price ? productDetails.price : data.price;
         data.image = productDetails.image ? productDetails.image : data.image;
         data.url_list = productDetails.url_list ? productDetails.url_list : data.url_list;
+
+        // Temporary data
+        data.releaseDate = productDetails.releaseDate;
       }
     })(),
 
@@ -71,6 +84,34 @@ const processProductData = async (data, id) => {
       data.amazon_url = amazonLink(data.amazon_url);
     })(),
   ]);
+
+  // Recompute product attributes
+  // Needs to come after the scraper in order to pickup the scraped data
+  data.attrs_rating = data.attrs_rating.map(attrRating => {
+    const matchedProductAttribute = productAttributes.find(({ id }) => (
+      attrRating.product_attribute == id
+    ));
+
+    // Autofill release date if applicable
+    if ( /release/i.test(matchedProductAttribute.name) && data.releaseDate ) {
+      attrRating.use_custom_formula = true;
+      attrRating.min = data.releaseDate;
+      attrRating.max = moment.utc().subtract(3, 'years').toISOString();
+    }
+
+    if ( attrRating.use_custom_formula ) {
+      attrRating.rating = applyCustomFormula(
+        attrRating,
+        matchedProductAttribute,
+        data,
+      )
+    }
+
+    return attrRating;
+  });
+
+  // Remove temporary data
+  delete data.releaseDate;
 
   return data;
 };

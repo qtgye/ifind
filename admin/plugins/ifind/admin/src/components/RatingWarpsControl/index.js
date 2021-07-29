@@ -6,7 +6,7 @@ import './styles.scss';
 
 const RATING_INCREMENTS = 0.5;
 
-const RatingWarpsControl = ({ rating = 0, onChange }) => {
+const RatingWarpsControl = ({ rating = 0, onChange, disabled = false }) => {
   const percentage = rating / 10 * 100;
 
   const onSubtract = useCallback((e) => {
@@ -28,13 +28,13 @@ const RatingWarpsControl = ({ rating = 0, onChange }) => {
       <button
         className="rating-warps-control__control rating-warps-control__control--subtract"
         onClick={(e) => onSubtract(e)}
-        disabled={rating <= 0}
+        disabled={rating <= 0 || disabled}
       ><FontAwesomeIcon icon='minus' /></button>
       <RatingWarps percentage={percentage} />
       <button
         className="rating-warps-control__control rating-warps-control__control--add"
         onClick={(e) => onAdd(e)}
-        disabled={rating >= 10}
+        disabled={rating >= 10 || disabled}
       ><FontAwesomeIcon icon='plus' /></button>
     </div>
   )
