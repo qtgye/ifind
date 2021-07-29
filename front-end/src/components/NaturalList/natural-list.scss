@@ -18,7 +18,7 @@ $item-layout: (
     & + & {
         margin-top: 50px;
     }
-    
+
     /*=============================
 	Loading Icon CSS
     ===============================*/
@@ -32,13 +32,13 @@ $item-layout: (
 	    height: 150px;
 	    pointer-events: none;
     }
-  
+
     @media (prefers-reduced-motion: no-preference) {
 	    .loading-icon {
 	        animation: loading-icon-spin infinite 1.5s linear;
 	    }
     }
-  
+
     @keyframes loading-icon-spin {
 	    from {
 	        transform: rotate(0deg);
@@ -47,11 +47,11 @@ $item-layout: (
 	        transform: rotate(360deg);
 	    }
      }
-  
+
     &__content {
         padding-top: calc(100% * 8 / 13);
     }
-    
+
     &__grid {
         display: grid;
         grid-template-columns: repeat(13, 1fr);
@@ -66,7 +66,7 @@ $item-layout: (
         padding: 5px;
         background-color: color(gray);
     }
-    
+
     &__item {
         display: flex;
         justify-content: center;
@@ -122,7 +122,7 @@ $item-layout: (
 
                 @if map-has-key($item-layout, $i ) {
                     $item-layout: map-get($item-layout, $i );
-    
+
                     @if map-has-key($item-layout, 'column-start') {
                         grid-column-start: map-get($item-layout, 'column-start');
                     }
@@ -182,10 +182,10 @@ $item-layout: (
         text-align: left;
         transition: all .3s;
     }
-    
+
     &__separator {
         position: absolute;
-        font-size: 24px;
+        font-size: 15px;
         margin-top: -49px;
         text-align: center;
         text-shadow: 2px 1px 3px rgb(214, 214, 214);
@@ -198,75 +198,85 @@ $item-layout: (
         border-radius: 4px;
     }
 
-    
+
     &__mfd {
         align-items: right;
-        font-size: 20px;
+        font-size: 15px;
         text-shadow: 2px 1px 3px rgb(214, 214, 214);
         margin-top: -48px;
-        margin-left: 45em;
+        margin-left: 59em;
         color: $white;
     }
 
     .left-arrow {
         position: absolute;
-        text-align: center;
-        align-items: center;
-        line-height: 13px;
-        height: 17px;
-        padding-right: 5px;
-        padding-left: 4px;
-        margin-top: -32px;
-        margin-left: 4px;
-        background-color: $white;
-        border: 1px solid $gray-900; 
+        margin-top: -34px;
+        margin-left: 6px;
+        cursor: pointer;
+        color: $white;
+        // animation: left-arrow 0.5s infinite alternate ease-in-out;
 
         i {
-            font-weight: bolder;
-            margin-top: -1px;
+            font-size: 20px;
         }
 
         &:hover {
-            background-color: $red;
-            color: $white
+            color: $red;
         }
+        
+        // @keyframes left-arrow {
+        //     0% {
+        //         transform: translateX(0.1em);
+        //         opacity: 0.5;
+        //     }
+        //     100% {
+        //         transform: translateX(0.2em);
+        //         opacity: 0.9;
+        //     }
+        // }
     }
     .right-arrow {
         position: absolute;
-        text-align: center;
-        align-items: center;
-        line-height: 13px;
-        height: 17px;
-        padding-right: 4px;
-        padding-left: 5px;
-        margin-top: -32px;
-        margin-left: 1008px;
-        background-color: $white;
-        border: 1px solid $gray-900; 
+        margin-top: -34px;
+        margin-left: 1009px;
+        cursor: pointer;
+        color: $white;
+        // animation: right-arrow 0.5s infinite alternate ease-in-out;
 
         i {
-            font-weight: bolder;
-            margin-top: -1px;
+            font-size: 20px;
         }
 
         &:hover {
-            background-color: $red;
-            color: $white
+            color: $red;
         }
+
+        // @keyframes right-arrow {
+        //     0% {
+        //         transform: translateX(0.1em);
+        //         opacity: 0.5;
+        //     }
+        //     100% {
+        //         transform: translateX(0.2em);
+        //         opacity: 0.9;
+        //     }
+        // }
     }
 
     &__price-cat {
         display: flex;
         position: absolute;
-        margin-top: -38px;
-        margin-left: 580pt;
+        margin-top: -42px;
+        margin-left: 540pt;
 
         button {
             background-color: $white;
             border: 5px solid $gray-900;
-            font-size: small;
+            border-radius: 8px;
+            font-size: 15px;
             font-weight: bold;
-            width: 35px;
+            height: 35px;
+            width: 50px;
         }
 
         button:hover {

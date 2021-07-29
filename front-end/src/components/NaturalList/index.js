@@ -62,8 +62,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                         {label.toUpperCase()}
                         <div className="natural-list__mfd">Q1/2021</div>
                     </div>
-                    <button className="left-arrow"><i className="fa fa-angle-left" aria-hidden="true"></i></button>
-                    <button className="right-arrow"><i className="fa fa-angle-right" aria-hidden="true"></i></button>
+                    <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
+                    <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
                     <div className="natural-list__price-cat">
                         <button>$</button>
                         <button>$$</button>
