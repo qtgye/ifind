@@ -26,8 +26,6 @@ const daysAgo = (dateTimeUTC = '') => {
                 productData[attributeData.product_prop] || null :
                 null;
 
-  console.log({ custom_formula });
-
   if ( !custom_formula ) {
     return 0;
   }
@@ -53,10 +51,15 @@ const daysAgo = (dateTimeUTC = '') => {
   ), custom_formula);
 
   // Evaluate substituted custom_formula string
-  const computedRating = eval(formulaWithData);
+  let computedRating = 0;
+  try {
+    computedRating = eval(formulaWithData);
+  } catch (err) {
+    throw new Error(`Error in custom formula for ${attributeData.name}: ${err.message}`);
+  }
 
-  // Ensure rating is >= 0 and <= 10
-  if ( computedRating <= 0 ) {
+  // Ensure rating is >= 0 and <= 10 and is not NaN
+  if ( isNaN(computedRating) || computedRating <= 0 ) {
     return 0;
   }
   else if ( computedRating >= 10 ) {

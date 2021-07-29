@@ -24,15 +24,17 @@ const processProductData = async (data, id) => {
 
     // Add necessary params in the url
     (() => {
-      if ( data && data.url_list && data.url_list.length ) {
+      data.url_list = data && data.url_list && data.url_list.length ?
+      (
         data.url_list = data.url_list.map(urlData => {
           if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
             urlData.url = ebayLink(urlData.url);
           }
 
           return urlData;
-        });
-      }
+        })
+      )
+      : [];
     })(),
 
     // Add dynamic position if not yet given

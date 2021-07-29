@@ -47,11 +47,21 @@ const AttributeRating = ({
 
       // Use custom formula if selected
       if ( newData.use_custom_formula && product_attribute.custom_formula ) {
-        newData.rating = applyCustomFormula(
-          newData,
-          product_attribute,
-          productData,
-        );
+        try {
+          newData.rating = applyCustomFormula(
+            newData,
+            product_attribute,
+            productData,
+          );
+        } catch (err) {
+          strapi.notification.toggle({
+            type: 'warning',
+            title: `Custom Formula Error`,
+            message: err.message,
+            timeout: 30000
+          });
+        }
+        
       }
 
       // Round rating to 1 decimal digit
@@ -144,7 +154,9 @@ const AttributeRating = ({
       <td>
         <RatingWarpsControl
           rating={rating}
-          onChange={newRating => onRatingChange(newRating)} />
+          onChange={newRating => onRatingChange(newRating)}
+          disabled={use_custom_formula}
+        />
       </td>
       <td>
         <Button
