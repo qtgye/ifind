@@ -1,4 +1,5 @@
 'use strict';
+const moment = require('moment');
 
 const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
@@ -72,6 +73,9 @@ const processProductData = async (data, id) => {
         data.price = productDetails.price ? productDetails.price : data.price;
         data.image = productDetails.image ? productDetails.image : data.image;
         data.url_list = productDetails.url_list ? productDetails.url_list : data.url_list;
+
+        // Temporary data
+        data.releaseDate = productDetails.releaseDate;
       }
     })(),
 
@@ -84,11 +88,18 @@ const processProductData = async (data, id) => {
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
   data.attrs_rating = data.attrs_rating.map(attrRating => {
-    if ( attrRating.use_custom_formula ) {
-      const matchedProductAttribute = productAttributes.find(({ id }) => (
-        attrRating.product_attribute == id
-      ));
+    const matchedProductAttribute = productAttributes.find(({ id }) => (
+      attrRating.product_attribute == id
+    ));
 
+    // Autofill release date if applicable
+    if ( /release/i.test(matchedProductAttribute.name) && data.releaseDate ) {
+      attrRating.use_custom_formula = true;
+      attrRating.min = data.releaseDate;
+      attrRating.max = moment.utc().subtract(3, 'years').toISOString();
+    }
+
+    if ( attrRating.use_custom_formula ) {
       attrRating.rating = applyCustomFormula(
         attrRating,
         matchedProductAttribute,
@@ -98,6 +109,9 @@ const processProductData = async (data, id) => {
 
     return attrRating;
   });
+
+  // Remove temporary data
+  delete data.releaseDate;
 
   return data;
 };

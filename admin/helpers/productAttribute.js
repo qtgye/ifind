@@ -66,7 +66,8 @@ const daysAgo = (dateTimeUTC = '') => {
     return 10
   }
 
-  return computedRating;
+  // Round to a single decimal place.
+  return Number(computedRating.toFixed(1));
 }
 
 module.exports = {
