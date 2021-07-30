@@ -70,4 +70,6 @@ const ProductComparison = () => {
   )
 };
 
-export default withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison));
+export default (
+  withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison))
+);

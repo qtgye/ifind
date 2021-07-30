@@ -5,12 +5,29 @@ const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
 const { applyCustomFormula } = appRequire('helpers/productAttribute');
 
+const updateScopeDefault = {
+  price: true,
+  amazonDetails: true,
+};
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#lifecycle-hooks)
  * to customize this model
  */
 
 const processProductData = async (data, id) => {
+  // Set product update scope
+  data.updateScope = {
+    ...updateScopeDefault,
+    ...data.updateScope,
+  };
+
+  // No need for additional scraped data if no price and details update needed
+  // Use case: clicks_count update only
+  if ( !data.updateScope.price || !data.updateScope.amazonDetails ) {
+    return data;
+  }
+
   const [
     ebaySource,
     productAttributes,
@@ -22,7 +39,6 @@ const processProductData = async (data, id) => {
   ]);
 
   await Promise.all([
-
     // Add necessary params in the url
     (() => {
       data.url_list = data && data.url_list && data.url_list.length ?
@@ -64,7 +80,10 @@ const processProductData = async (data, id) => {
     (async() => {
       // Using only image and title for checking
       // For some reason, details_html is not passed on update
+      // TODO: Add admin UI option to select either priceOnly, amazonDetails, both or neither
       const scapePriceOnly = data.title && data.image && true;
+
+
       const productDetails = await getProductDetails(data, 'de', scapePriceOnly);
 
       if ( productDetails ) {
@@ -111,6 +130,7 @@ const processProductData = async (data, id) => {
   });
 
   // Remove temporary data
+  delete data.updateScope;
   delete data.releaseDate;
 
   return data;
