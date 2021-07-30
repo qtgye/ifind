@@ -25,7 +25,10 @@ export const ProductContextProvider = ({ children }) => {
             language: locale,
         }
     });
-    const [mutationFunction, { data: mutationData, loading, error }] = useMutation(incrementProductClickMutation);
+    const [
+        mutationFunction,
+        // { data: mutationData, loading, error },
+    ] = useMutation(incrementProductClickMutation);
 
     const fetchProductDetail = useCallback(( productID ) => {
         setProductID(productID);

@@ -24,7 +24,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
         incrementProductClick(product.id);
-    }, [setActiveProduct]);
+    }, [setActiveProduct, incrementProductClick]);
 
     useEffect(() => {
         if (activeProduct) {
