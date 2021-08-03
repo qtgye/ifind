@@ -10,6 +10,7 @@ import RegionSelect from '../RegionSelect';
 import TextInput from '../TextInput';
 import NumberInput from '../NumberInput';
 import ProductAttributesRating from '../ProductAttributesRating';
+import ProductChangeHistoryTable from '../ProductChangeHistoryTable';
 
 import './styles.scss';
 
@@ -95,15 +96,15 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.website_tab = formData.websiteTab;
 
     // Process urlList
-    if (formData.urlList?.length) {
-      formData.url_list = formData.urlList.map(({ source, region, is_base, price, url }) => ({
+    formData.url_list = formData.urlList.length ? (
+      formData.urlList.map(({ source, region, is_base, price, url }) => ({
         source, region, is_base, url, price
-      }));
-    }
+      }))
+    ) : [];
 
     // Process attrs_rating
-    if (formData.attrsRating) {
-      formData.attrs_rating = formData.attrsRating.map(attrRating => ({
+    formData.attrs_rating = formData.attrsRating.length ? (
+      formData.attrsRating.map(attrRating => ({
         product_attribute: attrRating.product_attribute.id,
         points: attrRating.points,
         rating: attrRating.rating,
@@ -113,13 +114,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         max: attrRating.max,
         use_custom_formula: attrRating.use_custom_formula,
         enabled: attrRating.enabled,
-      }));
-    }
+      }))
+    ) : [];
 
     // Process final_rating
-    if (formData.finalRating) {
-      formData.final_rating = formData.finalRating;
-    }
+    formData.final_rating = formData.finalRating ? Number(formData.finalRating) : 0;
 
     // Format Position
     formData.position = Number(formData.position);
@@ -389,6 +388,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         <InputBlock className="col-md-12">
           <ImagePreview url={image} />
         </InputBlock>
+      </Panel>
+
+      <Panel title='Revision History' className="product-form__panel product-form__panel--history">
+        <ProductChangeHistoryTable className='col-md-12' />
       </Panel>
 
       <Panel title='Other Information' className="product-form__panel product-form__panel--meta">
