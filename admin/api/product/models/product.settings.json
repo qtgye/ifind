@@ -77,6 +77,10 @@
     },
     "release_date": {
       "type": "datetime"
+    },
+    "admin_user": {
+      "plugin": "admin",
+      "model": "user"
     }
   }
 }

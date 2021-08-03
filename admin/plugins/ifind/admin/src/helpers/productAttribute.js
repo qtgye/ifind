@@ -1,3 +1,4 @@
 export {
-  applyCustomFormula
+  applyCustomFormula,
+  compareAttributeChanges,
 } from '../../../../../helpers/productAttribute';

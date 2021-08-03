@@ -98,12 +98,12 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
         // Apply scraped details
         scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
         scrapedData.image = highResImage ? highResImage[0] : '';
-        scrapedData.details_html = detailElement.outerHTML;
+        scrapedData.details_html = detailElement.outerHTML.trim();
       }
 
       // Go to english site for price and release_date
       await detailPage.goto(englishPageURL, { timeout: TIMEOUT })
-      await detailPage.waitForSelector(priceSelector, { timeout: TIMEOUT });
+      await detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT });
       const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
       const dom = new JSDOM(detailPageHTML);
 

@@ -7,6 +7,7 @@ import { useProduct, ProductProvider } from '../../providers/productProvider';
 import { ProductAttributesProvider } from '../../providers/productAttributesProvider';
 import { useGlobal } from '../../providers/globalProvider';
 import { validationRules, validateData } from '../../helpers/form';
+import { compareProductChanges } from '../../helpers/product';
 import ProductForm from '../../components/ProductForm';
 
 const productValidationRules = {
@@ -42,6 +43,7 @@ const ProductDetail = () => {
   const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
   const [ hasChanges, setHasChanges ] = useState(false);
   const [ isSaving, setIsSaving ] = useState(false);
+  const [ productChanges, setProductChanges ] = useState(null);
 
   const saveProduct = useCallback(() => {
     // Prepare data for graphql request
@@ -101,52 +103,8 @@ const ProductDetail = () => {
 
   const onProductFormUpdate = useCallback((productFormData) => {
     const rawProductData = productData || {};
-
-    // Check if there are changes
-    const hasChanged = Object.entries(productFormData).some(([ formKey, formValue ]) => {
-      switch (formKey) {
-        case 'category':
-          if ( productFormData[formKey] ) {
-            return !rawProductData.categories?.length
-              || rawProductData.categories.find(({ id }) => id !== productFormData[formKey]);
-          }
-          else {
-            return rawProductData.categories?.length;
-          }
-        case 'url_list':
-          return (
-            (rawProductData.url_list?.length !== productFormData.url_list?.length)
-            || (
-              productFormData.url_list && productFormData.url_list.some((urlData, index) => (
-                !rawProductData.url_list || !rawProductData.url_list[index] ||
-                Object.entries(urlData).some(([ key, value ]) => (
-                  !rawProductData.url_list || !rawProductData.url_list[index]
-                  || !rawProductData.url_list[index][key] != urlData[key]
-                ))
-              ))
-            )
-            || (
-              rawProductData.url_list && rawProductData.url_list.some((urlData, index) => (
-                !productFormData.url_list || !productFormData.url_list[index] ||
-                Object.entries(urlData).some(([ key, value ]) => (
-                  !productFormData.url_list || !productFormData.url_list[index]
-                  || !productFormData.url_list[index][key] != urlData[key]
-                ))
-              ))
-            )
-          )
-        case 'title':
-        case 'website_tab':
-        case 'price':
-        case 'image':
-          return productFormData[formKey] !== rawProductData[formKey];
-        default:;
-      }
-
-      return false;
-    });
-
-    setHasChanges(hasChanged);
+    const changes = compareProductChanges(rawProductData, productFormData);
+    setHasChanges(changes ? true : false);
   }, [ productData ]);
 
   useEffect(() => {

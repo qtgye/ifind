@@ -1,5 +1,6 @@
 'use strict';
 const moment = require('moment');
+const { compareProductChanges } = require('../../../helpers/productChanges');
 
 const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
@@ -16,6 +17,11 @@ const updateScopeDefault = {
  */
 
 const processProductData = async (data, id) => {
+  // Save admin_user for afterSave hook
+  strapi.admin_user = data.admin_user;
+
+  const matchedProduct = await strapi.services.product.findOne({ id }) || {};
+
   // Set product update scope
   data.updateScope = {
     ...updateScopeDefault,
@@ -83,16 +89,13 @@ const processProductData = async (data, id) => {
       // TODO: Add admin UI option to select either priceOnly, amazonDetails, both or neither
       const scapePriceOnly = data.title && data.image && true;
 
-
       const productDetails = await getProductDetails(data, 'de', scapePriceOnly);
 
+      // Apply scraped data
       if ( productDetails ) {
-        data.title = productDetails.title ? productDetails.title.trim() : data.title;
-        data.details_html = productDetails.details_html ? productDetails.details_html.trim() : data.details_html;
-        data.price = productDetails.price ? productDetails.price : data.price;
-        data.image = productDetails.image ? productDetails.image : data.image;
-        data.url_list = productDetails.url_list ? productDetails.url_list : data.url_list;
-
+        Object.entries(productDetails).forEach(([ key, value ]) => {
+          data[key] = value;
+        });
         // Temporary data
         data.releaseDate = productDetails.releaseDate;
       }
@@ -133,17 +136,36 @@ const processProductData = async (data, id) => {
   delete data.updateScope;
   delete data.releaseDate;
 
-  return data;
+  // Extract only changed data
+  const changedData = compareProductChanges(matchedProduct, data);
+
+  // Save temporary data for afterSave use
+  strapi.changedData = changedData;
+
+  return changedData;
 };
 
 /**
  * TODO:
  * Figure out how to get updatedBy
  */
-const saveProductChange = async (id, productData, datetime, updatedBy) => {
+const saveProductChange = async (id) => {
+  const date_time = moment.utc().toISOString();
+  const admin_user = strapi.admin_user;
+  const state = strapi.changedData;
+
+  // Delete unnecessary temporary data
+  delete strapi.changedData;
+
+  // No need to save to history if there's no changes
+  if ( !state ) {
+    return;
+  }
+
   await strapi.query('product-change').create({
-    state: productData,
-    date_time: datetime,
+    state,
+    date_time,
+    admin_user,
     product: id,
   });
 }
@@ -156,11 +178,11 @@ module.exports = {
     async beforeUpdate(params, data) {
       await processProductData(data, params.id);
     },
-    async afterCreate(result, data) {
-      await saveProductChange(result.id, data, result.created_at, result.created_by);
+    async afterCreate(result) {
+      await saveProductChange(result.id);
     },
-    async afterUpdate(result, params, data) {
-      await saveProductChange(result.id, data, result.updated_at, result.updated_by);
+    async afterUpdate(result) {
+      await saveProductChange(result.id);
     }
   }
 };
