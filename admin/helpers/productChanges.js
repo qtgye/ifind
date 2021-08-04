@@ -9,20 +9,25 @@ const compareProductChanges = (originalData, changedData) => {
   const changesList = Object.entries(changedData).filter(([formKey]) => {
     switch (formKey) {
       case 'categories':
+        const originalCategories = originalData.categories || [];
+        const changedCategories = changedData.categories || [];
         return (
-          (originalData.categories && changedData.categories) &&
+          (originalCategories.length !== changedCategories.length) ||
           (
-            (originalData.categories.length !== changedData.categories.length) ||
-            (originalData.categories[0].id != changedData.categories[0])
+            (originalCategories[0].id && changedCategories[0].id) &&
+            originalCategories[0].id != changedCategories[0].id
           )
         );
       case 'url_list':
+        const originalUrlList = originalData.url_list || [];
+        const changedUrlList = changedData.url_list || [];
         return (
           // Check if urls count is changed
-          (originalData.url_list && originalData.url_list.length !== changedData.url_list.length)
+          (originalUrlList.length !== changedUrlList.length)
+          // Check if all items are the same
           || (
-            changedData.url_list && changedData.url_list.some((changedURLData, index) => {
-              const originalURLData = originalData.url_list[index];
+            changedUrlList.some((changedURLData, index) => {
+              const originalURLData = originalUrlList[index];
               return (
                 originalURLData.price != changedURLData.price ||
                 originalURLData.region.id != changedURLData.region ||
@@ -33,20 +38,20 @@ const compareProductChanges = (originalData, changedData) => {
           )
         );
       case 'attrs_rating':
+          const originalAttrsRating = originalData.attrs_rating || [];
+          const changedAttrsRating = changedData.attrs_rating || [];
           return (
-            (originalData.attrs_rating && changedData.attrs_rating) && (
-              // Check if count has changed
-              (originalData.attrs_rating.length !== changedData.attrs_rating.length) ||
-              // Check if each item has changed
-              (
-                originalData.attrs_rating.some(originalAttrRating => {
-                  const matchedChangedRating = changedData.attrs_rating.find(({ id }) => id == originalAttrRating.id);
+            // Check if count has changed
+            (originalAttrsRating.length !== changedAttrsRating.length) ||
+            // Check if each item has changed
+            (
+              originalAttrsRating.some(originalAttrRating => {
+                const matchedChangedRating = changedAttrsRating.find(({ id }) => id == originalAttrRating.id);
 
-                  // Attribute must have been removed on change
-                  if ( !matchedChangedRating ) { return true; }
-                  return compareAttributeChanges(originalAttrRating, matchedChangedRating);
-                })
-              )
+                // Attribute must have been removed on change
+                if ( !matchedChangedRating ) { return true; }
+                return compareAttributeChanges(originalAttrRating, matchedChangedRating);
+              })
             )
           )
       case 'title':

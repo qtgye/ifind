@@ -19,6 +19,9 @@ const ProductChangeHistoryTable = ({ className }) => {
 
       setProductChanges(changes);
     }
+    else {
+      setProductChanges([]);
+    }
   }, [ productData ]);
 
   const classNames = [
@@ -33,14 +36,16 @@ const ProductChangeHistoryTable = ({ className }) => {
           <tr>
             <th>Datetime</th>
             <th>Admin User</th>
+            <th>Change Type</th>
             <th>Changes Applied</th>
           </tr>
         </thead>
         <tbody>
           {productChanges.map(productChange => (
             <tr key={productChange.date_time}>
-              <td>{moment.utc(productChange.date_time).format('YYYY-MM=DD')}</td>
+              <td>{moment.utc(productChange.date_time).format('YYYY-MM-DD')}</td>
               <td>{productChange.admin_user ? `${productChange.admin_user.firstname} ${productChange.admin_user.lastname}` : ''}</td>
+              <td>{productChange.change_type}</td>
               <td><pre>{productChange.state ? JSON.stringify(productChange.state, null, '  ') : ''}</pre></td>
             </tr>
           ))}
