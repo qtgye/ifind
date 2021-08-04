@@ -394,21 +394,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         <ProductChangeHistoryTable className='col-md-12' />
       </Panel>
 
-      <Panel title='Other Information' className="product-form__panel product-form__panel--meta">
-        <div className="col-md-12">
-          {
-            lastModified ?
-              <Text size="sm" color="gray">Last Modified on <strong>{lastModified}</strong></Text>
-              : null
-          }
-          {
-            createdOn ?
-              <Text size="sm" color="gray">Created on <strong>{createdOn}</strong></Text>
-              : null
-          }
-        </div>
-      </Panel>
-
     </form>
   )
 };

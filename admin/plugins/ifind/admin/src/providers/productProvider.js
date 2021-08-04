@@ -62,6 +62,7 @@ fragment ProductDataFragment on Product {
   product_changes {
     state
     date_time
+    change_type
     admin_user {
       firstname
       lastname

@@ -149,10 +149,11 @@ const processProductData = async (data, id) => {
  * TODO:
  * Figure out how to get updatedBy
  */
-const saveProductChange = async (id) => {
+const saveProductChange = async (id, changeType = 'update') => {
   const date_time = moment.utc().toISOString();
   const admin_user = strapi.admin_user;
   const state = strapi.changedData;
+  let change_type = changeType;
 
   // Delete unnecessary temporary data
   delete strapi.changedData;
@@ -162,11 +163,17 @@ const saveProductChange = async (id) => {
     return;
   }
 
+  // Determine change_type
+  if ( 'status' in state && changeType !== 'create' ) {
+     change_type = 'publish';
+  }
+
   await strapi.query('product-change').create({
     state,
     date_time,
     admin_user,
     product: id,
+    change_type,
   });
 }
 
@@ -179,7 +186,7 @@ module.exports = {
       await processProductData(data, params.id);
     },
     async afterCreate(result) {
-      await saveProductChange(result.id);
+      await saveProductChange(result.id, 'create');
     },
     async afterUpdate(result) {
       await saveProductChange(result.id);
