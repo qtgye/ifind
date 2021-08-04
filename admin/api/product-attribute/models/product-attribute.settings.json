@@ -34,6 +34,31 @@
     },
     "custom_formula": {
       "type": "string"
+    },
+    "disable_min": {
+      "type": "boolean",
+      "default": false
+    },
+    "disable_max": {
+      "type": "boolean",
+      "default": false
+    },
+    "min_label": {
+      "type": "string",
+      "default": "Min"
+    },
+    "max_label": {
+      "type": "string",
+      "default": "Max"
+    },
+    "product_prop": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "price",
+        "release_date"
+      ],
+      "default": "none"
     }
   }
 }

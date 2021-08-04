@@ -1,11 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, memo } from 'react';
-import { Button, Label, Select, Text, Textarea } from '@buffetjs/core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@buffetjs/styles';
-
-import { useCategoriesListing } from '../../providers/categoriesListingProvider';
-import { useProductAttributes } from '../../providers/productAttributesProvider';
-import { amazonLink } from '../../helpers/url';
+import { Label, Select, Text, Textarea } from '@buffetjs/core';
 
 import Panel from '../Panel';
 import InputBlock from '../InputBlock';
@@ -16,7 +10,7 @@ import RegionSelect from '../RegionSelect';
 import TextInput from '../TextInput';
 import NumberInput from '../NumberInput';
 import ProductAttributesRating from '../ProductAttributesRating';
-import DateInput from '../DateInput';
+import ProductChangeHistoryTable from '../ProductChangeHistoryTable';
 
 import './styles.scss';
 
@@ -27,35 +21,38 @@ const _websiteTabOptions = [
 ];
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
-  const [ websiteTabOptions ] = useState(_websiteTabOptions);
+
+  const [websiteTabOptions] = useState(_websiteTabOptions);
 
   // Read-only fields
-  const [ id, setId ] = useState(null);
-  const [ clicksCount, setClicksCount ] = useState(null);
+  const [id, setId] = useState(null);
+  const [clicksCount, setClicksCount] = useState(null);
 
   // Product URL Input Data
-  const [ urlList, setUrlList ] = useState([]);
+  const [urlList, setUrlList] = useState([]);
+
+  // Product Attributes Rating additional data
+  const [trimmedProductData, setTrimmedProductData] = useState({});
 
   // Field states
-  const [ websiteTab, setWebsiteTab ] = useState('home');
-  const [ region, setRegion ] = useState(null);
-  const [ title, setTitle ] = useState('');
-  const [ category, setCategory ] = useState(null);
-  const [ image, setImage ] = useState('');
-  const [ position, setPosition ] = useState('');
-  const [ amazonURL, setAmazonURL ] = useState('');
-  const [ price, setPrice ] = useState('');
-  const [ detailsHTML, setDetailsHTML ] = useState('');
-  const [ releaseDate, setReleaseDate ] = useState('');
-  const [ productURLs, setProductURLs ] = useState([]); // Initial data for ProductURLInput
-  const [ attrsRating, setAttrsRating ] = useState([]);
-  const [ finalRating, setFinalRating ] = useState(0); // Don't pass into ProductAttributesRating
+  const [websiteTab, setWebsiteTab] = useState('product_comparison');
+  const [region, setRegion] = useState(null);
+  const [title, setTitle] = useState('');
+  const [category, setCategory] = useState(null);
+  const [image, setImage] = useState('');
+  const [position, setPosition] = useState('');
+  const [amazonURL, setAmazonURL] = useState('');
+  const [price, setPrice] = useState('');
+  const [detailsHTML, setDetailsHTML] = useState('');
+  const [productURLs, setProductURLs] = useState([]); // Initial data for ProductURLInput
+  const [attrsRating, setAttrsRating] = useState([]);
+  const [finalRating, setFinalRating] = useState(0); // Don't pass into ProductAttributesRating
 
   // Meta states
-  const [ createdOn, setCreatedOn ] = useState('');
-  // const [ createdBy, setCreatedBy ] = useState('');
-  const [ lastModified, setLastModified ] = useState('');
-  // const [ lastModifiedBy, setLastModifiedBy ] = useState('');
+  const [createdOn, setCreatedOn] = useState('');
+  const [createdBy, setCreatedBy] = useState('');
+  const [lastModified, setLastModified] = useState('');
+  const [lastModifiedBy, setLastModifiedBy] = useState('');
 
   const collectFormData = useCallback(() => {
     return {
@@ -73,7 +70,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       region,
       attrsRating,
       finalRating,
-      releaseDate,
     }
   }, [
     id,
@@ -90,26 +86,25 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     region,
     attrsRating,
     finalRating,
-    releaseDate,
   ]);
 
   const processFormData = useCallback((formData) => {
     formData.price = Number(formData.price);
-    formData.categories = [ formData.category ];
+    formData.categories = [formData.category];
     formData.details_html = formData.detailsHTML;
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
 
     // Process urlList
-    if ( formData.urlList?.length ) {
-      formData.url_list = formData.urlList.map(({ source, region, is_base, price, url }) => ({
+    formData.url_list = formData.urlList.length ? (
+      formData.urlList.map(({ source, region, is_base, price, url }) => ({
         source, region, is_base, url, price
-      }));
-    }
+      }))
+    ) : [];
 
     // Process attrs_rating
-    if ( formData.attrsRating ) {
-      formData.attrs_rating = formData.attrsRating.map(attrRating => ({
+    formData.attrs_rating = formData.attrsRating.length ? (
+      formData.attrsRating.map(attrRating => ({
         product_attribute: attrRating.product_attribute.id,
         points: attrRating.points,
         rating: attrRating.rating,
@@ -119,18 +114,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         max: attrRating.max,
         use_custom_formula: attrRating.use_custom_formula,
         enabled: attrRating.enabled,
-      }));
-    }
+      }))
+    ) : [];
 
     // Process final_rating
-    if ( formData.finalRating ) {
-      formData.final_rating = formData.finalRating;
-    }
-    
-    // Process release_date
-    if ( formData.releaseDate ) {
-      formData.release_date = formData.releaseDate;
-    }
+    formData.final_rating = formData.finalRating ? Number(formData.finalRating) : 0;
 
     // Format Position
     formData.position = Number(formData.position);
@@ -144,7 +132,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.urlList;
     delete formData.attrsRating;
     delete formData.finalRating;
-    delete formData.releaseDate;
 
     return formData;
   }, []);
@@ -153,11 +140,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     const formData = collectFormData();
     const processedData = processFormData(formData);
     setProductFormData(processedData);
-  }, [ collectFormData, setProductFormData, processFormData ]);
+  }, [collectFormData, setProductFormData, processFormData]);
 
   const onCategorySelect = useCallback((categoryID) => {
     setCategory(categoryID);
-  }, [ setCategory ]);
+  }, [setCategory]);
 
   const onProductURLsChange = useCallback((newUrlList) => {
     setUrlList(newUrlList);
@@ -171,12 +158,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setFinalRating(newFinalRating);
   }, []);
 
-  const generateAmazonLink = useCallback(() => {
-    setAmazonURL(amazonLink(amazonURL));
-  }, [ amazonURL ]);
-
   useEffect(() => {
-    if ( product ) {
+    if (product) {
       setId(product.id);
       setWebsiteTab(product.website_tab);
       setTitle(product.title);
@@ -188,7 +171,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setPrice(product.price);
       setDetailsHTML(product.details_html);
       setRegion(product.region?.id);
-      setReleaseDate(product.release_date);
 
       // Format product url list to match ProductURLInput
       setProductURLs((product.url_list || []).map(urlData => ({
@@ -200,22 +182,22 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       })));
 
       // Product attrs
-      if ( product.attrs_rating?.length ) {
+      if (product.attrs_rating?.length) {
         setAttrsRating(product.attrs_rating);
       }
 
       // Set meta
-      if ( product.created_at ) {
+      if (product.created_at) {
         setCreatedOn(product.created_at);
       }
-      if ( product.updated_at ) {
+      if (product.updated_at) {
         setLastModified(product.updated_at);
       }
 
-    // Reset to defaults
+      // Reset to defaults
     } else {
       setId(null);
-      setWebsiteTab('home');
+      setWebsiteTab('product_comparison');
       setTitle('');
       setImage('');
       setCategory(null);
@@ -232,7 +214,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setCreatedOn(null);
       setLastModified(null);
     }
-  }, [ product ]);
+  }, [product]);
+
+  useEffect(() => {
+    setTrimmedProductData({ price });
+  }, [ price ]);
 
   useEffect(() => {
     onChange();
@@ -251,7 +237,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     region,
     attrsRating,
     finalRating,
-    releaseDate,
   ]);
 
   return (
@@ -302,19 +287,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           value={amazonURL}
         />
 
-        {/* Generate Amazon link with tag */}
-        {/* <InputBlock className='col-md-2'>
-          <Label>&nbsp;</Label>
-          <Button
-            data-for="amazon-url-tag"
-            data-tip={'Generate Link'}
-            color='secondary'
-            icon={<FontAwesomeIcon icon='link' />}
-            onClick={generateAmazonLink}
-          />
-          <Tooltip id='amazon-url-tag' />
-        </InputBlock> */}
-
         {/* Position */}
         <NumberInput
           className='col-md-4'
@@ -323,16 +295,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           name='position'
           value={position}
           onChange={(value) => setPosition(value)}
-        />
-
-        {/* Release Date */}
-        <DateInput
-          className='col-md-4'
-          label='Release Date'
-          id='release_date'
-          name='release_date'
-          value={releaseDate}
-          onChange={(value) => setReleaseDate(value)}
         />
 
         {/* Clicks Count */}
@@ -351,7 +313,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           onChange={onCategorySelect}
           hasError={formErrors.categories?.length}
         />
-        { formErrors.categories && (
+        {formErrors.categories && (
           <Text className="col-sm-12" size="sm" color="red">{formErrors.categories.join('<br />')}</Text>
         )}
 
@@ -393,7 +355,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           <Textarea
             name="details-html"
             id="details-html"
-            onChange={({ target: { value }}) => setDetailsHTML(value)}
+            onChange={({ target: { value } }) => setDetailsHTML(value)}
             value={detailsHTML}
             disabled
           />
@@ -413,12 +375,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       <Panel title='General Product Attributes' className="product-form__panel product-form__panel--gen-prod-attrs">
         <ProductAttributesRating
           category={category}
-          productData={{
-            price,
-            release_date: releaseDate,
-          }}
+          productData={trimmedProductData}
           attributesRatings={attrsRating}
-          onChange={onProductAttrsChange}
           onAttributesChange={onProductAttrsChange}
           onFinalRatingChange={onFinalRatingChange}
           className="col-md-12"
@@ -432,19 +390,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         </InputBlock>
       </Panel>
 
-      <Panel title='Other Information' className="product-form__panel product-form__panel--meta">
-        <div className="col-md-12">
-          {
-            lastModified ?
-            <Text size="sm" color="gray">Last Modified on <strong>{lastModified}</strong></Text>
-            : null
-          }
-          {
-            createdOn ?
-            <Text size="sm" color="gray">Created on <strong>{createdOn}</strong></Text>
-            : null
-          }
-        </div>
+      <Panel title='Revision History' className="product-form__panel product-form__panel--history">
+        <ProductChangeHistoryTable className='col-md-12' />
       </Panel>
 
     </form>

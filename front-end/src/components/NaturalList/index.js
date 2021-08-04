@@ -4,11 +4,13 @@ import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
+import { useProductDetail } from '@contexts/productContext';
 import Item from './item';
 
 import './natural-list.scss';
 
 const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
+    const { incrementProductClick } = useProductDetail();
 
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
@@ -21,7 +23,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
-    }, [setActiveProduct]);
+        incrementProductClick(product.id);
+    }, [setActiveProduct, incrementProductClick]);
 
     useEffect(() => {
         if (activeProduct) {
@@ -49,6 +52,11 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         }
     }, [focusedCategory, id]);
 
+    // useEffect(() => {
+    //     setTimeout(5000);
+    // }, [])
+
+
     return (
         <div className="natural-list">
             {currentRouteConfig.path === '/' ? null :
@@ -56,6 +64,13 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                     <div className="natural-list__separator" ref={itemRef} data-category={id}>
                         {label.toUpperCase()}
                         <div className="natural-list__mfd">Q1/2021</div>
+                    </div>
+                    <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
+                    <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
+                    <div className="natural-list__price-cat">
+                        <button>$</button>
+                        <button>$$</button>
+                        <button>$$$</button>
                     </div>
                 </>
             }

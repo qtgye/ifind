@@ -46,6 +46,9 @@ module.exports = {
       ))
     ));
 
+    // Apply affiliate links
+
+
     return productsLists;
   },
 
@@ -56,5 +59,34 @@ module.exports = {
     }
 
     return '';
-  }
+  },
+
+  async addProductClick(productID) {
+    if ( !productID ) {
+      return null;
+    }
+
+    const matchedProduct = await this.findOne({ id: productID });
+
+    if ( !matchedProduct ) {
+      return null;
+    }
+
+    // Increment clicks count
+    const clicks_count = Number(matchedProduct.clicks_count) + 1;
+
+    // Update product
+    await this.update({ id: productID }, {
+      clicks_count,
+      updateScope: {
+        price: false,
+        amazonDetails: false,
+      }
+    });
+
+    return {
+      id: productID,
+      clicks_count
+    };
+  },
 };

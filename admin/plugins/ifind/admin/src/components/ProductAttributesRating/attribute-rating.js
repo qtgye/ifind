@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Toggle, Button } from '@buffetjs/core';
 import moment from 'moment';
 
+import { applyCustomFormula } from '../../helpers/productAttribute';
 import RatingWarpsControl from '../RatingWarpsControl';
 import NumberInput from '../NumberInput';
 import IFINDIcon from '../IFINDIcon';
@@ -11,65 +12,56 @@ import TextInput from '../TextInput';
 
 const RATING_INCREMENTS = 0.5;
 
-const applyCustomFormula = (customFormula = '', data, dataType = 'number') => {
-  const today = moment.utc();
+const AttributeRating = ({
+  product_attribute,
+  factor,
+  rating = 0,
+  points,
+  enabled,
+  custom_formula,
+  use_custom_formula,
+  data_type,
+  min,
+  max,
+  onChange,
+  productData,
+}) => {
 
-  const formulaWithData = Object.entries(data).reduce((updatedFormula, [ key, data ]) => {
-    let processedData = data;
-
-    if ( dataType === 'date_time' ) {
-      switch (key) {
-        case 'max':
-        case 'min':
-        case 'release_date':
-          // Compute days from today to min/max/release_date
-          const millisecondsAgo = today.valueOf() - moment.utc(data).valueOf();
-          processedData = Math.floor(millisecondsAgo / 1000 / 60 / 60 / 24);
-          processedData = !isNaN(processedData) ? processedData : 0;
-          break;
-        default:;
-      }
-    }
-
-    const substitutedFormula = updatedFormula.replace(new RegExp(key, 'g'), processedData);
-    return substitutedFormula;
-  }, customFormula);
-
-  const computedRating = eval(formulaWithData);
-
-  // Ensure rating is >= 0 and <= 10
-  if ( computedRating <= 0 ) {
-    return 0;
-  }
-  else if ( computedRating >= 10 ) {
-    return 10
-  }
-
-  return computedRating;
-}
-
-const AttributeRating = ({ product_attribute, factor, rating = 0, points, enabled, custom_formula, use_custom_formula, data_type, min, max, onChange, productData }) => {
   const onItemChange = useCallback((changes) => {
     if ( typeof onChange === 'function' ) {
       const newData = {
-        product_attribute,
         factor,
         rating,
         points,
         enabled,
-        custom_formula,
         use_custom_formula,
         min,
         max,
         ...changes,
       };
 
+      // Use today's date for max if release
+      if ( /release/i.test(product_attribute.name) ) {
+        newData.max = moment.utc().subtract(3, 'years').toISOString();
+      }
+
       // Use custom formula if selected
-      if ( newData.use_custom_formula && newData.custom_formula && newData.max ) {
-        newData.rating = applyCustomFormula(newData.custom_formula, {
-          ...newData,
-          ...productData,
-        }, product_attribute.data_type);
+      if ( newData.use_custom_formula && product_attribute.custom_formula ) {
+        try {
+          newData.rating = applyCustomFormula(
+            newData,
+            product_attribute,
+            productData,
+          );
+        } catch (err) {
+          strapi.notification.toggle({
+            type: 'warning',
+            title: `Custom Formula Error`,
+            message: err.message,
+            timeout: 30000
+          });
+        }
+        
       }
 
       // Round rating to 1 decimal digit
@@ -77,7 +69,10 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
         newData.rating = Number(Number(newData.rating).toFixed(1));
       }
 
-      onChange(newData);
+      onChange({
+        ...newData,
+        product_attribute,
+      });
     }
   }, [
     onChange,
@@ -92,6 +87,10 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
     min,
     max,
   ]);
+
+  const onProductDataUpdate = useCallback(() => {
+    onItemChange({});
+  }, [ onItemChange ]);
 
   const onRatingChange = useCallback((newRating) => {
     if ( typeof onChange === 'function' ) {
@@ -128,6 +127,10 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
     !enabled ? 'attribute-rating--disabled' : '',
   ].filter(Boolean).join(' ');
 
+  useEffect(() => {
+    onProductDataUpdate();
+  }, [ productData ]);
+
   return [
     <tr className={classNames}>
       <td>
@@ -151,7 +154,9 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
       <td>
         <RatingWarpsControl
           rating={rating}
-          onChange={newRating => onRatingChange(newRating)} />
+          onChange={newRating => onRatingChange(newRating)}
+          disabled={use_custom_formula}
+        />
       </td>
       <td>
         <Button
@@ -172,8 +177,8 @@ const AttributeRating = ({ product_attribute, factor, rating = 0, points, enable
           <div className='attribute-rating__custom-formula'>
             <TextInput label='Custom Formula' className='attribute-rating__formula-preview' value={custom_formula} disabled />
             <div className='attribute-rating__min-max'>
-              <AttributeMinMaxInput label='Min' value={min} type={data_type} onChange={(min => onMinMaxChange({ min, max }))} />
-              <AttributeMinMaxInput label='Max' value={max} type={data_type} onChange={(max => onMinMaxChange({ min, max }))} />
+              <AttributeMinMaxInput label={product_attribute.min_label || 'Min'} disabled={product_attribute.disable_min} value={min} type={data_type} onChange={(min => onMinMaxChange({ min, max }))} />
+              <AttributeMinMaxInput label={product_attribute.max_label || 'Max'} disabled={product_attribute.disable_max} value={max} type={data_type} onChange={(max => onMinMaxChange({ min, max }))} />
             </div>
           </div>
         </td>
