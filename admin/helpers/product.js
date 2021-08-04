@@ -12,7 +12,7 @@ const { JSDOM } = require('jsdom');
 const { addURLParams } = require('./url');
 
 const EBAY_GETITEM_ENDPOINT = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=KirillKr-ifindilu-PRD-9afbfbe27-8527205b&siteid=0&version=967&IncludeSelector=Details&ItemID=';
-const TIMEOUT = 60000;
+const TIMEOUT = 30000;
 
 const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
@@ -67,7 +67,7 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
       // Scrape for all amazon details if applicable
       if ( !scrapePriceOnly ) {
         await detailPage.goto(urlWithLanguage, { timeout: TIMEOUT })
-        await detailPage.waitForSelector(productSectionSelector, { timeout: 5000 });
+        await detailPage.waitForSelector(productSectionSelector, { timeout: TIMEOUT });
 
         const detailPageHTML = await detailPage.$eval(productSectionSelector, detailContents => detailContents.outerHTML);
 
