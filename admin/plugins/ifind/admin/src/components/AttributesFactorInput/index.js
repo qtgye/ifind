@@ -4,9 +4,9 @@ import { Label } from '@buffetjs/core';
 import { v4 as uuid } from 'uuid';
 
 import { useProductAttributes } from '../../providers/productAttributesProvider';
-import Item from './item';
+import NumberInput from '../NumberInput';
 
-const AttributesFactorInput = ({ label, factors, onChange, className }) => {
+const AttributesFactorInput = ({ label, attributeFactors, onChange, className }) => {
   const { productAttributes } = useProductAttributes();
   const [ factorsInputs, setFactorInputs ] = useState([]);
 
@@ -16,35 +16,42 @@ const AttributesFactorInput = ({ label, factors, onChange, className }) => {
   ].filter(Boolean).join(' ');
 
   const onItemChange = useCallback((changedItemData) => {
-    console.log({ changedItemData });
-  }, []);
+    if ( typeof onChange !== 'function' ) {
+      return;
+    }
+
+    const updatedFactorInputs = factorsInputs.map(factorInput => ({
+      ...factorInput,
+      factor: changedItemData.itemKey === factorInput.itemKey ? changedItemData.factor : factorInput.factor,
+    }));
+    onChange(updatedFactorInputs);
+  }, [ factorsInputs, onChange ]);
 
   useEffect(() => {
     // Map productAttributes
     // Match category's factorInputs
     const attributesWithFactors = productAttributes.map(productAttribute => {
-      const matchedCategoryAttributeFactor = factors.find(factor => (
+      const matchedCategoryAttributeFactor = attributeFactors.find(factor => (
         factor && factor.product_attribute && factor.product_attribute.id === productAttribute.id
       ));
 
       const itemKey = matchedCategoryAttributeFactor?.itemKey || uuid();
       const factor = matchedCategoryAttributeFactor?.factor || 1;
-      const label_preview = matchedCategoryAttributeFactor?.label_preview || `${productAttribute.name} (${factor})`;
+      const label_preview = productAttribute.name;
 
       return {
         id: matchedCategoryAttributeFactor?.id || null,
         itemKey,
         factor,
         label_preview,
+        product_attribute: factor.product_attribute,
       }
     });
 
-    setFactorInputs(attributesWithFactors)
-  }, [ factors, productAttributes ]);
+    console.log({ attributesWithFactors });
 
-  useEffect(() => {
-    console.log({ factorsInputs });
-  }, [ factorsInputs ]);
+    setFactorInputs(attributesWithFactors)
+  }, [ attributeFactors, productAttributes ]);
 
   return (
     <div className={classNames}>
@@ -62,7 +69,14 @@ const AttributesFactorInput = ({ label, factors, onChange, className }) => {
                   {attrWithFactor.label_preview}
                 </td>
                 <td>
-                  {attrWithFactor.factor}
+                  <NumberInput
+                    value={attrWithFactor.factor}
+                    step="0.1"
+                    onChange={(value) => onItemChange({
+                      factor: Number(value),
+                      itemKey: attrWithFactor.itemKey,
+                    })}
+                  />
                 </td>
               </tr>
             ))

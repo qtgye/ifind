@@ -20,10 +20,9 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
   const [ translatedLabels, setTranslatedLabels ] = useState([]);
   const [ parent, setParent ] = useState(null);
   const [ labelPreview , setLabelPreview] = useState('');
+  const [ attributeFactors , setAttributeFactors] = useState([]);
 
   const onChange = useCallback((newData) => {
-    console.log({ newData });
-
     if ( typeof setCategoryFormData === 'function' ) {
       setCategoryFormData(newData);
     }
@@ -38,11 +37,11 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
   }, []);
 
   const onParentSelect = useCallback((parent) => {
-    setParent(parent)
+    setParent(parent);
   }, []);
 
-  const onFactorsChange = useCallback((attributesFactos) => {
-    console.log({ attributesFactors });
+  const onFactorsChange = useCallback((attributesFactors) => {
+    setAttributeFactors([...attributesFactors]);
   }, []);
 
   useEffect(() => {
@@ -112,6 +111,7 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
         <AttributesFactorInput
           className='col-md-12'
           onChange={onFactorsChange}
+          attributeFactors={attributeFactors}
         />
       </Panel>
     </form>
