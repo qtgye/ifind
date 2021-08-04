@@ -12,7 +12,7 @@ const { JSDOM } = require('jsdom');
 const { addURLParams } = require('./url');
 
 const EBAY_GETITEM_ENDPOINT = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=KirillKr-ifindilu-PRD-9afbfbe27-8527205b&siteid=0&version=967&IncludeSelector=Details&ItemID=';
-const TIMEOUT = 30000;
+const TIMEOUT = 60000;
 
 const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
