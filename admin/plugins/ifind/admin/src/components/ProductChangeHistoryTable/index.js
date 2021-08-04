@@ -34,23 +34,29 @@ const ProductChangeHistoryTable = ({ className }) => {
       <table className="product-change-history-table__table">
         <thead>
           <tr>
-            <th>Datetime</th>
+            <th>Datetime (UTC)</th>
             <th>Admin User</th>
             <th>Change Type</th>
             <th>Changes Applied</th>
           </tr>
         </thead>
         <tbody>
-          {productChanges.map(productChange => (
-            <tr key={productChange.date_time}>
-              <td>{moment.utc(productChange.date_time).format('YYYY-MM-DD')}</td>
+          {productChanges.map(productChange => {
+            const dateTime = moment.utc(productChange.date_time);
+            return (
+              <tr key={productChange.date_time}>
+              <td>
+                <strong>{dateTime.format('YYYY-MM-DD')}</strong>&nbsp;
+                <em>{dateTime.format('HH:MM:SS a')}</em>
+              </td>
               <td>{productChange.admin_user ? `${productChange.admin_user.firstname} ${productChange.admin_user.lastname}` : ''}</td>
               <td>{productChange.change_type}</td>
               <td>
                 {productChange.state ? <JSONPreview data={productChange.state} className='product-change-history-table__state' /> : ''}
               </td>
             </tr>
-          ))}
+            )
+          })}
         </tbody>
       </table>
     </div>

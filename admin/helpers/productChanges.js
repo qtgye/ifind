@@ -62,6 +62,7 @@ const compareProductChanges = (originalData, changedData) => {
       case 'position':
       case 'final_rating':
       case 'details_html':
+      case 'clicks_count':
         return changedData[formKey] != originalData[formKey];
       default:;
     }

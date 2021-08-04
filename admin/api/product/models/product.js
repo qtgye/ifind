@@ -164,8 +164,10 @@ const saveProductChange = async (id, changeType = 'update') => {
   }
 
   // Determine change_type
-  if ( 'status' in state && changeType !== 'create' ) {
-     change_type = 'publish';
+  if ( changeType !== 'create' ) {
+    if ( 'status' in state ) {
+      change_type = 'publish';
+    }
   }
 
   await strapi.query('product-change').create({
