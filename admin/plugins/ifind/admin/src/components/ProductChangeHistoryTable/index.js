@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import { useProduct } from '../../providers/productProvider';
-
+import JSONPreview from '../JSONPreview';
 import './styles.scss';
 
 const ProductChangeHistoryTable = ({ className }) => {
@@ -46,7 +46,9 @@ const ProductChangeHistoryTable = ({ className }) => {
               <td>{moment.utc(productChange.date_time).format('YYYY-MM-DD')}</td>
               <td>{productChange.admin_user ? `${productChange.admin_user.firstname} ${productChange.admin_user.lastname}` : ''}</td>
               <td>{productChange.change_type}</td>
-              <td><pre>{productChange.state ? JSON.stringify(productChange.state, null, '  ') : ''}</pre></td>
+              <td>
+                {productChange.state ? <JSONPreview data={productChange.state} className='product-change-history-table__state' /> : ''}
+              </td>
             </tr>
           ))}
         </tbody>
