@@ -8,15 +8,36 @@ import { useGQLFetch } from '../helpers/gqlFetch';
 const categoryFragment = `
 fragment categoryFragment on Category {
   id
-  parent
-  language
+  parent {
+    id
+  }
+  language {
+    code
+  }
   icon
   order
   label_preview
-  region
-  source
-  label
-  product_attrs
+  region {
+    id
+  }
+  source {
+    id
+  }
+  label {
+    label
+    language {
+      id
+      code
+    }
+  }
+  product_attrs {
+    factor
+    label_preview
+    product_attribute {
+      id
+      name
+    }
+  }
 }
 `
 
@@ -33,8 +54,10 @@ query Category ($id: ID!) {
 
 export const addCategoryMutation = `
 ${categoryFragment}
-mutation AddCategory ($data: createCategoryInput) {
-  createCategory (input: $data) {
+mutation AddCategory ($data: CategoryInput) {
+  createCategory (input: {
+    data: $data
+  }) {
     category {
       ... categoryFragment
     }
@@ -54,7 +77,11 @@ export const CategoryProvider = ({ children }) => {
     setLoading(true);
 
     gqlFetch(addCategoryMutation, { data })
-    .then(data => { console.log({ data }) })
+    .then(({ createCategory }) => {
+      if ( createCategory?.category ) {
+        setCategory(createCategory.category);
+      }
+    })
     .catch(err => console.error(err))
     .finally(() => setLoading(false));
   }, []);

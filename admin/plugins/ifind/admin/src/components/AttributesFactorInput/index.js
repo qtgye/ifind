@@ -6,6 +6,8 @@ import { v4 as uuid } from 'uuid';
 import { useProductAttributes } from '../../providers/productAttributesProvider';
 import NumberInput from '../NumberInput';
 
+import './styles.scss';
+
 const AttributesFactorInput = ({ label, attributeFactors, onChange, className }) => {
   const { productAttributes } = useProductAttributes();
   const [ factorsInputs, setFactorInputs ] = useState([]);
@@ -27,13 +29,13 @@ const AttributesFactorInput = ({ label, attributeFactors, onChange, className })
     onChange(updatedFactorInputs);
   }, [ factorsInputs, onChange ]);
 
-  useEffect(() => {
+  const getNormalizedAttrFactors = useCallback(() => {
     // Map productAttributes
     // Match category's factorInputs
     const attributesWithFactors = productAttributes.map(productAttribute => {
-      const matchedCategoryAttributeFactor = attributeFactors.find(factor => (
-        factor && factor.product_attribute && factor.product_attribute.id === productAttribute.id
-      ));
+      const matchedCategoryAttributeFactor = attributeFactors.find(attrFactor => {
+        return attrFactor && attrFactor.product_attribute && attrFactor.product_attribute.id == productAttribute.id
+      });
 
       const itemKey = matchedCategoryAttributeFactor?.itemKey || uuid();
       const factor = matchedCategoryAttributeFactor?.factor || 1;
@@ -44,14 +46,22 @@ const AttributesFactorInput = ({ label, attributeFactors, onChange, className })
         itemKey,
         factor,
         label_preview,
-        product_attribute: factor.product_attribute,
+        product_attribute: productAttribute,
       }
     });
 
-    console.log({ attributesWithFactors });
+    return attributesWithFactors;
+  }, [ productAttributes, attributeFactors ]);
 
-    setFactorInputs(attributesWithFactors)
+  useEffect(() => {
+    setFactorInputs(getNormalizedAttrFactors());
   }, [ attributeFactors, productAttributes ]);
+
+  useEffect(() => {
+    if ( typeof onChange === 'function' ) {
+      onChange(getNormalizedAttrFactors());
+    }
+  }, [ productAttributes ]);
 
   return (
     <div className={classNames}>
