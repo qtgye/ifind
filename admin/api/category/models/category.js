@@ -20,6 +20,12 @@ const processCategoryData = async data => {
       const matchedProductAttr = productAttributes.find(({ id }) => id === catProductAttr.product_attribute);
       catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
     });
+  } else {
+    // Use defaults
+    data.product_attrs = productAttributes.map(product_attribute => ({
+      product_attribute: product_attribute.id,
+      factor: 1,
+    }))
   }
 }
 
@@ -34,8 +40,12 @@ const afterSave = async (data) => {
 
     const updatedProductAttrs = productData.attrs_rating.map(attrRating => {
       const matchedAttribute = data.product_attrs.find(({ product_attribute }) => (
-        product_attribute.id === attrRating.product_attribute.id
+        product_attribute.id == attrRating.product_attribute.id
       ));
+
+      if ( !matchedAttribute ) {
+        return attrRating;
+      }
 
       const newPoints = matchedAttribute.factor * attrRating.rating;
       totalProductPoints += newPoints;
@@ -50,10 +60,14 @@ const afterSave = async (data) => {
     const final_rating = totalProductPoints / totalAttrsPoints * 10;
 
     // Save product
-    await strapi.query('product').update({ id: productData.id }, {
-      attrs_rating: updatedProductAttrs,
-      final_rating,
-    });
+    try {
+      await strapi.query('product').update({ id: productData.id }, {
+        attrs_rating: updatedProductAttrs,
+        final_rating,
+      });
+    } catch (err) {
+      throw new Error(`Error after saving category ${data.label_preview}: ${err.message}`);
+    }
   }));
 }
 

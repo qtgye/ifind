@@ -114,19 +114,21 @@ const processProductData = async (data, id) => {
       attrRating.product_attribute == id
     ));
 
-    // Autofill release date if applicable
-    if ( /release/i.test(matchedProductAttribute.name) && data.releaseDate ) {
-      attrRating.use_custom_formula = true;
-      attrRating.min = data.releaseDate;
-      attrRating.max = moment.utc().subtract(3, 'years').toISOString();
-    }
+    if ( matchedProductAttribute ) {
+      // Autofill release date if applicable
+      if ( /release/i.test(matchedProductAttribute.name) && data.releaseDate ) {
+        attrRating.use_custom_formula = true;
+        attrRating.min = data.releaseDate;
+        attrRating.max = moment.utc().subtract(3, 'years').toISOString();
+      }
 
-    if ( attrRating.use_custom_formula ) {
-      attrRating.rating = applyCustomFormula(
-        attrRating,
-        matchedProductAttribute,
-        data,
-      )
+      if ( attrRating.use_custom_formula ) {
+        attrRating.rating = applyCustomFormula(
+          attrRating,
+          matchedProductAttribute,
+          data,
+        )
+      }
     }
 
     return attrRating;
