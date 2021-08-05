@@ -37,6 +37,10 @@ const afterSave = async (data) => {
         product_attribute.id == attrRating.product_attribute.id
       ));
 
+      if ( !matchedAttribute ) {
+        return attrRating;
+      }
+
       const newPoints = matchedAttribute.factor * attrRating.rating;
       totalProductPoints += newPoints;
 
