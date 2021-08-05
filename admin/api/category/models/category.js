@@ -34,7 +34,7 @@ const afterSave = async (data) => {
 
     const updatedProductAttrs = productData.attrs_rating.map(attrRating => {
       const matchedAttribute = data.product_attrs.find(({ product_attribute }) => (
-        product_attribute.id === attrRating.product_attribute.id
+        product_attribute.id == attrRating.product_attribute.id
       ));
 
       const newPoints = matchedAttribute.factor * attrRating.rating;
