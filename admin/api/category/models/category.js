@@ -58,7 +58,10 @@ const afterSave = async (data) => {
       attrs_rating: updatedProductAttrs,
       final_rating,
     });
-  }));
+  }))
+  .catch(err => {
+    throw new Error(`Error after saving category ${data.label_preview}: ${err.message}`);
+  });
 }
 
 module.exports = {
