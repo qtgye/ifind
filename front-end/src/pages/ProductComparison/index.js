@@ -5,11 +5,10 @@ import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import NaturalList from '@components/NaturalList';
 
-
 const ProductComparison = () => {
   const { productComparisonList, loading } = useProductComparison();
   const icon = '/images/loading.png';
-  // const [isLoading, setIsLoading] = useState(true);
+  const prodcompRef = useRef();
 
   const { setActiveCategory } = useContext(GlobalStateContext);
   let options = {
@@ -38,16 +37,12 @@ const ProductComparison = () => {
     }
   }, [observerRef]);
 
-  // useEffect(() => {
-  //   if (productComparisonList) {
-  //     setIsLoading(false);
-  //   }
-  // }, [productComparisonList])
-
 
   return (
     <GeneralTemplate>
-      <div className="product-comparison">
+      <div ref={prodcompRef}
+        className="product-comparison"
+      >
         <div className="container" style={{ paddingLeft: '280px' }}>
           {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
           <div className="product-comparison__list">

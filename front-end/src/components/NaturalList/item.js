@@ -1,4 +1,4 @@
-const Item = ({ active, image, title, withBadge, onClick }) => {
+const Item = ({ active, image, title, price, withBadge, onClick }) => {
     const itemClassnames = [
         'natural-list__item',
         active && 'natural-list__item--active ',
@@ -7,12 +7,15 @@ const Item = ({ active, image, title, withBadge, onClick }) => {
     return (
         <li className={itemClassnames.join(' ')} onClick={onClick}>
             <figure className="natural-list__figure">
-
+                <div className="natural-list__price">
+                    <span>{price} €</span>
+                </div>
                 {withBadge && (
                     <span className="natural-list__badge">Best Seller</span>
                 )}
 
                 <img className="img natural-list__image" src={image} alt="" />
+
                 {/* <img className="img natural-list__image" src={image} alt={`${title}`} />
                 <figcaption className="natural-list__title">{title}</figcaption> */}
 
