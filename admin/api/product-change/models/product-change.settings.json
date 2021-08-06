@@ -24,6 +24,18 @@
     "product": {
       "via": "product_changes",
       "model": "product"
+    },
+    "change_type": {
+      "type": "enumeration",
+      "enum": [
+        "create",
+        "update",
+        "admin_update",
+        "publish",
+        "trash",
+        "category_post_update"
+      ],
+      "default": "admin_update"
     }
   }
 }

@@ -70,6 +70,35 @@ const daysAgo = (dateTimeUTC = '') => {
   return Number(computedRating.toFixed(1));
 }
 
+const compareAttributeChanges = (originalAttribute, changedAtrribute) => {
+  const hasChanges = Object.entries(changedAtrribute).some(([objectKey]) => {
+    switch (objectKey) {
+      case 'min':
+      case 'max':
+        // Min/Max for release is autopopulated, so check if custom_formula is used
+        if ( /release/i.test(originalAttribute.product_attribute.name) ) {
+          return changedAtrribute.use_custom_formula !== originalAttribute.use_custom_formula;
+        }
+        // Else, just normally check for changes
+        return changedAtrribute[objectKey] != originalAttribute[objectKey];
+      case 'enabled':
+      case 'factor':
+      case 'points':
+      case 'rating':
+      case 'use_custom_formula':
+        return changedAtrribute[objectKey] != originalAttribute[objectKey];
+      default :;
+        return false;
+    }
+  });
+
+  const attrChanges = hasChanges ? changedAtrribute : null;
+
+  return attrChanges;
+}
+
+
 module.exports = {
-  applyCustomFormula
+  applyCustomFormula,
+  compareAttributeChanges,
 };

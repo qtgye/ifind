@@ -25,8 +25,12 @@
       grid-row: 1 / span 4;
     }
 
+    &--history {
+      grid-column: 1 / -1;
+    }
+
     &--meta {
-      grid-column: 1 / span 8;
+      grid-column: 1 / -1;
     }
   }
 

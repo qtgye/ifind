@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useCallback, useState } from 'react';
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { apiSourceHandle } from '@config/adminApi'
 import getProductDetailQuery from '@gql/getProductDetailQuery';
+import incrementProductClickMutation from '@gql/incrementProductClickMutation';
 
 import { locale } from '@config/locale';
 
@@ -24,10 +25,23 @@ export const ProductContextProvider = ({ children }) => {
             language: locale,
         }
     });
+    const [
+        mutationFunction,
+        // { data: mutationData, loading, error },
+    ] = useMutation(incrementProductClickMutation);
 
     const fetchProductDetail = useCallback(( productID ) => {
         setProductID(productID);
     }, [ setProductID ]);
+
+    const incrementProductClick = useCallback((id) => {
+        mutationFunction({
+            variables: { id},
+            context: {
+                apiSource: apiSourceHandle,
+            },
+        });
+    }, [ mutationFunction ]);
 
     useEffect(() => {
         refetch();
@@ -38,7 +52,11 @@ export const ProductContextProvider = ({ children }) => {
     }, [ data ]);
 
     return (
-        <ProductContext.Provider value={{ productDetail, fetchProductDetail }}>
+        <ProductContext.Provider value={{
+            productDetail,
+            fetchProductDetail,
+            incrementProductClick,
+        }}>
             {children}
         </ProductContext.Provider>
     )

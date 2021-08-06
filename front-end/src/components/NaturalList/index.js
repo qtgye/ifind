@@ -4,11 +4,13 @@ import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
+import { useProductDetail } from '@contexts/productContext';
 import Item from './item';
 
 import './natural-list.scss';
 
 const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
+    const { incrementProductClick } = useProductDetail();
 
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
@@ -21,7 +23,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
-    }, [setActiveProduct]);
+        incrementProductClick(product.id);
+    }, [setActiveProduct, incrementProductClick]);
 
     useEffect(() => {
         if (activeProduct) {

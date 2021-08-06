@@ -54,6 +54,7 @@ fragment ProductDataFragment on Product {
     use_custom_formula
     min
     max
+    factor
   }
   final_rating
   created_at
@@ -61,6 +62,11 @@ fragment ProductDataFragment on Product {
   product_changes {
     state
     date_time
+    change_type
+    admin_user {
+      firstname
+      lastname
+    }
   }
 }
 `;
@@ -99,6 +105,7 @@ position: $position
 attrs_rating: $attrs_rating
 final_rating: $final_rating
 release_date: $release_date
+admin_user: $user
 `;
 
 export const updateProductMutation = `
@@ -117,7 +124,6 @@ mutation UpdateProduct (
       }
       data: {
         ${productMutationCommonInput}
-        updated_by: $user
       }
     }
   )
@@ -139,7 +145,6 @@ mutation CreateProduct (
   createProduct (input: {
     data: {
       ${productMutationCommonInput}
-      created_by: $user
     }
   }) {
     product {

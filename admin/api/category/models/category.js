@@ -8,6 +8,8 @@
 const processCategoryData = async data => {
   const productAttributes = await strapi.services['product-attribute'].getCommon();
 
+  console.log('saving category', data);
+
   if ( data.label && data.label.length ) {
     const englishLanguage = await strapi.services.language.findOne({ code: 'en' });
     const englishLabel = data.label.find(label => label.language == englishLanguage.id);
@@ -20,10 +22,26 @@ const processCategoryData = async data => {
       const matchedProductAttr = productAttributes.find(({ id }) => id === catProductAttr.product_attribute);
       catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
     });
+
+    // Allow afterSave to pickup whether to update products or not
+    strapi.categoryChangeUpdateProducts = true;
+  } else {
+    // Use defaults
+    data.product_attrs = productAttributes.map(product_attribute => ({
+      product_attribute: product_attribute.id,
+      factor: 1,
+    }))
   }
 }
 
 const afterSave = async (data) => {
+  if ( !strapi.categoryChangeUpdateProducts ) {
+    return;
+  }
+
+  // Delete temporary data
+  delete strapi.categoryChangeUpdateProducts;
+
   const totalAttrsPoints = data.product_attrs.reduce((sum, attrData) => (
     sum + (attrData.factor * 10)
   ), 0);
@@ -34,8 +52,12 @@ const afterSave = async (data) => {
 
     const updatedProductAttrs = productData.attrs_rating.map(attrRating => {
       const matchedAttribute = data.product_attrs.find(({ product_attribute }) => (
-        product_attribute.id === attrRating.product_attribute.id
+        product_attribute.id == attrRating.product_attribute.id
       ));
+
+      if ( !matchedAttribute ) {
+        return attrRating;
+      }
 
       const newPoints = matchedAttribute.factor * attrRating.rating;
       totalProductPoints += newPoints;
@@ -50,10 +72,19 @@ const afterSave = async (data) => {
     const final_rating = totalProductPoints / totalAttrsPoints * 10;
 
     // Save product
-    await strapi.query('product').update({ id: productData.id }, {
-      attrs_rating: updatedProductAttrs,
-      final_rating,
-    });
+    try {
+      const changedData = {
+        attrs_rating: updatedProductAttrs,
+        final_rating,
+      };
+
+      // Allow product model's afterSave to pickup this changeType
+      strapi.productChangeType = 'category_post_update';
+      strapi.productChangedData = changedData;
+      await strapi.query('product').update({ id: productData.id }, changedData);
+    } catch (err) {
+      throw new Error(`Error after saving category ${data.label_preview}: ${err.message}`);
+    }
   }));
 }
 
