@@ -8,6 +8,8 @@
 const processCategoryData = async data => {
   const productAttributes = await strapi.services['product-attribute'].getCommon();
 
+  console.log('saving category', data);
+
   if ( data.label && data.label.length ) {
     const englishLanguage = await strapi.services.language.findOne({ code: 'en' });
     const englishLabel = data.label.find(label => label.language == englishLanguage.id);

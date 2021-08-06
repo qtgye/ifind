@@ -59,22 +59,14 @@
  }`;
  
  const categoryFieldsCompleteFragment = `
+ ${categoryFieldsOverviewFragment}
+ ${categoryFieldsDetailsFragment}
  fragment CategoryFieldsComplete on Category {
    ... CategoryFieldsOverview
    ... CategoryFieldsDetails
  }`;
- 
- const updatedCategoryFieldsFragment = `
- fragment UpdatedCategoryFields on updateCategoryPayload {
-   category {
-     ... CategoryFieldsComplete
-   }
- }`;
- 
- 
+
  const categoriesQuery = `
- ${categoryFieldsOverviewFragment}
- ${categoryFieldsDetailsFragment}
  ${categoryFieldsCompleteFragment}
  query GetCategories {
    categories {
@@ -83,35 +75,46 @@
  }
  `;
  
- const categoriesMutation = (categories) => (
-   `
-   ${categoryFieldsOverviewFragment}
-   ${categoryFieldsDetailsFragment}
-   ${categoryFieldsCompleteFragment}
-   ${updatedCategoryFieldsFragment}
-   mutation {
-     ${
-       categories
-       .map(({ id, ...data }, index) => `
-         updateCategory${index}: updateCategory (input: {
-           where: { id: ${id} },
-           data: {
-             ${
-               Object.entries(data)
-               .map(([key, value]) => `${key}: ${ typeof value === 'string' ? `"${value}"` : value }`)
-               .join(',\n')
-             }
-           }
-         }) {
-           ... UpdatedCategoryFields
-         }
-       `)
-       .join('\n')
-     }
-   }
-   `
- );
- 
+//  const categoriesMutation = (categories) => (
+//    `
+//    ${categoryFieldsOverviewFragment}
+//    ${categoryFieldsDetailsFragment}
+//    ${categoryFieldsCompleteFragment}
+//    ${updatedCategoryFieldsFragment}
+//    mutation {
+//      ${
+//        categories
+//        .map(({ id, ...data }, index) => `
+//          updateCategory${index}: updateCategory (input: {
+//            where: { id: ${id} },
+//            data: {
+//              ${
+//                Object.entries(data)
+//                .map(([key, value]) => `${key}: ${ typeof value === 'string' ? `"${value}"` : value }`)
+//                .join(',\n')
+//              }
+//            }
+//          }) {
+//            ... UpdatedCategoryFields
+//          }
+//        `)
+//        .join('\n')
+//      }
+//    }
+//    `
+//  );
+
+const categoriesMutation = `
+${categoryFieldsCompleteFragment}
+mutation UpdateCategories(
+  $categories: [updateCategoryInput]
+  ) {
+    updateCategories( categories: $categories ) {
+      ... CategoryFieldsComplete
+    }
+  }
+  `;
+
  export const flattenCategoriesTree = (tree, currentDepth = 0) => {
    const list = Object.values(tree)
    // Sort items first
@@ -240,13 +243,18 @@
   const [ error, setError ] = useState(false);
 
   const updateCategories = useCallback((updatedCategories) => {
-    callMutation(categoriesMutation(updatedCategories));
+    callMutation(categoriesMutation, {
+      categories: updatedCategories.map(({ id, ...data }) => ({
+        where: { id },
+        data,
+      }))
+    });
   }, [ callMutation ]);
 
   const updateCategoriesList = useCallback((updatedCategoriesList) => {
     // Map updated categories by id
     const newCategoriesMap = Object.values(updatedCategoriesList)
-                            .reduce((all, { category }) => {
+                            .reduce((all, category) => {
                               all[category.id] = category;
                               return all;
                             }, {});
@@ -254,7 +262,7 @@
     // Replace matching categories with updated ones
     const updatedCategories = categories.map(category => {
       if ( category.id in newCategoriesMap ) {
-      return newCategoriesMap[category.id];
+        return newCategoriesMap[category.id];
       }
       return category;
     });
@@ -279,8 +287,8 @@
   }, [ data ]);
 
   useEffect(() => {
-    if ( updatedCategoriesData ) {
-      updateCategoriesList(updatedCategoriesData);
+    if ( updatedCategoriesData?.updateCategories ) {
+      updateCategoriesList(updatedCategoriesData.updateCategories);
     }
   }, [ updatedCategoriesData ]);
 
