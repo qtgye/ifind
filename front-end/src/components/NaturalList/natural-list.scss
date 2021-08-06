@@ -174,12 +174,14 @@ $item-layout: (
     &__title {
         display: flex;
         position: absolute;
-        bottom: 0;
+        bottom: 5%;
         left: 0;
         width: 100%;
         padding: 10px;
         background-color: rgba(color(white), .8);
         text-align: left;
+        align-items: left;
+        align-content: left;
         transition: all .3s;
     }
 
@@ -267,7 +269,7 @@ $item-layout: (
         display: flex;
         position: absolute;
         margin-top: -42px;
-        margin-left: 540pt;
+        margin-left: 505pt;
 
         button {
             background-color: $white;
@@ -282,6 +284,29 @@ $item-layout: (
         button:hover {
             background-color: $red;
             color: $white
+        }
+    }
+
+    &__price {
+        position: absolute;
+        text-align: right;
+        font-weight: bold;
+        font-size: small;
+        background-color: rgba(color(white), 0.3);
+        bottom: 0;
+        left: 0;
+        padding: 3px;
+        width: 100%;
+        cursor: default;
+
+        span {
+            text-align: left;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 2px 2px 3px $white;
+            border: 1px solid $gray-500;
+            color: $gray-900;
+            padding: 2px;
         }
     }
 }

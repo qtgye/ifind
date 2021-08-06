@@ -15,7 +15,7 @@ const Header = () => {
     const { pathname } = useLocation();
     const { contactInfo } = useGlobalData();
     const [isSticky, setIsSticky] = useState(false);
-    //const [classNames, setClassNames] = useState('header');
+    // const [classNames, setClassNames] = useState('header');
     const [classNames] = useState('header');
 
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
@@ -31,7 +31,7 @@ const Header = () => {
 
     // Apply necessary classnames for sticky state
     useEffect(() => {
-        // const updatedClassNames = ['header'];
+        //const updatedClassNames = ['header'];
 
         // if (isSticky) {
         //     updatedClassNames.push('header--sticked');

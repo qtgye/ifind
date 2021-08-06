@@ -18,9 +18,11 @@ const HeaderSideNav = ({ withSideNav }) => {
     const { on } = eventBus;
     const listRef = useRef();
 
+    const [isVisible, setIsVisible] = useState(false);
+    const changeVisibility = () => setIsVisible(!isVisible);
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
-
+    // const [isHovered, setisHovered] = useState(false);
     const triggerScroll = useCallback(() => {
         listRef.current.scrollTop += listRef.current.offsetHeight;
     }, [listRef]);
@@ -36,60 +38,70 @@ const HeaderSideNav = ({ withSideNav }) => {
     return withSideNav ?
         (
             <div className="header-side-nav">
-                <h3 className="header-side-nav__heading"><i aria-hidden="true"
-                    className="fa fa-bars"></i>CATEGORIES</h3>
-                <div ref={listRef} className="header-side-nav__list">
+                <h3 className="header-side-nav__heading"
+                    onClick={changeVisibility}
+                >
+                    <i aria-hidden="true" className="fa fa-bars"></i>CATEGORIES</h3>
+                {isVisible ? <div ref={listRef}
+                    className="header-side-nav__list"
+                >
 
-                    {currentRouteConfig.path === '/' ?
-                        (<div>
-                            {homedata.map((item, index) => {
-                                return (
-                                    <div key={index}
-                                        className={["list", index === 0 ? "active" : ""].join(" ")}
-                                    >
-                                        <button>
-                                            {item.categoryIcon}
-                                            <span>{item.categoryLabel}</span>
-                                        </button>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                        ) : (<div>
-
-                            <div className="header-side-nav__label">
-
-                                <label className="label">Scroll with Subcategories</label>
-                                <label className="switch">
-                                    <input id="check" type="checkbox"
-                                        onChange={checkChange}
-                                        checked={checked}
-                                    />
-                                    <span className="slider round"></span>
-                                </label>
-
+                    {
+                        currentRouteConfig.path === '/' ?
+                            (<div>
+                                {homedata.map((item, index) => {
+                                    return (
+                                        <div key={index}
+                                            className={["list", index === 0 ? "active" : ""].join(" ")}
+                                        >
+                                            <button>
+                                                {item.categoryIcon}
+                                                <span>{item.categoryLabel}</span>
+                                            </button>
+                                        </div>
+                                    )
+                                })}
                             </div>
-                            <div>
+                            ) : (<div>
 
-                                <HeaderSideNavSubMenu
-                                    id={categoryTree}
-                                    categories={categoryTree}
-                                    checked={checked}
-                                    checkChange={checkChange}
-                                    triggerScroll={triggerScroll}
-                                />
+                                <div className="header-side-nav__label">
 
-                            </div>
+                                    <label className="label">Display SideNav Bar</label>
+                                    <label className="switch">
+                                        <input id="check" type="checkbox"
+                                            onChange={checkChange}
+                                            checked={checked}
+                                        />
+                                        <span className="slider round"></span>
+                                    </label>
 
-                        </div>)
+                                </div>
+                                <div>
+
+                                    {
+                                        checked ?
+                                            <HeaderSideNavSubMenu
+                                                id={categoryTree}
+                                                categories={categoryTree}
+                                                checked={checked}
+                                                //checkChange={checkChange}
+                                                triggerScroll={triggerScroll}
+                                            /> : null
+                                    }
+
+                                </div>
+
+                            </div>)
 
                     }
 
-                </div>
+                </div> : null
+
+                }
 
                 {
                     currentRouteConfig.path === '/productcomparison' ?
-                        (<HeaderSideNavButton />) : null
+                        (isVisible && checked ? <HeaderSideNavButton /> : "") : null
                 }
 
             </div >
