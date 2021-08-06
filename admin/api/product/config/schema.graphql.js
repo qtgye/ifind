@@ -19,6 +19,10 @@ module.exports = {
       id: ID
       clicks_count: Int
     }
+    type FixedProductsPayload {
+      count: Int
+      products: [Product]
+    }
   `,
   query: `
     productDetails (id: ID!, language: String): ProductDetails
@@ -26,6 +30,7 @@ module.exports = {
   `,
   mutation: `
     addProductClick (id: ID!): ProductClicksDetails
+    fixProducts: FixedProductsPayload
   `,
   resolver: {
     Query: {
@@ -44,6 +49,13 @@ module.exports = {
         const updatedProductClicks = await strapi.services.product.addProductClick(args.id);
         return updatedProductClicks;
       },
+      async fixProducts() {
+        const updatedProducts = await strapi.services.product.fixProducts();
+        return {
+          count: updatedProducts.length,
+          products: updatedProducts,
+        }
+      }
     }
   }
 };

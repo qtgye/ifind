@@ -50,8 +50,7 @@ const processProductData = async (data, id) => {
   await Promise.all([
     // Add necessary params in the url
     (() => {
-      data.url_list = data && data.url_list && data.url_list.length ?
-      (
+      if ( data.url_list.length ) {
         data.url_list = data.url_list.map(urlData => {
           if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
             urlData.url = ebayLink(urlData.url);
@@ -59,8 +58,7 @@ const processProductData = async (data, id) => {
 
           return urlData;
         })
-      )
-      : [];
+      }
     })(),
 
     // Add dynamic position if not yet given
