@@ -92,7 +92,7 @@ module.exports = {
   },
 
   async fixProducts() {
-    const allProducts = await this.find();
+    const allProducts = await this.find({ _limit: 99999 });
     const productsWithProblems = filterProductsWithProblems(allProducts);
 
     return await Promise.all(
