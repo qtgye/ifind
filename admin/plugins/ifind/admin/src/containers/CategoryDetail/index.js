@@ -12,8 +12,9 @@ import FontAwesomeIcon from '../../components/FontAwesomeIcon';
 const CategoryDetail = () => {
   const history = useHistory();
   const { setIsLoading } = useGlobal();
-  const { category, addCategory, updateCategory, loading } = useCategory();
+  const { category, addCategory, updateCategory, deleteCategory, loading } = useCategory();
   const [ isSaving, setIsSaving ] = useState(false);
+  const [ isDeleting, setIsDeleting ] = useState(false);
   const [ categoryFormData, setCategoryFormData ] = useState();
 
   const redirectToAddCategory = useCallback(() => {
@@ -32,7 +33,14 @@ const CategoryDetail = () => {
     }
   }, [ categoryFormData, category, addCategory, updateCategory ]);
 
-  useEffect(() => {
+  const confirmDelete = useCallback(() => {
+    if ( confirm(`Are you sure to delete category "${category.label_preview}"?`) ) {
+      setIsDeleting(true);
+      deleteCategory(category.id);
+    }
+  }, [ category, deleteCategory, setIsDeleting ]);
+
+  const checkCategoryChange = useCallback(() => {
     if ( category?.id ) {
       if ( isSaving ) {
         strapi.notification.toggle({
@@ -40,14 +48,22 @@ const CategoryDetail = () => {
           timeout: 10000,
         });
         setIsSaving(false);
-      }
-      else {
+      } else {
         strapi.notification.toggle({
           message: 'Category Loaded!',
           timeout: 10000,
         });
       }
+    } else {
+      if ( isDeleting ) {
+        setIsDeleting(false);
+        history.push(generatePluginLink('categories'));
+      }
     }
+  }, [ category, isSaving, isDeleting ]);
+
+  useEffect(() => {
+    checkCategoryChange();
   }, [ category ]);
   
   useEffect(() => {
@@ -84,6 +100,7 @@ const CategoryDetail = () => {
         <CategoryForm
           category={category}
           setCategoryFormData={setCategoryFormData}
+          onDelete={confirmDelete}
         />
       </div>
     </div>

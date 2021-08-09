@@ -79,6 +79,19 @@ mutation UpdateCategory ($data: editCategoryInput, $id: ID!) {
 }
 `
 
+export const deleteCategoryMutation = `
+${categoryFragment}
+mutation DeleteCategory ($id: ID!) {
+  deleteCategory (input: {
+    where: { id: $id }
+  }) {
+    category {
+      ... categoryFragment
+    }
+  }
+}
+`
+
 export const CategoryContext = createContext({});
 
 export const CategoryProvider = ({ children }) => {
@@ -115,6 +128,15 @@ export const CategoryProvider = ({ children }) => {
     .finally(() => setLoading(false));
   }, [ category ]);
 
+  const deleteCategory = useCallback((id) => {
+    setLoading(true);
+
+    gqlFetch(deleteCategoryMutation, { id })
+    .then(() => setCategory(null))
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
+  }, []);
+
   const loadCategory = useCallback((id) => {
     setLoading(true);
 
@@ -140,6 +162,7 @@ export const CategoryProvider = ({ children }) => {
       loading,
       addCategory,
       updateCategory,
+      deleteCategory,
     }}>
       {children}
     </CategoryContext.Provider>

@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@buffetjs/core';
 
 import Panel from '../Panel';
 import IconSelect from '../IconSelect';
@@ -12,8 +13,9 @@ import { useLanguages } from '../../providers/languageProvider';
 import { useProductAttributes } from '../../providers/productAttributesProvider';
 
 import './styles.scss';
+import FontAwesomeIcon from '../FontAwesomeIcon';
 
-const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
+const CategoryForm = ({ category, setCategoryFormData, formErrors, onDelete }) => {
   const languages = useLanguages();
   const { productAttributes } = useProductAttributes();
 
@@ -129,12 +131,16 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
       setLabelPreview(category.label_preview);
       setAttributeFactors(category.product_attrs);
       setTranslatedLabels(category.label.map(({ language, ...label }) => ({
-        ...label, language: language.id,
+        ...label, language: language?.id,
       })));
     }
     // Create Category
     else {
       setDefaultAttributeFactors();
+      setIcon(null);
+      setParent(null);
+      setLabelPreview('');
+      setTranslatedLabels([]);
     }
   }, [ category ]);
 
@@ -177,6 +183,17 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
           onChange={onFactorsChange}
           attributeFactors={attributeFactors}
         />
+      </Panel>
+      <Panel className="category-form__panel category-form__panel--delete">
+        <div className="col-md-12">
+          <Button
+            color='delete'
+            label='Delete this Category'
+            icon={<FontAwesomeIcon icon='trash-alt' />}
+            onClick={onDelete}
+            className='category-form__delete'
+          />
+        </div>
       </Panel>
     </form>
   )
