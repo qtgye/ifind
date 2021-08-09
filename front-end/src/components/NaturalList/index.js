@@ -52,11 +52,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         }
     }, [focusedCategory, id]);
 
-    // useEffect(() => {
-    //     setTimeout(5000);
-    // }, [])
-
-
     return (
         <div className="natural-list">
             {currentRouteConfig.path === '/' ? null :
@@ -89,6 +84,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                             urlList={activeProduct?.url_list}
                                             title={activeProduct.title}
                                             isLoading={isDetailsLoading}
+                                            price={activeProduct.price}
                                         />
                                     }
 
