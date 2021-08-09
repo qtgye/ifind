@@ -1,28 +1,32 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button } from '@buffetjs/core';
 
 import Panel from '../Panel';
 import IconSelect from '../IconSelect';
 import TranslatedLabelsInput from '../TranslatedLabelsInput';
 import CategorySelect from '../CategorySelect';
 import TextInput from '../TextInput';
+import AttributesFactorInput from '../AttributesFactorInput';
 
 import { useLanguages } from '../../providers/languageProvider';
+import { useProductAttributes } from '../../providers/productAttributesProvider';
 
 import './styles.scss';
+import FontAwesomeIcon from '../FontAwesomeIcon';
 
-const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
+const CategoryForm = ({ category, setCategoryFormData, formErrors, onDelete }) => {
   const languages = useLanguages();
+  const { productAttributes } = useProductAttributes();
 
   // Form states
   const [ icon, setIcon ] = useState(null);
   const [ translatedLabels, setTranslatedLabels ] = useState([]);
   const [ parent, setParent ] = useState(null);
   const [ labelPreview , setLabelPreview] = useState('');
+  const [ attributeFactors , setAttributeFactors] = useState([]);
 
   const onChange = useCallback((newData) => {
-    console.log({ newData });
-
     if ( typeof setCategoryFormData === 'function' ) {
       setCategoryFormData(newData);
     }
@@ -37,8 +41,74 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
   }, []);
 
   const onParentSelect = useCallback((parent) => {
-    setParent(parent)
+    setParent(parent);
   }, []);
+
+  const onFactorsChange = useCallback((attributesFactors) => {
+    setAttributeFactors(attributesFactors);
+  }, []);
+
+  const setDefaultAttributeFactors = useCallback(() => {
+    setAttributeFactors(productAttributes.map(productAttr => ({
+      product_attribute: productAttr.id,
+      factor: 1,
+    })));
+  }, [ productAttributes ]);
+
+  const onFormChange = useCallback(() => {
+    // Format attribute factors to match graphql requirements
+    const formattedFactors = attributeFactors.map(attrFactor => {
+      const formattedFactor = {
+        factor: attrFactor.factor,
+        label_preview: attrFactor.label_preview,
+        product_attribute: attrFactor.product_attribute.id,
+      };
+
+      if ( attrFactor.id ) {
+        formattedFactor.id = attrFactor.id;
+      }
+
+      return formattedFactor;
+    });
+
+    // Format translated labels to match graphql requirements
+    const formattedLabels = translatedLabels.map(({ id, language, label}) => {
+      const formatedLabel = { language, label };
+
+      if ( id ) {
+        formatedLabel.id = id;
+      }
+
+      return formatedLabel;
+    });
+
+    onChange({
+      parent,
+      icon: icon?.replace(/-/g, '_'),
+      label_preview: labelPreview,
+      label: formattedLabels,
+      product_attrs: formattedFactors,
+    });
+  }, [
+    languages,
+    // form data
+    icon,
+    translatedLabels,
+    labelPreview,
+    parent,
+    attributeFactors,
+  ]);
+
+  useEffect(() => {
+    onFormChange();
+  }, [
+    onFormChange,
+    // form data
+    icon,
+    labelPreview,
+    parent,
+    attributeFactors,
+  ]);
 
   useEffect(() => {
     const englishLabel = languages.find(({ code }) => code === 'en');
@@ -51,23 +121,27 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
     ))?.label || translatedLabels.find(({ label }) => label)?.label || '';
 
     setLabelPreview(selectedLabel);
-
-    onChange({
-      icon,
-      translatedLabels,
-      parent,
-      labelPreview: selectedLabel,
-    })
-  }, [
-    languages,
-    // form data
-    icon,
-    translatedLabels,
-    parent,
-  ]);
+  }, [ translatedLabels ]);
 
   useEffect(() => {
-    console.log({ category });
+    // Edit Category
+    if ( category ) {
+      setIcon(category.icon?.replace(/_/g, '-'));
+      setParent(category.parent?.id);
+      setLabelPreview(category.label_preview);
+      setAttributeFactors(category.product_attrs);
+      setTranslatedLabels(category.label.map(({ language, ...label }) => ({
+        ...label, language: language?.id,
+      })));
+    }
+    // Create Category
+    else {
+      setDefaultAttributeFactors();
+      setIcon(null);
+      setParent(null);
+      setLabelPreview('');
+      setTranslatedLabels([]);
+    }
   }, [ category ]);
 
   return (
@@ -102,6 +176,24 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
           // hasError
           // emptyMessage
         />
+      </Panel>
+      <Panel title='Attributes Factoring' className="category-form__panel category-form__panel--factoring">
+        <AttributesFactorInput
+          className='col-md-6'
+          onChange={onFactorsChange}
+          attributeFactors={attributeFactors}
+        />
+      </Panel>
+      <Panel className="category-form__panel category-form__panel--delete">
+        <div className="col-md-12">
+          <Button
+            color='delete'
+            label='Delete this Category'
+            icon={<FontAwesomeIcon icon='trash-alt' />}
+            onClick={onDelete}
+            className='category-form__delete'
+          />
+        </div>
       </Panel>
     </form>
   )

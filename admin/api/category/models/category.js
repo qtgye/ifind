@@ -19,7 +19,7 @@ const processCategoryData = async data => {
 
   if ( data.product_attrs && data.product_attrs.length ) {
     data.product_attrs.forEach(catProductAttr => {
-      const matchedProductAttr = productAttributes.find(({ id }) => id === catProductAttr.product_attribute);
+      const matchedProductAttr = productAttributes.find(({ id }) => id == catProductAttr.product_attribute);
       catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
     });
 

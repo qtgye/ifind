@@ -4,6 +4,7 @@ import { useDrag, useDrop } from 'react-sortly';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import ProductListLink from './product-list-link';
+import { generatePluginLink } from '../../helpers/url';
 
 const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, products } }) => {
   const [, drag] = useDrag();
@@ -19,8 +20,8 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, product
             ) }
           </div>
           <div className="category-tree__details">
-            <Link to={`/plugins/content-manager/collectionType/application::category.category/${id}`}>
-              {label}
+            <Link to={generatePluginLink(`categories/${id}`)}>
+              [{id}] {label}
               <FontAwesomeIcon className='category-tree__item-edit-icon' icon='pen' />
             </Link>
           </div>
