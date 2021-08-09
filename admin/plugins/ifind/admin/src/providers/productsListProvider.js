@@ -53,7 +53,7 @@ const buildProductsQuery = (where) => {
       products (
         limit: $limit,
         start: $start,
-        sort:$sort,
+        sort: $sort,
         where: {${
           Object.entries(where).map(([ key, value ]) => (
             `${key === 'category' ? 'categories_contains' : key}: ${value}`
@@ -94,6 +94,9 @@ export const ProductsListContext = createContext({});
 export const ProductsListProvider = memo(({ children }) => {
   const gqlFetch = useGQLFetch();
   const searchParams = useSearchParams();
+  const [ loading, setLoading ] = useState(false);
+  const [ requestTimeout, setRequestTimeout ] = useState(null);
+  const [ searchTerm, setSearchTerm ] = useState('');
 
   const getFiltersObject = useCallback(() => {
     if ( searchParams?.filters ) {
@@ -105,7 +108,6 @@ export const ProductsListProvider = memo(({ children }) => {
           [key]: value
         }), {});
     }
-
     return {};
   }, [ searchParams ]);
 
@@ -124,12 +126,6 @@ export const ProductsListProvider = memo(({ children }) => {
   });
 
   const [ products, setProducts ] = useState([]);
-  const {
-    data,
-    loading,
-    error,
-    refetch,
-  } = useQuery(queryOptions.query, queryOptions.variables);
 
   const buildQueryVars = useCallback(({
     sortBy,
@@ -145,8 +141,18 @@ export const ProductsListProvider = memo(({ children }) => {
   }, []);
 
   const refresh = useCallback(() => {
-    refetch();
-  }, [ refetch ]);
+    clearTimeout(requestTimeout);
+
+    setRequestTimeout(setTimeout(async () => {
+      setLoading(true);
+      const data = await gqlFetch(queryOptions.query, queryOptions.variables);
+      
+      if ( data?.products ) {
+        setProductsListData(data);
+      }
+      setLoading(false);
+    }), 300);
+  }, [ queryOptions, requestTimeout ]);
 
   const deleteProducts = useCallback((productIDs) => {
     return gqlFetch(_deleteProductsMutation(productIDs))
@@ -154,11 +160,16 @@ export const ProductsListProvider = memo(({ children }) => {
   });
 
   const setProductsListData = useCallback(({ products, productsConnection }) => {
-    setProducts([...products]);
+    const searchTermPattern = searchTerm ? new RegExp(searchTerm, 'i') : null;
+    const filteredProductsBySearch = products.filter(({ title }) => (
+      searchTermPattern ? searchTermPattern.test(title) : true
+    ));
+
+    setProducts(filteredProductsBySearch);
 
     // Compute pagination
     setTotalPages(Math.ceil(productsConnection?.aggregate?.totalCount / listOptions.pageSize) || 1);
-  }, [ listOptions ]);
+  }, [ listOptions, searchTerm ]);
 
   // Update queryVars on change of sortBy, sortOrder, pageSize, page
   useEffect(() => {
@@ -178,16 +189,10 @@ export const ProductsListProvider = memo(({ children }) => {
   }, [ queryOptions ]);
 
   useEffect(() => {
-    if ( data?.products ) {
-      setProductsListData(data);
-    }
-  }, [ data, setProductsListData ]);
-
-  useEffect(() => {
      setListOptions({
       page: Number(searchParams?.page || 1),
       pageSize: Number(searchParams?.page_size || 10),
-      sortBy: searchParams?.sort_by || 'position',
+      sortBy: searchParams?.sort_by || 'id',
       sortOrder: searchParams?.order || 'desc',
       filters: getFiltersObject(),
      });
@@ -204,6 +209,7 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder: listOptions.sortOrder,
       filters: listOptions.filters,
       totalPages,
+      setSearchTerm,
       // Additionals
       loading,
       refresh,

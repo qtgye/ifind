@@ -7,7 +7,6 @@ import './styles.scss';
 
 const SortControls = ({ options = [], onSortUpdate, sortByKey = 'sort_by', orderKey = 'order' }) => {
   const searchParams = useSearchParams();
-  const history = useHistory();
   const [ sortBy, setSortBy ] = useState(searchParams[sortByKey] || 'id');
   const [ order, setOrder ] = useState(searchParams[orderKey] || 'desc');
 

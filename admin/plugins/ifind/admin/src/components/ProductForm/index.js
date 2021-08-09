@@ -49,10 +49,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [finalRating, setFinalRating] = useState(0); // Don't pass into ProductAttributesRating
 
   // Meta states
-  const [createdOn, setCreatedOn] = useState('');
-  const [createdBy, setCreatedBy] = useState('');
   const [lastModified, setLastModified] = useState('');
-  const [lastModifiedBy, setLastModifiedBy] = useState('');
 
   const collectFormData = useCallback(() => {
     return {

@@ -53,6 +53,20 @@
     margin-right: auto;
   }
 
+  &__search {
+    .input-block {
+      margin-top: 0;
+    }
+
+    label {
+      display: none;
+    }
+  }
+
+  .sort-controls {
+    margin-left: 20px;
+  }
+
   &__filter-toggle {
     display: flex;
     white-space: nowrap;

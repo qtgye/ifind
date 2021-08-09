@@ -53,12 +53,12 @@ export const generatePluginLink = (relativeToPlugin = null, _searchParams = fals
     return window.location.pathname.replace(/^\/admin/, adminRoot) + searchParams;
   }
 
-  return `${adminRoot}/plugins/${pluginId}/${relativeToPlugin.replace(/^\//,'')}${searchParams}`;
+  const link = `${adminRoot}/plugins/${pluginId}/${relativeToPlugin.replace(/^\//,'')}${searchParams}`;
+  return link;
 };
 
 export const amazonLink = (originalLink = '') => {
   const [ baseURL, searchParamsString ] = originalLink.split('?');
-  console.log({ searchParamsString });
 
   const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
     const [ key, value ] = param.split('=');
@@ -69,8 +69,6 @@ export const amazonLink = (originalLink = '') => {
 
     return obj;
   }, {});
-
-  console.log({ searchParamsObj });
 
   return baseURL + toSearchParams({
     ...searchParamsObj,

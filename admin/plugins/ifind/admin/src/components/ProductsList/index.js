@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Table, Button, Toggle } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Select, Label } from '@buffetjs/core';
@@ -12,6 +12,7 @@ import { generatePluginLink } from '../../helpers/url';
 import Pagination from '../Pagination';
 import SortControls from '../SortControls';
 import ProductFilters from '../ProductFilters';
+import TextInput from '../TextInput';
 import CustomRow from './_custom-row';
 import ProductThumbnail from './_product-thumbnail';
 import headers from './_table-headers';
@@ -34,6 +35,8 @@ const ProductsList = () => {
     products,
     loading,
     deleteProducts,
+    searchTerm,
+    setSearchTerm,
     // Values
     pageSize,
     sortBy,
@@ -185,6 +188,15 @@ const ProductsList = () => {
               </Button>
             )) || ''
           }
+        </div>
+        <div className="products-list__search">
+          {/* TODO: Implement Search Products */}
+          {/* <TextInput
+            placeholder='Search Current List'
+            value={searchTerm}
+            onChange={setSearchTerm}
+            search
+          /> */}
         </div>
         <div className="products-list__sort-controls">
           <SortControls

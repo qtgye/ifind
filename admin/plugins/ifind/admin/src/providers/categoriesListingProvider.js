@@ -5,7 +5,8 @@
  */
 
  import React, { createContext, useContext, useState, useEffect, useCallback, memo } from 'react';
- import { useQuery, useMutation } from '../helpers/query';
+ import { useMutation } from '../helpers/query';
+ import { useGQLFetch } from '../helpers/gqlFetch';
 
  const CategoriesListingContext = createContext({});
  
@@ -74,35 +75,6 @@
    }
  }
  `;
- 
-//  const categoriesMutation = (categories) => (
-//    `
-//    ${categoryFieldsOverviewFragment}
-//    ${categoryFieldsDetailsFragment}
-//    ${categoryFieldsCompleteFragment}
-//    ${updatedCategoryFieldsFragment}
-//    mutation {
-//      ${
-//        categories
-//        .map(({ id, ...data }, index) => `
-//          updateCategory${index}: updateCategory (input: {
-//            where: { id: ${id} },
-//            data: {
-//              ${
-//                Object.entries(data)
-//                .map(([key, value]) => `${key}: ${ typeof value === 'string' ? `"${value}"` : value }`)
-//                .join(',\n')
-//              }
-//            }
-//          }) {
-//            ... UpdatedCategoryFields
-//          }
-//        `)
-//        .join('\n')
-//      }
-//    }
-//    `
-//  );
 
 const categoriesMutation = `
 ${categoryFieldsCompleteFragment}
@@ -230,7 +202,7 @@ mutation UpdateCategories(
 
 
  export const CategoriesListingProvider = memo(({ children }) => {
-  const { data } = useQuery(categoriesQuery);
+  const gqlFetch = useGQLFetch();
   const [
     callMutation,
     {
@@ -281,12 +253,6 @@ mutation UpdateCategories(
   });
 
   useEffect(() => {
-    if ( data ) {
-      replaceCategories(data.categories);
-    }
-  }, [ data ]);
-
-  useEffect(() => {
     if ( updatedCategoriesData?.updateCategories ) {
       updateCategoriesList(updatedCategoriesData.updateCategories);
     }
@@ -297,6 +263,17 @@ mutation UpdateCategories(
       setError(updateCategoriesError);
     }
   }, [ updateCategoriesError ]);
+
+  useEffect(() => {
+    if ( !categories.length ) {
+      gqlFetch(categoriesQuery)
+      .then(({ categories }) => {
+        if ( categories?.length ) {
+          replaceCategories(categories);
+        }
+      });
+    }
+  }, [ categories ]);
 
   return (
     <CategoriesListingContext.Provider value={{
