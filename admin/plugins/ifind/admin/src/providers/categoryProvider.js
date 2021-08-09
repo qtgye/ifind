@@ -3,7 +3,9 @@
  */
 
 import React, { useState, useEffect, useCallback, useContext, createContext } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import { useGQLFetch } from '../helpers/gqlFetch';
+import { generatePluginLink } from '../helpers/url';
 
 const categoryFragment = `
 fragment categoryFragment on Category {
@@ -42,12 +44,10 @@ fragment categoryFragment on Category {
 `
 
 export const categoryQuery = `
+${categoryFragment}
 query Category ($id: ID!) {
   category (id: $id) {
-    product_attrs {
-      id
-      label_preview
-    }
+    ... categoryFragment
   }
 }
 `;
@@ -63,12 +63,28 @@ mutation AddCategory ($data: CategoryInput) {
     }
   }
 }
+`;
+
+export const updateCategoryMutation = `
+${categoryFragment}
+mutation UpdateCategory ($data: editCategoryInput, $id: ID!) {
+  updateCategory (input: {
+    where: { id: $id }
+    data: $data
+  }) {
+    category {
+      ... categoryFragment
+    }
+  }
+}
 `
 
 export const CategoryContext = createContext({});
 
 export const CategoryProvider = ({ children }) => {
   const gqlFetch = useGQLFetch();
+  const history = useHistory();
+  const { categoryId } = useParams();
   const [ category, setCategory ] = useState(null);
   const [ loading, setLoading ] = useState(false);
   const [ error, setError ] = useState(null);
@@ -79,18 +95,51 @@ export const CategoryProvider = ({ children }) => {
     gqlFetch(addCategoryMutation, { data })
     .then(({ createCategory }) => {
       if ( createCategory?.category ) {
-        setCategory(createCategory.category);
+        history.push(generatePluginLink(`categories/${createCategory.category.id}`));
       }
     })
     .catch(err => console.error(err))
     .finally(() => setLoading(false));
   }, []);
 
+  const updateCategory = useCallback((id, data) => {
+    setLoading(true);
+
+    gqlFetch(updateCategoryMutation, { id, data })
+    .then(({ updateCategory }) => {
+      if ( updateCategory?.category ) {
+        setCategory(updateCategory.category)
+      }
+    })
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
+  }, [ category ]);
+
+  const loadCategory = useCallback((id) => {
+    setLoading(true);
+
+    gqlFetch(categoryQuery, { id })
+    .then(({ category }) => {
+      setCategory(category);
+    })
+    .catch(err => console.error(err))
+    .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if ( categoryId ) {
+      loadCategory(categoryId);
+    } else {
+      setCategory(null);
+    }
+  }, [ categoryId ]);
+
   return (
     <CategoryContext.Provider value={{
       category,
       loading,
       addCategory,
+      updateCategory,
     }}>
       {children}
     </CategoryContext.Provider>

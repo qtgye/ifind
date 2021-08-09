@@ -68,7 +68,7 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
 
       return formattedFactor;
     });
-    
+
     // Format translated labels to match graphql requirements
     const formattedLabels = translatedLabels.map(({ id, language, label}) => {
       const formatedLabel = { language, label };
@@ -100,6 +100,7 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
   useEffect(() => {
     onFormChange();
   }, [
+    onFormChange,
     // form data
     icon,
     labelPreview,
@@ -124,7 +125,9 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
     // Edit Category
     if ( category ) {
       setIcon(category.icon);
-      setTranslatedLabels(category.label);
+      setTranslatedLabels(category.label.map(({ language, ...label }) => ({
+        ...label, language: language.id,
+      })));
       setParent(category.parent?.id);
       setLabelPreview(category.label_preview);
       setAttributeFactors(category.product_attrs);

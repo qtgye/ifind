@@ -1,6 +1,8 @@
 import React, { useEffect, useCallback, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Header } from '@buffetjs/custom';
 
+import { generatePluginLink } from '../../helpers/url';
 import { CategoryProvider, useCategory } from '../../providers/categoryProvider';
 import { useGlobal } from '../../providers/globalProvider';
 
@@ -8,23 +10,27 @@ import CategoryForm from '../../components/CategoryForm';
 import FontAwesomeIcon from '../../components/FontAwesomeIcon';
 
 const CategoryDetail = () => {
+  const history = useHistory();
   const { setIsLoading } = useGlobal();
-  const { category, addCategory } = useCategory();
+  const { category, addCategory, updateCategory, loading } = useCategory();
   const [ isSaving, setIsSaving ] = useState(false);
   const [ categoryFormData, setCategoryFormData ] = useState();
+
+  const redirectToAddCategory = useCallback(() => {
+    history.push(generatePluginLink('categories/create'));
+  }, []);
 
   const saveCategory = useCallback(() => {
     setIsSaving(true);
 
     if ( category?.id ) {
-      // - Get changed data
-      // - update category
+      updateCategory(category.id, categoryFormData);
     }
     else {
       // create category
       addCategory(categoryFormData);
     }
-  }, [ categoryFormData, category, addCategory ]);
+  }, [ categoryFormData, category, addCategory, updateCategory ]);
 
   useEffect(() => {
     if ( category?.id ) {
@@ -43,10 +49,10 @@ const CategoryDetail = () => {
       }
     }
   }, [ category ]);
-
+  
   useEffect(() => {
-    setIsLoading(false);
-  }, []);
+    setIsLoading(loading);
+  }, [ loading ]);
 
   return (
     <div className="category-detail container">
@@ -66,8 +72,8 @@ const CategoryDetail = () => {
               )
             },
             category && {
-              label: 'Add Product',
-              // onClick: redirectToAddProduct,
+              label: 'Add Category',
+              onClick: redirectToAddCategory,
               color: 'primary',
               type: 'button',
               disabled: !category?.id,
