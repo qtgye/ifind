@@ -82,6 +82,10 @@ const amazonLink = (originalLink = '') => {
   });
 }
 
+const isAmazonLink = (link) => (
+  /^https?/i.test(link) && /amazon/ig.test(link)
+)
+
 const ebayLink = (originalLink = '') => {
   // Remove unnecessary params
   const [ baseURL, queryParams ] = originalLink.split('?');
@@ -98,4 +102,5 @@ module.exports = {
   removeURLParams,
   amazonLink,
   ebayLink,
+  isAmazonLink,
 };

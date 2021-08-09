@@ -14,8 +14,8 @@ const compareProductChanges = (originalData, changedData) => {
         return (
           (originalCategories.length !== changedCategories.length) ||
           (
-            (originalCategories[0].id && changedCategories[0].id) &&
-            originalCategories[0].id != changedCategories[0].id
+            (originalCategories[0].id && changedCategories[0]) &&
+            originalCategories[0].id != changedCategories[0]
           )
         );
       case 'url_list':
@@ -40,6 +40,7 @@ const compareProductChanges = (originalData, changedData) => {
       case 'attrs_rating':
           const originalAttrsRating = originalData.attrs_rating || [];
           const changedAttrsRating = changedData.attrs_rating || [];
+
           return (
             // Check if count has changed
             (originalAttrsRating.length !== changedAttrsRating.length) ||

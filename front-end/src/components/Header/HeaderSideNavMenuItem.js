@@ -4,7 +4,7 @@ import IfindIcon from '@components/IfindIcon';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import { getGrandchildrenCategories } from '../../utilities/category';
 
-const HeaderSideNavMenuItem = ({ category, checked }) => {
+const HeaderSideNavMenuItem = ({ category }) => {
 
     const [subCategories, setSubCategories] = useState(false);
     const showSubCategories = () => setSubCategories(!subCategories);
@@ -47,11 +47,12 @@ const HeaderSideNavMenuItem = ({ category, checked }) => {
                 {len === 0 ? "" : <span className="num-of-elements">{len}</span>}
             </button>
             {
-                checked ?
-                    (subCategories && category.children &&
-                        <div className="listing" key={category.id}>
-                            <HeaderSideNavSubMenu categories={category.children} key={category.id} checked={checked} />
-                        </div>) : null
+                // checked ?
+                subCategories && category.children &&
+                <div className="listing" key={category.id}>
+                    {/* <HeaderSideNavSubMenu categories={category.children} key={category.id} checked={checked} /> */}
+                    <HeaderSideNavSubMenu categories={category.children} key={category.id} />
+                </div>
             }
         </div >
     )

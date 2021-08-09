@@ -1,10 +1,13 @@
 'use strict';
 const moment = require('moment');
+const productChangeSettings = require('../../product-change/models/product-change.settings.json');
 const { compareProductChanges } = require('../../../helpers/productChanges');
 
 const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
 const { applyCustomFormula } = appRequire('helpers/productAttribute');
+
+const defaultChangeType = productChangeSettings.attributes.change_type.default;
 
 const updateScopeDefault = {
   price: true,
@@ -47,8 +50,7 @@ const processProductData = async (data, id) => {
   await Promise.all([
     // Add necessary params in the url
     (() => {
-      data.url_list = data && data.url_list && data.url_list.length ?
-      (
+      if ( data.url_list.length ) {
         data.url_list = data.url_list.map(urlData => {
           if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
             urlData.url = ebayLink(urlData.url);
@@ -56,8 +58,7 @@ const processProductData = async (data, id) => {
 
           return urlData;
         })
-      )
-      : [];
+      }
     })(),
 
     // Add dynamic position if not yet given
@@ -101,9 +102,11 @@ const processProductData = async (data, id) => {
       }
     })(),
 
-    // Add Affiliate links
+    // Add amazon affiliate link
     (async() => {
-      data.amazon_url = amazonLink(data.amazon_url);
+      if ( data.amazon_url ) {
+        data.amazon_url = amazonLink(data.amazon_url);
+      }
     })(),
   ]);
 
@@ -142,7 +145,7 @@ const processProductData = async (data, id) => {
   const changedData = compareProductChanges(matchedProduct, data);
 
   // Save temporary data for afterSave use
-  strapi.changedData = changedData;
+  strapi.productChangedData = changedData;
 
   return changedData;
 };
@@ -151,14 +154,16 @@ const processProductData = async (data, id) => {
  * TODO:
  * Figure out how to get updatedBy
  */
-const saveProductChange = async (id, changeType = 'update') => {
+const saveProductChange = async (id, changeType = strapi.productChangeType || defaultChangeType) => {
   const date_time = moment.utc().toISOString();
   const admin_user = strapi.admin_user;
-  const state = strapi.changedData;
+  const state = strapi.productChangedData;
   let change_type = changeType;
 
   // Delete unnecessary temporary data
-  delete strapi.changedData;
+  delete strapi.productChangedData;
+  delete strapi.admin_user;
+  delete strapi.productChangeType;
 
   // No need to save to history if there's no changes
   if ( !state ) {

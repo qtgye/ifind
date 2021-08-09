@@ -6,9 +6,7 @@
   Create separate services for amazon and ebay
  */
 const fetch = require('node-fetch');
-const moment = require('moment');
-const { JSDOM } = require('jsdom');
-const { addURLParams } = require('./url');
+const { isAmazonLink } = require('./url');
 const { scrapeAmazonProduct } = require('./scrapeAmazonProduct');
 
 const EBAY_GETITEM_ENDPOINT = 'https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=KirillKr-ifindilu-PRD-9afbfbe27-8527205b&siteid=0&version=967&IncludeSelector=Details&ItemID=';
@@ -97,8 +95,32 @@ const fetchProductDetails = async (productID, language = 'en') => {
   };
 }
 
+const filterProductsWithProblems = (products) => {
+  return products.filter(product => {
+    const productChanges = product.product_changes || [];
+
+    // Check amazon_url
+    if (
+      !isAmazonLink(product.amazon_url)
+      && productChanges.some(({ state }) => state && isAmazonLink(state.amazon_url))
+    ) {
+      return true;
+    }
+
+    // Check url_list
+    // Check if url_list is provided before but was removed unknowingly
+    if (
+      (!product.url_list || !product.url_list.length)
+      && productChanges.some(({ state }) => state && state.url_list && state.url_list.length)
+    ) {
+      return true;
+    }
+  });
+}
+
 
 module.exports = {
   fetchProductDetails,
   getProductDetails,
+  filterProductsWithProblems,
 };
