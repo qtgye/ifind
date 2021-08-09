@@ -184,9 +184,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       }
 
       // Set meta
-      if (product.created_at) {
-        setCreatedOn(product.created_at);
-      }
       if (product.updated_at) {
         setLastModified(product.updated_at);
       }
@@ -208,7 +205,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setAttrsRating([]);
       setFinalRating(0);
       // Meta
-      setCreatedOn(null);
       setLastModified(null);
     }
   }, [product]);
