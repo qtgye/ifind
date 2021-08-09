@@ -81,8 +81,8 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
     });
 
     onChange({
-      icon,
       parent,
+      icon: icon?.replace(/-/g, '_'),
       label_preview: labelPreview,
       label: formattedLabels,
       product_attrs: formattedFactors,
@@ -124,13 +124,13 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors }) => {
   useEffect(() => {
     // Edit Category
     if ( category ) {
-      setIcon(category.icon);
-      setTranslatedLabels(category.label.map(({ language, ...label }) => ({
-        ...label, language: language.id,
-      })));
+      setIcon(category.icon?.replace(/_/g, '-'));
       setParent(category.parent?.id);
       setLabelPreview(category.label_preview);
       setAttributeFactors(category.product_attrs);
+      setTranslatedLabels(category.label.map(({ language, ...label }) => ({
+        ...label, language: language.id,
+      })));
     }
     // Create Category
     else {
