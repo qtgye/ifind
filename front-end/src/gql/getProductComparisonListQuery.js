@@ -34,6 +34,7 @@ query ProductComparisonList {
             url_list {
                 source {
                     id
+                    name
                     button_logo {
                         url
                     }

@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import ReactShadowRoot from 'react-shadow-root';
 import { toAdminURL } from '@utilities/url';
+import { trackClick } from '@utilities/tracking';
 import { v4 as uuid } from 'uuid';
 
 import { useSourceRegion } from '@contexts/sourceRegionContext';
@@ -11,13 +12,20 @@ import './product-details.scss';
 
 import inlineStyles from './detail-styles';
 
-const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
+const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency }) => {
 
     const percentDifference = 100 * (price - basePrice) / basePrice;
 
+    const onClick = useCallback(({ target }) => {
+        trackClick(target, {
+            category: 'Product',
+            action: `click` + (source ? `.${source.toLowerCase()}` : ''),
+        });
+    }, []);
+
     return (
         <div className="product-details__link-item">
-            <a href={url} className="product-details__link" target="_blank" rel="noreferrer">
+            <a href={url} className="product-details__link" target="_blank" rel="noreferrer" onClick={onClick}>
                 <img src={toAdminURL(logo)} alt="" className="product-details__link-image" />
             </a>
             <span className="product-details__price">{currency}&nbsp;{price}</span>
@@ -74,6 +82,7 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                                 <ProductURLLink
                                     key={key}
                                     url={url}
+                                    source={source?.name}
                                     logo={source?.button_logo?.url}
                                     price={price}
                                     basePrice={productData.price}
