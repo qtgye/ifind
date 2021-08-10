@@ -16,8 +16,8 @@ const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency 
 
     const percentDifference = 100 * (price - basePrice) / basePrice;
 
-    const onClick = useCallback(({ target }) => {
-        trackClick(target, {
+    const onClick = useCallback(({ currentTarget }) => {
+        trackClick(currentTarget, {
             category: 'Product',
             action: `click` + (source ? `.${source.toLowerCase()}` : ''),
         });
