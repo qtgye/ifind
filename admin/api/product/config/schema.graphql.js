@@ -31,6 +31,7 @@ module.exports = {
   mutation: `
     addProductClick (id: ID!): ProductClicksDetails
     fixProducts: FixedProductsPayload
+    updateProductLinks: FixedProductsPayload
   `,
   resolver: {
     Query: {
@@ -51,6 +52,13 @@ module.exports = {
       },
       async fixProducts() {
         const updatedProducts = await strapi.services.product.fixProducts();
+        return {
+          count: updatedProducts.length,
+          products: updatedProducts,
+        }
+      },
+      async updateProductLinks() {
+        const updatedProducts = await strapi.services.product.updateProductLinks();
         return {
           count: updatedProducts.length,
           products: updatedProducts,
