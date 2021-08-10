@@ -21,7 +21,7 @@ const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency 
             category: 'Product',
             action: `click` + (source ? `.${source.toLowerCase()}` : ''),
         });
-    }, []);
+    }, [ source ]);
 
     return (
         <div className="product-details__link-item">
