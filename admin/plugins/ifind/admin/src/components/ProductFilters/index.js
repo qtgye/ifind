@@ -28,32 +28,18 @@ const ProductFilters = ({ onChange }) => {
   }, [  ]);
 
   const applyFilters = useCallback(() => {
-    const filters = Object.entries({ category })
-      .filter(([ key, value ]) => value)
-      .map(([ key, value ]) => `${key}:${value}`)
-      .join(',');
-
-    const targetURL = generatePluginLink('', { filters })
-
+    const targetURL = generatePluginLink('', { category });
     history.push(targetURL);
   }, [ category ])
 
+  const clearFilters = useCallback(() => {
+    const targetURL = generatePluginLink('', { category: '' });
+    history.push(targetURL);
+  }, []);
+
   useEffect(() => {
-    const { filters } = searchParams;
-
-    // Extract filters
-    const filtersMap = filters ?
-    filters.split(',').reduce((all, filterString) => {
-      const [ key, value ] = filterString.split(':');
-
-      all[key] = value;
-      return all;
-    }, {})
-    : {};
-
-    if ( filtersMap?.category ) {
-      setCategory(filtersMap.category);
-    }
+    const { category } = searchParams;
+    setCategory(category)
   }, [ searchParams ]);
   
   return (
@@ -71,6 +57,17 @@ const ProductFilters = ({ onChange }) => {
           label="Apply"
           onClick={applyFilters}
         />
+        &nbsp;
+        {
+          category ? (
+            <Button
+              type="submit"
+              color="secondary"
+              label="Clear"
+              onClick={clearFilters}
+            />
+          ): null
+        }
       </div>
     </div>
   )

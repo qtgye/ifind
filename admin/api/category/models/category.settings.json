@@ -213,6 +213,9 @@
       "type": "component",
       "repeatable": true,
       "component": "atoms.product-attr"
+    },
+    "label_translations_json": {
+      "type": "json"
     }
   }
 }

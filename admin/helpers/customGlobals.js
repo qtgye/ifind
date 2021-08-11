@@ -1,5 +1,5 @@
 const path = require('path');
-const appRoot = process.cwd();
+const appRoot = path.resolve(__dirname, '../');
 
 /**
  * Add necessary globals

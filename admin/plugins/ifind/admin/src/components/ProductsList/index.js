@@ -36,7 +36,6 @@ const ProductsList = () => {
     loading,
     deleteProducts,
     searchTerm,
-    setSearchTerm,
     // Values
     pageSize,
     sortBy,
@@ -47,6 +46,8 @@ const ProductsList = () => {
   const [ allSelected, setAllSelected ] = useState(false);
   const [ selectedItems, setSelectedItems ] = useState([]);
   const [ isFiltersVisible, setIsFiltersVisible ] = useState(false);
+  const [ searchInput, setSearchInput ] = useState(searchTerm);
+  const [ searchTermTimeout, setSearchTermTimeout ] = useState(null);
 
   const getUrlType = useCallback((sourceID, regionID) => {
     const matchedSource = sources.find(({ id }) => id === sourceID);
@@ -143,15 +144,24 @@ const ProductsList = () => {
 
   // Page size select handler
   const onPageSizeSelect = useCallback((page_size) => {
-    history.push(generatePluginLink('', { page_size }));
+    // Reset page when page size changes
+    history.push(generatePluginLink('', { page_size, page: 1 }));
   });
 
   // Sort Control update handler
   const onSortUpdate = useCallback(({ sort_by, order }) => {
     if ( sort_by !== sortBy || order !== sortOrder ) {
-      history.push(generatePluginLink('', { sort_by, order }));
+      history.push(generatePluginLink('', { sort_by, order, page: 1 }));
     }
   });
+
+  const updateSearchTerm = useCallback((search) => {
+      window.clearTimeout(searchTermTimeout);
+      setSearchTermTimeout(window.setTimeout(() => {
+        // Reset page when search changes
+        history.push(generatePluginLink('', { search, page: 1 }));
+      }, 500));
+  }, [ searchTermTimeout ]);
 
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
@@ -165,6 +175,10 @@ const ProductsList = () => {
     const selectedItems = rows.filter(row => row.selected).map(({ id }) => id);
     setSelectedItems(selectedItems);
   }, [ rows ]);
+
+  useEffect(() => {
+    updateSearchTerm(searchInput);
+  }, [ searchInput ]);
 
   useEffect(() => {
     setIsLoading(loading);
@@ -190,13 +204,12 @@ const ProductsList = () => {
           }
         </div>
         <div className="products-list__search">
-          {/* TODO: Implement Search Products */}
-          {/* <TextInput
+          <TextInput
             placeholder='Search Current List'
-            value={searchTerm}
-            onChange={setSearchTerm}
+            value={searchInput}
+            onChange={setSearchInput}
             search
-          /> */}
+          />
         </div>
         <div className="products-list__sort-controls">
           <SortControls
