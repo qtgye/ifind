@@ -6,31 +6,34 @@
  */
 
 const processCategoryData = async data => {
+  const updateLabels = 'categoryChangeUpdateLabels' in strapi ? strapi.categoryChangeUpdateProducts : true;
+  const updateAttributes = 'categoryChangeUpdateAttributes' in strapi ? strapi.categoryChangeUpdateAttributes : true;
+
   const productAttributes = await strapi.services['product-attribute'].getCommon();
 
-  console.log('saving category', data);
-
-  if ( data.label && data.label.length ) {
+  if ( updateLabels && data.label && data.label.length ) {
     const englishLanguage = await strapi.services.language.findOne({ code: 'en' });
     const englishLabel = data.label.find(label => label.language == englishLanguage.id);
     const selectedLabel = englishLabel || data.label[0];
     data.label_preview = selectedLabel.label;
   }
 
-  if ( data.product_attrs && data.product_attrs.length ) {
-    data.product_attrs.forEach(catProductAttr => {
-      const matchedProductAttr = productAttributes.find(({ id }) => id == catProductAttr.product_attribute);
-      catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
-    });
+  if ( updateAttributes ) {
+    if ( data.product_attrs && data.product_attrs.length ) {
+      data.product_attrs.forEach(catProductAttr => {
+        const matchedProductAttr = productAttributes.find(({ id }) => id == catProductAttr.product_attribute);
+        catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
+      });
 
-    // Allow afterSave to pickup whether to update products or not
-    strapi.categoryChangeUpdateProducts = true;
-  } else {
-    // Use defaults
-    data.product_attrs = productAttributes.map(product_attribute => ({
-      product_attribute: product_attribute.id,
-      factor: 1,
-    }))
+      // Allow afterSave to pickup whether to update products or not
+      strapi.categoryChangeUpdateProducts = true;
+    } else {
+      // Use defaults
+      data.product_attrs = productAttributes.map(product_attribute => ({
+        product_attribute: product_attribute.id,
+        factor: 1,
+      }))
+    }
   }
 }
 
@@ -97,7 +100,10 @@ module.exports = {
       await processCategoryData(data);
     },
     async afterFindOne(result, params, populate) {
-      return await strapi.services.category.prepopulateProductAttributes(result);
+      if ( result ) {
+        return await strapi.services.category.prepopulateProductAttributes(result);
+      }
+      return params;
     },
     async afterCreate(result) {
       // Consider update ratings computations for each related products

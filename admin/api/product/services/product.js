@@ -187,5 +187,39 @@ module.exports = {
         return result;
       })
     );
+  },
+
+  // Get products list
+  async productsList(args) {
+    const whereParams = {};
+    const otherParams = {
+      _limit: args.limit || 10,
+      _sort: args.sort || "id:desc",
+      _start: args.start || 0,
+    };
+
+    if ( args.where && args.where.search ) {
+      whereParams.title_contains = args.where.search;
+    };
+
+    if ( args.where && args.where.category ) {
+      whereParams.categories_contains = args.where.category;
+    };
+
+    const [
+      count,
+      products,
+    ] = await Promise.all([
+      strapi.services.product.count({
+        ...whereParams,
+        ...otherParams,
+      }),
+      strapi.services.product.find({
+        ...whereParams,
+        ...otherParams,
+      }),
+    ]);
+
+    return { count, products };
   }
 };

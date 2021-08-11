@@ -42,34 +42,32 @@ fragment ProductFragment on Product {
 }
 `;
 
-const buildProductsQuery = (where) => {
-  return `
+const productsListQuery = `
   ${ProductFragment}
   query ProductsList (
-    $limit: Int!,
-    $start: Int!,
+    $limit: Int!
+    $start: Int!
     $sort: String!
+    $search: String
+    $category: ID
     ) {
-      products (
-        limit: $limit,
-        start: $start,
-        sort: $sort,
-        where: {${
-          Object.entries(where).map(([ key, value ]) => (
-            `${key === 'category' ? 'categories_contains' : key}: ${value}`
-          )).join(',')
-        }}
-        ) {
-          ... ProductFragment
+      productsList (
+        limit: $limit
+        start: $start
+        sort: $sort
+        where: {
+          search: $search,
+          category: $category
         }
-        productsConnection {
-          aggregate {
-            totalCount
+        ) {
+          count
+          products {
+            ... ProductFragment
           }
         }
       }
   `
-};
+;
 
 const _deleteProductsMutation = (productIDs) => `
 mutation DeleteProducts {
@@ -96,27 +94,15 @@ export const ProductsListProvider = memo(({ children }) => {
   const searchParams = useSearchParams();
   const [ loading, setLoading ] = useState(false);
   const [ requestTimeout, setRequestTimeout ] = useState(null);
-  const [ searchTerm, setSearchTerm ] = useState('');
-
-  const getFiltersObject = useCallback(() => {
-    if ( searchParams?.filters ) {
-      return searchParams.filters
-        .split(',')
-        .map(filterString => filterString.split(':'))
-        .reduce((all, [ key, value ]) => ({
-          ...all,
-          [key]: value
-        }), {});
-    }
-    return {};
-  }, [ searchParams ]);
+  const [ searchTerm, setSearchTerm ] = useState(searchParams.search);
 
   const [ listOptions, setListOptions ] = useState({
     sortBy: searchParams?.sort_by || 'id', // Product field
     sortOrder: searchParams?.order || 'desc', // desc|asc
     pageSize: Number(searchParams?.page_size || 10),
     page: Number(searchParams?.page || 1),
-    filters: getFiltersObject(), // { fieldName: value }
+    category: searchParams?.category || '',
+    search: searchParams?.search || '',
   });
 
   const [ totalPages, setTotalPages ] = useState(1);
@@ -131,13 +117,15 @@ export const ProductsListProvider = memo(({ children }) => {
     sortBy,
     sortOrder,
     pageSize,
-    page
+    page,
+    category,
+    search,
   }) => {
     const limit = pageSize;
     const start = pageSize * (page - 1);
     const sort = `${sortBy}:${sortOrder}`;
 
-    return { limit, start, sort }
+    return { limit, start, sort, category, search };
   }, []);
 
   const refresh = useCallback(() => {
@@ -146,9 +134,9 @@ export const ProductsListProvider = memo(({ children }) => {
     setRequestTimeout(setTimeout(async () => {
       setLoading(true);
       const data = await gqlFetch(queryOptions.query, queryOptions.variables);
-      
-      if ( data?.products ) {
-        setProductsListData(data);
+
+      if ( data?.productsList ) {
+        setProductsListData(data.productsList);
       }
       setLoading(false);
     }), 300);
@@ -159,16 +147,11 @@ export const ProductsListProvider = memo(({ children }) => {
     .then(data => console.log({ data }))
   });
 
-  const setProductsListData = useCallback(({ products, productsConnection }) => {
-    const searchTermPattern = searchTerm ? new RegExp(searchTerm, 'i') : null;
-    const filteredProductsBySearch = products.filter(({ title }) => (
-      searchTermPattern ? searchTermPattern.test(title) : true
-    ));
-
-    setProducts(filteredProductsBySearch);
+  const setProductsListData = useCallback(({ products, count }) => {
+    setProducts(products);
 
     // Compute pagination
-    setTotalPages(Math.ceil(productsConnection?.aggregate?.totalCount / listOptions.pageSize) || 1);
+    setTotalPages(Math.ceil((count || 0) / listOptions.pageSize) || 1);
   }, [ listOptions, searchTerm ]);
 
   // Update queryVars on change of sortBy, sortOrder, pageSize, page
@@ -178,8 +161,10 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder: listOptions.sortOrder,
       pageSize: listOptions.pageSize,
       page: listOptions.page,
+      category: listOptions.category,
+      search: listOptions.search,
     });
-    const query = buildProductsQuery(listOptions.filters);
+    const query = productsListQuery;
 
     setQueryOptions({ query, variables });
   }, [ listOptions ]);
@@ -194,9 +179,10 @@ export const ProductsListProvider = memo(({ children }) => {
       pageSize: Number(searchParams?.page_size || 10),
       sortBy: searchParams?.sort_by || 'id',
       sortOrder: searchParams?.order || 'desc',
-      filters: getFiltersObject(),
+      category: searchParams?.category || '',
+      search: searchParams?.search || '',
      });
-
+     setSearchTerm(searchParams.search);
   }, [ searchParams ]);
 
   return (
@@ -209,7 +195,6 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder: listOptions.sortOrder,
       filters: listOptions.filters,
       totalPages,
-      setSearchTerm,
       // Additionals
       loading,
       refresh,

@@ -12,7 +12,6 @@ const Pagination = ({ totalPages = 1, pageKey = 'page' }) => {
   const [ page, setPage ] = useState(Number(searchParams?.page || 1) - 1);
 
   const onPaginationPageSelect = useCallback(({ selected }) => {
-    console.log({ selected });
     history.push(generatePluginLink(null, { [pageKey]: selected + 1 }));
   });
 

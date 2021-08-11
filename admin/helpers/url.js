@@ -1,7 +1,9 @@
-// AMAZON AFFILIATE
-const AMAZON_AFFILIATE_PARAMS = {
-  tag: 'ifind01-21',
-};
+/**
+ * TODO: Cleanup
+ * - Update consuming modules to use helpers from helpers/amazon
+ */
+
+const { amazonLink, isAmazonLink } = require('./amazon');
 
 // EBAY AFFILIATE
 // https://www.ebay.de/itm/223840934857?mkcid=1&mkrid=707-53477-19255-0&siteid=77&campid=5338787715&customid=&toolid=10001&mkevt=1
@@ -64,28 +66,6 @@ const toSearchParams = (paramsObject = {}) => {
   )
 }
 
-const amazonLink = (originalLink = '') => {
-  const [ baseURL, searchParamsString = '' ] = originalLink.split('?');
-
-  const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
-    const [ key, value ] = param.split('=');
-
-    if ( key && value ) {
-      obj[key] = value;
-    }
-
-    return obj;
-  }, {});
-
-  return baseURL + toSearchParams({
-    ...searchParamsObj,
-    ...AMAZON_AFFILIATE_PARAMS
-  });
-}
-
-const isAmazonLink = (link) => (
-  /^https?/i.test(link) && /amazon/ig.test(link)
-)
 
 const ebayLink = (originalLink = '') => {
   // Remove unnecessary params
