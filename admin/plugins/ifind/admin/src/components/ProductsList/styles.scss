@@ -9,6 +9,7 @@
       margin-left: 20px;
     }
   }
+
   &__thumbnail {
     height: 30px;
 
@@ -73,9 +74,21 @@
     align-items: center;
     margin-left: 20px;
 
-    label {
-      margin-right: 5px;
+    > label {
       margin-bottom: 0;
+      margin-right: 5px;
+    }
+  }
+
+  &__filters {
+    background-color: #fff;
+    margin-bottom: 20px;
+    box-shadow: 0 0 3px rgba(black, .1);
+  }
+
+  table {
+    th {
+      margin: 0;
     }
   }
 

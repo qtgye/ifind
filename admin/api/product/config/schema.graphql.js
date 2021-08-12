@@ -11,6 +11,14 @@ module.exports = {
       id: ID!
       order: Int
     }
+    input ProductsListWhereParamInput {
+      search: String
+      category: ID
+    }
+    type ProductsListPayload {
+      count: Int
+      products: [Product]
+    }
     type NaturalList {
       category: ProductCategory
       products: [Product]
@@ -27,6 +35,7 @@ module.exports = {
   query: `
     productDetails (id: ID!, language: String): ProductDetails
     productComparisonList (language: String!): [NaturalList]
+    productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
   `,
   mutation: `
     addProductClick (id: ID!): ProductClicksDetails
@@ -39,11 +48,13 @@ module.exports = {
         const productDetails = await strapi.services.product.getProductDetails(args.id, args.language);
         return productDetails;
       },
-
       async productComparisonList(_, args) {
         const productComparisonList = await strapi.services.product.productComparisonList(args.language);
         return productComparisonList;
       },
+      async productsList(_, args) {
+        return await strapi.services.product.productsList(args);
+      }
     },
     Mutation: {
       async addProductClick(_, args) {
