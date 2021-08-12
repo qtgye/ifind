@@ -221,5 +221,6 @@ module.exports = {
     ]);
 
     return { count, products };
-  }
+  },
+
 };

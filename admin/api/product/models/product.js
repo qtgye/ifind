@@ -3,7 +3,6 @@ const moment = require('moment');
 const productChangeSettings = require('../../product-change/models/product-change.settings.json');
 const { compareProductChanges } = require('../../../helpers/productChanges');
 
-const { amazonLink, ebayLink } = appRequire('helpers/url');
 const { getProductDetails } = appRequire('helpers/product');
 const { applyCustomFormula } = appRequire('helpers/productAttribute');
 
@@ -38,28 +37,35 @@ const processProductData = async (data, id) => {
   }
 
   const [
-    ebaySource,
     productAttributes,
   ] = await Promise.all([
-    strapi.services.source.findOne({
-      name_contains: 'ebay'
-    }),
     strapi.services['product-attribute'].find(),
   ]);
 
   await Promise.all([
     // Add necessary params in the url
-    (() => {
-      if ( data.url_list.length ) {
-        data.url_list = data.url_list.map(urlData => {
-          if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
-            urlData.url = ebayLink(urlData.url);
-          }
+    // (async () => {
+    //   if ( data.url_list.length ) {
+    //     const url_list = await Promise.all(
+    //       data.url_list.map( async urlData => {
 
-          return urlData;
-        })
-      }
-    })(),
+    //         // Process Ebay Link
+    //         if ( ebaySource && ebaySource.id && urlData.source == ebaySource.id ) {
+    //           urlData.url = ebayLink(urlData.url);
+    //         }
+
+    //         // Process
+    //         if ( aliExpressSource && aliExpressSource.id && urlData.source == ebaySource.id ) {
+    //           //
+    //         }
+
+    //         return urlData;
+    //       })
+    //     );
+
+    //     data.url_list = url_list;
+    //   }
+    // })(),
 
     // Add dynamic position if not yet given
     (async() => {
@@ -99,13 +105,6 @@ const processProductData = async (data, id) => {
         });
         // Temporary data
         data.releaseDate = productDetails.releaseDate;
-      }
-    })(),
-
-    // Add amazon affiliate link
-    (async() => {
-      if ( data.amazon_url ) {
-        data.amazon_url = amazonLink(data.amazon_url);
       }
     })(),
   ]);

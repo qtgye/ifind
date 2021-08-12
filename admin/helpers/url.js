@@ -1,20 +1,3 @@
-/**
- * TODO: Cleanup
- * - Update consuming modules to use helpers from helpers/amazon
- */
-
-const { amazonLink, isAmazonLink } = require('./amazon');
-
-// EBAY AFFILIATE
-// https://www.ebay.de/itm/223840934857?mkcid=1&mkrid=707-53477-19255-0&siteid=77&campid=5338787715&customid=&toolid=10001&mkevt=1
-const EBAY_AFFILIATE_PARAMS = {
-  campid: '5338787715',
-  mkevt: 1,
-  mkcid: 1,
-  toolid: 10001,
-  mkrid: '707-53477-19255-0',
-};
-
 const addURLParams = (url = '', paramsObject) => {
   const [ baseURL, searchParams = '' ] = url.split('?');
   const searchParamsObject = searchParams.split('&').reduce((all, keyValue) => {
@@ -66,22 +49,9 @@ const toSearchParams = (paramsObject = {}) => {
   )
 }
 
-
-const ebayLink = (originalLink = '') => {
-  // Remove unnecessary params
-  const [ baseURL, queryParams ] = originalLink.split('?');
-  const queryParamsObj = paramsToObject(queryParams);
-
-  return baseURL + toSearchParams({
-    ...queryParamsObj,
-    ...EBAY_AFFILIATE_PARAMS,
-  });
-}
-
 module.exports = {
   addURLParams,
   removeURLParams,
-  amazonLink,
-  ebayLink,
-  isAmazonLink,
+  paramsToObject,
+  toSearchParams,
 };
