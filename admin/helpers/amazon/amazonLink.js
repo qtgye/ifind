@@ -1,17 +1,9 @@
 const { affiliateParams } = require('./config');
+const { toSearchParams, paramsToObject } = require('../url');
 
 const amazonLink = (originalLink = '') => {
   const [ baseURL, searchParamsString = '' ] = originalLink.split('?');
-
-  const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
-    const [ key, value ] = param.split('=');
-
-    if ( key && value ) {
-      obj[key] = value;
-    }
-
-    return obj;
-  }, {});
+  const searchParamsObj = paramsToObject(searchParamsString);
 
   return baseURL + toSearchParams({
     ...searchParamsObj,
