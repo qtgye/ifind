@@ -7,7 +7,8 @@
  */
 const { isAmazonLink } = require('./url');
 const { scrapeAmazonProduct, amazonLink } = require('./amazon');
-const { getDetailsFromURL, ebayLink,  } = require('./ebay');
+const { getDetailsFromURL: getEbayDetails, ebayLink } = require('./ebay');
+const { getDetailsFromURl: getAliExpressDetails } = require('./aliexpress');
 
 const getProductDetails = async (productData, language, scrapePriceOnly = false) => {
   const productURL = productData.amazon_url;
@@ -47,7 +48,7 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
       scrapedData.url_list = await Promise.all(productData.url_list.map(async urlData => {
         // Scrapte EBAY details
         if ( Number(urlData.source) == Number(ebaySource.id) && urlData.url ) {
-          const ebayProductDetails = await getDetailsFromURL(urlData.url);
+          const ebayProductDetails = await getEbayDetails(urlData.url);
           if ( ebayProductDetails ) {
             urlData.price = ebayProductDetails.price || urlData.price || '';
             urlData.url = ebayLink(urlData.url);
@@ -55,7 +56,12 @@ const getProductDetails = async (productData, language, scrapePriceOnly = false)
         }
         // Scrape ALIEXPRESS details
         else if ( Number(urlData.source) == Number(aliExpressSource.id) && urlData.url ) {
-          // Scrape data here
+          const aliExpressProductDetails = await getAliExpressDetails(urlData.url);
+          console.log({ aliExpressProductDetails });
+          if ( aliExpressProductDetails ) {
+            urlData.price = aliExpressProductDetails.price || urlData.price || '';
+            urlData.url = aliExpressProductDetails.affiliateLink || urlData.url || '';
+          }
         }
 
         return urlData;

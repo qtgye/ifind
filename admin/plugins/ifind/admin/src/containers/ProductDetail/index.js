@@ -87,7 +87,8 @@ const ProductDetail = () => {
     if ( isSaving ) {
       strapi.notification.toggle({
         type: 'success',
-        message: 'Product Saved.'
+        message: 'Product Saved.',
+        timeout: 10000,
       });
       setIsSaving(false);
     }
@@ -117,6 +118,7 @@ const ProductDetail = () => {
         type: 'warning',
         title: 'Error',
         message: error.message,
+        timeout: 10000,
       });
       setIsSaving(false);
     }
