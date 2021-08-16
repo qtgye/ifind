@@ -29,11 +29,6 @@
       "min": 0,
       "default": 0
     },
-    "categories": {
-      "via": "products",
-      "collection": "category",
-      "dominant": true
-    },
     "image": {
       "type": "string",
       "required": true
@@ -84,6 +79,10 @@
     },
     "category_temp": {
       "type": "integer"
+    },
+    "category": {
+      "model": "category",
+      "via": "products"
     }
   }
 }

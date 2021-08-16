@@ -30,7 +30,7 @@ fragment ProductFragment on Product {
   region {
     id
   }
-  categories {
+  category {
     id
     label {
       label

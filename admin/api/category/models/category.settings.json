@@ -205,10 +205,6 @@
       "required": true,
       "min": 1
     },
-    "products": {
-      "via": "categories",
-      "collection": "product"
-    },
     "product_attrs": {
       "type": "component",
       "repeatable": true,
@@ -216,6 +212,10 @@
     },
     "label_translations_json": {
       "type": "json"
+    },
+    "products": {
+      "via": "category",
+      "collection": "product"
     }
   }
 }

@@ -1,3 +1,4 @@
+require('colors');
 const fs = require('fs');
 const path = require('path');
 const { iconsList } = require('ifind-icons');

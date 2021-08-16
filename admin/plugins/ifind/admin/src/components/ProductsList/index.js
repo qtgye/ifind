@@ -58,7 +58,7 @@ const ProductsList = () => {
     return `${matchedSource.name} ${matchedRegion.name}`;
   }, [ sources ]);
 
-  const getCategoryLabel = useCallback(([ productCategoryData ]) => {
+  const getCategoryLabel = useCallback((productCategoryData) => {
     if ( !productCategoryData ) {
       return ''
     }
@@ -124,7 +124,7 @@ const ProductsList = () => {
       ...product,
       urlType: getUrlType(product.source, product.region),
       image: (<ProductThumbnail src={product.image} />),
-      category: getCategoryLabel(product.categories || []),
+      category: getCategoryLabel(product.category),
       confirmProductDelete: () => confirmProductDelete(product),
     }))
   }, [ onSelectUnselect ]);

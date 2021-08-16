@@ -87,7 +87,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   const processFormData = useCallback((formData) => {
     formData.price = Number(formData.price);
-    formData.categories = [formData.category];
+    formData.category = formData.category;
     formData.details_html = formData.detailsHTML;
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
@@ -121,7 +121,6 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.position = Number(formData.position);
 
     // Delete unnecessary props for graphql request
-    delete formData.category;
     delete formData.urlType;
     delete formData.amazonURL;
     delete formData.detailsHTML;
@@ -161,7 +160,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setWebsiteTab(product.website_tab);
       setTitle(product.title);
       setImage(product.image);
-      setCategory(product.categories[0]?.id);
+      setCategory(product.category?.id);
       setClicksCount(product.clicks_count);
       setPosition(product.position);
       setAmazonURL(product.amazon_url);
@@ -304,10 +303,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         <CategorySelect
           category={category}
           onChange={onCategorySelect}
-          hasError={formErrors.categories?.length}
+          hasError={formErrors.category?.length}
         />
-        {formErrors.categories && (
-          <Text className="col-sm-12" size="sm" color="red">{formErrors.categories.join('<br />')}</Text>
+        {formErrors.category && (
+          <Text className="col-sm-12" size="sm" color="red">{formErrors.category.join('<br />')}</Text>
         )}
 
       </Panel>
