@@ -17,15 +17,6 @@ query ProductComparisonList {
             amazon_url
             price
             image
-            category {
-                label {
-                    label
-                    language {
-                        id
-                        name
-                    }
-                }
-            }
         }
     }
 }
