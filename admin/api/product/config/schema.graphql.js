@@ -1,11 +1,5 @@
 module.exports = {
   definition: `
-    type ProductDetails {
-      id: ID
-      details_html: String
-      price: Float
-      image: String
-    }
     type ProductCategory {
       label: ComponentAtomsTranslateableLabel
       id: ID!
@@ -33,7 +27,7 @@ module.exports = {
     }
   `,
   query: `
-    productDetails (id: ID!, language: String): ProductDetails
+    productDetails (id: ID!, language: String): Product
     productComparisonList (language: String!): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
   `,

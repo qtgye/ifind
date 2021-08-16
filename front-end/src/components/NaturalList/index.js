@@ -10,11 +10,10 @@ import Item from './item';
 import './natural-list.scss';
 
 const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
-    const { incrementProductClick } = useProductDetail();
+    const { incrementProductClick, productDetail: productDetailFromContext, getProductDetails } = useProductDetail();
 
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState(null);
-    const [detailsHTML, setDetailsHTML] = useState(null);
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
@@ -26,14 +25,39 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         incrementProductClick(product.id);
     }, [setActiveProduct, incrementProductClick]);
 
-    useEffect(() => {
-        if (activeProduct) {
-            if (activeProduct.details_html) {
-                setDetailsHTML(activeProduct.details_html);
-            }
-            setIsDetailsLoading(false);
+    const populateProductDetails = useCallback(async (productID) => {
+        setIsDetailsLoading(true);
+        getProductDetails( productID );
+    }, [ getProductDetails ]);
+
+    const productHasDetails = useCallback((productData) => (
+        productData?.details_html ? true : false
+    ), []);
+
+    // Merge activeProduct and productDetails from the context
+    const mergeCurrentProductDetails = useCallback(() => {
+        if ( activeProduct ) {
+            setActiveProduct({
+                ...activeProduct,
+                ...(productDetailFromContext || {}),
+            });
         }
-    }, [activeProduct]);
+        setIsDetailsLoading(false);
+    }, [ productDetailFromContext, activeProduct ]);
+
+    // When product details update from context,
+    // Merge it with activeProduct
+    useEffect(() => {
+        mergeCurrentProductDetails();
+    }, [ productDetailFromContext ]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // When a product is selected,
+    // Determine whether it has details
+    useEffect(() => {
+        if ( activeProduct && !productHasDetails(activeProduct) ) {
+            populateProductDetails(activeProduct.id);
+        }
+    }, [ activeProduct ]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (observeItem && itemRef) {
@@ -79,12 +103,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                     {
                                         activeProduct &&
                                         <ProductDetails
-                                            productData={activeProduct}
-                                            detailsHTML={detailsHTML}
-                                            urlList={activeProduct?.url_list}
-                                            title={activeProduct.title}
+                                            product={activeProduct}
                                             isLoading={isDetailsLoading}
-                                            price={activeProduct.price}
                                         />
                                     }
 

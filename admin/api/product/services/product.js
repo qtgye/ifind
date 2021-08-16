@@ -1,6 +1,6 @@
 'use strict';
 
-const { fetchProductDetails, filterProductsWithProblems } = appRequire('helpers/product');
+const { filterProductsWithProblems } = appRequire('helpers/product');
 const { isAmazonLink, ebayLink, amazonLink } = appRequire('helpers/url');
 
 const extractEndpointCategories = (categoryTree) => {
@@ -27,6 +27,15 @@ module.exports = {
   async productComparisonList(language) {
     const categoryTree = await strapi.services.category.categoryTree(language);
 
+    // Selected fields to return for product
+    const populate = [
+      'id',
+      'title',
+      'price',
+      'image',
+      'category',
+    ];
+
     // Granchildren categories
     const endpointCategories = await extractEndpointCategories(categoryTree);
 
@@ -37,12 +46,12 @@ module.exports = {
       endpointCategories.map(async (category) => (
         {
           category,
-          products: await strapi.services.product.find({
+          products: await strapi.query('product').find({
             category: category.id,
             website_tab: 'product_comparison',
             _limit: 5,
             _sort: 'position:ASC',
-          })
+          }, populate),
         }
       ))
     ));
@@ -53,7 +62,7 @@ module.exports = {
 
   async getProductDetails(productID, language) {
     if ( productID ) {
-      const productDetails = await fetchProductDetails(productID, language);
+      const productDetails = await this.findOne({ id: productID });
       return productDetails;
     }
 
