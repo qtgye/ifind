@@ -10,7 +10,7 @@ const commands = {
     let updatedCount = 0;
 
     // update each product
-    products.forEach(async (product) => {
+    for ( const product of products ) {
       try {
         await strapiInstance.query('product').update({ id: product.id}, {
           category_temp: product.categories[0] ? product.categories[0].id : null,
@@ -19,7 +19,7 @@ const commands = {
       } catch (err) {
         console.error(err.message, `[${++updatedCount}} of ${totalProducts}] [${product.id}] ${product.title}`);
       }
-    })
+    }
   },
 
 };
@@ -28,3 +28,4 @@ const commands = {
 if ( args._[0] in commands ) {
   strapi().then(commands[args._[0]]);
 }
+
