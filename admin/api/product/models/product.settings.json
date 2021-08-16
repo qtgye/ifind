@@ -81,6 +81,9 @@
     "admin_user": {
       "plugin": "admin",
       "model": "user"
+    },
+    "category_temp": {
+      "type": "integer"
     }
   }
 }

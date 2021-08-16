@@ -111,7 +111,7 @@ const processProductData = async (data, id) => {
 
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
-  data.attrs_rating = data.attrs_rating.map(attrRating => {
+  data.attrs_rating = (data.attrs_rating || []).map(attrRating => {
     const matchedProductAttribute = productAttributes.find(({ id }) => (
       attrRating.product_attribute == id
     ));
