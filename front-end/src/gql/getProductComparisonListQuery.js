@@ -49,7 +49,7 @@ query ProductComparisonList {
                 price
                 is_base
             }
-            categories {
+            category {
                 label {
                     label
                     language {

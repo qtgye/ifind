@@ -38,7 +38,7 @@ module.exports = {
         {
           category,
           products: await strapi.services.product.find({
-            categories: [ category.id ],
+            category: category.id,
             website_tab: 'product_comparison',
             _limit: 5,
             _sort: 'position:ASC',
