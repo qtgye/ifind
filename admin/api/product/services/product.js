@@ -203,7 +203,7 @@ module.exports = {
     };
 
     if ( args.where && args.where.category ) {
-      whereParams.categories_contains = args.where.category;
+      whereParams.category = args.where.category;
     };
 
     const [
