@@ -220,6 +220,10 @@
     "children_count": {
       "type": "integer",
       "default": 0
+    },
+    "products_count": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

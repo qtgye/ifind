@@ -15,19 +15,29 @@ module.exports = {
   `,
   mutation: `
     updateCategories( categories: [updateCategoryInput] ): [Category]
+    updateProductCounts: [Category]
   `,
   resolver: {
     Query: {
       async categoryTree(_, args, ...rest) {
-        const categoryTree = await strapi.services.category.categoryTree(args.language);
+        const categoryTree = await strapi.services.category.categoryTree(
+          args.language
+        );
         return categoryTree;
-      }
+      },
     },
     Mutation: {
       async updateCategories(_, args, ...rest) {
-        const updatedCategories = await strapi.services.category.updateMultiple(args.categories);
+        const updatedCategories = await strapi.services.category.updateMultiple(
+          args.categories
+        );
         return updatedCategories;
-      }
-    }
-  }
+      },
+      async updateProductCounts() {
+        const updatedCategories =
+          await strapi.services.category.updateProductCounts();
+        return updatedCategories;
+      },
+    },
+  },
 };
