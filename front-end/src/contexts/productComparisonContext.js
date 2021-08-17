@@ -11,7 +11,7 @@ export const ProductComparisonContextProvider = ({ children }) => {
     const {
         data,
         loading,
-        error,
+        // error,
         // refetch
     } = useQuery(getProductComparisonListQuery, {
         variables: { language: locale },
