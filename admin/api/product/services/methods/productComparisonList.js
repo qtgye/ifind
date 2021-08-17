@@ -1,5 +1,16 @@
 const { getTranslatedLabel } = appRequire("helpers/category");
 
+const sortCategoryProducts = (products) => {
+  // Sort by position, ascending
+  products.sort((prodA, prodB) => (prodA.position > prodB.position ? 1 : -1));
+
+  // Get only first 5 products
+  return products.slice(0, 4).map((product) => ({
+    ...product,
+    category: category.id,
+  }));
+};
+
 /**
  * Retrieves a listing of products for Product Comparison page
  * @param {String} language
@@ -11,6 +22,7 @@ module.exports = async (language) => {
     children_count: 0,
     products_count_gt: 0,
     _sort: "order:ASC",
+    _limit: 9999,
   });
 
   const productsLists = await Promise.all(
@@ -19,10 +31,7 @@ module.exports = async (language) => {
         ...category,
         label: await getTranslatedLabel(category.label),
       },
-      products: category.products.map((product) => ({
-        ...product,
-        category: category.id,
-      })),
+      products: sortCategoryProducts(category.products || []),
     }))
   );
 

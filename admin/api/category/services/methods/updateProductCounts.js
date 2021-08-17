@@ -2,6 +2,7 @@ module.exports = async () => {
   // Get only granchild categories
   const categories = await strapi.services.category.find({
     children_count: 0,
+    _limit: 9999,
   });
 
   // Update each category
