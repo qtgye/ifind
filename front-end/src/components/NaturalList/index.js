@@ -87,7 +87,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                             price={activeProduct.price}
                                         />
                                     }
-
                                 </li>
                                 {items.map((item, index) => (
                                     <Item

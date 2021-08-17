@@ -11,6 +11,9 @@ const HeaderSideNavMenuItem = ({ category }) => {
     const { activeCategory, onCategoryClick } = useContext(GlobalStateContext);
     const grandChildren = getGrandchildrenCategories(category?.children || []);
     const len = grandChildren.length;
+    const str = category.label.label;
+    //const labelLength = category.label.label.length;
+    const withSpace = str.indexOf(" ");
     const categoryRef = useRef();
 
     const onItemClick = useCallback((id) => {
@@ -43,8 +46,8 @@ const HeaderSideNavMenuItem = ({ category }) => {
         <div ref={categoryRef} key={category.id} className={["list", activeCategory.toString() === category.id ? "active" : ""].join(" ")}>
             <button onClick={categoryClick}>
                 <IfindIcon icon={category.icon} className="header-side-nav__icon" />
-                {category.label.label}
-                {len === 0 ? "" : <span className="num-of-elements">{len}</span>}
+                <span className={["category-label", withSpace > 0 ? "change-width" : ""].join(" ")}>{category.label.label}</span>
+                {len === 0 ? "" : <div className="num-of-elements">{len}</div>}
             </button>
             {
                 // checked ?
