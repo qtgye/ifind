@@ -23,7 +23,6 @@ const ProductComparison = () => {
     if (isIntersecting) {
       const category = target.dataset.category;
       setActiveCategory(category);
-      console.log(category);
     }
   }, [setActiveCategory]);
 
@@ -53,7 +52,7 @@ const ProductComparison = () => {
                   items={products}
                   observeItem={observeItem}
                   id={category.id}
-                  label={category.label.label}
+                  label={category.label}
                   category={category}
                 />
               ))

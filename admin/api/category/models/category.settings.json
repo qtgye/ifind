@@ -216,6 +216,10 @@
     "products": {
       "via": "category",
       "collection": "product"
+    },
+    "children_count": {
+      "type": "integer",
+      "default": 0
     }
   }
 }

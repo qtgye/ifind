@@ -5,10 +5,7 @@ query ProductComparisonList {
     productComparisonList(language: "en") {
         category {
             id
-            label {
-                id
-                label
-            }
+            label
             order
         }
         products {

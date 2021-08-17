@@ -57,6 +57,7 @@
     }
     factor
   }
+  children_count
  }`;
  
  const categoryFieldsCompleteFragment = `

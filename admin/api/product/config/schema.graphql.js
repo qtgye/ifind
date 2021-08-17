@@ -1,7 +1,7 @@
 module.exports = {
   definition: `
     type ProductCategory {
-      label: ComponentAtomsTranslateableLabel
+      label: String
       id: ID!
       order: Int
     }

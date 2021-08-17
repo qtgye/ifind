@@ -18,6 +18,25 @@ const extractEndpointCategories = (categoryTree) => {
   return endpointCategories;
 }
 
+const getTranslatedLabel = async (categoryLabels, language = "en") => {
+  const [
+    targetLanguage,
+    englishLanguage,
+  ] = await Promise.all([
+    strapi.services.language.findOne({ code: language }),
+    strapi.services.language.findOne({ code: 'en' }),
+  ]);
+
+  const matchedLabel = (
+    categoryLabels.find(({language}) => language.id === targetLanguage.id)
+    || categoryLabels.find(({language}) => language.id === englishLanguage.id)
+    || categoryLabels[0]
+  )
+
+  return matchedLabel ? matchedLabel.label : '';
+
+}
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-services)
  * to customize this service
@@ -25,8 +44,6 @@ const extractEndpointCategories = (categoryTree) => {
 
 module.exports = {
   async productComparisonList(language) {
-    const categoryTree = await strapi.services.category.categoryTree(language);
-
     // Selected fields to return for product
     const populate = [
       'id',
@@ -37,21 +54,23 @@ module.exports = {
     ];
 
     // Granchildren categories
-    const endpointCategories = await extractEndpointCategories(categoryTree);
-
-    // Ensure categories are sorted by order
-    endpointCategories.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+    // const endpointCategories = await extractEndpointCategories(categoryTree);
+    const endpointCategories = await strapi.services.category.find({
+      children_count: 0,
+      _sort: 'order:ASC',
+    });
 
     const productsLists = await Promise.all((
       endpointCategories.map(async (category) => (
         {
-          category,
-          products: await strapi.query('product').find({
+          category: {
+            ...category,
+            label: await getTranslatedLabel(category.label),
+          },
+          products: category.products.map(product => ({
+            ...product,
             category: category.id,
-            website_tab: 'product_comparison',
-            _limit: 5,
-            _sort: 'position:ASC',
-          }, populate),
+          })),
         }
       ))
     ));
