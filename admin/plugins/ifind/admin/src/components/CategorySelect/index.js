@@ -57,6 +57,7 @@ const CategorySelect = ({ exclude, category, onChange, hasError, emptyMessage, a
     ));
 
     setCategoryOptions(filteredOptions);
+    buildCategoryPath();
   }, [ categories ]);
 
   // Build categoryPath for rendering nested categories

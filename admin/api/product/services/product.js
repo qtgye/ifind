@@ -1,7 +1,7 @@
 'use strict';
 
-const { fetchProductDetails, filterProductsWithProblems } = appRequire('helpers/product');
-const { isAmazonLink } = appRequire('helpers/url');
+const { filterProductsWithProblems } = appRequire('helpers/product');
+const { isAmazonLink, ebayLink, amazonLink } = appRequire('helpers/url');
 
 const extractEndpointCategories = (categoryTree) => {
   const endpointCategories = [];
@@ -18,6 +18,25 @@ const extractEndpointCategories = (categoryTree) => {
   return endpointCategories;
 }
 
+const getTranslatedLabel = async (categoryLabels, language = "en") => {
+  const [
+    targetLanguage,
+    englishLanguage,
+  ] = await Promise.all([
+    strapi.services.language.findOne({ code: language }),
+    strapi.services.language.findOne({ code: 'en' }),
+  ]);
+
+  const matchedLabel = (
+    categoryLabels.find(({language}) => language.id === targetLanguage.id)
+    || categoryLabels.find(({language}) => language.id === englishLanguage.id)
+    || categoryLabels[0]
+  )
+
+  return matchedLabel ? matchedLabel.label : '';
+
+}
+
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-services)
  * to customize this service
@@ -25,29 +44,36 @@ const extractEndpointCategories = (categoryTree) => {
 
 module.exports = {
   async productComparisonList(language) {
-    const categoryTree = await strapi.services.category.categoryTree(language);
+    // Selected fields to return for product
+    const populate = [
+      'id',
+      'title',
+      'price',
+      'image',
+      'category',
+    ];
 
     // Granchildren categories
-    const endpointCategories = await extractEndpointCategories(categoryTree);
-
-    // Ensure categories are sorted by order
-    endpointCategories.sort((catA, catB) => catA.order >= catB.order ? 1 : -1);
+    // const endpointCategories = await extractEndpointCategories(categoryTree);
+    const endpointCategories = await strapi.services.category.find({
+      children_count: 0,
+      _sort: 'order:ASC',
+    });
 
     const productsLists = await Promise.all((
       endpointCategories.map(async (category) => (
         {
-          category,
-          products: await strapi.services.product.find({
-            categories: [ category.id ],
-            website_tab: 'product_comparison',
-            _limit: 5,
-            _sort: 'position:ASC',
-          })
+          category: {
+            ...category,
+            label: await getTranslatedLabel(category.label),
+          },
+          products: category.products.map(product => ({
+            ...product,
+            category: category.id,
+          })),
         }
       ))
     ));
-
-    // Apply affiliate links
 
 
     return productsLists;
@@ -55,7 +81,7 @@ module.exports = {
 
   async getProductDetails(productID, language) {
     if ( productID ) {
-      const productDetails = await fetchProductDetails(productID, language);
+      const productDetails = await this.findOne({ id: productID });
       return productDetails;
     }
 
@@ -118,7 +144,7 @@ module.exports = {
           ));
           // Apply old url list if any
           if ( changeWithURLList ) {
-            product.url_list = changeWithURLList.state.url_list
+            product.url_list = changeWithURLList.state.url_list;
           }
         }
 
@@ -144,5 +170,85 @@ module.exports = {
         return result;
       })
     );
-  }
+  },
+
+  // Updates Product Links for all products
+  async updateProductLinks() {
+    const allProducts = await this.find({ _limit: 99999 });
+
+    return await Promise.all(
+      // Extract and set fixed data for each product
+      allProducts.map(product => {
+        product.amazon_url = amazonLink(product.amazon_url);
+
+        if ( product.url_list && product.url_list.length ) {
+          product.url_list.forEach(urlData => {
+            if ( urlData.source ) {
+              switch ( true ) {
+                case /ebay/i.test(urlData.source.name):
+                  urlData.url = ebayLink(urlData.url);
+                  break;
+              }
+            }
+          });
+        }
+
+        // Only apply updates to selected properties
+        return {
+          id: product.id,
+          amazon_url: product.amazon_url,
+          url_list: product.url_list,
+        };
+      })
+      // Then, save all these updated products,
+      // Returning the full data for each product
+      .map(async productUpdates => {
+        const { id, ...productData } = productUpdates;
+
+        // Prevent lifecycle from scraping
+        productData.updateScope = {
+          price: false,
+          amazonDetails: false,
+        }
+
+        const result = await this.update({ id }, productData );
+        return result;
+      })
+    );
+  },
+
+  // Get products list
+  async productsList(args) {
+    const whereParams = {};
+    const otherParams = {
+      _limit: args.limit || 10,
+      _sort: args.sort || "id:desc",
+      _start: args.start || 0,
+    };
+
+    if ( args.where && args.where.search ) {
+      whereParams.title_contains = args.where.search;
+    };
+
+    if ( args.where && args.where.category ) {
+      whereParams.category = args.where.category;
+    };
+
+    const [
+      count,
+      products,
+    ] = await Promise.all([
+      strapi.services.product.count({
+        ...whereParams,
+        ...otherParams,
+      }),
+      strapi.services.product.find({
+        ...whereParams,
+        ...otherParams,
+      }),
+    ]);
+
+    return { count, products };
+  },
+
 };

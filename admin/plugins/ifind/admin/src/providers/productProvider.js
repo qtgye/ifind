@@ -29,7 +29,7 @@ fragment ProductDataFragment on Product {
     price
     is_base
   }
-  categories {
+  category {
     id
   }
   region {
@@ -85,7 +85,7 @@ $user: ID!
 $image: String!
 $title: String!
 $website_tab: String!
-$categories: [ID!]!
+$category: [ID!]!
 $position: Int
 $amazon_url: String!
 $price: Float
@@ -97,7 +97,7 @@ export const productMutationCommonInput = `
 image: $image
 title: $title
 website_tab: $website_tab
-categories: $categories
+category: $category
 amazon_url: $amazon_url
 price: $price
 url_list: $url_list

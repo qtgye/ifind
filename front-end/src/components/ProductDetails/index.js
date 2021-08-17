@@ -1,90 +1,70 @@
 import { useState, useEffect } from 'react';
 import ReactShadowRoot from 'react-shadow-root';
-import { toAdminURL } from '@utilities/url';
 import { v4 as uuid } from 'uuid';
 
 import { useSourceRegion } from '@contexts/sourceRegionContext';
 import PriceChangeGraph from '@components/PriceChangeGraph';
 import ProductRating from '@components/ProductRating';
-
-import './product-details.scss';
+import ProductURLLink from './product-url-link';
 
 import inlineStyles from './detail-styles';
+import './product-details.scss';
 
-const ProductURLLink = ({ url, logo, price, isBase, basePrice, currency }) => {
+const icon = '/images/loading.png';
 
-    const percentDifference = 100 * (price - basePrice) / basePrice;
-
-    return (
-        <div className="product-details__link-item">
-            <a href={url} className="product-details__link" target="_blank" rel="noreferrer">
-                <img src={toAdminURL(logo)} alt="" className="product-details__link-image" />
-            </a>
-            <span className="product-details__price">{currency}&nbsp;{price}</span>
-            {
-                !isBase && (
-                    <span className={['product-details__diff', percentDifference < 0 ? 'product-details__diff--lower' : 'product-details__diff--higher'].join(' ')}>
-                        {percentDifference.toFixed(2)}%
-                    </span>
-                )
-            }
-        </div>
-    )
-}
-
-const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoading }) => {
+const ProductDetails = ({ product, isLoading }) => {
     const { sources } = useSourceRegion();
     const amazonSource = sources.find(source => /amazon/i.test(source.name));
     const [urlItems, setURLItems] = useState([]);
-    // const icon = '/images/loading.png';
 
     useEffect(() => {
         // Add keys to urlList
-        setURLItems(productData.url_list?.map(urlData => ({
-            ...urlData,
-            key: uuid(),
-        })))
-
-    }, [productData]);
+        if ( product.url_list ) {
+            setURLItems(product.url_list.map(urlData => ({
+                ...urlData,
+                key: uuid(),
+            })));
+        }
+    }, [product]);
 
     return (
         <div className="product-details">
-            {isLoading && (<h1>Loading...</h1>)}
-            {/* {isLoading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>} */}
-            {!isLoading && (
+            {isLoading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
+            {!isLoading && product && (
                 <div className="product-details__content">
-                    <h1 className="product-details__title">{title}</h1>
+                    <h1 className="product-details__title">{product.title}</h1>
                     <div className="product-details__body">
                         <ReactShadowRoot>
                             <style>{inlineStyles}</style>
-                            <div dangerouslySetInnerHTML={{ __html: productData.details_html }}></div>
+                            <div dangerouslySetInnerHTML={{ __html: product.details_html }}></div>
                         </ReactShadowRoot>
                     </div>
                     <div className="product-details__additional">
                         <div className="product-details__links">
                             <ProductURLLink
-                                key={productData.amazon_url}
-                                url={productData.amazon_url}
+                                key={product.amazon_url}
+                                url={product.amazon_url}
                                 logo={amazonSource?.button_logo?.url}
-                                price={productData.price}
+                                price={product.price}
                                 isBase={true}
-                                currency={productData.region?.currency?.symbol}
+                                currency={product.region?.currency?.symbol}
                             />
                             {urlItems.map(({ key, url, source, price, region, is_base }) => (
                                 <ProductURLLink
                                     key={key}
                                     url={url}
+                                    source={source?.name}
                                     logo={source?.button_logo?.url}
                                     price={price}
-                                    basePrice={productData.price}
-                                    currency={productData.region?.currency?.symbol}
+                                    basePrice={product.price}
+                                    currency={product.region?.currency?.symbol}
                                 />
                             ))}
                         </div>
                         {
-                            productData?.product_changes?.length ?
+                            product?.product_changes?.length ?
                                 <PriceChangeGraph
-                                    priceChanges={productData.product_changes.map(({ state, date_time }) => ({
+                                    priceChanges={product.product_changes.map(({ state, date_time }) => ({
                                         price: state.price,
                                         date_time,
                                     }))}
@@ -92,15 +72,18 @@ const ProductDetails = ({ productData, detailsHTML, title, urlList = [], isLoadi
                                 : null
                         }
                         {
-                            productData.final_rating ?
+                            product.final_rating ?
                                 <ProductRating
-                                    finalRating={productData.final_rating}
-                                    attributes={productData.attrs_rating}
+                                    finalRating={product.final_rating}
+                                    attributes={product.attrs_rating}
                                 />
                                 : null
                         }
                     </div>
                 </div>
+            )}
+            {!isLoading && !product && (
+                <strong>No data available for this product</strong>
             )}
         </div>
     )

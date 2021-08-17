@@ -7,6 +7,7 @@ import { SourceRegionProvider } from './sourceRegionProvider';
 import { GlobalContextProvider } from './globalProvider';
 import { AdminUserProvider } from './adminUserProvider';
 import { LanguageProvider } from './languageProvider';
+import { ProductAttributesProvider } from './productAttributesProvider';
 
 const Providers = ({ children }) => {
   return (
@@ -15,11 +16,13 @@ const Providers = ({ children }) => {
         <AdminUserProvider>
           <LanguageProvider>
             <SourceRegionProvider>
-              <CategoriesListingProvider>
-                <DragAndDropProvider>
-                  {children}
-                </DragAndDropProvider>
-              </CategoriesListingProvider>
+              <ProductAttributesProvider>
+                <CategoriesListingProvider>
+                  <DragAndDropProvider>
+                    {children}
+                  </DragAndDropProvider>
+                </CategoriesListingProvider>
+              </ProductAttributesProvider>
             </SourceRegionProvider>
           </LanguageProvider>
         </AdminUserProvider>

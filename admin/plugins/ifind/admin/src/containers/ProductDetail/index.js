@@ -23,7 +23,7 @@ const productValidationRules = {
   //   validationRules.required('Please provide an image'),
   //   validationRules.url('Image must be a valid URL'),
   // ], 'Please provide an image in a valid URL format'),
-  categories: validationRules.required('Please select a category'),
+  category: validationRules.required('Please select a category'),
 };
 
 const ProductDetail = () => {
@@ -87,7 +87,8 @@ const ProductDetail = () => {
     if ( isSaving ) {
       strapi.notification.toggle({
         type: 'success',
-        message: 'Product Saved.'
+        message: 'Product Saved.',
+        timeout: 10000,
       });
       setIsSaving(false);
     }
@@ -117,6 +118,7 @@ const ProductDetail = () => {
         type: 'warning',
         title: 'Error',
         message: error.message,
+        timeout: 10000,
       });
       setIsSaving(false);
     }

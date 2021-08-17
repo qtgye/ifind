@@ -1,6 +1,16 @@
+require('colors');
 const fs = require('fs');
+const path = require('path');
 const { iconsList } = require('ifind-icons');
-require('../helpers/customGlobals');
+const args = require('minimist')(process.argv.slice(2));
+const strapiNativeCommands = [
+  'start',
+  'build',
+  'develop',
+];
+
+const adminRoot = path.resolve(__dirname, '../');
+require(path.resolve(adminRoot, 'helpers/customGlobals'));
 
 const strapi = require('strapi');
 
@@ -29,5 +39,20 @@ categoryModelSettings.attributes.icon.enum = iconsList.map(icon => icon.replace(
 // Write updated category model settings
 fs.writeFileSync(categoryModelSettingsFile, JSON.stringify(categoryModelSettings, null, '  '));
 
+/**
+ * Creates a strapi instance using our configs, without serving admin panel
+* @returns {Promise} - Passes loaded strapi instance
+ */
+const createStrapiInstance = () => (
+  strapi({
+    dir: adminRoot,
+    serveAdminPanel: false,
+  }).load()
+);
 
-require('strapi/bin/strapi');
+if ( args._.some(command => strapiNativeCommands.includes(command)) ) {
+  require('strapi/bin/strapi');
+} else {
+  module.exports = createStrapiInstance;
+}
+

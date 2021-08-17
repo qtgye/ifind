@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, memo } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Table, Button, Toggle } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Select, Label } from '@buffetjs/core';
@@ -12,6 +12,7 @@ import { generatePluginLink } from '../../helpers/url';
 import Pagination from '../Pagination';
 import SortControls from '../SortControls';
 import ProductFilters from '../ProductFilters';
+import TextInput from '../TextInput';
 import CustomRow from './_custom-row';
 import ProductThumbnail from './_product-thumbnail';
 import headers from './_table-headers';
@@ -34,6 +35,7 @@ const ProductsList = () => {
     products,
     loading,
     deleteProducts,
+    searchTerm,
     // Values
     pageSize,
     sortBy,
@@ -44,6 +46,8 @@ const ProductsList = () => {
   const [ allSelected, setAllSelected ] = useState(false);
   const [ selectedItems, setSelectedItems ] = useState([]);
   const [ isFiltersVisible, setIsFiltersVisible ] = useState(false);
+  const [ searchInput, setSearchInput ] = useState(searchTerm);
+  const [ searchTermTimeout, setSearchTermTimeout ] = useState(null);
 
   const getUrlType = useCallback((sourceID, regionID) => {
     const matchedSource = sources.find(({ id }) => id === sourceID);
@@ -54,7 +58,7 @@ const ProductsList = () => {
     return `${matchedSource.name} ${matchedRegion.name}`;
   }, [ sources ]);
 
-  const getCategoryLabel = useCallback(([ productCategoryData ]) => {
+  const getCategoryLabel = useCallback((productCategoryData) => {
     if ( !productCategoryData ) {
       return ''
     }
@@ -120,7 +124,7 @@ const ProductsList = () => {
       ...product,
       urlType: getUrlType(product.source, product.region),
       image: (<ProductThumbnail src={product.image} />),
-      category: getCategoryLabel(product.categories || []),
+      category: getCategoryLabel(product.category),
       confirmProductDelete: () => confirmProductDelete(product),
     }))
   }, [ onSelectUnselect ]);
@@ -140,15 +144,24 @@ const ProductsList = () => {
 
   // Page size select handler
   const onPageSizeSelect = useCallback((page_size) => {
-    history.push(generatePluginLink('', { page_size }));
+    // Reset page when page size changes
+    history.push(generatePluginLink('', { page_size, page: 1 }));
   });
 
   // Sort Control update handler
   const onSortUpdate = useCallback(({ sort_by, order }) => {
     if ( sort_by !== sortBy || order !== sortOrder ) {
-      history.push(generatePluginLink('', { sort_by, order }));
+      history.push(generatePluginLink('', { sort_by, order, page: 1 }));
     }
   });
+
+  const updateSearchTerm = useCallback((search) => {
+      window.clearTimeout(searchTermTimeout);
+      setSearchTermTimeout(window.setTimeout(() => {
+        // Reset page when search changes
+        history.push(generatePluginLink('', { search, page: 1 }));
+      }, 500));
+  }, [ searchTermTimeout ]);
 
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
@@ -162,6 +175,10 @@ const ProductsList = () => {
     const selectedItems = rows.filter(row => row.selected).map(({ id }) => id);
     setSelectedItems(selectedItems);
   }, [ rows ]);
+
+  useEffect(() => {
+    updateSearchTerm(searchInput);
+  }, [ searchInput ]);
 
   useEffect(() => {
     setIsLoading(loading);
@@ -185,6 +202,14 @@ const ProductsList = () => {
               </Button>
             )) || ''
           }
+        </div>
+        <div className="products-list__search">
+          <TextInput
+            placeholder='Search Current List'
+            value={searchInput}
+            onChange={setSearchInput}
+            search
+          />
         </div>
         <div className="products-list__sort-controls">
           <SortControls

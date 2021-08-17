@@ -34,8 +34,8 @@ const CategoryTree = (onChange) => {
 
   const filterChangedItems = useCallback((updatedItems) => {
     // Filter only changed items
-    const _changedItems = updatedItems.filter(({ softParent, softOrder, parent, order }) => (
-      (parent?.id || null) !== softParent || order !== softOrder
+    const _changedItems = updatedItems.filter(({ softParent, softOrder, parent, order, children_count, softChildrenCount }) => (
+      (parent?.id || null) !== softParent || order !== softOrder || children_count !== softChildrenCount
     ));
     return _changedItems;
   }, []);
@@ -58,8 +58,8 @@ const CategoryTree = (onChange) => {
     setIsSaving(true);
 
     // Format data to be passed into GraphQL
-    const itemsToChange = changedItems.map(({ id, parent, softParent, order, softOrder }) => ({
-      id, parent: softParent, order: softOrder,
+    const itemsToChange = changedItems.map(({ id, parent, softParent, order, softOrder, children_count, softChildrenCount }) => ({
+      id, parent: softParent, order: softOrder, children_count: softChildrenCount,
     }));
     
     updateCategories(itemsToChange);
@@ -73,7 +73,14 @@ const CategoryTree = (onChange) => {
         softOrder: retainIndex ? index : 
                    category.softOrder ? category.softOrder :
                    category.order,
+        softChildrenCount: category.softChildrenCount || category.children_count || 0,
     }));
+
+    // Update softChildrenCount
+    processedCategories.forEach(category => {
+      const matchedChildren = processedCategories.filter(({ softParent }) => softParent === category.id);
+      category.softChildrenCount = matchedChildren.length;
+    });
 
     // Sort categories
     const sortedCategories = processedCategories.sort((categoryA, categoryB) => (

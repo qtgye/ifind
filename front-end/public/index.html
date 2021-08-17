@@ -8,6 +8,23 @@
 
   <meta name="api_root" content="%REACT_APP_API_ROOT%">
   <meta name="admin_api_root" content="%REACT_APP_ADMIN_API_ROOT%">
+  <meta name="environment" content="%REACT_APP_ENV%">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-204521375-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-204521375-1', { 'anonymize_ip': true });
+    gtag('event', 'environment', {
+      'event_category': 'PageEvent',
+      'event_label': 'Page Loaded At Environment',
+      'value': Array.from(document.head.children).filter(element => element.name === 'environment').reduce((string, el) => el.content, ''),
+    });
+  </script>
+  <!-- End Google Analytics -->
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKT6JF4VR9"></script>
@@ -79,13 +96,6 @@
 </head>
 
 <body>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-SKT6JF4VR9', { 'anonymize_ip': true });
-  </script>
-
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
   <!--

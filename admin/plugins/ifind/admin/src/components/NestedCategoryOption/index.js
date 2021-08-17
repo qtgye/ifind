@@ -47,9 +47,7 @@ const NestedCategoryOption = ({ categories, categoryPath = [], onChange = null, 
     const [ _currentCategory ] = categoryPath;
 
     // Set current category
-    if ( _currentCategory ) {
-      setSelectedCategory(_currentCategory);
-    }
+    setSelectedCategory(_currentCategory);
 
     // Set children
     const matchedCategory = categories.find(({ id }) => _currentCategory === id);

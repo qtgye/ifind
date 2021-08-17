@@ -29,11 +29,6 @@
       "min": 0,
       "default": 0
     },
-    "categories": {
-      "via": "products",
-      "collection": "category",
-      "dominant": true
-    },
     "image": {
       "type": "string",
       "required": true
@@ -81,6 +76,13 @@
     "admin_user": {
       "plugin": "admin",
       "model": "user"
+    },
+    "category_temp": {
+      "type": "integer"
+    },
+    "category": {
+      "via": "products",
+      "model": "category"
     }
   }
 }

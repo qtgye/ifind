@@ -30,7 +30,7 @@ fragment ProductFragment on Product {
   region {
     id
   }
-  categories {
+  category {
     id
     label {
       label
@@ -42,34 +42,32 @@ fragment ProductFragment on Product {
 }
 `;
 
-const buildProductsQuery = (where) => {
-  return `
+const productsListQuery = `
   ${ProductFragment}
   query ProductsList (
-    $limit: Int!,
-    $start: Int!,
+    $limit: Int!
+    $start: Int!
     $sort: String!
+    $search: String
+    $category: ID
     ) {
-      products (
-        limit: $limit,
-        start: $start,
-        sort:$sort,
-        where: {${
-          Object.entries(where).map(([ key, value ]) => (
-            `${key === 'category' ? 'categories_contains' : key}: ${value}`
-          )).join(',')
-        }}
-        ) {
-          ... ProductFragment
+      productsList (
+        limit: $limit
+        start: $start
+        sort: $sort
+        where: {
+          search: $search,
+          category: $category
         }
-        productsConnection {
-          aggregate {
-            totalCount
+        ) {
+          count
+          products {
+            ... ProductFragment
           }
         }
       }
   `
-};
+;
 
 const _deleteProductsMutation = (productIDs) => `
 mutation DeleteProducts {
@@ -94,27 +92,17 @@ export const ProductsListContext = createContext({});
 export const ProductsListProvider = memo(({ children }) => {
   const gqlFetch = useGQLFetch();
   const searchParams = useSearchParams();
-
-  const getFiltersObject = useCallback(() => {
-    if ( searchParams?.filters ) {
-      return searchParams.filters
-        .split(',')
-        .map(filterString => filterString.split(':'))
-        .reduce((all, [ key, value ]) => ({
-          ...all,
-          [key]: value
-        }), {});
-    }
-
-    return {};
-  }, [ searchParams ]);
+  const [ loading, setLoading ] = useState(false);
+  const [ requestTimeout, setRequestTimeout ] = useState(null);
+  const [ searchTerm, setSearchTerm ] = useState(searchParams.search);
 
   const [ listOptions, setListOptions ] = useState({
     sortBy: searchParams?.sort_by || 'id', // Product field
     sortOrder: searchParams?.order || 'desc', // desc|asc
     pageSize: Number(searchParams?.page_size || 10),
     page: Number(searchParams?.page || 1),
-    filters: getFiltersObject(), // { fieldName: value }
+    category: searchParams?.category || '',
+    search: searchParams?.search || '',
   });
 
   const [ totalPages, setTotalPages ] = useState(1);
@@ -124,41 +112,47 @@ export const ProductsListProvider = memo(({ children }) => {
   });
 
   const [ products, setProducts ] = useState([]);
-  const {
-    data,
-    loading,
-    error,
-    refetch,
-  } = useQuery(queryOptions.query, queryOptions.variables);
 
   const buildQueryVars = useCallback(({
     sortBy,
     sortOrder,
     pageSize,
-    page
+    page,
+    category,
+    search,
   }) => {
     const limit = pageSize;
     const start = pageSize * (page - 1);
     const sort = `${sortBy}:${sortOrder}`;
 
-    return { limit, start, sort }
+    return { limit, start, sort, category, search };
   }, []);
 
   const refresh = useCallback(() => {
-    refetch();
-  }, [ refetch ]);
+    clearTimeout(requestTimeout);
+
+    setRequestTimeout(setTimeout(async () => {
+      setLoading(true);
+      const data = await gqlFetch(queryOptions.query, queryOptions.variables);
+
+      if ( data?.productsList ) {
+        setProductsListData(data.productsList);
+      }
+      setLoading(false);
+    }), 300);
+  }, [ queryOptions, requestTimeout ]);
 
   const deleteProducts = useCallback((productIDs) => {
     return gqlFetch(_deleteProductsMutation(productIDs))
     .then(data => console.log({ data }))
   });
 
-  const setProductsListData = useCallback(({ products, productsConnection }) => {
-    setProducts([...products]);
+  const setProductsListData = useCallback(({ products, count }) => {
+    setProducts(products);
 
     // Compute pagination
-    setTotalPages(Math.ceil(productsConnection?.aggregate?.totalCount / listOptions.pageSize) || 1);
-  }, [ listOptions ]);
+    setTotalPages(Math.ceil((count || 0) / listOptions.pageSize) || 1);
+  }, [ listOptions, searchTerm ]);
 
   // Update queryVars on change of sortBy, sortOrder, pageSize, page
   useEffect(() => {
@@ -167,8 +161,10 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder: listOptions.sortOrder,
       pageSize: listOptions.pageSize,
       page: listOptions.page,
+      category: listOptions.category,
+      search: listOptions.search,
     });
-    const query = buildProductsQuery(listOptions.filters);
+    const query = productsListQuery;
 
     setQueryOptions({ query, variables });
   }, [ listOptions ]);
@@ -178,20 +174,15 @@ export const ProductsListProvider = memo(({ children }) => {
   }, [ queryOptions ]);
 
   useEffect(() => {
-    if ( data?.products ) {
-      setProductsListData(data);
-    }
-  }, [ data, setProductsListData ]);
-
-  useEffect(() => {
      setListOptions({
       page: Number(searchParams?.page || 1),
       pageSize: Number(searchParams?.page_size || 10),
-      sortBy: searchParams?.sort_by || 'position',
+      sortBy: searchParams?.sort_by || 'id',
       sortOrder: searchParams?.order || 'desc',
-      filters: getFiltersObject(),
+      category: searchParams?.category || '',
+      search: searchParams?.search || '',
      });
-
+     setSearchTerm(searchParams.search);
   }, [ searchParams ]);
 
   return (

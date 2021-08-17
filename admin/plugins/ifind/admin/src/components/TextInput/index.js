@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Label, InputText } from '@buffetjs/core';
 
 import InputBlock from '../InputBlock';
 
-const TextInput = ({ label, id, value = '', name = null, disabled = false, error = null, onChange = () => {}, className = '' }) => {
+const TextInput = ({ label, id, value = '', name = null, disabled = false, error = null, onChange = () => {}, className = '', placeholder = '', search }) => {
   const classNames = [
     className,
     'text-input',
@@ -20,6 +20,8 @@ const TextInput = ({ label, id, value = '', name = null, disabled = false, error
         id={id}
         value={value}
         disabled={disabled}
+        type={ search ? 'search' : 'text' }
+        placeholder={placeholder}
         onChange={({ target: { value }}) => typeof onChange === 'function' && onChange(value)}
       />
     </InputBlock>
@@ -28,6 +30,7 @@ const TextInput = ({ label, id, value = '', name = null, disabled = false, error
 
 TextInput.propTypes = {
   disabled: PropTypes.bool,
+  search: PropTypes.bool,
 };
 
 export default TextInput;

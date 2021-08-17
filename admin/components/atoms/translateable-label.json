@@ -9,7 +9,7 @@
   "attributes": {
     "label": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "language": {
       "model": "language"
