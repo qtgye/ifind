@@ -29,10 +29,11 @@ module.exports = async (language = null) => {
 
   await Promise.all(
     matchedCategories.map(async (category) => {
-      const processedCategory = await preProcessCategory(
-        category,
-        matchedLanguage
-      );
+      const processedCategory =
+        await strapi.services.category.preProcessCategory(
+          category,
+          matchedLanguage
+        );
 
       // Check if category has existing parent
       if (processedCategory.parent && processedCategory.parent.id in byId) {
