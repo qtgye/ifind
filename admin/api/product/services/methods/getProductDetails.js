@@ -5,11 +5,13 @@
  * @param {Strin} language - The target language code
  * @returns Object
  */
-module.exports = async (productID, language = 'en') => {
-  if ( productID ) {
-    const productDetails = await this.findOne({ id: productID });
+module.exports = async (productID, language = "en") => {
+  if (productID) {
+    const productDetails = await strapi.services.product.findOne({
+      id: productID,
+    });
     return productDetails;
   }
 
-  return '';
-}
+  return "";
+};
