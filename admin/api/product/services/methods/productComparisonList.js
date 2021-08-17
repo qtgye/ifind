@@ -1,13 +1,13 @@
 const { getTranslatedLabel } = appRequire("helpers/category");
 
-const sortCategoryProducts = (products) => {
+const sortCategoryProducts = (categoryID, products) => {
   // Sort by position, ascending
   products.sort((prodA, prodB) => (prodA.position > prodB.position ? 1 : -1));
 
   // Get only first 5 products
   return products.slice(0, 4).map((product) => ({
     ...product,
-    category: category.id,
+    category: categoryID,
   }));
 };
 
@@ -31,7 +31,7 @@ module.exports = async (language) => {
         ...category,
         label: await getTranslatedLabel(category.label),
       },
-      products: sortCategoryProducts(category.products || []),
+      products: sortCategoryProducts(category.id, category.products || []),
     }))
   );
 
