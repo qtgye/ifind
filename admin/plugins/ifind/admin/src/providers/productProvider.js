@@ -85,7 +85,7 @@ $user: ID!
 $image: String!
 $title: String!
 $website_tab: String!
-$category: [ID!]!
+$category: ID!
 $position: Int
 $amazon_url: String!
 $price: Float
