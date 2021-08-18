@@ -78,7 +78,6 @@ module.exports = async () => {
       const result = await strapi.services.product.update({ id }, productData);
       console.log(`Saved ${id}`.green.bold, result.title);
       savedProducts.push(result);
-      return result;
     } catch (err) {
       console.log(`Error in ${id}`.bgRed.white.bold, productData);
       console.error(err);
