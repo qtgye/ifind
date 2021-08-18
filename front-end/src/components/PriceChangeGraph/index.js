@@ -12,7 +12,7 @@ const PriceChangeGraph = ({ priceChanges }) => {
       text: null,
     },
     chart: {
-      type: "area",
+      type: "line",
       height: 200,
       styledMode: true,
     },
