@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ProductListLink from './product-list-link';
 import { generatePluginLink } from '../../helpers/url';
 
-const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, products } }) => {
+const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, products_count } }) => {
   const [, drag] = useDrag();
   const [{ hovered }, drop] = useDrop(); 
 
@@ -25,7 +25,7 @@ const ItemRenderer = ({ data: { url, id, label, depth, softParent, icon, product
               <FontAwesomeIcon className='category-tree__item-edit-icon' icon='pen' />
             </Link>
           </div>
-          {products?.length && <ProductListLink count={products.length} categoryId={id} /> || ''}
+          {products_count && <ProductListLink count={products_count} category={id} /> || ''}
         </div>
       </div>
     </>
