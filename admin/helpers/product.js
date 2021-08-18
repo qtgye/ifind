@@ -5,7 +5,7 @@
   TODO:
   Create separate services for amazon and ebay
  */
-const { isAmazonLink } = require("./url");
+const { isAmazonLink } = require("./amazon");
 const { scrapeAmazonProduct, amazonLink } = require("./amazon");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 const { getDetailsFromURl: getAliExpressDetails } = require("./aliexpress");
@@ -134,6 +134,17 @@ const filterProductsWithProblems = (products) => {
       (!product.url_list || !product.url_list.length) &&
       productChanges.some(
         ({ state }) => state && state.url_list && state.url_list.length
+      )
+    ) {
+      return true;
+    }
+
+    // Check attrs_rating
+    // Each product should have attrs_rating as it's being supplied by default
+    if (
+      (!product.attrs_rating || !product.attrs_rating.length) &&
+      productChanges.some(
+        ({ state }) => state && state.attrs_rating && state.attrs_rating.length
       )
     ) {
       return true;

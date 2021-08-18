@@ -1,3 +1,6 @@
+const { filterProductsWithProblems } = appRequire("helpers/product");
+const { isAmazonLink } = appRequire("helpers/amazon");
+
 /**
  * Fixes all products in terms of missing URLs or price.
  * Traverses each product's change history, and retrieves necessary Details from them.
@@ -38,12 +41,26 @@ module.exports = async () => {
             product.url_list = changeWithURLList.state.url_list;
           }
         }
+        // Fix attrs_rating
+        if (!product.attrs_rating || !product.attrs_rating.length) {
+          const changeWithAttrsRating = productChanges.find(
+            ({ state }) =>
+              state && state.attrs_rating && state.attrs_rating.length
+          );
+          // Apply old url list if any
+          if (changeWithAttrsRating) {
+            product.attrs_rating = changeWithAttrsRating.state.attrs_rating.map(
+              ({ id, ...attr_rating }) => attr_rating
+            );
+          }
+        }
 
         // Only apply updates to selected properties
         return {
           id: product.id,
           amazon_url: product.amazon_url,
           url_list: product.url_list,
+          attrs_rating: product.attrs_rating,
         };
       })
       // Then, save all these updated products,
@@ -57,11 +74,17 @@ module.exports = async () => {
           amazonDetails: false,
         };
 
-        const result = await strapi.services.product.update(
-          { id },
-          productData
-        );
-        return result;
+        try {
+          const result = await strapi.services.product.update(
+            { id },
+            productData
+          );
+          console.log(`Saved ${id}`.green.bold, result.title);
+          return result;
+        } catch (err) {
+          console.log(`Error in ${id}`.bgRed.white.bold, productData);
+          console.error(err);
+        }
       })
   );
 };

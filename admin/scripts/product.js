@@ -3,6 +3,13 @@ const strapi = require('./strapi-custom');
 
 const commands = {
 
+  // Runs products fixer
+  'fix-products': async (strapiInstance) => {
+    console.log('Fixing products...'.cyan);
+    const fixedProducts = await strapiInstance.services.product.fixProducts();
+    console.log(` Fixed ${fixedProducts.length} products `.bgGreen.white.bold);
+  },
+
   // Converts categories into category, following the update for Product schema
   'singularify-categories': async (strapiInstance) => {
     const products = await strapiInstance.services.product.find({ _limit: 9999 });
@@ -22,7 +29,6 @@ const commands = {
     }
 
     console.log(' DONE '.bgGreen.white.bold);
-    process.exit();
   },
 
   // Assigns product.category_temp value into product.category following updates for Product schema
@@ -44,13 +50,19 @@ const commands = {
     }
 
     console.log(' DONE '.bgGreen.white.bold);
-    process.exit();
   },
 
 };
 
 // Ensure a command is given
 if ( args._[0] in commands ) {
-  strapi().then(commands[args._[0]]);
+  (async () => {
+    try {
+      await strapi().then(commands[args._[0]]);
+    } catch (err) {
+      console.error(err);
+    }
+    process.exit();
+  })();
 }
 
