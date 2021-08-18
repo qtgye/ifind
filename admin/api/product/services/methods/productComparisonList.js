@@ -5,7 +5,7 @@ const sortCategoryProducts = (categoryID, products) => {
   products.sort((prodA, prodB) => (prodA.position > prodB.position ? 1 : -1));
 
   // Get only first 5 products
-  return products.slice(0, 4).map((product) => ({
+  return products.slice(0, 5).map((product) => ({
     ...product,
     category: categoryID,
   }));

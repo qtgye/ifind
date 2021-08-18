@@ -6,12 +6,12 @@ const { isAmazonLink } = appRequire("helpers/amazon");
  * Traverses each product's change history, and retrieves necessary Details from them.
  * @returns [Product]
  */
-module.exports = async () => {
+module.exports = async (force = false) => {
   const allProducts = await strapi.services.product.find({ _limit: 99999 });
-  const productsWithProblems = filterProductsWithProblems(allProducts);
+  const productsToUpdate = force ? allProducts : filterProductsWithProblems(allProducts);
 
   // Extract and set fixed data for each product
-  const updatedProductsData = productsWithProblems.map((product) => {
+  const updatedProductsData = productsToUpdate.map((product) => {
     const productChanges = product.product_changes || [];
 
     // Sort from recent changes
@@ -68,16 +68,18 @@ module.exports = async () => {
   for (const newData of updatedProductsData) {
     const { id, ...productData } = newData;
 
-    // Prevent lifecycle from scraping
-    productData.updateScope = {
-      price: false,
-      amazonDetails: false,
-    };
-
     try {
-      const result = await strapi.services.product.update({ id }, productData);
+      strapi.productChangedData = productData;
+
+      const result = await strapi.services.product.update({ id }, {
+        ...productData,
+        updateScope: {
+          price: false,
+          amazonDetails: false,
+        }
+      });
       const count = savedProducts.push(result);
-      console.log(`Saved ${count} of ${updatedProductsData.length} [${id}]`.green.bold, result.title);
+      console.log(`Updated ${count} of ${updatedProductsData.length} [${id}]`.green.bold, result.title);
     } catch (err) {
       console.log(`Error in ${id}`.bgRed.white.bold, productData);
       console.error(err);
