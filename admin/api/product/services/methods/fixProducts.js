@@ -1,5 +1,6 @@
 const { filterProductsWithProblems } = appRequire("helpers/product");
 const { isAmazonLink } = appRequire("helpers/amazon");
+const updateProduct = require('./updateProduct');
 
 /**
  * Fixes all products in terms of missing URLs or price.
@@ -8,7 +9,9 @@ const { isAmazonLink } = appRequire("helpers/amazon");
  */
 module.exports = async (force = false) => {
   const allProducts = await strapi.services.product.find({ _limit: 99999 });
-  const productsToUpdate = force ? allProducts : filterProductsWithProblems(allProducts);
+  const productsToUpdate = force
+    ? allProducts
+    : filterProductsWithProblems(allProducts);
 
   // Extract and set fixed data for each product
   const updatedProductsData = productsToUpdate.map((product) => {
@@ -69,17 +72,20 @@ module.exports = async (force = false) => {
     const { id, ...productData } = newData;
 
     try {
-      strapi.productChangedData = productData;
-
-      const result = await strapi.services.product.update({ id }, {
-        ...productData,
-        updateScope: {
+      const result = await updateProduct(
+        id,
+        productData,
+        {
           price: false,
           amazonDetails: false,
-        }
-      });
+        },
+      )
+
       const count = savedProducts.push(result);
-      console.log(`Updated ${count} of ${updatedProductsData.length} [${id}]`.green.bold, result.title);
+      console.log(
+        `Updated ${count} of ${updatedProductsData.length} [${id}]`.green.bold,
+        result.title
+      );
     } catch (err) {
       console.log(`Error in ${id}`.bgRed.white.bold, productData);
       console.error(err);
