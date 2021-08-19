@@ -1,3 +1,4 @@
+const moment = require('moment');
 const { compareProductChanges } = appRequire("helpers/productChanges");
 const { getProductDetails } = appRequire("helpers/product");
 const { applyCustomFormula } = appRequire("helpers/productAttribute");
