@@ -14,6 +14,7 @@ query ProductComparisonList {
             amazon_url
             price
             image
+            created_at
         }
     }
 }
