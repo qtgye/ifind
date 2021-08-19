@@ -1,4 +1,4 @@
-const moment = require('moment');
+const moment = require("moment");
 const { compareProductChanges } = appRequire("helpers/productChanges");
 const { getProductDetails } = appRequire("helpers/product");
 const { applyCustomFormula } = appRequire("helpers/productAttribute");
@@ -23,7 +23,10 @@ module.exports = async (data, id) => {
   setProductChangeParams({
     ...productChangeParams,
     admin_user: data.admin_user || productChangeParams.admin_user,
-    change_type: data.admin_user ? 'admin_update' : productChangeParams.change_type
+    change_type:
+      data.admin_user && productChangeParams.change_type !== "create"
+        ? "admin_update"
+        : productChangeParams.change_type,
   });
 
   const matchedProduct = (await strapi.services.product.findOne({ id })) || {};

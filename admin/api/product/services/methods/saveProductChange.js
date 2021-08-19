@@ -13,7 +13,7 @@ const { getState, resetProductChangeParams } = appRequire('helpers/redux');
  */
 module.exports = async (
   id,
-  changeType = strapi.productChangeType || defaultChangeType
+  changeType,
 ) => {
   const { productChange } = getState();
   const { productChangeParams } = productChange;
@@ -21,7 +21,7 @@ module.exports = async (
   const date_time = moment.utc().toISOString();
   const admin_user = productChangeParams.admin_user;
   const state = productChangeParams.state;
-  let change_type = productChangeParams.change_type || changeType;
+  let change_type = changeType || productChangeParams.change_type;
 
   // Reset productChangeParams
   resetProductChangeParams();
