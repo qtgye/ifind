@@ -27,8 +27,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
     const populateProductDetails = useCallback(async (productID) => {
         setIsDetailsLoading(true);
-        getProductDetails( productID );
-    }, [ getProductDetails ]);
+        getProductDetails(productID);
+    }, [getProductDetails]);
 
     const productHasDetails = useCallback((productData) => (
         productData?.details_html ? true : false
@@ -36,28 +36,28 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
     // Merge activeProduct and productDetails from the context
     const mergeCurrentProductDetails = useCallback(() => {
-        if ( activeProduct ) {
+        if (activeProduct) {
             setActiveProduct({
                 ...activeProduct,
                 ...(productDetailFromContext || {}),
             });
         }
         setIsDetailsLoading(false);
-    }, [ productDetailFromContext, activeProduct ]);
+    }, [productDetailFromContext, activeProduct]);
 
     // When product details update from context,
     // Merge it with activeProduct
     useEffect(() => {
         mergeCurrentProductDetails();
-    }, [ productDetailFromContext ]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [productDetailFromContext]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // When a product is selected,
     // Determine whether it has details
     useEffect(() => {
-        if ( activeProduct && !productHasDetails(activeProduct) ) {
+        if (activeProduct && !productHasDetails(activeProduct)) {
             populateProductDetails(activeProduct.id);
         }
-    }, [ activeProduct ]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [activeProduct]); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
         if (observeItem && itemRef) {
@@ -74,7 +74,10 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
             window.scrollTo(0, targetScroll);
         }
+        //console.log(category);
     }, [focusedCategory, id]);
+
+
 
     return (
         <div className="natural-list">
@@ -86,7 +89,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                     </div>
                     <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
                     <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
-                    <div className="natural-list__price-cat">
+                    {/* <div className="natural-list__price-cat"> */}
+                    <div className="price-cat">
                         <button>$</button>
                         <button>$$</button>
                         <button>$$$</button>
@@ -107,7 +111,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                             isLoading={isDetailsLoading}
                                         />
                                     }
-
                                 </li>
                                 {items.map((item, index) => (
                                     <Item

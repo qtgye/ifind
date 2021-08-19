@@ -36,7 +36,6 @@ const ProductComparison = () => {
     }
   }, [observerRef]);
 
-
   return (
     <GeneralTemplate>
       <div ref={prodcompRef}

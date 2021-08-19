@@ -27,8 +27,8 @@ $item-layout: (
     }
 
     .loading-icon {
-        margin-top: 19%;
-        margin-left: 43%;
+        margin-top: 34%;
+        margin-left: 36%;
 	    height: 150px;
 	    pointer-events: none;
     }
@@ -198,6 +198,7 @@ $item-layout: (
         background-color: $gray-900;
         border: 1px solid $gray-900;
         border-radius: 4px;
+        cursor: default;
     }
 
 
@@ -215,8 +216,7 @@ $item-layout: (
         margin-top: -34px;
         margin-left: 6px;
         cursor: pointer;
-        color: $white;
-        // animation: left-arrow 0.5s infinite alternate ease-in-out;
+        color: $gray-300;
 
         i {
             font-size: 20px;
@@ -226,24 +226,13 @@ $item-layout: (
             color: $red;
         }
         
-        // @keyframes left-arrow {
-        //     0% {
-        //         transform: translateX(0.1em);
-        //         opacity: 0.5;
-        //     }
-        //     100% {
-        //         transform: translateX(0.2em);
-        //         opacity: 0.9;
-        //     }
-        // }
     }
     .right-arrow {
         position: absolute;
         margin-top: -34px;
         margin-left: 1009px;
         cursor: pointer;
-        color: $white;
-        // animation: right-arrow 0.5s infinite alternate ease-in-out;
+        color: $gray-300;
 
         i {
             font-size: 20px;
@@ -253,31 +242,22 @@ $item-layout: (
             color: $red;
         }
 
-        // @keyframes right-arrow {
-        //     0% {
-        //         transform: translateX(0.1em);
-        //         opacity: 0.5;
-        //     }
-        //     100% {
-        //         transform: translateX(0.2em);
-        //         opacity: 0.9;
-        //     }
-        // }
     }
 
     &__price-cat {
         display: flex;
         position: absolute;
-        margin-top: -42px;
+        margin-top: -40px;
         margin-left: 505pt;
 
         button {
             background-color: $white;
             border: 5px solid $gray-900;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: bold;
-            height: 35px;
+            height: 32px;
+            line-height: 16px;
             width: 50px;
         }
 
@@ -287,26 +267,155 @@ $item-layout: (
         }
     }
 
+    .price-cat {
+        margin:0;
+        padding:0;
+        position:absolute;
+        left: 485pt;
+        top: -36px;
+        list-style:none;
+    }
+
+    .price-cat button {
+        float: left;
+        height: 24px;
+        line-height: 22px;
+        position: relative;
+        font-size: 11px;
+        font-weight: bolder;
+    }
+
+    .price-cat button {
+        margin-left: 20px;
+        padding: 0 20px 0 12px;
+        background: $gray-300;
+        color: black;
+        text-decoration: none;
+        -moz-border-radius-bottomright: 2px;
+        -webkit-border-bottom-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+        -moz-border-radius-topright: 2px;
+        -webkit-border-top-right-radius: 2px;
+        border-top-right-radius: 2px;
+        
+        -webkit-box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
+        -moz-box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
+        box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
+    }
+
+    .price-cat button:before {
+        content: "";
+        float: left;
+        position: absolute;
+        top: 0;
+        right: -12px;
+        width: 0;
+        height: 0;
+        border-color: $gray-300  transparent  $gray-300 transparent;
+        border-style: solid;
+        border-width: 11px 12px 11.2px 0;
+    }
+
+    .price-cat button:after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        float: left;
+        width: 4px;
+        height: 4px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        background: $white;
+        -moz-box-shadow: -1px -1px 2px #004977;
+        -webkit-box-shadow: -1px -1px 2px #004977;
+        box-shadow: -1px -1px 2px #004977;
+    }
+    .price-cat button:hover {
+        background: $red;
+        color: $white;
+    }
+    .price-cat button:hover:before {
+        border-color: $red transparent $red transparent;
+    }
+
     &__price {
         position: absolute;
-        text-align: right;
-        font-weight: bold;
-        font-size: small;
-        background-color: rgba(color(white), 0.3);
-        bottom: 0;
-        left: 0;
-        padding: 3px;
-        width: 100%;
+        align-items: left;
+        font-weight: bolder;
+        font-size: 11px;
         cursor: default;
+        right: 7%;
+        bottom: 7%;
+        height: fit-content;
+        width: fit-content;
+        padding-left: 3px;
+        padding-right: 3px;
+        border: 1px solid #3771d0;
+        border-radius: 4px;
+        background-color: #f5f5f5;
 
         span {
-            text-align: left;
-            margin-left: auto;
-            margin-right: auto;
-            text-shadow: 2px 2px 3px $white;
-            border: 1px solid $gray-500;
-            color: $gray-900;
-            padding: 2px;
+            text-align: center;
+            color: #0d45a0;
         }
+        
     }
+
+    .price-per-product {
+        //display: inline-block;
+        position: absolute;
+        width: fit-content;
+        height: 20px;
+        align-items: left;
+        right: 6%;
+        bottom: 7%;
+        cursor: pointer;
+        
+        background-color: $red;
+        -webkit-border-radius: 3px 3px 3px 3px;
+        -moz-border-radius: 3px 3px 3px 3px;
+        border-radius: 3px 3px 3px 3px;
+        border-left: 1px solid $red;
+    
+        /* This makes room for the triangle */
+        position: absolute;
+        
+        color: white;
+        font-weight: bolder;
+        font-size: 11px;
+        line-height: 20px;
+    
+        padding: 0 4px 0 5px;
+    }
+    
+    /* Makes the triangle */
+    .price-per-product:before {
+        content: "";
+        position: absolute;
+        display: block;
+        left: -12px;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-bottom: 10px solid transparent;
+        border-right: 10px solid $red;
+        padding-right: 2px;
+    }
+    
+    /* Makes the circle */
+    .price-per-product:after {
+        content: "";
+        background-color: white;
+        border-radius: 50%;
+        width: 2px;
+        height: 2px;
+        display: block;
+        position: absolute;
+        left: -3px;
+        top: 9px;
+    }
+
+
 }
