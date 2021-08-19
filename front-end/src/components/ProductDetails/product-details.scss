@@ -22,9 +22,9 @@
         align-items: start;
         align-self: flex-end;
         position: sticky;
-        bottom: 0;
+        bottom: -1px;
         width: calc(100% + 40px);
-        padding: 4px 20px;
+        padding: 20px;
         border-top: 1px solid silver;
         background-color: white;
         margin-left: -20px;

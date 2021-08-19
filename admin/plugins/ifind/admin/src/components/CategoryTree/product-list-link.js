@@ -1,10 +1,12 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
+import { generatePluginLink } from "../../helpers/url";
 
-const ProductListLink = ({ count = 0, categoryId }) => (
+const ProductListLink = ({ count = 0, category }) => (
   <Link
     className="category-tree__products-link"
-    to={`/plugins/content-manager/collectionType/application::product.product?page=1&_sort=url:ASC&_where[0][category.id]=${categoryId}`}>
+    to={generatePluginLink("products", { category })}
+  >
     {count} Product(s)
   </Link>
 );

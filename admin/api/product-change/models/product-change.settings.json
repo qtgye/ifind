@@ -31,11 +31,12 @@
         "create",
         "update",
         "admin_update",
+        "script_update",
         "publish",
         "trash",
         "category_post_update"
       ],
-      "default": "admin_update"
+      "default": "script_update"
     }
   }
 }
