@@ -22,13 +22,24 @@ const detailsListSelector = '#detailBullets_feature_div';
 const detailSelector = '#centerCol';
 const selectorsToRemove = [
   '#title',
+  '#mars-pav-widget',
   '#desktop_unifiedPrice',
+  '#unifiedPrice_feature_div',
+  '#averageCustomerReviews_feature_div',
+  '#ask_feature_div',
+  '#variation_configuration [role="radiogroup"]',
+  '#variation_style_name [role="radiogroup"]',
+  '#variation_color_name [role="radiogroup"]',
   '#productSupportAndReturnPolicy_feature_div',
+  '#poToggleButton',
   '#alternativeOfferEligibilityMessaging_feature_div',
+  '#valuePick_feature_div',
   '#olp_feature_div',
   '#seeMoreDetailsLink',
   '#HLCXComparisonJumplink_feature_div',
   '.caretnext',
+  '#productAlert_feature_div',
+  '#atfCenter16_feature_div',
 ];
 
 const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly = false) => {
@@ -70,6 +81,8 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     // Apply scraped details
     scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
     scrapedData.image = highResImage ? highResImage[0] : '';
+
+    // Ensure utf-8 encoding
     scrapedData.details_html = detailElement.outerHTML.trim();
   }
 
@@ -81,6 +94,12 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
   // Get the price
   const priceElement = dom.window.document.querySelector(priceSelector);
   const priceMatch = priceElement && priceElement.textContent.match(/[0-9.,]+/);
+
+  // Product must be unavailable if there's no price parsed
+  if ( !priceMatch ) {
+    throw new Error("Unable to parse price for the product from Amazon. Please make sure that it's currently available");
+  }
+
   scrapedData.price = priceMatch && priceMatch[0].replace(',', '') || 0;
 
   // Get the release date if applicable
@@ -109,18 +128,16 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
 
     const releaseDateString = parsedReleaseDates.find(date => date);
 
-    if ( !releaseDateString ) {
-      return;
-    }
+    if ( releaseDateString ) {
+      const [ day, monthAbbrev, year ] = releaseDateString.split(' ');
+      const isoDate = [ year, MONTHS.indexOf(monthAbbrev.substr(0, 3)), day ];
 
-    const [ day, monthAbbrev, year ] = releaseDateString.split(' ');
-    const isoDate = [ year, MONTHS.indexOf(monthAbbrev.substr(0, 3)), day ];
+      const releaseDateMoment = moment.utc(isoDate);
+      const releaseDate = releaseDateMoment ? releaseDateMoment.toISOString() : '';
 
-    const releaseDateMoment = moment.utc(isoDate);
-    const releaseDate = releaseDateMoment ? releaseDateMoment.toISOString() : '';
-
-    if ( releaseDate ) {
-      scrapedData.releaseDate = releaseDate;
+      if ( releaseDate ) {
+        scrapedData.releaseDate = releaseDate;
+      }
     }
   }
 

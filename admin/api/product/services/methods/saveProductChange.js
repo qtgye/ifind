@@ -16,7 +16,8 @@ module.exports = async (
 ) => {
   const date_time = moment.utc().toISOString();
   const admin_user = strapi.admin_user;
-  const state = strapi.productChangedData;
+  const productData = strapi.productChangedData;
+  const state = typeof productData === 'string' ? productData : JSON.stringify(productData);
   let change_type = changeType;
 
   // Delete unnecessary temporary data

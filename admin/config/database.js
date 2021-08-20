@@ -11,8 +11,22 @@ module.exports = ({ env }) => ({
         username: env('DATABASE_USERNAME'),
         password: env('DATABASE_PASSWORD'),
         ssl: env.bool('DATABASE_SSL', false),
+        // https://github.com/strapi/strapi/issues/2699#issuecomment-507959154
+        charset: 'utf8mb4',
       },
-      options: {}
+      options: {
+        /**
+         * Updates database charset in order to accept special characters (such as emojis)
+         *
+         * NOTE: Make sure to update mysql manually from CLI. (https://stackoverflow.com/a/50264108)
+         *       Affected tables: products, product_changes
+         *
+         * Sources:
+         * - https://github.com/strapi/strapi/issues/2699#issuecomment-507959154
+         * -
+         */
+         charset: 'utf8mb4',
+      }
     },
   },
 });
