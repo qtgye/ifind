@@ -12,12 +12,13 @@ const defaultChangeType = productChangeSettings.attributes.change_type.default;
  */
 module.exports = async (
   id,
-  changeType = strapi.productChangeType || defaultChangeType
+  changeType,
 ) => {
   const date_time = moment.utc().toISOString();
   const admin_user = strapi.admin_user;
   const productData = strapi.productChangedData;
-  const state = typeof productData === 'string' ? productData : JSON.stringify(productData);
+  const state =
+    typeof productData === "string" ? JSON.parse(productData) : productData;
   let change_type = changeType;
 
   // Delete unnecessary temporary data
@@ -30,15 +31,17 @@ module.exports = async (
     return;
   }
 
+  // console.log({ state });
+
   // Determine change_type
   if (changeType !== "create") {
-    if ("status" in state) {
+    if (state && "status" in state) {
       change_type = "publish";
     }
   }
 
   await strapi.query("product-change").create({
-    state,
+    state: JSON.stringify(state),
     date_time,
     admin_user,
     product: id,
