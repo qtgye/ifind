@@ -7,7 +7,8 @@ const Item = ({ active, image, title, price, withBadge, onClick }) => {
     return (
         <li className={itemClassnames.join(' ')} onClick={onClick}>
             <figure className="natural-list__figure">
-                <div className="natural-list__price">
+                {/* <div className="natural-list__price"> */}
+                <div className="price-per-product">
                     <span>{price} €</span>
                 </div>
                 {withBadge && (

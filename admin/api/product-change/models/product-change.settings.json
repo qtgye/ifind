@@ -12,7 +12,8 @@
   },
   "attributes": {
     "state": {
-      "type": "json"
+      "type": "text",
+      "private": false
     },
     "admin_user": {
       "plugin": "admin",

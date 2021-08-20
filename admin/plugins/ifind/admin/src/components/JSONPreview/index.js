@@ -4,9 +4,9 @@ import JSONFormatter from 'json-formatter-js';
 import './styles.scss';
 
 const jsonFormatterConfig = {
-  hoverPreviewEnabled: true,
-  hoverPreviewArrayCount: 100,
-  hoverPreviewFieldCount: 5,
+  hoverPreviewEnabled: false,
+  // hoverPreviewArrayCount: 100,
+  // hoverPreviewFieldCount: 5,
   animateOpen: true,
   animateClose: true,
   useToJSON: true
@@ -19,7 +19,8 @@ const JSONPreview = ({ data, className = '' }) => {
     if ( containerRef.current ) {
       containerRef.current.firstElementChild?.remove();
 
-      const formatter = new JSONFormatter(data, 0, jsonFormatterConfig);
+      const objectData = typeof data === 'string' ? JSON.parse(data) : data;
+      const formatter = new JSONFormatter(objectData, 0, jsonFormatterConfig);
       containerRef.current.appendChild(formatter.render());
     }
   }, [ containerRef, data ]);
