@@ -1,3 +1,5 @@
+import './breadcrumbs.scss';
+
 const BreadCrumbs = () => (
     <div className="breadcrumbs">
         <div className="container_test">

@@ -7,6 +7,7 @@ query ProductComparisonList {
             id
             label
             order
+            created_at
         }
         products {
             id

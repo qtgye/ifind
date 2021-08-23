@@ -53,6 +53,7 @@ const ProductComparison = () => {
                   id={category.id}
                   label={category.label}
                   category={category}
+                  date={category.created_at}
                 />
               ))
             }
