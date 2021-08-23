@@ -1,6 +1,15 @@
 const createCommands = require("./_createCommands");
 
 createCommands({
+  // Runs products publisher
+  "publish-products": async (strapiInstance, args) => {
+    console.log("Publishing products...".cyan);
+    const publishedProducts = await strapiInstance.services.product.publishProducts(
+      args.force ? true : false
+    );
+    console.log(` Published ${publishedProducts.length} products `.bgGreen.white.bold);
+  },
+
   // Runs products fixer
   "fix-products": async (strapiInstance, args) => {
     console.log("Fixing products...".cyan);

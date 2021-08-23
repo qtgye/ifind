@@ -1,4 +1,13 @@
 .products-list {
+  &__status-controls {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  &__validator {
+    margin-left: 10px;
+  }
+
   &__controls {
     width: 100%;
     display: flex;

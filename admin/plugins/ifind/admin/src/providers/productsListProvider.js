@@ -50,6 +50,7 @@ const productsListQuery = `
     $sort: String!
     $search: String
     $category: ID
+    $status: String
     ) {
       productsList (
         limit: $limit
@@ -58,6 +59,7 @@ const productsListQuery = `
         where: {
           search: $search,
           category: $category
+          status: $status
         }
         ) {
           count
@@ -95,6 +97,7 @@ export const ProductsListProvider = memo(({ children }) => {
   const [ loading, setLoading ] = useState(false);
   const [ requestTimeout, setRequestTimeout ] = useState(null);
   const [ searchTerm, setSearchTerm ] = useState(searchParams.search);
+  const [ status, setStatus ] = useState(searchParams.status);
 
   const [ listOptions, setListOptions ] = useState({
     sortBy: searchParams?.sort_by || 'id', // Product field
@@ -103,6 +106,7 @@ export const ProductsListProvider = memo(({ children }) => {
     page: Number(searchParams?.page || 1),
     category: searchParams?.category || '',
     search: searchParams?.search || '',
+    status: searchParams?.status || 'published',
   });
 
   const [ totalPages, setTotalPages ] = useState(1);
@@ -120,12 +124,13 @@ export const ProductsListProvider = memo(({ children }) => {
     page,
     category,
     search,
+    status
   }) => {
     const limit = pageSize;
     const start = pageSize * (page - 1);
     const sort = `${sortBy}:${sortOrder}`;
 
-    return { limit, start, sort, category, search };
+    return { limit, start, sort, category, search, status };
   }, []);
 
   const refresh = useCallback(() => {
@@ -163,6 +168,7 @@ export const ProductsListProvider = memo(({ children }) => {
       page: listOptions.page,
       category: listOptions.category,
       search: listOptions.search,
+      status: listOptions.status,
     });
     const query = productsListQuery;
 
@@ -181,8 +187,10 @@ export const ProductsListProvider = memo(({ children }) => {
       sortOrder: searchParams?.order || 'desc',
       category: searchParams?.category || '',
       search: searchParams?.search || '',
+      status: searchParams?.status || 'published',
      });
      setSearchTerm(searchParams.search);
+     setStatus(searchParams.status);
   }, [ searchParams ]);
 
   return (
@@ -194,6 +202,7 @@ export const ProductsListProvider = memo(({ children }) => {
       sortBy: listOptions.sortBy,
       sortOrder: listOptions.sortOrder,
       filters: listOptions.filters,
+      status: listOptions.status,
       totalPages,
       // Additionals
       loading,

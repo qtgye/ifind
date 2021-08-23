@@ -19,8 +19,8 @@ module.exports = async (id, changeType) => {
   const admin_user = productChangeParams.admin_user;
   const state =
     typeof productChangeParams.state === "string"
-      ? productChangeParams.state
-      : JSON.stringify(productChangeParams.state);
+      ? JSON.parse(productChangeParams.state)
+      : productChangeParams.state;
   let change_type = changeType || productChangeParams.change_type;
 
   // Reset productChangeParams
@@ -39,7 +39,7 @@ module.exports = async (id, changeType) => {
   }
 
   await strapi.query("product-change").create({
-    state,
+    state: JSON.stringify(state),
     date_time,
     admin_user,
     product: id,

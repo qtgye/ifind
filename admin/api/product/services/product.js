@@ -15,4 +15,5 @@ module.exports = {
   preProcessProductData: require("./methods/preProcessProductData"),
   saveProductChange: require("./methods/saveProductChange"),
   applyProductCategoryUpdates: require("./methods/applyProductCategoryUpdates"),
+  publishProducts: require("./methods/publishProducts"),
 };
