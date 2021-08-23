@@ -4,6 +4,7 @@ module.exports = {
       label: String
       id: ID!
       order: Int
+      created_at: DateTime
     }
     input ProductsListWhereParamInput {
       search: String

@@ -31,9 +31,11 @@ module.exports = async (id, changeType) => {
     return;
   }
 
+  // console.log({ state });
+
   // Determine change_type
   if (changeType !== "create") {
-    if ("status" in state) {
+    if (state && "status" in state) {
       change_type = "publish";
     }
   }
