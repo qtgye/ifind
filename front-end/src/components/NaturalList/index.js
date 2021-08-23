@@ -9,7 +9,7 @@ import Item from './item';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false, category, observeItem, id, label }) => {
+const NaturalList = ({ items = [], loading = false, category, observeItem, id, label, date }) => {
     const { incrementProductClick, productDetail: productDetailFromContext, getProductDetails } = useProductDetail();
 
     const icon = '/images/loading.png';
@@ -74,9 +74,15 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
 
             window.scrollTo(0, targetScroll);
         }
-        //console.log(category);
+        //console.log(date);
     }, [focusedCategory, id]);
 
+    const getQuarter = (date) => {
+        date = new Date(date);
+        let qtr = Math.ceil((date.getMonth() + 1) / 3);
+        let yr = date.getFullYear();
+        return ["Q" + qtr, "/" + yr];
+    }
 
 
     return (
@@ -85,7 +91,9 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                 <>
                     <div className="natural-list__separator" ref={itemRef} data-category={id}>
                         {label.toUpperCase()}
-                        <div className="natural-list__mfd">Q1/2021</div>
+                        <div className="natural-list__mfd">
+                            {getQuarter(date)}
+                        </div>
                     </div>
                     <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
                     <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>

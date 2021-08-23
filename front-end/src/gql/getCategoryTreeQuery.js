@@ -19,8 +19,7 @@ const generateChildCategory = (iterationsLeft) => {
             label
         }
         ${generateParentCategoryFragment(10)}
-        ${
-            (iterationsLeft &&
+        ${(iterationsLeft &&
             `
                 children {
                     ${generateChildCategory(--iterationsLeft)}
