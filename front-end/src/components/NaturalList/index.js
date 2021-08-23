@@ -84,7 +84,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         return ["Q" + qtr, "/" + yr];
     }
 
-
     return (
         <div className="natural-list">
             {currentRouteConfig.path === '/' ? null :
