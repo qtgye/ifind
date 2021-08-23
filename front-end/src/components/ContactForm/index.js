@@ -11,7 +11,7 @@ const ContactForm = () => {
                 alert("Your message is Successfully Sent!");
             }, (error) => {
                 console.log(error.text);
-                alert("Error on sending your message!");
+                alert("There's an error on sending your message!");
             });
 
         e.target.reset();
@@ -29,25 +29,25 @@ const ContactForm = () => {
                         <div className="col-lg-6 col-12">
                             <div className="form-group">
                                 <label>Your Name<span>*</span></label>
-                                <input name="name" type="text" placeholder="" />
+                                <input name="name" type="text" placeholder="" required />
                             </div>
                         </div>
                         <div className="col-lg-6 col-12">
                             <div className="form-group">
                                 <label>Your Subjects<span>*</span></label>
-                                <input name="subject" type="text" placeholder="" />
+                                <input name="subject" type="text" placeholder="" required />
                             </div>
                         </div>
                         <div className="col-lg-6 col-12">
                             <div className="form-group">
                                 <label>Your Email<span>*</span></label>
-                                <input name="email" type="email" placeholder="" />
+                                <input name="email" type="email" placeholder="" required />
                             </div>
                         </div>
                         <div className="col-lg-6 col-12">
                             <div className="form-group">
                                 <label>Your Phone<span>*</span></label>
-                                <input name="phone_no" type="text" placeholder="" />
+                                <input name="phone_no" type="text" placeholder="" required />
                             </div>
                         </div>
                         <div className="col-12">
