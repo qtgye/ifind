@@ -1,7 +1,8 @@
-const moment = require('moment');
+const moment = require("moment");
 const { compareProductChanges } = appRequire("helpers/productChanges");
 const { getProductDetails } = appRequire("helpers/product");
 const { applyCustomFormula } = appRequire("helpers/productAttribute");
+const { getState, setProductChangeParams } = appRequire("helpers/redux");
 
 const updateScopeDefault = {
   price: true,
@@ -15,8 +16,18 @@ const updateScopeDefault = {
  * @returns {Product}
  */
 module.exports = async (data, id) => {
+  const { productChange } = getState();
+  const { productChangeParams } = productChange;
+
   // Save admin_user for afterSave hook
-  strapi.admin_user = data.admin_user;
+  setProductChangeParams({
+    ...productChangeParams,
+    admin_user: data.admin_user || productChangeParams.admin_user,
+    change_type:
+      data.admin_user && productChangeParams.change_type !== "create"
+        ? "admin_update"
+        : productChangeParams.change_type,
+  });
 
   const matchedProduct = (await strapi.services.product.findOne({ id })) || {};
 
@@ -122,7 +133,7 @@ module.exports = async (data, id) => {
   const changedData = compareProductChanges(matchedProduct, data);
 
   // Save temporary data for afterSave use
-  strapi.productChangedData = changedData;
+  setProductChangeParams({ state: changedData });
 
   return changedData;
 };

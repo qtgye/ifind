@@ -9,6 +9,7 @@ module.exports = {
     input ProductsListWhereParamInput {
       search: String
       category: ID
+      status: String
     }
     type ProductsListPayload {
       count: Int

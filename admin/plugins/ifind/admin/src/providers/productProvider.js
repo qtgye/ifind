@@ -17,6 +17,7 @@ fragment ProductDataFragment on Product {
   price
   details_html
   release_date
+  status
   url_list {
     source {
       id
@@ -91,6 +92,7 @@ $amazon_url: String!
 $price: Float
 $final_rating: Float
 $release_date: DateTime
+$status: ENUM_PRODUCT_STATUS
 `;
 
 export const productMutationCommonInput = `
@@ -106,6 +108,7 @@ attrs_rating: $attrs_rating
 final_rating: $final_rating
 release_date: $release_date
 admin_user: $user
+status: $status
 `;
 
 export const updateProductMutation = `

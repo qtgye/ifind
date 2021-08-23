@@ -1,9 +1,17 @@
-const args = require("minimist")(process.argv.slice(2));
-const strapi = require("./strapi-custom");
+const createCommands = require("./_createCommands");
 
-const commands = {
+createCommands({
+  // Runs products publisher
+  "publish-products": async (strapiInstance, args) => {
+    console.log("Publishing products...".cyan);
+    const publishedProducts = await strapiInstance.services.product.publishProducts(
+      args.force ? true : false
+    );
+    console.log(` Published ${publishedProducts.length} products `.bgGreen.white.bold);
+  },
+
   // Runs products fixer
-  "fix-products": async (strapiInstance) => {
+  "fix-products": async (strapiInstance, args) => {
     console.log("Fixing products...".cyan);
     const fixedProducts = await strapiInstance.services.product.fixProducts(
       args.force ? true : false
@@ -82,16 +90,4 @@ const commands = {
 
     console.log(" DONE ".bgGreen.white.bold);
   },
-};
-
-// Ensure a command is given
-if (args._[0] in commands) {
-  (async () => {
-    try {
-      await strapi().then(commands[args._[0]]);
-    } catch (err) {
-      console.error(err);
-    }
-    process.exit();
-  })();
-}
+});

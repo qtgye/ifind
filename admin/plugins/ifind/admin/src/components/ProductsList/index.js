@@ -13,6 +13,7 @@ import Pagination from '../Pagination';
 import SortControls from '../SortControls';
 import ProductFilters from '../ProductFilters';
 import TextInput from '../TextInput';
+import ProductStatusOptions from '../ProductStatusOptions';
 import CustomRow from './_custom-row';
 import ProductThumbnail from './_product-thumbnail';
 import headers from './_table-headers';
@@ -41,6 +42,7 @@ const ProductsList = () => {
     sortBy,
     sortOrder,
     totalPages,
+    status,
   } = useProductsList();
   const [ rows, setRows ] = useState([]); // Processed products
   const [ allSelected, setAllSelected ] = useState(false);
@@ -163,6 +165,16 @@ const ProductsList = () => {
       }, 500));
   }, [ searchTermTimeout ]);
 
+  // Callback for selected status from ProductStatusOptions
+  const onProductStatusSelect = useCallback(status => {
+    history.push(generatePluginLink('', { status, page: 1 }));
+  }, []);
+
+  // Triggers ProductValidator to start running in the background
+  const triggerProductValidator = useCallback(() => {
+    // Trigger Product Validator BPM
+  }, []);
+
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
   }, [ selectedItems ]);
@@ -186,6 +198,26 @@ const ProductsList = () => {
 
   return (
     <div className="products-list row">
+      <div className="products-list__status-controls">
+        <div className="products-list__status-options">
+          <ProductStatusOptions
+            value={status}
+            onChange={onProductStatusSelect}
+          />
+        </div>
+        {/*
+          TODO:
+          - Add logic to determine current ProductValidator state in BPM
+          - 'primary' color is ProductValidator is not running, 'secondary' and disabled if it is
+        */}
+        <Button
+          color='secondary'
+          className="products-list__validator"
+          onClick={triggerProductValidator}
+          disabled={true}
+          label='Validate Products' // 'Validate Products' if not running, 'Validating Products' (with icon) if it is
+        />
+      </div>
       <div className="products-list__controls">
         <div className="products-list__bulk-controls">
           {

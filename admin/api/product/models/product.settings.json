@@ -83,6 +83,14 @@
     "category": {
       "via": "products",
       "model": "category"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "published",
+        "draft"
+      ],
+      "default": "published"
     }
   }
 }
