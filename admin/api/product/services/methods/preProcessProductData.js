@@ -100,30 +100,32 @@ module.exports = async (data, id) => {
 
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
-  data.attrs_rating = (data.attrs_rating || []).map((attrRating) => {
-    const matchedProductAttribute = productAttributes.find(
-      ({ id }) => attrRating.product_attribute == id
-    );
+  if ( data.attrs_rating && data.attrs_rating.length ) {
+    data.attrs_rating = data.attrs_rating.map((attrRating) => {
+      const matchedProductAttribute = productAttributes.find(
+        ({ id }) => attrRating.product_attribute == id
+      );
 
-    if (matchedProductAttribute) {
-      // Autofill release date if applicable
-      if (/release/i.test(matchedProductAttribute.name) && data.releaseDate) {
-        attrRating.use_custom_formula = true;
-        attrRating.min = data.releaseDate;
-        attrRating.max = moment.utc().subtract(3, "years").toISOString();
+      if (matchedProductAttribute) {
+        // Autofill release date if applicable
+        if (/release/i.test(matchedProductAttribute.name) && data.releaseDate) {
+          attrRating.use_custom_formula = true;
+          attrRating.min = data.releaseDate;
+          attrRating.max = moment.utc().subtract(3, "years").toISOString();
+        }
+
+        if (attrRating.use_custom_formula) {
+          attrRating.rating = applyCustomFormula(
+            attrRating,
+            matchedProductAttribute,
+            data
+          );
+        }
       }
 
-      if (attrRating.use_custom_formula) {
-        attrRating.rating = applyCustomFormula(
-          attrRating,
-          matchedProductAttribute,
-          data
-        );
-      }
-    }
-
-    return attrRating;
-  });
+      return attrRating;
+    });
+  }
 
   // Remove temporary data
   delete data.updateScope;
@@ -131,6 +133,8 @@ module.exports = async (data, id) => {
 
   // Extract only changed data
   const changedData = compareProductChanges(matchedProduct, data);
+
+  console.log({ changedData });
 
   // Save temporary data for afterSave use
   setProductChangeParams({ state: changedData });

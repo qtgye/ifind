@@ -34,6 +34,7 @@
         "admin_update",
         "script_update",
         "publish",
+        "draft",
         "trash",
         "category_post_update"
       ],

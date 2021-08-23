@@ -31,12 +31,16 @@ module.exports = async (id, changeType) => {
     return;
   }
 
-  // console.log({ state });
-
   // Determine change_type
-  if (changeType !== "create") {
+  if (change_type !== "create") {
     if (state && "status" in state) {
-      change_type = "publish";
+      switch ( state.status ) {
+        case 'published':
+          change_type = 'publish';
+          break;
+        default:
+          change_type = state.status;
+      }
     }
   }
 
