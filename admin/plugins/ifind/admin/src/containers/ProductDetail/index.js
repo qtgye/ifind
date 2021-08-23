@@ -43,7 +43,8 @@ const ProductDetail = () => {
   const [ redirectOnUpdate, setRedirectOnUpdate ] = useState(false); // Useful in Create Product
   const [ hasChanges, setHasChanges ] = useState(false);
   const [ isSaving, setIsSaving ] = useState(false);
-  const [ productChanges, setProductChanges ] = useState(null);
+  const [ isPublishing, setIsPublishing ] = useState(false);
+  // const [ productChanges, setProductChanges ] = useState(null);
 
   const saveProduct = useCallback(() => {
     // Prepare data for graphql request
@@ -70,6 +71,27 @@ const ProductDetail = () => {
     }
   }, [ productFormData, updateProduct, addProduct ]);
 
+  const publishProduct = useCallback(() => {
+    // Prepare data for graphql request
+    const { success, errors } = validateData(productFormData, productValidationRules);
+
+    setFormErrors(errors);
+
+    // Don't save if validation fails
+    if ( !success ) {
+      return;
+    }
+
+    // Save product
+    else {
+      setIsPublishing(true);
+      updateProduct({
+        ...productFormData,
+        status: 'published',
+      });
+    }
+  }, [ productFormData, updateProduct, addProduct ]);
+
   const onProductDataUpdate = useCallback((newProductData) => {
     if ( !newProductData ) {
       setTitle('Create New Product');
@@ -84,15 +106,16 @@ const ProductDetail = () => {
       setTitle(newProductData?.title || '[ No Title ]');
     }
 
-    if ( isSaving ) {
+    if ( isSaving || isPublishing ) {
       strapi.notification.toggle({
         type: 'success',
         message: 'Product Saved.',
         timeout: 10000,
       });
       setIsSaving(false);
+      setIsPublishing(false);
     }
-  }, [ redirectOnUpdate, isSaving ]);
+  }, [ redirectOnUpdate, isSaving, isPublishing ]);
 
   const determineLoading = useCallback(() => {
     setIsLoading(loading && productId);
@@ -144,22 +167,38 @@ const ProductDetail = () => {
                 onClick: saveProduct,
                 color: isSaving ? 'cancel' : 'success',
                 type: 'button',
-                // disabled: !hasChanges, // Improve logic, some fields are not checked for changes
+                disabled: isSaving || isPublishing,
                 icon: (
                   isSaving
                   ? <FontAwesomeIcon icon="spinner" pulse />
                   : <FontAwesomeIcon icon="save" />
                 )
               },
-              {
-                label: 'Add Product',
-                onClick: redirectToAddProduct,
-                color: 'primary',
-                type: 'button',
-                disabled: !productData?.id,
-                icon: <FontAwesomeIcon icon="plus" />
-              },
-            ]}
+              (
+                productData?.status === 'draft' ? {
+                  label: isPublishing ? 'Publishing' : 'Publish',
+                  onClick: publishProduct,
+                  color: isPublishing ? 'cancel' : 'success',
+                  type: 'button',
+                  disabled: isSaving || isPublishing,
+                  icon: (
+                    isPublishing
+                    ? <FontAwesomeIcon icon="spinner" pulse />
+                    : <FontAwesomeIcon icon="arrow-alt-cirlce-up" />
+                  )
+                } : null
+              ),
+              productData?.id ? (
+                {
+                  label: 'Add Product',
+                  onClick: redirectToAddProduct,
+                  color: 'primary',
+                  type: 'button',
+                  disabled: isSaving || isPublishing,
+                  icon: <FontAwesomeIcon icon="plus" />
+                }
+              ) : null,
+            ].filter(Boolean)}
           />
         </div>
         <ProductForm
