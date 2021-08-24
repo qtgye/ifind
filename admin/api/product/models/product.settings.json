@@ -91,6 +91,11 @@
         "draft"
       ],
       "default": "published"
+    },
+    "product_issues": {
+      "type": "component",
+      "repeatable": false,
+      "component": "atoms.product-issues"
     }
   }
 }

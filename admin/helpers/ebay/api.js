@@ -23,13 +23,19 @@ const getDetailsFromURL = async(productURL) => {
     };
     const res = await fetch(BASE_URL + toSearchParams(requestParams));
     const { Item } = await res.json();
-    const data = {};
 
-    if ( Item && Item.CurrentPrice && Item.CurrentPrice.Value ) {
-      data.price = Item.CurrentPrice.Value;
+    if ( Item ) {
+      const data = {};
+
+      if ( Item && Item.CurrentPrice && Item.CurrentPrice.Value ) {
+        data.price = Item.CurrentPrice.Value;
+      }
+
+      return data;
     }
-
-    return data;
+    else {
+      return null;
+    }
   }
 
   return null;

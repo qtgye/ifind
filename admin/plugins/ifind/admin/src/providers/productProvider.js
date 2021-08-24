@@ -18,6 +18,13 @@ fragment ProductDataFragment on Product {
   details_html
   release_date
   status
+  product_issues {
+    amazon_link_invalid
+    amazon_link_unavailable
+    ebay_link_invalid
+    aliexpress_link_invalid
+    idealo_link_invalid
+  }
   url_list {
     source {
       id
