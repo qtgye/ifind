@@ -8,7 +8,7 @@
 const { isAmazonLink } = require("./amazon");
 const { scrapeAmazonProduct, amazonLink } = require("./amazon");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
-const { getDetailsFromURl: getAliExpressDetails } = require("./aliexpress");
+const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
 
 const getProductDetails = async (
   productData,

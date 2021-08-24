@@ -1,6 +1,20 @@
 const createCommands = require("./_createCommands");
 
 createCommands({
+  // Runs products validator
+  'validate-products': async (strapiInstance, args) => {
+    console.log("Validating products...".cyan);
+    const productsWithIssues = await strapiInstance.services.product.validateProducts(
+      args.force ? true : false
+    );
+
+    if ( productsWithIssues.length ) {
+      console.log(` Found ${productsWithIssues.length} product(s) with issue(s). Kindly check draft products. `.bgRed.white.bold);
+    } else {
+      console.log(` Validated all products and no issues found `.bgGreen.white.bold);
+    }
+  },
+
   // Runs products publisher
   "publish-products": async (strapiInstance, args) => {
     console.log("Publishing products...".cyan);

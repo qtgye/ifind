@@ -36,7 +36,8 @@
         "publish",
         "draft",
         "trash",
-        "category_post_update"
+        "category_post_update",
+        "product_validator_results"
       ],
       "default": "script_update"
     }

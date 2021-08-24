@@ -38,8 +38,7 @@ module.exports = async (id, changeType) => {
         case 'published':
           change_type = 'publish';
           break;
-        default:
-          change_type = state.status;
+        default:;
       }
     }
   }

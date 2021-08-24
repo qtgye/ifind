@@ -16,4 +16,6 @@ module.exports = {
   saveProductChange: require("./methods/saveProductChange"),
   applyProductCategoryUpdates: require("./methods/applyProductCategoryUpdates"),
   publishProducts: require("./methods/publishProducts"),
+  updateProduct: require("./methods/updateProduct"),
+  validateProducts: require("./methods/validateProducts"),
 };

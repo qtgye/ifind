@@ -9,7 +9,7 @@ module.exports = async (
   id,
   data = {},
   scope = {},
-  productChangeParams = initialState.setProductChangeParams
+  productChangeParams = initialState.productChangeParams
 ) => {
   // { admin_user, state, change_type }
   setProductChangeParams({

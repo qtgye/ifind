@@ -93,7 +93,6 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
 
   // Get the price
   const priceElement = dom.window.document.querySelector(priceSelector);
-  console.log('priceElement', priceElement.textContent);
 
   const priceMatch = priceElement && priceElement.textContent.match(/[0-9.,]+/);
 
