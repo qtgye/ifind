@@ -1,3 +1,4 @@
+const fetch = require('node-fetch');
 const ApiClient = require('./nodejs').ApiClient;
 const { appKey, appSecret, tracking_id } = require('./config');
 
@@ -9,7 +10,8 @@ var client = new ApiClient({
                             });
 
 const getDetailsFromURL = async (productURL) => {
-  const productID = parseIdFromURL(productURL);
+  const actualProductURL = await getAffiliateLinkRedirect(productURL);
+  const productID = parseIdFromURL(actualProductURL);
 
   if ( !productID ) {
     return null;
@@ -24,7 +26,7 @@ const getDetailsFromURL = async (productURL) => {
     getProductDetails(productID),
 
     // Get affiliate link
-    generateAffiliateLink(productURL),
+    generateAffiliateLink(actualProductURL),
 
   ]);
 
@@ -54,6 +56,15 @@ const getDetailsFromURL = async (productURL) => {
   }
 
   return data;
+}
+
+// This will follow the redirect in case an affiliate shortlink is provided, thus returning the actual product detail URL.
+// If an actual product detail URL is provided, it will be returned as is.
+const getAffiliateLinkRedirect = async ( link ) => {
+  return fetch(link, {
+    redirect: 'follow'
+  })
+  .then(({ url }) => url);
 }
 
 const parseIdFromURL = (productURL) => {

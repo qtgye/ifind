@@ -98,6 +98,15 @@ module.exports = async (data, id) => {
     })(),
   ]);
 
+  // Change product status to Draft if some issues arised from the scraper
+  if ( Object.values(data.product_issues || {}).some(Boolean) ) {
+    data.status = 'draft';
+  }
+  // Else, set product as published
+  else {
+    data.status = 'published';
+  }
+
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
   if ( data.attrs_rating && data.attrs_rating.length ) {
@@ -133,8 +142,6 @@ module.exports = async (data, id) => {
 
   // Extract only changed data
   const changedData = compareProductChanges(matchedProduct, data);
-
-  console.log({ changedData });
 
   // Save temporary data for afterSave use
   setProductChangeParams({ state: changedData });

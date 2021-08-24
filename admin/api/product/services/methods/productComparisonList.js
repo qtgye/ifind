@@ -1,11 +1,14 @@
 const { getTranslatedLabel } = appRequire("helpers/category");
 
 const sortCategoryProducts = (categoryID, products) => {
+  // Filter only published products
+  const filteredProducts = products.filter(({ status }) => status === 'published');
+
   // Sort by position, ascending
-  products.sort((prodA, prodB) => (prodA.position > prodB.position ? 1 : -1));
+  filteredProducts.sort((prodA, prodB) => (prodA.position > prodB.position ? 1 : -1));
 
   // Get only first 5 products
-  return products.slice(0, 5).map((product) => ({
+  return filteredProducts.slice(0, 5).map((product) => ({
     ...product,
     category: categoryID,
   }));
