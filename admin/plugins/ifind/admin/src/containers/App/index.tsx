@@ -25,7 +25,7 @@ import { spriteContents } from 'ifind-icons';
 import './styles.scss';
 
 const App = () => {
-  const { goBack } = useHistory();
+  const { goBack } = useHistory() as { goBack: Function };
 
   return (
     <div className="ifind-plugin">

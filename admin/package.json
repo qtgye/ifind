@@ -4,6 +4,8 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
+    "tsc": "tsc",
+    "ts-node": "ts-node -r tsconfig-paths/register",
     "develop": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
     "develop:live": "rm -rf .cache/ build/ && node ./scripts/strapi-custom.js develop",
     "develop:watch": "nodemon ./scripts/strapi-custom.js develop watch-plugin",
@@ -12,7 +14,9 @@
     "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
-    "currencies:import": "node scripts/currencies-import.js"
+    "currencies:import": "node scripts/currencies-import.js",
+    "admin-types": "ts-node -r tsconfig-paths/register ./scripts/generateAdminTypes.ts",
+    "product-validator": "node ./background-process/product-validator"
   },
   "devDependencies": {
     "colors": "^1.4.0",
@@ -25,16 +29,25 @@
     "postcss-preset-env": "^6.7.0",
     "resolve-url-loader": "^4.0.0",
     "sass-loader": "^10.2.0",
-    "style-loader": "^2.0.0"
+    "style-loader": "^2.0.0",
+    "tsconfig-paths": "^3.11.0"
   },
   "dependencies": {
+    "@babel/preset-typescript": "^7.15.0",
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@reduxjs/toolkit": "^1.6.1",
+    "@types/fs-extra": "^9.0.12",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.1",
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9",
     "apollo-link": "^1.2.14",
+    "chokidar": "^3.5.2",
     "form-data": "^0.2.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
+    "graphql-schema-typescript": "^1.5.2",
     "iconv-lite": "^0.4.7",
     "ifind-icons": "file:../ifind-icons",
     "immutability-helper": "^3.1.1",
@@ -44,6 +57,7 @@
     "memoize-one": "^5.2.1",
     "mime": "~1.3.4",
     "minimist": "^1.2.5",
+    "module-alias": "^2.2.2",
     "mysql": "^2.18.1",
     "puppeteer": "^10.0.0",
     "react-dnd": "^14.0.2",
@@ -62,6 +76,8 @@
     "strapi-plugin-upload": "3.6.2",
     "strapi-plugin-users-permissions": "3.6.2",
     "strapi-utils": "3.6.2",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.3.5",
     "urlencode": "^1.1.0",
     "ws": "^0.4.32"
   },
@@ -81,5 +97,9 @@
       "plugins/"
     ],
     "ignore": []
+  },
+  "_moduleAliases": {
+    "@custom-types": "types",
+    "@scripts": "scripts"
   }
 }
