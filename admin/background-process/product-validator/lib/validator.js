@@ -1,6 +1,6 @@
 const EventEmitter = require("events");
 
-const adminStrapi = appRequire('scripts/strapi-custom');
+const adminStrapi = appRequire("scripts/strapi-custom");
 const { isAmazonLink, scrapeAmazonProduct } = appRequire("helpers/amazon");
 const { getDetailsFromURL: getDetailsFromEbayURL } = appRequire("helpers/ebay");
 const { getDetailsFromURL: getDetailsFromAliExppressURL } =
@@ -9,7 +9,6 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
 const _switch = require("./switch");
 const _log = require("./logger");
 
-const VALIDATOR_PROCESS_PROMISE = Symbol();
 const EVENT_EMITTER = Symbol();
 
 class Validator {
@@ -17,6 +16,11 @@ class Validator {
     this.forced = forced;
     this.running = false;
     this[EVENT_EMITTER] = new EventEmitter();
+
+    this[EVENT_EMITTER].on("stop", () => {
+      // Throwing error in order to cancel
+      throw new Error("cancel");
+    });
   }
 
   start() {
@@ -28,18 +32,18 @@ class Validator {
 
     this.running = true;
 
-    this[VALIDATOR_PROCESS_PROMISE] = new Promise(async (resolve, reject) => {
-      await this.validate();
-      resolve();
-    });
-
-    this[VALIDATOR_PROCESS_PROMISE].catch((err) => this.onError(err));
+    (new Promise((resolve, reject) => {
+      return this.validate()
+      .then(resolve)
+      .catch(reject);
+    }))
+    .catch((err) => this.onError(err));
   }
 
   stop() {
     _log("Stopping validator");
 
-    if (this.running && this[VALIDATOR_PROCESS_PROMISE]) {
+    if (this.running) {
       this.running = false;
       this[EVENT_EMITTER].emit("stop");
     }
@@ -47,20 +51,15 @@ class Validator {
 
   onError(err) {
     if (err.message === "cancel") {
-      _log('Validator Cancelled');
+      _log("Validator Cancelled");
+      this.stop();
     } else {
-      _log(err.message + err.stack.gray, 'ERROR');
+      _log(`${err.message} ${`STACK`.black.bold} ==> ${err.stack.gray}`, "ERROR");
+      _switch.error();
     }
-
-    this.stop();
   }
 
   async validate() {
-    this[EVENT_EMITTER].on("stop", () => {
-      // Throwing error in order to cancel
-      throw new Error("cancel");
-    });
-
     const strapi = await adminStrapi();
 
     const queryParams = {
