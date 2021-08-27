@@ -13,6 +13,11 @@ module.exports = {
     //   path.resolve(process.cwd(), 'node_modules'),
     // ];
 
+    // Update loader for js files to accept ts and tsx
+    config.module.rules[0].test = /\.((m?j)|t)sx?$/;
+    config.module.rules[0].use.options.presets.push('@babel/preset-typescript');
+    config.resolve.extensions.push('.ts', '.tsx')
+
     // SASS support.
     // Extracted from config/webpack.config.js
     config.module.rules.push({
