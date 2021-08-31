@@ -10,6 +10,9 @@ const _log = require('./lib/logger');
 const forced = 'force' in args;
 const validator = new Validator(forced);
 
+// Ensure that switch is on STOP state upon initialization
+_switch.stop();
+
 // Listen to start
 _switch.listen('START', () => {
   // Start validator
@@ -19,7 +22,11 @@ _switch.listen('START', () => {
 // Listen to stop
 _switch.listen('STOP', () => {
   // Stop validator
-  validator.stop();
+  if ( validator.running ) {
+    validator.cancel();
+  } else {
+    validator.stop();
+  }
 });
 
 // Listen to error

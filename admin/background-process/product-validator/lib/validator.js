@@ -1,6 +1,6 @@
 const EventEmitter = require("events");
 
-const adminStrapi = appRequire('scripts/strapi-custom');
+const adminStrapi = appRequire("scripts/strapi-custom");
 const { isAmazonLink, scrapeAmazonProduct } = appRequire("helpers/amazon");
 const { getDetailsFromURL: getDetailsFromEbayURL } = appRequire("helpers/ebay");
 const { getDetailsFromURL: getDetailsFromAliExppressURL } =
@@ -9,56 +9,73 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
 const _switch = require("./switch");
 const _log = require("./logger");
 
-const VALIDATOR_PROCESS_PROMISE = Symbol();
 const EVENT_EMITTER = Symbol();
+const RUNNING_STATUS = Symbol();
 
 class Validator {
   constructor(forced = false) {
     this.forced = forced;
-    this.running = false;
+    this[RUNNING_STATUS] = false;
+
+    // Validator-specific event emitter
     this[EVENT_EMITTER] = new EventEmitter();
   }
 
   start() {
     _log("Starting validator");
 
-    if (this.running) {
+    if (this[RUNNING_STATUS]) {
       return;
     }
 
-    this.running = true;
+    this[RUNNING_STATUS] = true;
 
-    this[VALIDATOR_PROCESS_PROMISE] = new Promise(async (resolve, reject) => {
-      await this.validate();
-      resolve();
+    (new Promise((resolve, reject) => {
+      return this.validate()
+      .then(resolve)
+      .catch(reject);
+    }))
+    .catch((err) => {
+      console.log('init catch', err);
     });
+  }
 
-    this[VALIDATOR_PROCESS_PROMISE].catch((err) => this.onError(err));
+  cancel() {
+    this[EVENT_EMITTER].emit('cancel');
   }
 
   stop() {
     _log("Stopping validator");
 
-    if (this.running && this[VALIDATOR_PROCESS_PROMISE]) {
-      this.running = false;
+    if (this[RUNNING_STATUS]) {
+      this[RUNNING_STATUS] = false;
       this[EVENT_EMITTER].emit("stop");
     }
   }
 
-  onError(err) {
+  handleError(err) {
     if (err.message === "cancel") {
-      _log('Validator Cancelled');
+      _log("Validator Cancelled");
+      this.stop();
     } else {
-      _log(err.message + err.stack.gray, 'ERROR');
+      _log(`${err.message} ${`STACK`.black.bold} ==> ${err.stack.gray}`, "ERROR");
+      _switch.error();
     }
+  }
 
-    this.stop();
+  get running () {
+    return this[RUNNING_STATUS];
   }
 
   async validate() {
-    this[EVENT_EMITTER].on("stop", () => {
-      // Throwing error in order to cancel
-      throw new Error("cancel");
+    (new Promise(this.startCancellableValidator.bind(this)))
+    .catch(this.handleError.bind(this));
+  }
+
+  async startCancellableValidator(resolve, reject) {
+    this[EVENT_EMITTER].on('cancel', () => {
+      // Throw an error in order to cancel current validation process
+      reject(new Error('cancel'));
     });
 
     const strapi = await adminStrapi();
@@ -83,7 +100,7 @@ class Validator {
 
     _log(`Running validator on ${foundProducts.length} product(s)...`.cyan);
 
-    for (let i = 0; i < foundProducts.length && this.running; i++) {
+    for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
       const product = foundProducts[i];
       const productIssues = [];
 
