@@ -1,4 +1,5 @@
-import React, { useEffect, memo } from 'react';
+import React, { memo } from 'react';
+import { FunctionComponent } from 'react';
 
 import { DragAndDropProvider } from './dragAndDropProvider';
 import { AuthContextProvider } from './authProvider';
@@ -9,7 +10,11 @@ import { AdminUserProvider } from './adminUserProvider';
 import { LanguageProvider } from './languageProvider';
 import { ProductAttributesProvider } from './productAttributesProvider';
 
-const Providers = ({ children }) => {
+interface Props {
+  children: Array<any>
+}
+
+const Providers: FunctionComponent<Props> = ({ children }: Props ) => {
   return (
     <GlobalContextProvider>
       <AuthContextProvider>
