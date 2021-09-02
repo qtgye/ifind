@@ -143,7 +143,11 @@ class Validator {
 
             // Validate AliExpress
             case aliexpressSource.id:
-              if (!(await getDetailsFromAliExppressURL(urlData.url))) {
+              try {
+                if ( !(await getDetailsFromAliExppressURL(urlData.url)) ) {
+                  throw new Error('Invalid AlixExpress Link')
+                }
+              } catch (err) {
                 productIssues.push("aliexpress_link_invalid");
               }
               break;

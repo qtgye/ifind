@@ -1,13 +1,16 @@
-import React, { FunctionComponent, useCallback, useState } from "react";
+import React, { FunctionComponent, useCallback, useEffect, useState, useRef } from "react";
 import { Header } from "@buffetjs/custom";
 
 import FontAwesomeIcon from "../../components/FontAwesomeIcon";
 import {
   BackgroundProcessProvider,
   useBackgroundProcess,
+  I_BackgroundProcessProviderValues,
 } from "../../providers/backgroundProcessProvider";
 
-import LogsList, { LogsListProps, LOG_TYPE } from '../../components/LogsList';
+import LogsList from '../../components/LogsList';
+
+import './styles.scss';
 
 interface Props {};
 
@@ -16,9 +19,10 @@ export type statusLabelMapType = {
 };
 
 const ProductValidator = () => {
-  const { status = 'STOP', start, stop, logs }: LogsListProps = useBackgroundProcess();
+  const { status = 'STOP', start, stop, logs, refetch }: I_BackgroundProcessProviderValues = useBackgroundProcess();
   const [ isStarting, setIsStarting ] = useState(false);
   const [ isStopping, setIsStopping ] = useState(false);
+  const refetchTimeout = useRef<undefined|number>();
 
   const statusLabelMap: statusLabelMapType = {
     STOP: 'Stopped',
@@ -38,6 +42,20 @@ const ProductValidator = () => {
     }
   }, [ status, isStarting, isStopping ]);
 
+  const getButtonIcon = useCallback(() => {
+    if ( isStarting || isStopping ) {
+      return 'hour-glass';
+    }
+
+    switch ( status ) {
+      case 'STOP':
+      case 'ERROR' :
+        return 'play';
+      case 'START':
+        return 'stop';
+    }
+  }, [ status, isStarting, isStopping ]);
+
   const getButtonColor = useCallback(() => {
     switch ( status ) {
       case 'STOP':
@@ -49,16 +67,37 @@ const ProductValidator = () => {
   }, [ status ]);
 
   const onCTAClick = useCallback(() => {
-    // switch ( status ) {
-    //   case 'STOP':
-    //   case 'ERROR' :
-    //     setIsStarting(true);
-    //     start();
-    //   case 'START':
-    //     setIsStopping(true);
-    //     stop();
-    // }
+    switch ( status ) {
+      case 'STOP':
+      case 'ERROR' :
+        setIsStarting(true);
+        start && start();
+        break;
+      case 'START':
+        setIsStopping(true);
+        stop && stop();
+        break;
+    }
   }, [ status, isStarting, isStopping, start, stop ]);
+
+  const refetchData = useCallback(() => {
+    refetch && refetch();
+  }, [ refetch ]);
+
+  const checkRefetchTimeout = useCallback(() => {
+    if ( status === 'START' ) {
+      refetchTimeout.current = setTimeout(() => refetchData(), 1000);
+    }
+  }, [ status, refetchTimeout ]);
+
+  useEffect(() => {
+    setIsStarting(false);
+    setIsStopping(false);
+  }, [ status ]);
+
+  useEffect(() => {
+    checkRefetchTimeout();
+  }, [ status, logs ]);
 
   return (
     <div className="container">
@@ -68,16 +107,16 @@ const ProductValidator = () => {
           actions={[
             {
               label: getButtonLabel(),
-              onClick: onCTAClick(),
+              onClick: onCTAClick,
               color: getButtonColor(),
               type: "button",
               disabled: isStopping || isStarting,
-              icon: <FontAwesomeIcon icon="flag-checkered" />,
+              icon: <FontAwesomeIcon icon={getButtonIcon()} />,
             },
           ]}
         />
         <div className="product-validator__header">
-          {status && <h2 className="product-validator__status">{statusLabel}</h2>}
+          {status && <div className="product-validator__status">Current status: <strong>{statusLabel}</strong></div>}
         </div>
         <div className="product-validator__logs">
           { logs?.length && (

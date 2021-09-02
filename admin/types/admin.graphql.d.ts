@@ -69,13 +69,23 @@ declare global {
   }
   
   export const enum BACKGROUND_PROCESS_STATUS {
-    running = 'running',
-    stopped = 'stopped',
-    error = 'error'
+    START = 'START',
+    STOP = 'STOP',
+    ERROR = 'ERROR'
+  }
+  
+  export const enum BACKGROUND_PROCESS_NAME {
+    product_validator = 'product_validator'
+  }
+  
+  export const enum BACKGROUND_PROCESS_LOG_TYPE {
+    INFO = 'INFO',
+    ERROR = 'ERROR'
   }
   
   export interface BackgroundProcessLogEntry {
-    date_time?: DateTime;
+    date_time?: string;
+    type?: BACKGROUND_PROCESS_LOG_TYPE;
     message?: string;
   }
   
@@ -3254,6 +3264,7 @@ declare global {
     categoryTree?: Array<CategoryWithChild | null>;
     footerSettingsByLanguage?: ComponentEntryFieldsFooterFields;
     getBackgroundProcess?: BackgroundProcess;
+    triggerBackgroundProcess?: BackgroundProcess;
     pageBySlug?: PageData;
     productDetails?: Product;
     productComparisonList?: Array<NaturalList | null>;
@@ -3764,10 +3775,15 @@ declare global {
   
   export interface BackgroundProcessLogEntryTypeResolver<TParent = any> {
     date_time?: BackgroundProcessLogEntryToDate_timeResolver<TParent>;
+    type?: BackgroundProcessLogEntryToTypeResolver<TParent>;
     message?: BackgroundProcessLogEntryToMessageResolver<TParent>;
   }
   
   export interface BackgroundProcessLogEntryToDate_timeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface BackgroundProcessLogEntryToTypeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -8347,6 +8363,7 @@ declare global {
     categoryTree?: QueryToCategoryTreeResolver<TParent>;
     footerSettingsByLanguage?: QueryToFooterSettingsByLanguageResolver<TParent>;
     getBackgroundProcess?: QueryToGetBackgroundProcessResolver<TParent>;
+    triggerBackgroundProcess?: QueryToTriggerBackgroundProcessResolver<TParent>;
     pageBySlug?: QueryToPageBySlugResolver<TParent>;
     productDetails?: QueryToProductDetailsResolver<TParent>;
     productComparisonList?: QueryToProductComparisonListResolver<TParent>;
@@ -8733,10 +8750,18 @@ declare global {
   }
   
   export interface QueryToGetBackgroundProcessArgs {
-    backgroundProcess: string;
+    backgroundProcess: BACKGROUND_PROCESS_NAME;
   }
   export interface QueryToGetBackgroundProcessResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToGetBackgroundProcessArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface QueryToTriggerBackgroundProcessArgs {
+    backgroundProcess: BACKGROUND_PROCESS_NAME;
+    status: BACKGROUND_PROCESS_STATUS;
+  }
+  export interface QueryToTriggerBackgroundProcessResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: QueryToTriggerBackgroundProcessArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface QueryToPageBySlugArgs {

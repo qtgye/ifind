@@ -49,12 +49,14 @@ module.exports = {
       logEntries.forEach((logEntry) => {
         const [date_time = "", type = "", message = ""] = logEntry.split(" | ");
 
-        // Remove ANSI formatting on some properties
-        logs.push({
-          date_time: date_time.replace(/\u001b\[\d+m/gi, "").trim(),
-          type: type.replace(/\u001b\[\d+m/gi, "").trim() || 'INFO',
-          message,
-        });
+        if ( message || type || message ) {
+          // Remove ANSI formatting on some properties
+          logs.push({
+            date_time: date_time.replace(/\u001b\[\d+m/gi, "").trim(),
+            type: type.replace(/\u001b\[\d+m/gi, "").trim() || 'INFO',
+            message,
+          });
+        }
       });
     });
 
