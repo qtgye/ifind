@@ -1,6 +1,18 @@
 const createCommands = require("./_createCommands");
 
 createCommands({
+  // Runs product links updater
+  'update-product-links': async (strapiInstance) => {
+    console.log("Updating product links...".cyan);
+    const updatedProducts = await strapiInstance.services.product.updateProductLinks();
+
+    if ( updatedProducts.length ) {
+      console.log(` Updated links for ${updatedProducts.length} product(s). `.bgGreen.white.bold);
+    } else {
+      console.log(` No products were updated `.bgGreen.white.bold);
+    }
+  },
+
   // Runs products validator
   'validate-products': async (strapiInstance, args) => {
     console.log("Validating products...".cyan);
