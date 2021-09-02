@@ -20,8 +20,13 @@ const processCategoryData = async data => {
 
   if ( updateAttributes ) {
     if ( data.product_attrs && data.product_attrs.length ) {
+      console.log('data.product_attrs', data.product_attrs);
+
       data.product_attrs.forEach(catProductAttr => {
+        console.log({ catProductAttr: catProductAttr.id });
         const matchedProductAttr = productAttributes.find(({ id }) => id == catProductAttr.product_attribute);
+
+        console.log({ matchedProductAttr });
         catProductAttr.label_preview = `${matchedProductAttr.name} (${catProductAttr.factor})`
       });
 

@@ -49,8 +49,8 @@ const CategoryForm = ({ category, setCategoryFormData, formErrors, onDelete }) =
   }, []);
 
   const setDefaultAttributeFactors = useCallback(() => {
-    setAttributeFactors(productAttributes.map(productAttr => ({
-      product_attribute: productAttr.id,
+    setAttributeFactors(productAttributes.map(product_attribute => ({
+      product_attribute,
       factor: 1,
     })));
   }, [ productAttributes ]);
