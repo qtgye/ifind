@@ -36,7 +36,7 @@ class Validator {
       .catch(reject);
     }))
     .catch((err) => {
-      console.log('init catch', err);
+      console.log('Validator start error', err);
     });
   }
 
@@ -55,7 +55,9 @@ class Validator {
 
   handleError(err) {
     if (err.message === "cancel") {
-      _log("Validator Cancelled");
+      if ( this.running ) {
+        _log("Validator Cancelled");
+      }
       this.stop();
     } else {
       _log(`${err.message} ${`STACK`.black.bold} ==> ${err.stack.gray}`, "ERROR");

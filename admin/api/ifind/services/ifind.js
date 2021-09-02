@@ -7,6 +7,19 @@ const backgroundProcessesRoot = path.resolve(
   "../../../background-process"
 );
 
+const getBackgroundProcessPath = (backgroundProcessName) => {
+  const backgroundProcessFolder = path.resolve(
+    backgroundProcessesRoot,
+    backgroundProcessName.replace("_", "-")
+  );
+
+  if (!existsSync(backgroundProcessFolder)) {
+    return null;
+  }
+
+  return backgroundProcessFolder;
+};
+
 module.exports = {
   async getBackgroundProcess(backgroundProcessName) {
     const backgroundProcessFolder = path.resolve(
@@ -50,4 +63,35 @@ module.exports = {
       logs,
     };
   },
+
+  async triggerBackgroundProcess(backgroundProcessName, status) {
+    const backgroundProcessFolder = getBackgroundProcessPath(
+      backgroundProcessName
+    );
+
+    if (!backgroundProcessFolder) {
+      return null;
+    }
+
+    // Get the switch module
+    const _switch = require(path.resolve(backgroundProcessFolder, "lib/switch"));
+
+    // Throw error if no swtich module is found for the background process
+    if ( !_switch ) {
+      throw new Error(`No switch module found for background process: ${backgroundProcessName}`);
+    }
+
+    // Trigger process
+    switch (status) {
+      case 'START':
+        _switch.start();
+        break;
+      case 'STOP':
+        _switch.stop();
+        break;
+    }
+
+    // Get current process stats
+    return await this.getBackgroundProcess(backgroundProcessName);
+  }
 };

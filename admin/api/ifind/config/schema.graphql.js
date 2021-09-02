@@ -28,13 +28,23 @@ module.exports = {
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
+  triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
   `,
   mutation: ``,
   type: {},
   resolver: {
     Query: {
       async getBackgroundProcess(_, { backgroundProcess }) {
-        const backgroundProcessData = await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
+        const backgroundProcessData =
+          await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
+        return backgroundProcessData;
+      },
+      async triggerBackgroundProcess(_, { backgroundProcess, status }) {
+        const backgroundProcessData =
+          await strapi.services.ifind.triggerBackgroundProcess(
+            backgroundProcess,
+            status
+          );
         return backgroundProcessData;
       },
     },
