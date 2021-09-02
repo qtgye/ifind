@@ -1,6 +1,6 @@
 module.exports = {
   // AMAZON AFFILIATE
   affiliateParams: {
-    tag: 'ifind01-21',
+    tag: 'ifind08f-21',
   }
 };
