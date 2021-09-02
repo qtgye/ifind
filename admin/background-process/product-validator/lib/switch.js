@@ -19,11 +19,13 @@ const onSwitchChange = (listenedState, callback) => {
 
 // Sets the switch file to START
 const start = () => {
+  _log('(Switch) Starting...');
   outputFileSync(switchFilePath, "START");
 };
 
 // Sets the switch file to STOP
 const stop = () => {
+  _log('(Switch) Stopping...');
   outputFileSync(switchFilePath, "STOP");
 };
 

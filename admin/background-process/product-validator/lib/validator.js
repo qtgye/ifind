@@ -36,7 +36,7 @@ class Validator {
       .catch(reject);
     }))
     .catch((err) => {
-      console.log('init catch', err);
+      console.log('Validator start error', err);
     });
   }
 
@@ -55,7 +55,9 @@ class Validator {
 
   handleError(err) {
     if (err.message === "cancel") {
-      _log("Validator Cancelled");
+      if ( this.running ) {
+        _log("Validator Cancelled");
+      }
       this.stop();
     } else {
       _log(`${err.message} ${`STACK`.black.bold} ==> ${err.stack.gray}`, "ERROR");
@@ -141,7 +143,11 @@ class Validator {
 
             // Validate AliExpress
             case aliexpressSource.id:
-              if (!(await getDetailsFromAliExppressURL(urlData.url))) {
+              try {
+                if ( !(await getDetailsFromAliExppressURL(urlData.url)) ) {
+                  throw new Error('Invalid AlixExpress Link')
+                }
+              } catch (err) {
                 productIssues.push("aliexpress_link_invalid");
               }
               break;
