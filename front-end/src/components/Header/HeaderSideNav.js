@@ -23,6 +23,11 @@ const HeaderSideNav = ({ withSideNav }) => {
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
     // const [isHovered, setisHovered] = useState(false);
+
+
+    const [ currentCategory, setCurrentCategory ] = useState(null);
+
+
     const triggerScroll = useCallback(() => {
         listRef.current.scrollTop += listRef.current.offsetHeight;
     }, [listRef]);
@@ -45,6 +50,30 @@ const HeaderSideNav = ({ withSideNav }) => {
                 {isVisible ? <div ref={listRef}
                     className="header-side-nav__list"
                 >
+
+                {/* Just for reference */}
+                <ul>
+                  {
+                    categoryTree.map(category => (
+                      <li key={category.id}>
+                        <button
+                          style={{
+                            padding: '10px 15px',
+                            backgroundColor: category.id === currentCategory ? 'green' : 'white',
+                            color: category.id === currentCategory ? 'white' : 'gray',
+                          }}
+                          onClick={e => {
+                            e.preventDefault();
+                            setCurrentCategory(category.id)
+                          }}
+                        >
+                            {category.label.label}
+                        </button>
+                      </li>
+                    ))
+                  }
+                </ul>
+
 
                     {
                         currentRouteConfig.path === '/' ?

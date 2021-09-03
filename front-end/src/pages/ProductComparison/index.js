@@ -3,9 +3,11 @@ import { withComponentName, withProvider } from '@utilities/component';
 import { useProductComparison } from '@contexts/productComparisonContext';
 import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
+import { ProductComparisonContextProvider } from '@contexts/productComparisonContext';
+import { CategoryProductsContextProvider } from '@contexts/categoryProductsContext';
 import NaturalList from '@components/NaturalList';
 
-const ProductComparison = () => {
+const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const { productComparisonList, loading } = useProductComparison();
   const icon = '/images/loading.png';
   const prodcompRef = useRef();
@@ -62,8 +64,13 @@ const ProductComparison = () => {
       </div>
     </GeneralTemplate>
   )
-};
+});
 
-export default (
-  withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison))
+// TODO: Remove ProductComparisonContextProvider altogether once integrated in FE
+export default (props) => (
+  <ProductComparisonContextProvider>
+    <ProductComparison {...props} />
+  </ProductComparisonContextProvider>
 );
+
+// export default withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison))
