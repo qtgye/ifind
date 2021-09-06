@@ -67,10 +67,8 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
 });
 
 // TODO: Remove ProductComparisonContextProvider altogether once integrated in FE
-export default (props) => (
+export default withComponentName('ProductComparisonPage')((props) => (
   <ProductComparisonContextProvider>
     <ProductComparison {...props} />
   </ProductComparisonContextProvider>
-);
-
-// export default withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison))
+));
