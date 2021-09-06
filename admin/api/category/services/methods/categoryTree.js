@@ -1,9 +1,10 @@
 /**
  * Retrieves a nested list of categories according to parent-children hierarchy.
  * @param {String} language
+ * @param {ID} root - Localized tree under the given root
  * @returns CategoryTree
  */
-module.exports = async (language = null) => {
+module.exports = async (language = 'en', root = null) => {
   // Will use to select label for categories
   const matchedLanguage = await strapi.services.language.findOne({
     code: language,
@@ -11,11 +12,17 @@ module.exports = async (language = null) => {
 
   // Get categories sorted by order
   // ensures children are in order
+  const findParams = {
+    _sort: "order:ASC",
+    _limit: 1000,
+  };
+
+  if (root) {
+    findParams.ascendants_in = root;
+  }
+
   const matchedCategories =
-    (await strapi.services.category.find({
-      _sort: "order:ASC",
-      _limit: 1000,
-    })) || [];
+    (await strapi.services.category.find(findParams)) || [];
 
   // Build categoryTree object
   const categoryTree = {};
