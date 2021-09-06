@@ -31,6 +31,7 @@ module.exports = {
   query: `
     productDetails (id: ID!, language: String): Product
     productComparisonList (language: String!): [NaturalList]
+    categoryProducts (language: String, categories: [ID]): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
   `,
   mutation: `
@@ -41,15 +42,16 @@ module.exports = {
   resolver: {
     Query: {
       async productDetails(_, args) {
-        const productDetails = await strapi.services.product.getProductDetails(args.id, args.language);
-        return productDetails;
+        return await strapi.services.product.getProductDetails(args.id, args.language);
       },
       async productComparisonList(_, args) {
-        const productComparisonList = await strapi.services.product.productComparisonList(args.language);
-        return productComparisonList;
+        return await strapi.services.product.productComparisonList(args.language);
       },
       async productsList(_, args) {
         return await strapi.services.product.productsList(args);
+      },
+      async categoryProducts(_, args) {
+        return await strapi.services.product.categoryProducts(args.language, args.categories);
       }
     },
     Mutation: {

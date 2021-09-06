@@ -11,7 +11,7 @@ module.exports = {
     }
   `,
   query: `
-    categoryTree (language: String): [CategoryWithChild]
+    categoryTree (language: String, root: ID): [CategoryWithChild]
   `,
   mutation: `
     updateCategories( categories: [updateCategoryInput] ): [Category]
@@ -19,9 +19,10 @@ module.exports = {
   `,
   resolver: {
     Query: {
-      async categoryTree(_, args, ...rest) {
+      async categoryTree(_, args) {
         const categoryTree = await strapi.services.category.categoryTree(
-          args.language
+          args.language,
+          args.root
         );
         return categoryTree;
       },

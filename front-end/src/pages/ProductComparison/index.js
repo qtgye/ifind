@@ -1,14 +1,32 @@
+import { useEffect, useState } from 'react';
 import GeneralTemplate from '@templates/GeneralTemplate';
 import { withComponentName, withProvider } from '@utilities/component';
 import { useProductComparison } from '@contexts/productComparisonContext';
 import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
+import { ProductComparisonContextProvider } from '@contexts/productComparisonContext';
+import { CategoryProductsContextProvider } from '@contexts/categoryProductsContext';
 import NaturalList from '@components/NaturalList';
 
-const ProductComparison = () => {
+// TEST BLOCK
+import { useCategoryTree } from '@contexts/categoriesContext';
+// END TEST BLOCK
+
+const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const { productComparisonList, loading } = useProductComparison();
   const icon = '/images/loading.png';
   const prodcompRef = useRef();
+
+  // TEST BLOCK
+  const categoryTree = useCategoryTree();
+  const [ currentCategory, setCurrentCategory ] = useState(null);
+
+  useEffect(() => {
+    if ( categoryTree?.length ) {
+
+    }
+  }, [ categoryTree ]);
+  // END TEST BLOCK
 
   const { setActiveCategory } = useContext(GlobalStateContext);
   let options = {
@@ -44,6 +62,30 @@ const ProductComparison = () => {
         <div className="container" style={{ paddingLeft: '280px' }}>
           {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
           <div className="product-comparison__list">
+            {/* Just for reference */}
+            <ul>
+                {
+                  categoryTree.map(category => (
+                    <li key={category.id}>
+                      <button
+                        style={{
+                          padding: '10px 15px',
+                          backgroundColor: category.id === currentCategory ? 'green' : 'white',
+                          color: category.id === currentCategory ? 'white' : 'gray',
+                        }}
+                        onClick={e => {
+                          e.preventDefault();
+                          setCurrentCategory(category.id)
+                        }}
+                      >
+                          {category.label.label}
+                      </button>
+                    </li>
+                  ))
+                }
+              </ul>
+
+
             {!loading &&
               productComparisonList.map(({ category, products }) => (
                 <NaturalList
@@ -62,8 +104,11 @@ const ProductComparison = () => {
       </div>
     </GeneralTemplate>
   )
-};
+});
 
-export default (
-  withProvider('ProductComparisonContextProvider')(withComponentName('ProductComparisonPage')(ProductComparison))
-);
+// TODO: Remove ProductComparisonContextProvider altogether once integrated in FE
+export default withComponentName('ProductComparisonPage')((props) => (
+  <ProductComparisonContextProvider>
+    <ProductComparison {...props} />
+  </ProductComparisonContextProvider>
+));
