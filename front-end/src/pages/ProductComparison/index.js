@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import GeneralTemplate from '@templates/GeneralTemplate';
-import { withComponentName, withProvider } from '@utilities/component';
+import { withComponentName } from '@utilities/component';
 import { useProductComparison } from '@contexts/productComparisonContext';
 import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import { ProductComparisonContextProvider } from '@contexts/productComparisonContext';
-import { CategoryProductsContextProvider } from '@contexts/categoryProductsContext';
 import NaturalList from '@components/NaturalList';
 
 // TEST BLOCK
@@ -62,8 +61,9 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
         <div className="container" style={{ paddingLeft: '280px' }}>
           {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
           <div className="product-comparison__list">
+
             {/* Just for reference */}
-            <ul>
+            <ul hidden>
                 {
                   categoryTree.map(category => (
                     <li key={category.id}>

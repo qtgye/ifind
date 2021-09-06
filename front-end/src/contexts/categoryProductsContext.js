@@ -35,7 +35,7 @@ export const CategoryProductsContextProvider = ({ children }) => {
 
     useEffect(() => {
       loadCategoryProducts();
-    }, [ categories ]);;
+    }, [ categories, loadCategoryProducts ]);
 
     return (
         <CategoryProductsContext.Provider value={{
