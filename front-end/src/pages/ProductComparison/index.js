@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import GeneralTemplate from '@templates/GeneralTemplate';
 import { withComponentName, withProvider } from '@utilities/component';
 import { useProductComparison } from '@contexts/productComparisonContext';
@@ -7,10 +8,25 @@ import { ProductComparisonContextProvider } from '@contexts/productComparisonCon
 import { CategoryProductsContextProvider } from '@contexts/categoryProductsContext';
 import NaturalList from '@components/NaturalList';
 
+// TEST BLOCK
+import { useCategoryTree } from '@contexts/categoriesContext';
+// END TEST BLOCK
+
 const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const { productComparisonList, loading } = useProductComparison();
   const icon = '/images/loading.png';
   const prodcompRef = useRef();
+
+  // TEST BLOCK
+  const categoryTree = useCategoryTree();
+  const [ currentCategory, setCurrentCategory ] = useState(null);
+
+  useEffect(() => {
+    if ( categoryTree?.length ) {
+
+    }
+  }, [ categoryTree ]);
+  // END TEST BLOCK
 
   const { setActiveCategory } = useContext(GlobalStateContext);
   let options = {
@@ -46,6 +62,30 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
         <div className="container" style={{ paddingLeft: '280px' }}>
           {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
           <div className="product-comparison__list">
+            {/* Just for reference */}
+            <ul>
+                {
+                  categoryTree.map(category => (
+                    <li key={category.id}>
+                      <button
+                        style={{
+                          padding: '10px 15px',
+                          backgroundColor: category.id === currentCategory ? 'green' : 'white',
+                          color: category.id === currentCategory ? 'white' : 'gray',
+                        }}
+                        onClick={e => {
+                          e.preventDefault();
+                          setCurrentCategory(category.id)
+                        }}
+                      >
+                          {category.label.label}
+                      </button>
+                    </li>
+                  ))
+                }
+              </ul>
+
+
             {!loading &&
               productComparisonList.map(({ category, products }) => (
                 <NaturalList
