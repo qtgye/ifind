@@ -1,60 +1,74 @@
-import { generatePluginLink } from '@plugins/ifind/admin/src/helpers/url';
+import { generatePluginLink } from "@plugins/ifind/admin/src/helpers/url";
 
 export const leftCollectionMenu = [
   {
     pattern: /product\.product/,
     override: {
-      icon: 'shopping-bag',
-      destination: generatePluginLink('/products'),
-    }
+      icon: "shopping-bag",
+      destination: generatePluginLink("/products"),
+    },
   },
   {
     pattern: /category/,
     override: {
-      icon: 'sitemap',
-      destination: generatePluginLink('/categories'),
-    }
+      icon: "sitemap",
+      destination: generatePluginLink("/categories"),
+    },
   },
   {
     pattern: /attribute/,
     override: {
-      icon: 'star',
-    }
+      icon: "star",
+    },
   },
   {
     pattern: /source/,
     override: {
-      icon: 'external-link-alt'
-    }
+      icon: "external-link-alt",
+    },
   },
   {
     pattern: /region/,
     override: {
-      icon: 'globe-americas'
-    }
+      icon: "globe-americas",
+    },
   },
   {
     pattern: /currency/,
     override: {
-      icon: 'dollar-sign'
-    }
+      icon: "dollar-sign",
+    },
   },
   {
     pattern: /language/,
     override: {
-      icon: 'language'
-    }
+      icon: "language",
+    },
   },
   {
     pattern: /page/,
     override: {
-      icon: 'book'
-    }
+      icon: "book",
+    },
   },
   {
     pattern: /user/,
     override: {
-      icon: 'users'
-    }
-  }
-]
+      icon: "users",
+    },
+  },
+];
+
+export const pluginLinks = [
+  {
+    override: {
+      destination: generatePluginLink("background-processes/product-validator"),
+      icon: "clipboard-check",
+      label: "Product Validator",
+    },
+  },
+  { pattern: /\/icons/ },
+  { pattern: /\/strapi-icons/ },
+  { pattern: /\/content-type-builder/ },
+  { pattern: /\/upload/ },
+];
