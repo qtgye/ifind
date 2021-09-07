@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Footer from '@components/Footer';
 import NewsLetter from '@components/NewsLetter';
+import Carousel from '../../components/Carousel';
 
 const GeneralTemplate = ({ children }) => {
 
@@ -12,6 +13,7 @@ const GeneralTemplate = ({ children }) => {
     return (
         <>
             {children}
+            <Carousel />
             <NewsLetter />
             <Footer />
         </>

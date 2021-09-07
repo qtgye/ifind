@@ -30,11 +30,31 @@
 
     &__right {
         @include bootstrap(col-lg-2 col-md-3 col-12);
-        flex-shrink: 0;
+        //flex-shrink: 0;
+
+        @include laptop {
+            opacity: 0;
+        }
+
+        @include tablet {
+            opacity: 0;
+        }
+
+        @include mobile {
+            opacity: 0;
+        }
     }
 
     .logo {
         margin-top: 0;
+
+        @include smaller_tablet {
+            position: absolute;
+            margin-top: 60px;
+            margin-left: -60px;
+            width: 110px;
+            height: 70px;
+        }
     }
 
     .search-top {
@@ -43,6 +63,10 @@
 
     .search-bar-top {
     	text-align: center;
+
+        @include tablet {
+            margin-left: 45px;
+        }
     }
 
     .search-bar {
@@ -59,6 +83,33 @@
 
         form {
             width: 100%;
+        }
+
+        @include tablet {
+            width: 360px;
+
+            form {
+                width: 85%;
+            }
+
+            i {
+                font-size: 14px;
+            }
+        }
+
+        @include smaller_tablet {
+            margin-top: 50px;
+            margin-left: -10px;
+            width: 370px;
+
+            form {
+                width: 80%;
+                margin-left: -15px;
+            }
+
+            i {
+                font-size: 14px;
+            }
         }
 
         input {
@@ -112,6 +163,8 @@
     }
 
     .flag-container {
+        display: flex;
+        align-items: center;
         margin-top: 7px;
         margin-left: 0;
         margin-right: 0px;
@@ -146,6 +199,8 @@
     }
 
     .single-icon {
+        display: flex;
+        align-items: center;
         color: $gray-800;
         font-size: 20px;
 
