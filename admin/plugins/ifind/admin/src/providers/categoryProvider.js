@@ -40,6 +40,9 @@ fragment categoryFragment on Category {
       name
     }
   }
+  ascendants {
+    id
+  }
 }
 `
 

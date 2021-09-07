@@ -1,44 +1,59 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { locale } from '@config/locale';
-import { apiSourceHandle } from '@config/adminApi';
-import getProductComparisonListQuery from '@gql/getProductComparisonListQuery';
+import { locale } from "@config/locale";
+import { apiSourceHandle } from "@config/adminApi";
+import getProductComparisonListQuery from "@gql/getProductComparisonListQuery";
 
 export const ProductComparisonContext = createContext({});
 
 export const ProductComparisonContextProvider = ({ children }) => {
-    const [productComparisonList, setProductComparisonList] = useState([]);
-    const {
-        data,
-        loading,
-        // error,
-        // refetch
-    } = useQuery(getProductComparisonListQuery, {
-        variables: { language: locale },
-        context: {
-            apiSource: apiSourceHandle,
-        }
-    });
+  const [category, setCategory] = useState(null);
+  const [productComparisonList, setProductComparisonList] = useState([]);
+  const {
+    data,
+    loading,
+    // error,
+    refetch
+  } = useQuery(getProductComparisonListQuery, {
+    variables: {
+      language: locale,
+      root: category || null,
+    },
+    context: {
+      apiSource: apiSourceHandle,
+    },
+  });
 
-    useEffect(() => {
-        if (data?.productComparisonList) {
-            setProductComparisonList(data.productComparisonList);
-        }
-    }, [data]);
+  const setCurrentListCategory = useCallback((categoryId) => {
+    setCategory(categoryId);
+  }, []);
 
-    return (
-        <ProductComparisonContext.Provider value={{ productComparisonList, loading }}>
-            {children}
-        </ProductComparisonContext.Provider>
-    )
-}
+  useEffect(() => {
+    if (data?.productComparisonList) {
+      setProductComparisonList(data.productComparisonList);
+    }
+  }, [data]);
 
-ProductComparisonContextProvider.providerName = 'ProductComparisonContextProvider';
+  useEffect(() => {
+    refetch();
+  }, [category, refetch]);
+
+  return (
+    <ProductComparisonContext.Provider
+      value={{ productComparisonList, loading, setCurrentListCategory }}
+    >
+      {children}
+    </ProductComparisonContext.Provider>
+  );
+};
+
+ProductComparisonContextProvider.providerName =
+  "ProductComparisonContextProvider";
 
 export const useProductComparison = () => {
-    const context = useContext(ProductComparisonContext);
-    return context;
-}
+  const context = useContext(ProductComparisonContext);
+  return context;
+};
 
 // Export as default to be used in testing
 export default ProductComparisonContext;

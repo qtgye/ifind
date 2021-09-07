@@ -14,6 +14,7 @@ import Categories from '../Categories';
 import CategoryDetail from '../CategoryDetail';
 import ProductsListing from '../ProductsListing';
 import ProductDetail from '../ProductDetail';
+import ProductValidator from '../ProductValidator';
 // Components
 import LoadingOverlay from '../../components/LoadingOverlay';
 
@@ -25,7 +26,7 @@ import { spriteContents } from 'ifind-icons';
 import './styles.scss';
 
 const App = () => {
-  const { goBack } = useHistory();
+  const { goBack } = useHistory() as { goBack: Function };
 
   return (
     <div className="ifind-plugin">
@@ -39,6 +40,11 @@ const App = () => {
             <Route path={`/plugins/${pluginId}/products`} component={ProductsListing} exact />
             <Route path={`/plugins/${pluginId}/products/create`} component={ProductDetail} exact />
             <Route path={`/plugins/${pluginId}/products/:productId`} component={ProductDetail} />
+
+            {/* Background Processes */}
+            <Route path={`/plugins/${pluginId}/background-processes/:backgroundProcess`} component={ProductValidator} />
+
+            {/* Error Pages */}
             <Route component={NotFound} />
           </Switch>
           <LoadingOverlay />

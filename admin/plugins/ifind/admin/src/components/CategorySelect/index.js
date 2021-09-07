@@ -40,14 +40,14 @@ const CategorySelect = ({ exclude, category, onChange, hasError, emptyMessage, a
       // But only if allowParent
       // Otherwise, fire null
       if ( allowParent ) {
-        onChange(matchedCategory.id);
+        onChange(matchedCategory.id, categoryPath);
       }
     }
     // Always fire onChange granchild category
     else {
-      onChange(matchedCategory.id);
+      onChange(matchedCategory.id, categoryPath);
     }
-  }, [ categories, onChange ]);
+  }, [ categories, onChange, categoryPath ]);
 
   // Set category options for UI only, no data manipulation
   useEffect(() => {

@@ -1,17 +1,17 @@
-import React, { memo, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import React, { memo, useEffect } from "react";
+import PropTypes from "prop-types";
+import { useLocation } from "react-router-dom";
 import {
   LeftMenuLinksSection,
   LeftMenuFooter,
   LeftMenuHeader,
   LinksContainer,
-} from '../../components/LeftMenu';
-import Loader from './Loader';
-import Wrapper from './Wrapper';
-import useMenuSections from './useMenuSections';
+} from "../../components/LeftMenu";
+import Loader from "./Loader";
+import Wrapper from "./Wrapper";
+import useMenuSections from "./useMenuSections";
 
-import { leftCollectionMenu } from '../../../admin.settings';
+import { leftCollectionMenu, pluginLinks } from "../../../admin.settings";
 
 const LeftMenu = ({ shouldUpdateStrapi, version, plugins, setUpdateMenu }) => {
   const location = useLocation();
@@ -28,26 +28,42 @@ const LeftMenu = ({ shouldUpdateStrapi, version, plugins, setUpdateMenu }) => {
     generateMenu,
   } = useMenuSections(plugins, shouldUpdateStrapi);
 
-  const mapped = leftCollectionMenu.map(
-    menuSetting => {
-      const matchedMenu = collectionTypesSectionLinks.find(
-        link => menuSetting.pattern.test(link.destination)
-      );
+  const mapped = leftCollectionMenu.map((menuSetting) => {
+    const matchedMenu = collectionTypesSectionLinks.find((link) =>
+      menuSetting.pattern.test(link.destination)
+    );
 
-      if ( matchedMenu ) {
-        return {
-          ...matchedMenu,
-          ...menuSetting.override,
-        };
-      }
+    if (matchedMenu) {
+      return {
+        ...matchedMenu,
+        ...menuSetting.override,
+      };
     }
+  });
+
+  const filteredCollectionTypeLinks = mapped.filter(Boolean);
+  const filteredSingleTypeLinks = singleTypesSectionLinks.filter(
+    ({ isDisplayed }) => isDisplayed
   );
 
-  // const filteredCollectionTypeLinks = collectionTypesSectionLinks.filter(
-  //   ({ isDisplayed }) => isDisplayed
-  // );
-  const filteredCollectionTypeLinks = mapped.filter(Boolean)
-  const filteredSingleTypeLinks = singleTypesSectionLinks.filter(({ isDisplayed }) => isDisplayed);
+  const customPluginLinksMenu = pluginLinks
+    .map((customPluginLink) => {
+      const matchedBuiltInLink = pluginsSectionLinks.find(({ destination }) =>
+        customPluginLink.pattern?.test(destination)
+      );
+
+      if (matchedBuiltInLink) {
+        return {
+          ...matchedBuiltInLink,
+          ...customPluginLink,
+        };
+      }
+
+      if (customPluginLink?.override?.label) {
+        return customPluginLink.override;
+      }
+    })
+    .filter(Boolean);
 
   // This effect is really temporary until we create the menu api
   // We need this because we need to regenerate the links when the settings are being changed
@@ -84,11 +100,11 @@ const LeftMenu = ({ shouldUpdateStrapi, version, plugins, setUpdateMenu }) => {
           />
         )}
 
-        {pluginsSectionLinks.length > 0 && (
+        {customPluginLinksMenu.length > 0 && (
           <LeftMenuLinksSection
             section="plugins"
             name="plugins"
-            links={pluginsSectionLinks}
+            links={customPluginLinksMenu}
             location={location}
             searchable={false}
             emptyLinksListMessage="app.components.LeftMenuLinkContainer.noPluginsInstalled"

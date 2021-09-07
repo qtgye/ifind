@@ -23,7 +23,13 @@ export const useGQLFetch = () => {
       })
     })
     .then(res => res.json())
-    .then(({ data }) => data)
+    .then(({ data, errors }) => {
+      if ( errors ) {
+        throw new Error(errors[0]);
+      }
+
+      return data;
+    })
     : Promise.resolve(null)
   ), [ jwt ])
 

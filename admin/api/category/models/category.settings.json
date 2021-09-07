@@ -224,6 +224,9 @@
     "products_count": {
       "type": "integer",
       "default": 0
+    },
+    "ascendants": {
+      "collection": "category"
     }
   }
 }

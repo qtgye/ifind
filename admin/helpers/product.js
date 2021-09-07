@@ -8,7 +8,7 @@
 const { isAmazonLink } = require("./amazon");
 const { scrapeAmazonProduct, amazonLink } = require("./amazon");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
-const { getDetailsFromURl: getAliExpressDetails } = require("./aliexpress");
+const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
 
 const getProductDetails = async (
   productData,
@@ -53,6 +53,9 @@ const getProductDetails = async (
         strapi.services.source.findOne({ name_contains: "ali" }),
       ]);
 
+      // Prepare to save product issues
+      scrapedData.product_issues = productData.product_issues || {};
+
       scrapedData.url_list = await Promise.all(
         productData.url_list.map(async (urlData) => {
           // Scrapte EBAY details
@@ -61,6 +64,11 @@ const getProductDetails = async (
             if (ebayProductDetails) {
               urlData.price = ebayProductDetails.price || urlData.price || "";
               urlData.url = ebayLink(urlData.url);
+
+              scrapedData.product_issues.ebay_link_invalid = false;
+            } else {
+              // Ebay URL is invalid
+              scrapedData.product_issues.ebay_link_invalid = true;
             }
           }
           // Scrape ALIEXPRESS details
@@ -76,6 +84,11 @@ const getProductDetails = async (
                 aliExpressProductDetails.price || urlData.price || "";
               urlData.url =
                 aliExpressProductDetails.affiliateLink || urlData.url || "";
+
+              scrapedData.product_issues.aliexpress_link_invalid = false;
+            } else {
+              // AliExpress URL is invalid
+              scrapedData.product_issues.aliexpress_link_invalid = true;
             }
           }
 

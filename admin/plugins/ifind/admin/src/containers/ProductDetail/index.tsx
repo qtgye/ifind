@@ -174,20 +174,6 @@ const ProductDetail = () => {
                   : <FontAwesomeIcon icon="save" />
                 )
               },
-              (
-                productData?.status === 'draft' ? {
-                  label: isPublishing ? 'Publishing' : 'Publish',
-                  onClick: publishProduct,
-                  color: isPublishing ? 'cancel' : 'success',
-                  type: 'button',
-                  disabled: isSaving || isPublishing,
-                  icon: (
-                    isPublishing
-                    ? <FontAwesomeIcon icon="spinner" pulse />
-                    : <FontAwesomeIcon icon="arrow-alt-cirlce-up" />
-                  )
-                } : null
-              ),
               productData?.id ? (
                 {
                   label: 'Add Product',
