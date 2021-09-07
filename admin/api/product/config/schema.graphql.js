@@ -30,7 +30,7 @@ module.exports = {
   `,
   query: `
     productDetails (id: ID!, language: String): Product
-    productComparisonList (language: String!): [NaturalList]
+    productComparisonList (language: String, root: ID): [NaturalList]
     categoryProducts (language: String, categories: [ID], includeDescendants: Boolean): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
   `,
@@ -45,7 +45,7 @@ module.exports = {
         return await strapi.services.product.getProductDetails(args.id, args.language);
       },
       async productComparisonList(_, args) {
-        return await strapi.services.product.productComparisonList(args.language);
+        return await strapi.services.product.productComparisonList(args.language, args.root);
       },
       async productsList(_, args) {
         return await strapi.services.product.productsList(args);

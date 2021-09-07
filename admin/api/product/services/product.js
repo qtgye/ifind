@@ -18,5 +18,4 @@ module.exports = {
   publishProducts: require("./methods/publishProducts"),
   updateProduct: require("./methods/updateProduct"),
   validateProducts: require("./methods/validateProducts"),
-  categoryProducts: require("./methods/categoryProducts"),
 };

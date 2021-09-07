@@ -75,6 +75,7 @@ module.exports = {
     config.resolve.alias = {
       ...(config.resolve.alias || {}),
       '@plugins': path.resolve(PROJECT_ROOT, 'plugins'),
+      '@custom-types': path.resolve(PROJECT_ROOT, 'types'),
     }
 
     return config;

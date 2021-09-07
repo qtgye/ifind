@@ -5,7 +5,7 @@
  *                         - If "first", localizes category tree using the first category root in order
  * @returns CategoryTree
  */
-module.exports = async (language = 'en', root = 'first') => {
+module.exports = async (language = 'en', root = false, includeDescendants = false) => {
   // Will use to select label for categories
   const matchedLanguage = await strapi.services.language.findOne({
     code: language,
@@ -29,7 +29,7 @@ module.exports = async (language = 'en', root = 'first') => {
       findParams.ascendants = firstCategory.id;
     }
   }
-  else if ( !isNaN(root) ) {
+  else if ( !isNaN(root) && Number(root) ) {
     findParams.ascendants = root;
   }
 

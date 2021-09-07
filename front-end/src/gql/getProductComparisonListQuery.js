@@ -1,8 +1,14 @@
 import { gql } from "apollo-boost";
 
 const getProductComparisonList = gql`
-query ProductComparisonList {
-    productComparisonList(language: "en") {
+query ProductComparisonList(
+  $language: String
+  $root: ID
+) {
+    productComparisonList(
+      language: $language
+      root: $root
+    ) {
         category {
             id
             label
