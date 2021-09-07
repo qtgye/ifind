@@ -35,7 +35,6 @@ export const ProductComparisonContextProvider = ({ children }) => {
   }, [data]);
 
   useEffect(() => {
-    console.log({ category });
     refetch();
   }, [category, refetch]);
 

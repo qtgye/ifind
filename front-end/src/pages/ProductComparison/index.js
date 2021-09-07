@@ -22,12 +22,6 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   useEffect(() => {
     setCurrentListCategory(currentCategory);
   }, [ currentCategory, setCurrentListCategory ]);
-
-  useEffect(() => {
-    if ( categoryTree[0] ) {
-      setCurrentCategory(categoryTree[0].id)
-    }
-  }, [ categoryTree ]);
   // --- END TEST BLOCK
 
   const { setActiveCategory } = useContext(GlobalStateContext);
@@ -68,13 +62,21 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
             {/* ---- TEST BLOCK */}
             <ul style={{ display: 'flex', columnGap: 10, padding: 10 }} hidden>
                 {
-                  categoryTree.map(category => (
+                  categoryTree.map((category, index) => (
                     <li key={category.id}>
                       <button
                         style={{
                           padding: '10px 15px',
-                          backgroundColor: category.id === currentCategory ? 'green' : 'white',
-                          color: category.id === currentCategory ? 'white' : 'gray',
+                          backgroundColor: (
+                            currentCategory ?
+                              category.id === currentCategory ? 'green' : 'white'
+                              : index === 0 ? 'green' : 'white'
+                          ),
+                          color: (
+                            currentCategory ?
+                              category.id === currentCategory ? 'white' : 'gray'
+                              : index === 0 ? 'white' : 'gray'
+                          ),
                         }}
                         onClick={e => {
                           e.preventDefault();
