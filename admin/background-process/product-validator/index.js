@@ -1,40 +1,211 @@
 require('colors');
-require('../../helpers/customGlobals');
-
+const path = require('path');
 const args = require('minimist')(process.argv.slice(2));
 
-const Validator = require('./lib/validator');
-const _switch = require('./lib/switch');
-const _log = require('./lib/logger');
+require('../../helpers/customGlobals');
+
+const adminStrapi = appRequire("scripts/strapi-custom");
+const { isAmazonLink, scrapeAmazonProduct } = appRequire("helpers/amazon");
+const { getDetailsFromURL: getDetailsFromEbayURL } = appRequire("helpers/ebay");
+const { getDetailsFromURL: getDetailsFromAliExppressURL } =
+  appRequire("helpers/aliexpress");
+
+const BackgroundProcess = require('../_lib/BackgroundProcess');
 
 const forced = 'force' in args;
-const validator = new Validator(forced);
 
-// Ensure that switch is on STOP state upon initialization
-_switch.stop();
+const RUNNING_STATUS = Symbol();
 
-// Listen to start
-_switch.listen('START', () => {
-  // Start validator
-  validator.start();
-});
+class ProductValidator extends BackgroundProcess {
+  constructor(forced = false) {
+    super({
+      baseDir: path.resolve(__dirname)
+    });
 
-// Listen to stop
-_switch.listen('STOP', () => {
-  // Stop validator
-  if ( validator.running ) {
-    validator.cancel();
-  } else {
-    validator.stop();
+    this.forced = forced;
+    this[RUNNING_STATUS] = false;
   }
-});
 
-// Listen to error
-_switch.listen('ERROR', () => {
-  // Stop validator
-  validator.stop();
-});
+  onSwitchStart() {
+    this.logger.log("Starting validator");
 
-// Initialize switch watcher
-_log('Initializing Product Validator'.green);
-_switch.init();
+    if (this[RUNNING_STATUS]) {
+      return;
+    }
+
+    this[RUNNING_STATUS] = true;
+
+    (new Promise((resolve, reject) => {
+      return this.validate()
+      .then(resolve)
+      .catch(reject);
+    }))
+    .catch((err) => {
+      console.log('Validator start error', err);
+    });
+  }
+
+  onSwitchStop() {
+    // Stop validator
+    if ( this.running ) {
+      this.cancel();
+    } else {
+      this.stop();
+    }
+  }
+
+  onSwitchError() {
+    // Stop validator
+    this.stop();
+  }
+
+  cancel() {
+    this.emit('cancel');
+  }
+
+  stop() {
+    this.logger.log("Stopping validator");
+
+    if (this[RUNNING_STATUS]) {
+      this[RUNNING_STATUS] = false;
+      this.emit("stop");
+    }
+  }
+
+  handleError(err) {
+    if (err.message === "cancel") {
+      if ( this.running ) {
+        this.logger.log("Validator Cancelled");
+      }
+      this.stop();
+    } else {
+      this.logger.log(`${err.message} ${`STACK`.black.bold} ==> ${err.stack.gray}`, "ERROR");
+      this.switch.error();
+    }
+  }
+
+  get running () {
+    return this[RUNNING_STATUS];
+  }
+
+  async validate() {
+    (new Promise(this.startCancellableValidator.bind(this)))
+    .catch(this.handleError.bind(this));
+  }
+
+  async startCancellableValidator(resolve, reject) {
+    this.on('cancel', () => {
+      // Throw an error in order to cancel current validation process
+      reject(new Error('cancel'));
+    });
+
+    const strapi = await adminStrapi();
+
+    const queryParams = {
+      _limit: 9999,
+      status: "published",
+    };
+
+    // Include all products if forced is true
+    if (this.forced && queryParams.status) {
+      delete queryParams.status;
+    }
+
+    const sources = await strapi.services.source.find();
+    const foundProducts = await strapi.services.product.find(queryParams);
+    const productsWithIssues = [];
+
+    // Sources
+    const ebaySource = sources.find(({ name }) => /ebay/i.test(name));
+    const aliexpressSource = sources.find(({ name }) => /ali/i.test(name));
+
+    this.logger.log(`Running validator on ${foundProducts.length} product(s)...`.cyan);
+
+    for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
+      const product = foundProducts[i];
+      const productIssues = [];
+
+      this.logger.log(
+        `[ ${i + 1} of ${foundProducts.length} ]`.cyan.bold +
+          ` Validating - [${String(product.id).bold}] ${product.title}`
+      );
+
+      // Validate amazon link
+      if (!isAmazonLink(product.amazon_url)) {
+        productIssues.push("amazon_link_invalid");
+      } else {
+        try {
+          const scrapedDetails = await scrapeAmazonProduct(
+            product.amazon_url,
+            "en",
+            true
+          );
+
+          if (!scrapedDetails) {
+            productIssues.push("amazon_link_unavailable");
+          }
+        } catch (err) {
+          productIssues.push("amazon_link_unavailable");
+        }
+      }
+
+      // Validate other URLs
+      if (product.url_list && product.url_list.length) {
+        for (const urlData of product.url_list) {
+          switch (urlData.source.id) {
+            // Validate Ebay
+            case ebaySource.id:
+              if (!(await getDetailsFromEbayURL(urlData.url))) {
+                productIssues.push("ebay_link_invalid");
+              }
+              break;
+
+            // Validate AliExpress
+            case aliexpressSource.id:
+              try {
+                if ( !(await getDetailsFromAliExppressURL(urlData.url)) ) {
+                  throw new Error('Invalid AlixExpress Link')
+                }
+              } catch (err) {
+                productIssues.push("aliexpress_link_invalid");
+              }
+              break;
+          }
+        }
+      }
+
+      if (productIssues.length) {
+        product.product_issues = {};
+
+        productIssues.forEach((product_issue) => {
+          product.product_issues[product_issue] = true;
+        });
+
+        // Save product as draft
+        product.status = "draft";
+        await strapi.services.product.updateProduct(
+          product.id,
+          { status: "draft", product_issues: product.product_issues },
+          { price: false, amazonDetails: false },
+          { change_type: "product_validator_results" }
+        );
+
+        this.logger.log(
+          `Issue(s) were found for [`.yellow +
+            String(product.id).yellow.bold +
+            `] ${product.title}`.yellow,
+          "ERROR"
+        );
+        productsWithIssues.push(product.id);
+      }
+    }
+
+    this.logger.log(" DONE ".bgGreen.white.bold);
+    this.switch.stop();
+  }
+}
+
+ProductValidator.name = 'Product Validator';
+
+// Initialize Product Validator
+(new ProductValidator(forced)).init();
