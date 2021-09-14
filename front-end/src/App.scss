@@ -2517,6 +2517,11 @@
 	border: none;
 	border: 1px solid #ececec;
 	border-radius: 30px 0 0 30px;
+
+	@include smaller_tablet {
+		margin-left: -20px;
+		width: 380px;
+	}
 }
 .shop-newsletter .newsletter-inner button{
 	border:none;
@@ -3666,6 +3671,7 @@
 .loading-container {
 	height: 500px;
 	width: 100%;
+	z-index: -6;;
 }
 
 /*=============================
@@ -3673,6 +3679,7 @@
 ===============================*/
     .loading {
 	    text-align: center;
+		z-index: -5;
     }
 
     .loading-icon {

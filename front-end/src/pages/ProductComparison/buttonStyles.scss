@@ -1,0 +1,22 @@
+@import 'base/scss';
+
+.buttonStyle {
+    font-size: 10px;
+    border-radius: 14px;
+    padding: 5px 11px;
+    background-color: #96969a;
+    border: 1px solid #96969a;
+    color: white;
+
+    &:hover {
+        background-color: $red;
+        color: white;
+        border: 1px solid $red;
+    }
+}
+
+.button-active {
+    background-color: $red;
+    color: white;
+    border: 1px solid $red;
+}

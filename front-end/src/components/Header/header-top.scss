@@ -16,6 +16,20 @@
 
     &__left {
         @include bootstrap(col-lg-5 col-md-12 col-12);
+
+        .list-main {
+            @include custom_laptop {
+                li {
+                    margin-top: 35px;
+                }
+            }  
+            
+            @include smaller_tablet {
+                li {
+                    margin-left: -85px;
+                }
+            }
+        }
     }
 
     &__right {
@@ -23,6 +37,22 @@
 
         .list-main {
             @include bootstrap(float-end);
+        }
+        
+        @include custom_laptop {
+            .list-main {
+                position: absolute;
+                margin-top: -25px;
+                margin-left: 28em;
+            }
+        }
+
+        @include smaller_tablet {
+            .list-main {
+                position: absolute;
+                margin-top: -25px;
+                margin-left: 22em;
+            }
         }
     }
     

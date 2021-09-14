@@ -13,7 +13,7 @@ $item-layout: (
 
 .natural-list {
     position: relative;
-    margin-top: 50px;
+    margin-top: 95px;
 
     & + & {
         margin-top: 50px;
@@ -199,16 +199,75 @@ $item-layout: (
         border: 1px solid $gray-900;
         border-radius: 4px;
         cursor: default;
+
+        @include medlarge_desktop {
+            span {
+                margin-left: -75pt;
+            }
+         }
+
+        @include desktop {
+           span {
+               margin-left: -100pt;
+           }
+        }
+
+        @include small_desktop {
+            span {
+                margin-left: -115pt;
+            }
+        }
+
+        @include custom_desktop {
+            span {
+                font-size: 14px;
+            }
+        }
+
+        @include custom_laptop {
+            span {
+                margin-left: -165pt;
+                font-size: 10px;
+            }
+        }
     }
 
 
     &__mfd {
+        display: flex;
+        justify-content: center;
         align-items: right;
         font-size: 15px;
         text-shadow: 2px 1px 3px rgb(214, 214, 214);
         margin-top: -48px;
         margin-left: 59em;
         color: $white;
+
+        @include medlarge_desktop {
+            margin-left: 47em;
+        }
+
+        @include desktop {
+            margin-left: 46em;
+        }
+
+        @include custom_desktop {
+            margin-left: 37em;
+            font-size: 14px;
+        }
+
+        @include small_desktop {
+            margin-left: 38em;
+        }
+
+        @include laptop {
+            margin-left: 37em;
+        }
+
+        @include custom_laptop {
+            margin-left: 31em;
+            font-size: 11px;
+        }
     }
 
     .left-arrow {
@@ -224,6 +283,15 @@ $item-layout: (
 
         &:hover {
             color: $red;
+        }
+
+        @include custom_laptop {
+            margin-top: -36px;
+            margin-left: 4px;
+
+            i {
+                font-size: 15px;
+            }
         }
         
     }
@@ -242,50 +310,94 @@ $item-layout: (
             color: $red;
         }
 
+        @include medlarge_desktop {
+            margin-left: 829px;   
+        }
+        
+
+        @include desktop {
+            margin-left: 828px;   
+        }
+
+        @include custom_desktop {
+            margin-left: 650px;
+        }
+
+        @include small_desktop {
+            margin-left: 649px;   
+        }
+
+        @include laptop {
+            margin-left: 650px;
+        }
+
+        @include custom_laptop {
+            margin-top: -36px;
+            margin-left: 414px;
+
+            i {
+                font-size: 15px;
+            }
+        }
+
     }
 
     &__price-cat {
-        display: flex;
-        position: absolute;
-        margin-top: -40px;
-        margin-left: 505pt;
-
-        button {
-            background-color: $white;
-            border: 5px solid $gray-900;
-            border-radius: 8px;
-            font-size: 13px;
-            font-weight: bold;
-            height: 32px;
-            line-height: 16px;
-            width: 50px;
-        }
-
-        button:hover {
-            background-color: $red;
-            color: $white
-        }
-    }
-
-    .price-cat {
         margin:0;
         padding:0;
         position:absolute;
         left: 485pt;
         top: -36px;
         list-style:none;
+
+        @include medlarge_desktop {
+            margin-left: -105pt;
+        }
+        
+        @include desktop {
+            margin-left: -130pt;
+        }
+
+        @include custom_desktop {
+            margin-left: -218pt;
+        }
+
+        @include small_desktop {
+            margin-left: -200pt;
+        }
+
+        
+        @include custom_desktop {
+            top: -34px;
+            margin-left: -210pt;
+        }
+
+        @include laptop {
+            margin-left: -218pt;
+            flex-shrink: 0;
+        }
+
+        @include custom_laptop {
+            margin-left: -360pt;
+        }
     }
 
-    .price-cat button {
+    &__price-cat button {
         float: left;
         height: 24px;
         line-height: 22px;
         position: relative;
         font-size: 11px;
         font-weight: bolder;
+
+        @include custom_desktop {
+            height: 20px;
+            line-height: 18px;
+            font-size: 9px;
+        }
     }
 
-    .price-cat button {
+    &__price-cat button {
         margin-left: 20px;
         padding: 0 20px 0 12px;
         background: $gray-300;
@@ -301,9 +413,17 @@ $item-layout: (
         -webkit-box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
         -moz-box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
         box-shadow: 1px 3px 3px 1px rgba(0,0,0,0.5);
+
+        @include custom_desktop {
+            padding: 0 18px 0 10px;
+            margin-left: 15px;
+            -webkit-box-shadow: 0.5px 1.5px 1.5px 0.5px rgba(0,0,0,0.5);
+            -moz-box-shadow: 0.5px 1.5px 1.5px 0.5px rgba(0,0,0,0.5);
+            box-shadow: 0.5px 1.5px 1.5px 0.5px rgba(0,0,0,0.5);
+        }
     }
 
-    .price-cat button:before {
+    &__price-cat button:before {
         content: "";
         float: left;
         position: absolute;
@@ -314,9 +434,13 @@ $item-layout: (
         border-color: $gray-300  transparent  $gray-300 transparent;
         border-style: solid;
         border-width: 11px 12px 11.2px 0;
+
+        @include custom_desktop {
+            border-width: 9px 10px 9.2px 0;
+        }
     }
 
-    .price-cat button:after {
+    &__price-cat button:after {
         content: "";
         position: absolute;
         top: 10px;
@@ -331,12 +455,18 @@ $item-layout: (
         -moz-box-shadow: -1px -1px 2px #004977;
         -webkit-box-shadow: -1px -1px 2px #004977;
         box-shadow: -1px -1px 2px #004977;
+
+        @include custom_laptop {
+            top: 8px;
+        }
     }
-    .price-cat button:hover {
+
+    &__price-cat button:hover {
         background: $red;
         color: $white;
     }
-    .price-cat button:hover:before {
+
+    &__price-cat button:hover:before {
         border-color: $red transparent $red transparent;
     }
 

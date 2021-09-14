@@ -89,7 +89,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
             {currentRouteConfig.path === '/' ? null :
                 <>
                     <div className="natural-list__separator" ref={itemRef} data-category={id}>
-                        {label.toUpperCase()}
+                        <span>{label.toUpperCase()}</span>
                         <div className="natural-list__mfd">
                             {getQuarter(date)}
                         </div>
@@ -97,7 +97,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                     <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
                     <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
                     {/* <div className="natural-list__price-cat"> */}
-                    <div className="price-cat">
+                    <div className="natural-list__price-cat">
                         <button>$</button>
                         <button>$$</button>
                         <button>$$$</button>
