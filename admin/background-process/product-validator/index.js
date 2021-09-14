@@ -27,7 +27,7 @@ class ProductValidator extends BackgroundProcess {
   }
 
   onSwitchStart() {
-    this.logger.log("Starting validator");
+    this.logger.log("Starting validator");''
 
     if (this[RUNNING_STATUS]) {
       return;
