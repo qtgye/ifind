@@ -12,7 +12,6 @@ const HeaderSideNavMenuItem = ({ category }) => {
     const grandChildren = getGrandchildrenCategories(category?.children || []);
     const len = grandChildren.length;
     const str = category.label.label;
-    //const labelLength = category.label.label.length;
     const withSpace = str.indexOf(" ");
     const categoryRef = useRef();
 
@@ -32,7 +31,7 @@ const HeaderSideNavMenuItem = ({ category }) => {
 
     useEffect(() => {
         onActiveCategory(activeCategory);
-        //console.log(activeCategory, grandChildren);
+        //console.log(category);
     }, [activeCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const categoryClick = () => {
@@ -44,11 +43,11 @@ const HeaderSideNavMenuItem = ({ category }) => {
 
     return (
         <div ref={categoryRef} key={category.id} className={["list", activeCategory.toString() === category.id ? "active" : ""].join(" ")}>
-            <button onClick={categoryClick}>
+            {category.parent === null ? "" : <button onClick={categoryClick}>
                 <IfindIcon icon={category.icon} className="header-side-nav__icon" />
                 <span className={["category-label", withSpace > 0 ? "change-width" : ""].join(" ")}>{category.label.label}</span>
                 {len === 0 ? "" : <div className="num-of-elements">{len}</div>}
-            </button>
+            </button>}
             {
                 // checked ?
                 subCategories && category.children &&

@@ -52,7 +52,7 @@ const ContactForm = () => {
                         </div>
                         <div className="col-12">
                             <div className="form-group message">
-                                <label>your message<span>*</span></label>
+                                <label>Your Message<span>*</span></label>
                                 <textarea name="message" placeholder="" required></textarea>
                             </div>
                         </div>

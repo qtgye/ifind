@@ -5,23 +5,28 @@ import { ProductComparisonContextProvider, useProductComparison } from '@context
 import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import NaturalList from '@components/NaturalList';
+import IfindIcon from '@components/IfindIcon';
 
+import './buttonStyles.scss';
 // TEST BLOCK
 import { useCategoryTree } from '@contexts/categoriesContext';
+import { useSubCategories } from '../../contexts/categoriesContext';
+import Carousel from '../../components/Carousel';
 // END TEST BLOCK
 
 const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const { productComparisonList, setCurrentListCategory, loading } = useProductComparison();
   const icon = '/images/loading.png';
   const prodcompRef = useRef();
+  const { setSubCategories } = useSubCategories();
 
   // ---- TEST BLOCK
   const categoryTree = useCategoryTree();
-  const [ currentCategory, setCurrentCategory ] = useState();
+  const [currentCategory, setCurrentCategory] = useState();
 
   useEffect(() => {
     setCurrentListCategory(currentCategory);
-  }, [ currentCategory, setCurrentListCategory ]);
+  }, [currentCategory, setCurrentListCategory]);
   // --- END TEST BLOCK
 
   const { setActiveCategory } = useContext(GlobalStateContext);
@@ -50,48 +55,62 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
     }
   }, [observerRef]);
 
+  const onCategoryNavClick = useCallback((category) => {
+    setSubCategories(category.children);
+    window.scrollTo(0, 0)
+  }, [setSubCategories]);
+
+  const onCategoryLoadClick = useCallback((e, id) => {
+    e.preventDefault();
+    setCurrentCategory(id);
+  }, [setCurrentCategory]);
+
   return (
     <GeneralTemplate>
       <div ref={prodcompRef}
         className="product-comparison"
       >
         <div className="container" style={{ paddingLeft: '280px' }}>
-          {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
-          <div className="product-comparison__list">
+          <div className="product-comparison__list" style={{ zIndex: -1 }}>
 
             {/* ---- TEST BLOCK */}
-            <ul style={{ display: 'flex', columnGap: 10, padding: 10 }} hidden>
+            <nav style={{
+              position: 'sticky',
+              top: '61px',
+              height: 50,
+              width: 1045,
+              backgroundColor: '#212121',
+              border: '1px solid white',
+              borderRadius: 6,
+              zIndex: 2,
+              marginLeft: -5,
+              marginBottom: -46,
+            }}>
+              <ul style={{
+                display: 'flex',
+                columnGap: 23,
+                padding: 10,
+                position: 'sticky',
+                zIndex: 3,
+              }} >
                 {
                   categoryTree.map((category, index) => (
                     <li key={category.id}>
-                      <button
-                        style={{
-                          padding: '10px 15px',
-                          backgroundColor: (
-                            currentCategory ?
-                              category.id === currentCategory ? 'green' : 'white'
-                              : index === 0 ? 'green' : 'white'
-                          ),
-                          color: (
-                            currentCategory ?
-                              category.id === currentCategory ? 'white' : 'gray'
-                              : index === 0 ? 'white' : 'gray'
-                          ),
-                        }}
-                        onClick={e => {
-                          e.preventDefault();
-                          setCurrentCategory(category.id)
-                        }}
+                      <button className={["buttonStyle", currentCategory ? category.id === currentCategory ? "button-active" : ""
+                        : index === 0 ? "button-active" : ""].join(" ")}
+                        onClick={(e) => { onCategoryLoadClick(e, category.id); onCategoryNavClick(category); }}
                       >
-                          {category.label.label}
+                        <IfindIcon icon={category.icon} style={{ height: 15, width: 15, marginRight: 5 }} />
+                        <span>{(category.label.label).split(" ")[0]}</span>
                       </button>
                     </li>
                   ))
                 }
               </ul>
-              {/* ---- END TEST BLOCK */}
+            </nav>
+            {/* ---- END TEST BLOCK */}
 
-
+            {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
             {!loading &&
               productComparisonList.map(({ category, products }) => (
                 <NaturalList
@@ -108,7 +127,14 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
           </div>
         </div>
       </div>
-    </GeneralTemplate>
+      <div>
+        <Carousel categories={categoryTree}
+          currentCategory={currentCategory}
+          onCategoryLoadClick={onCategoryLoadClick}
+          onCategoryNavClick={onCategoryNavClick}
+        />
+      </div>
+    </GeneralTemplate >
   )
 });
 

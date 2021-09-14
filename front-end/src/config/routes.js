@@ -18,16 +18,16 @@ const routes = [
         withSideNav: true,
         exact: true,
     },
-    {
-        path: '/findtube',
-        componentName: 'FindTubePage',
-        label: 'Findtube',
-    },
-    {
-        path: '/blog',
-        componentName: 'BlogPage',
-        label: 'Blog',
-    },
+    // {
+    //     path: '/findtube',
+    //     componentName: 'FindTubePage',
+    //     label: 'Findtube',
+    // },
+    // {
+    //     path: '/blog',
+    //     componentName: 'BlogPage',
+    //     label: 'Blog',
+    // },
     {
         path: '/contact',
         componentName: 'ContactPage',
@@ -71,7 +71,7 @@ export const dynamicRoutes = [
 ];
 
 
-export const navigationRoutes = ['/', '/productcomparison', '/findtube', '/blog', '/contact'];
+export const navigationRoutes = ['/', '/productcomparison', '/contact'];
 export const footerRoutes = [
     // '/about-us',
     // '/agb',
