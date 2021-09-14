@@ -2,53 +2,63 @@ export const slideWidth = 16;
 
 export const _items = [
     {
-        player: {
-            title: 'Efren Reyes',
+        category: {
+            id: 9,
+            label: 'Electronics',
         },
     },
     {
-        player: {
-            title: "Ronnie O'Sullivan",
+        category: {
+            id: 35,
+            label: 'Entertainment',
         },
     },
     {
-        player: {
-            title: 'Shane Van Boening',
+        category: {
+            id: 47,
+            label: 'Furniture',
         },
     },
     {
-        player: {
-            title: 'Mike Sigel',
+        category: {
+            id: 12,
+            label: 'Grocery',
         },
     },
     {
-        player: {
-            title: 'Mike Sigel',
+        category: {
+            id: 17,
+            label: 'Health',
         },
     },
     {
-        player: {
-            title: 'Mike Sigel',
+        category: {
+            id: 15,
+            label: 'Hobby',
         },
     },
     {
-        player: {
-            title: 'Willie Mosconi',
+        category: {
+            id: 72,
+            label: 'Kids',
         },
     },
     {
-        player: {
-            title: 'Willie Mosconi',
+        category: {
+            id: 6,
+            label: 'Mode',
         },
     },
     {
-        player: {
-            title: 'Willie Mosconi',
+        category: {
+            od: 19,
+            label: 'Tools',
         },
     },
     {
-        player: {
-            title: 'Willie M',
+        category: {
+            id: 36,
+            label: 'EverythingElse',
         },
     },
 ];
@@ -66,7 +76,7 @@ export const createItem = (position, idx) => {
         styles: {
             transform: `translateX(${position * slideWidth}rem)`,
         },
-        player: _items[idx].player,
+        category: _items[idx].category,
     };
 
     switch (position) {

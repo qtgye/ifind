@@ -35,14 +35,14 @@ a {
 }
 
 .carousel__wrap {
-    top: -10%;
+    top: -20%;
     align-items: center;
     display: flex;
     flex: 1;
     justify-content: center;
     position: relative;
     width: 51%;
-    left: 50%;
+    left: 57%;
     transform: translateX(-50%);
 }
 
@@ -58,14 +58,14 @@ a {
     height: 40%;
     overflow: hidden;
     position: relative;
-    width: 70%;
+    width: 68%;
     //background-color: gray;
 }
 
 .carousel__slide-list {
     top: 6rem;
     height: 100%;
-    left: 45%;
+    left: 46%;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -97,53 +97,35 @@ a {
         font-weight: bold;
         height: 25px;
         object-fit: cover;
-        transition: all 0.5s ease;
+        transition: all 0.4s ease;
         width: 130px;
+        color: black;
     }
 
     &::after {
         align-items: center;
-        background: rgba(#bc0031, 0.8);
-        color: white;
+        background: rgba(#cf0138, 0.7);
         content: '';
         display: flex;
         height: 27px;
         justify-content: center;
-        opacity: 0.6;
+        opacity: 0.5;
         position: absolute;
-        transition: all 0.5s ease;
+        transition: all 0.4s ease;
         width: 140px;
     }
 
     &:hover {
         &::after {
-            opacity: 1.5;
-        }
+            opacity: 1;
+            color: #000;
+        }      
 
         button {
-            transform: scale(1.3);
-            color: black;
-            opacity: 1;
+            transform: scale(1.2);
         }
     }
 }
-
-// .carousel-slide-item__body {
-//     bottom: -2.5rem;
-//     height: 10%;
-//     position: absolute;
-
-//     h4 {
-//         margin: 0.7rem 0 0;
-//         text-transform: uppercase;
-//     }
-
-//     p {
-//         font-size: 1.2rem;
-//         line-height: 1.3;
-//         margin: 0.7rem 0 0;
-//     }
-// }
 
 .carousel__btn {
     align-items: center;
@@ -184,7 +166,7 @@ a {
 
 .carousel__dots {
     display: inline-block;
-    left: 50%;
+    left: 49.4%;
     margin-top: 6rem;
     position: absolute;
     transform: translateX(-50%);
@@ -201,7 +183,7 @@ a {
         width: 2rem;
 
         &.active {
-            background: black;
+            background: #bc0031;
         }
     }
 }

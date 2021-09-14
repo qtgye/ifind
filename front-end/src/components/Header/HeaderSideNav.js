@@ -2,25 +2,24 @@ import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
-import { useSubCategories, useCategoryTree } from '@contexts/categoriesContext';
+import { useSubCategories } from '@contexts/categoriesContext';
 import { homedata } from '@mocks/components/homesidenav';
 import eventBus from '@utilities/EventBus';
 
 import './header-side-nav.scss';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import HeaderSideNavButton from './HeaderSideNavButton';
-import HeaderCategoriesNav from './HeaderCategoriesNav';
 
 const HeaderSideNav = ({ withSideNav }) => {
 
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { subCategories } = useSubCategories();
-    const categoryTree = useCategoryTree();
+    //const categoryTree = useCategoryTree();
     const { on } = eventBus;
     const listRef = useRef();
 
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(true);
     const changeVisibility = () => setIsVisible(!isVisible);
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
@@ -107,8 +106,6 @@ const HeaderSideNav = ({ withSideNav }) => {
                     currentRouteConfig.path === '/productcomparison' ?
                         (isVisible && checked ? <HeaderSideNavButton /> : "") : null
                 }
-
-                {currentRouteConfig.path === '/' ? "" : <HeaderCategoriesNav categories={categoryTree} visible={setIsVisible} />}
 
             </div >
 

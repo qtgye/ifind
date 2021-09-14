@@ -164,6 +164,8 @@
     &__label {
         display: block;
         text-align: center;
+        line-height: 24px;
+        height: 25px;
         border-bottom: 1px solid $gray-300;
 
         .label {

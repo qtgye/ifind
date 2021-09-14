@@ -23,11 +23,11 @@ const routes = [
     //     componentName: 'FindTubePage',
     //     label: 'Findtube',
     // },
-    {
-        path: '/blog',
-        componentName: 'BlogPage',
-        label: 'Blog',
-    },
+    // {
+    //     path: '/blog',
+    //     componentName: 'BlogPage',
+    //     label: 'Blog',
+    // },
     {
         path: '/contact',
         componentName: 'ContactPage',
@@ -71,7 +71,7 @@ export const dynamicRoutes = [
 ];
 
 
-export const navigationRoutes = ['/', '/productcomparison', '/blog', '/contact'];
+export const navigationRoutes = ['/', '/productcomparison', '/contact'];
 export const footerRoutes = [
     // '/about-us',
     // '/agb',
