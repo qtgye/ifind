@@ -17,9 +17,11 @@ const forced = 'force' in args;
 const RUNNING_STATUS = Symbol();
 
 class ProductValidator extends BackgroundProcess {
-  constructor(forced = false) {
+  constructor({
+    forced = false,
+  }) {
     super({
-      baseDir: path.resolve(__dirname)
+      baseDir: path.resolve(__dirname),
     });
 
     this.forced = forced;
@@ -208,5 +210,11 @@ class ProductValidator extends BackgroundProcess {
 
 ProductValidator.name = 'Product Validator';
 
-// Initialize Product Validator
-(new ProductValidator(forced)).init();
+const productValidator = new ProductValidator({ forced });
+
+// Initialize Product Validator if provided through cli
+if ( args.init ) {
+  productValidator.init();
+}
+
+module.exports = productValidator;
