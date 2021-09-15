@@ -1,9 +1,6 @@
-require('colors');
-require('../../helpers/customGlobals');
-
 const EventEmitter = require("events");
-const Logger = require('./inc/Logger');
-const Switch = require('./inc/Switch');
+const Logger = require("./inc/Logger");
+const Switch = require("./inc/Switch");
 
 const EVENT_EMITTER = Symbol();
 
@@ -28,38 +25,43 @@ class BackgroundProcess {
     this.logger = new Logger({
       baseDir: this.baseDir,
     });
-
-    // Notify
-    this.logger.log(`Initializing ${this.__proto__.constructor.name}`);
   }
 
   init() {
+    // Notify
+    this.logger.log(`Initializing ${this.__proto__.constructor.name}`);
+
     // Ensure that switch is on STOP state upon initialization
     this.switch.stop();
 
     // Listen to start
-    this.switch.listen('START', () => {
-        if ( typeof this.onSwitchStart === 'function' ) {
-          this.onSwitchStart();
-        }
-      });
+    this.switch.listen("START", () => {
+      if (typeof this.onSwitchStart === "function") {
+        this.onSwitchStart();
+      }
+    });
 
     // Listen to stop
-    this.switch.listen('STOP', () => {
-        if ( typeof this.onSwitchStop === 'function' ) {
-          this.onSwitchStop();
-        }
-      });
+    this.switch.listen("STOP", () => {
+      if (typeof this.onSwitchStop === "function") {
+        this.onSwitchStop();
+      }
+    });
 
     // Listen to error
-    this.switch.listen('ERROR', () => {
-        if ( typeof this.onSwitchError === 'function' ) {
-          this.onSwitchError();
-        }
-      });
+    this.switch.listen("ERROR", () => {
+      if (typeof this.onSwitchError === "function") {
+        this.onSwitchError();
+      }
+    });
 
     // Initialize switch
     this.switch.init();
+
+    // After init
+    if ( typeof this.afterInit === 'function' ) {
+      this.afterInit();
+    }
   }
 
   on(event, callback) {

@@ -77,7 +77,7 @@ class Switch {
       }
     });
 
-    this.logger.log('Initialized switch file watcher for Product Validator');
+    this.logger.log('Initialized switch file watcher.');
   }
 }
 
