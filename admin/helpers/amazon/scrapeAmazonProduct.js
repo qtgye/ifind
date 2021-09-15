@@ -40,6 +40,8 @@ const selectorsToRemove = [
   '.caretnext',
   '#productAlert_feature_div',
   '#atfCenter16_feature_div',
+  'style',
+  'script',
 ];
 
 const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly = false) => {
@@ -79,11 +81,11 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     });
 
     // Apply scraped details
-    scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
+    scrapedData.title = titleElement ? titleElement.textContent.trim().replace(/\n/, '') : '';
     scrapedData.image = highResImage ? highResImage[0] : '';
 
-    // Ensure utf-8 encoding
-    scrapedData.details_html = detailElement.outerHTML.trim();
+    // Apply details_html
+    scrapedData.details_html = detailElement.outerHTML.trim().replace(/\n+/g, '\n');
   }
 
   // Go to english site for price and release_date

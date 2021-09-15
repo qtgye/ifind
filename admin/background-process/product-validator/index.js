@@ -102,8 +102,9 @@ class ProductValidator extends BackgroundProcess {
     const strapi = await adminStrapi();
 
     const queryParams = {
-      _limit: 9999,
       status: "published",
+      _limit: 9999,
+      _sort: 'id:desc',
     };
 
     // Include all products if forced is true
