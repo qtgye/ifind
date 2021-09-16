@@ -159,7 +159,7 @@ const filterProductsWithProblems = (products) => {
     }
 
     // Check title and details_html for unnecessary newlines
-    if ( product.title.match(/\n/) || product.title.details_html(/\n+/g) ) {
+    if ( product.title.match(/\n/) || product.details_html.match(/\n+/g) ) {
       return true;
     }
   });
