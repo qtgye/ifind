@@ -124,6 +124,10 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     'upgrade-insecure-requests': '1',
   } });
 
+
+  const englishPageHTML = await englishSiteResponse.text();
+  const dom = new JSDOM(englishPageHTML);
+
   // This might be a server error
   // So we won't be able to get product data
   // But we don't want to flag this as a product issue.
@@ -137,10 +141,6 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
   if ( englishSiteResponse.status >= 400 ) {
     throw new Error(`Unable to parse price for the product from Amazon. Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
   }
-
-
-  const englishPageHTML = await englishSiteResponse.text();
-  const dom = new JSDOM(englishPageHTML);
 
   // Get the price
   const priceElement = dom.window.document.querySelector(priceSelector);
