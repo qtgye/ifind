@@ -13,8 +13,9 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
 const BackgroundProcess = require('../_lib/BackgroundProcess');
 
 const forced = 'force' in args;
-
 const RUNNING_STATUS = Symbol();
+const REQUEST_THROTTLE = 10000;
+const REQUEST_CHUNK = 10; // How many products per throttled request
 
 class ProductValidator extends BackgroundProcess {
   constructor({
@@ -125,13 +126,12 @@ class ProductValidator extends BackgroundProcess {
     this.logger.log(`Running validator on ${foundProducts.length} product(s)...`.cyan);
 
     for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
-      // For every 10 products processed,
-      // add a 3s delay before continuing
-      if ( i > 0 && i % 10 === 0 ) {
-        this.logger.log(`Pausing for 3 seconds before proceeding...`);
-        await new Promise(resolve => setTimeout(resolve, 3000));
+      // For every chunk of products processed,
+      // add delay before continuing
+      if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
+        this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
+        await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
       }
-
 
       const product = foundProducts[i];
       const productIssues = [];
@@ -143,6 +143,7 @@ class ProductValidator extends BackgroundProcess {
 
       // Validate amazon link
       if (!isAmazonLink(product.amazon_url)) {
+        console.error(`Invalid amazon url for [ ${product.id} ] - ${product.title}`)
         productIssues.push("amazon_link_invalid");
       } else {
         try {

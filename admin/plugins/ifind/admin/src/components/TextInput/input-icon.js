@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 
 const InputIcon = ({ icon, iconLink }) => {
@@ -10,6 +9,7 @@ const InputIcon = ({ icon, iconLink }) => {
 
   if (iconLink) {
     props.href = iconLink;
+    props.target = "_blank";
   }
 
   return icon ? (
