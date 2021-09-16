@@ -148,6 +148,7 @@ class ProductValidator extends BackgroundProcess {
             productIssues.push("amazon_link_unavailable");
           }
         } catch (err) {
+          console.error(err);
           productIssues.push("amazon_link_unavailable");
         }
       }
