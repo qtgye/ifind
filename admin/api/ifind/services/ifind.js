@@ -76,20 +76,20 @@ module.exports = {
     }
 
     // Get the switch module
-    const _switch = require(path.resolve(backgroundProcessFolder, "lib/switch"));
+    const backgroundProcessModule = require(path.resolve(backgroundProcessFolder));
 
     // Throw error if no swtich module is found for the background process
-    if ( !_switch ) {
-      throw new Error(`No switch module found for background process: ${backgroundProcessName}`);
+    if ( !backgroundProcessModule ) {
+      throw new Error(`No module found for background process: ${backgroundProcessName}`);
     }
 
     // Trigger process
     switch (status) {
       case 'START':
-        _switch.start();
+        backgroundProcessModule.switch.start();
         break;
       case 'STOP':
-        _switch.stop();
+        backgroundProcessModule.switch.stop();
         break;
     }
 

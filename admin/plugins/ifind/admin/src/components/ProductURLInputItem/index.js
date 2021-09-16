@@ -1,13 +1,13 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { InputText, InputNumber, Label, Button } from '@buffetjs/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Tooltip } from '@buffetjs/styles';
 import { v4 as uuid } from 'uuid';
 
 import { amazonLink } from '../../helpers/url';
 import { useSourceRegion } from '../../providers/sourceRegionProvider';
 import InputBlock from '../InputBlock';
 import URLTypeSelect from '../URLTypeSelect';
+import TextInput from '../TextInput';
 
 const ProductURLInputItem = ({ source, region, url, price, onChange, onDelete, softId }) => {
   const { sources } = useSourceRegion();
@@ -89,13 +89,14 @@ const ProductURLInputItem = ({ source, region, url, price, onChange, onDelete, s
           value={priceInput}
         />
       </InputBlock>
-      <InputBlock className="col-md-6">
-        <Label>URL</Label>
-        <InputText
-          onChange={({ target: { value }}) => onURLInput(value)}
-          value={urlInput}
-        />
-      </InputBlock>
+      <TextInput
+        className="col-md-6"
+        label='URL'
+        onChange={(value) => onURLInput(value)}
+        value={urlInput}
+        icon='external-link-alt'
+        iconLink={urlInput}
+      />
       <InputBlock className="col-md-1">
         <Label>&nbsp;</Label>
         <div className="product-url-input__item-controls">

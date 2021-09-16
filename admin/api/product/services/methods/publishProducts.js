@@ -7,6 +7,7 @@ const updateProduct = require('./updateProduct');
  module.exports = async () => {
   const allProducts = await strapi.services.product.find({
     _limit: 99999,
+    status: 'draft',
   });
 
   // Extract and set published data for each product

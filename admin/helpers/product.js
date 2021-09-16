@@ -154,19 +154,30 @@ const filterProductsWithProblems = (products) => {
 
     // Check attrs_rating
     // Each product should have attrs_rating as it's being supplied by default
-    if (
-      (!product.attrs_rating || !product.attrs_rating.length) &&
-      productChanges.some(
-        ({ state }) => state && state.attrs_rating && state.attrs_rating.length
-      )
-    ) {
+    if ( hasInvalidRating(product) ) {
+      return true;
+    }
+
+    // Check title and details_html for unnecessary newlines
+    if ( product.title.match(/\n/) || product.details_html.match(/\n+/g) ) {
       return true;
     }
   });
 };
 
+// Checks if a given product has invalid Product Attribute Rating
+const hasInvalidRating = (product) => (
+  !product.attrs_rating ||
+  !product.attrs_rating.length ||
+  product.attrs_rating.some(attr_rating => (
+    !attr_rating ||
+    !attr_rating.product_attribute
+  ))
+);
+
 module.exports = {
   fetchProductDetails,
   getProductDetails,
   filterProductsWithProblems,
+  hasInvalidRating,
 };

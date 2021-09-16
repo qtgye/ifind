@@ -1,3 +1,6 @@
+const path = require('path');
+const fs = require('fs-extra');
+
 const fetch = require('node-fetch');
 const moment = require('moment');
 const { JSDOM } = require('jsdom');
@@ -7,13 +10,24 @@ const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
 
-const fetchHeaders = {
-  'origin': 'https://www.amazon.de',
-  'referer': 'https://www.amazon.de',
-  'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
-};
+// Allow each request to use a random user agent
+// To avoid getting blocked by Amazon
+USER_AGENTS = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246',
+  'Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9',
+  'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36',
+  'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1',
+];
 
-const priceSelector = '#priceblock_ourprice, #priceblock_dealprice, [data-action="show-all-offers-display"] .a-color-price';
+const priceSelector = [
+  '#price_inside_buybox',
+  '#priceblock_ourprice',
+  '#priceblock_dealprice',
+  '[data-action="show-all-offers-display"] .a-color-price',
+  '#usedOnlyBuybox .offer-price',
+  '#olp_feature_div .a-color-price',
+].join(',');
 const imageSelector = '#landingImage[data-a-dynamic-image]';
 const titleSelector = '#title';
 const additionalInfoTableSelector = '#productDetails_detailBullets_sections1';
@@ -40,6 +54,8 @@ const selectorsToRemove = [
   '.caretnext',
   '#productAlert_feature_div',
   '#atfCenter16_feature_div',
+  'style',
+  'script',
 ];
 
 const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly = false) => {
@@ -51,10 +67,12 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
 
   // Scrape for all amazon details if applicable
   if ( !scrapePriceOnly ) {
-    const response = await fetch(urlWithLanguage, { headers: fetchHeaders });
+    const response = await fetch(urlWithLanguage, { headers: {
+      origin: urlWithLanguage,
+      referer: urlWithLanguage,
+      'User-Agent': USER_AGENTS[ Math.floor(Math.random() * ( USER_AGENTS.length)) ]
+    }});
     const detailPageHTML = await response.text();
-
-    console.log('Page parsed');
 
     const dom = new JSDOM(detailPageHTML);
     const titleElement = dom.window.document.querySelector(titleSelector);
@@ -79,26 +97,59 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     });
 
     // Apply scraped details
-    scrapedData.title = titleElement ? titleElement.textContent.trim() : '';
+    scrapedData.title = titleElement ? titleElement.textContent.trim().replace(/\n/, '') : '';
     scrapedData.image = highResImage ? highResImage[0] : '';
 
-    // Ensure utf-8 encoding
-    scrapedData.details_html = detailElement.outerHTML.trim();
+    // Apply details_html
+    scrapedData.details_html = detailElement.outerHTML.trim().replace(/\n+/g, '\n');
   }
 
   // Go to english site for price and release_date
-  const englishSiteResponse = await fetch(englishPageURL, { headers: fetchHeaders });
+  const englishSiteResponse = await fetch(englishPageURL, { headers: {
+    'origin': englishPageURL,
+    'referer': englishPageURL,
+    'User-Agent': USER_AGENTS[ Math.floor(Math.random() * ( USER_AGENTS.length)) ],
+    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+    'accept-encoding': 'gzip, deflate, br',
+    'accept-language': 'en-US,en;q=0.9,la;q=0.8,fil;q=0.7',
+    'cache-control': 'max-age=0',
+    'rtt': '50',
+    'sec-ch-ua': '"Google Chrome";v="93", " Not;A Brand";v="99", "Chromium";v="93"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'document',
+    'sec-fetch-mode': 'navigate',
+    'sec-fetch-site': 'same-origin',
+    'sec-fetch-user': '?1',
+    'upgrade-insecure-requests': '1',
+  } });
+
+  // This might be a server error
+  // So we won't be able to get product data
+  // But we don't want to flag this as a product issue.
+  // We'll leave the product data as is.
+  if ( englishSiteResponse.status >= 500 ) {
+    fs.outputFileSync( path.resolve(__dirname, 'page-errors', englishPageURL + '.html'), englishPageHTML);
+    console.error(`Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
+    return true;
+  }
+
+  if ( englishSiteResponse.status >= 400 ) {
+    throw new Error(`Unable to parse price for the product from Amazon. Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
+  }
+
+
   const englishPageHTML = await englishSiteResponse.text();
   const dom = new JSDOM(englishPageHTML);
 
   // Get the price
   const priceElement = dom.window.document.querySelector(priceSelector);
-
   const priceMatch = priceElement && priceElement.textContent.match(/[0-9.,]+/);
 
   // Product must be unavailable if there's no price parsed
   if ( !priceMatch ) {
-    throw new Error("Unable to parse price for the product from Amazon. Please make sure that it's currently available");
+    fs.outputFileSync( path.resolve(__dirname, 'page-errors', englishPageURL + '.html'), englishPageHTML);
+    throw new Error("Unable to parse price for the product from Amazon. Please make sure that it's currently available: " + englishPageURL);
   }
 
   scrapedData.price = priceMatch && priceMatch[0].replace(',', '') || 0;

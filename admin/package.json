@@ -16,7 +16,7 @@
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
     "currencies:import": "node scripts/currencies-import.js",
     "admin-types": "ts-node -r tsconfig-paths/register ./scripts/generateAdminTypes.ts",
-    "product-validator": "node ./background-process/product-validator"
+    "bpm:start": "node ./background-process"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",

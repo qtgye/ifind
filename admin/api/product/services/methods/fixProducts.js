@@ -1,14 +1,19 @@
-const { filterProductsWithProblems } = appRequire("helpers/product");
+const { filterProductsWithProblems, hasInvalidRating } =
+  appRequire("helpers/product");
 const { isAmazonLink } = appRequire("helpers/amazon");
-const updateProduct = require('./updateProduct');
+const updateProduct = require("./updateProduct");
 
 /**
- * Fixes all products in terms of missing URLs or price.
+ * Fixes all products in terms of missing URLs, price, or missing attributes.
  * Traverses each product's change history, and retrieves necessary Details from them.
  * @returns [Product]
  */
 module.exports = async (force = false) => {
-  const allProducts = await strapi.services.product.find({ _limit: 99999 });
+  const allAttributes = await strapi.services["product-attribute"].find();
+  const allProducts = await strapi.services.product.find({
+    _limit: 99999,
+    _sort: 'id:desc',
+  });
   const productsToUpdate = force
     ? allProducts
     : filterProductsWithProblems(allProducts);
@@ -42,7 +47,8 @@ module.exports = async (force = false) => {
         product.url_list = changeWithURLList.state.url_list;
       }
     }
-    // Fix attrs_rating
+
+    // Fix missing attrs
     if (!product.attrs_rating || !product.attrs_rating.length) {
       const changeWithAttrsRating = productChanges.find(
         ({ state }) => state && state.attrs_rating && state.attrs_rating.length
@@ -54,10 +60,25 @@ module.exports = async (force = false) => {
         );
       }
     }
+    // Retain valid attributes
+    product.attrs_rating = product.attrs_rating.filter(
+      (attrRating) =>
+        attrRating &&
+        attrRating.product_attribute &&
+        allAttributes.find(
+          (productAttr) => productAttr.id == attrRating.product_attribute.id
+        )
+    );
+
+    // Remove unnecessary multiple newlines
+    product.details_html = product.details_html.replace(/\n+/g, "\n");
+    product.title = product.title.replace(/\n/g, "\n");
 
     // Only apply updates to selected properties
     return {
       id: product.id,
+      details_html: product.details_html,
+      title: product.title,
       amazon_url: product.amazon_url,
       url_list: product.url_list,
       attrs_rating: product.attrs_rating,
@@ -72,14 +93,10 @@ module.exports = async (force = false) => {
     const { id, ...productData } = newData;
 
     try {
-      const result = await updateProduct(
-        id,
-        productData,
-        {
-          price: false,
-          amazonDetails: false,
-        },
-      )
+      const result = await updateProduct(id, productData, {
+        price: false,
+        amazonDetails: false,
+      });
 
       const count = savedProducts.push(result);
       console.log(
