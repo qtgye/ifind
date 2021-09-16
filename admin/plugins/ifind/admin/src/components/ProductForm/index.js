@@ -301,6 +301,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           name="amazon-url"
           onChange={(value) => setAmazonURL(value)}
           value={amazonURL}
+          icon='external-link-alt'
+          iconLink={amazonURL}
         />
 
         {/* Position */}

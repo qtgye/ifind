@@ -1,12 +1,21 @@
 .input-block {
   display: inline-flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   margin-top: 20px;
 
   &--error {
     select,
     input {
       box-shadow: 0 0 0 1px red;
+    }
+  }
+
+  label {
+    width: 100%;
+
+    // BuffetJS input
+    + * {
+      width: 100%;
     }
   }
 }

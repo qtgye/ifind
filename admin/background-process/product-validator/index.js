@@ -125,6 +125,14 @@ class ProductValidator extends BackgroundProcess {
     this.logger.log(`Running validator on ${foundProducts.length} product(s)...`.cyan);
 
     for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
+      // For every 10 products processed,
+      // add a 3s delay before continuing
+      if ( i > 0 && i % 10 === 0 ) {
+        this.logger.log(`Pausing for 3 seconds before proceeding...`);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+      }
+
+
       const product = foundProducts[i];
       const productIssues = [];
 

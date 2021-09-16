@@ -13,7 +13,7 @@ const fetchHeaders = {
   'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36',
 };
 
-const priceSelector = '#priceblock_ourprice, #priceblock_dealprice, [data-action="show-all-offers-display"] .a-color-price';
+const priceSelector = '#priceblock_ourprice, #priceblock_dealprice, [data-action="show-all-offers-display"] .a-color-price, #usedOnlyBuybox .offer-price';
 const imageSelector = '#landingImage[data-a-dynamic-image]';
 const titleSelector = '#title';
 const additionalInfoTableSelector = '#productDetails_detailBullets_sections1';
