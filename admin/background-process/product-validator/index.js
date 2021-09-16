@@ -128,10 +128,10 @@ class ProductValidator extends BackgroundProcess {
     for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
       // For every chunk of products processed,
       // add delay before continuing
-      if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
-        this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
-        await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
-      }
+      // if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
+      //   this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
+      //   await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
+      // }
 
       const product = foundProducts[i];
       const productIssues = [];
@@ -158,6 +158,7 @@ class ProductValidator extends BackgroundProcess {
           }
         } catch (err) {
           console.error(err);
+          this.logger.log(err.message + err.stack, 'ERROR');
           productIssues.push("amazon_link_unavailable");
         }
       }
