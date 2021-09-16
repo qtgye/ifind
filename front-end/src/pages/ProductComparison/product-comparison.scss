@@ -1,0 +1,57 @@
+@import 'base/scss';
+
+.list {
+    z-index: -1;
+}
+
+.nav {
+    position: sticky;
+    top: 61px;
+    height: 50px;
+    width: 1050px;
+    background-color: $gray-900;
+    border: 1px solid $white;
+    border-radius: 6px;
+    z-index: 2;
+    margin-left: -8px;
+}
+
+.nav-list {
+    display: flex;
+    position: sticky;
+    column-gap: 24px;
+    padding: 10px;
+    z-index: 3;
+}
+
+.buttonStyle {
+    display: flex;
+    align-items: center;
+    font-size: 10px;
+    border-radius: 14px;
+    width: fit-content;
+    padding: 5px 12px;
+    background-color: $white;
+    border: 1px solid $white;
+    color: $gray-900;
+
+    &:hover {
+        background-color: $red;
+        color: white;
+        border: 1px solid $red;
+    }
+}
+
+.category-icons {
+    display: flex;
+    align-items: center;
+    height: 13px;
+    width: 13px;
+    margin-right: 5px;
+}
+
+.button-active {
+    background-color: $red;
+    color: white;
+    border: 1px solid $red;
+}

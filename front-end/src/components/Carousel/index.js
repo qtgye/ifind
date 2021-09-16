@@ -5,7 +5,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 import './carousel.scss';
-import './carousel2.scss';
 
 const Carousel = ({ categories, currentCategory, onCategoryLoadClick, onCategoryNavClick }) => {
 
@@ -22,11 +21,11 @@ const Carousel = ({ categories, currentCategory, onCategoryLoadClick, onCategory
             <Slider {...settings}>
                 {categories.map((category, i) => (
                     <div className="items" key={i}>
-                        <button className={["buttonStyle", currentCategory ? category.id === currentCategory ? "active" : ""
+                        <button className={["carousel-button", currentCategory ? category.id === currentCategory ? "active" : ""
                             : i === 0 ? "active" : ""].join(" ")}
                             onClick={(e) => { onCategoryLoadClick(e, category.id); onCategoryNavClick(category); }}>
                             <IfindIcon icon={category.icon} className="carousel-icon" />
-                            <span>{(category.label.label).split(" ")[0]}</span>
+                            <span className="carousel-label">{(category.label.label).split(" ")[0]}</span>
                         </button>
                     </div>
                 ))}
