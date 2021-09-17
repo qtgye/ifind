@@ -7,12 +7,10 @@ import { GlobalStateContext } from '@contexts/globalStateContext';
 import NaturalList from '@components/NaturalList';
 import IfindIcon from '@components/IfindIcon';
 
-import './buttonStyles.scss';
-// TEST BLOCK
+import './product-comparison.scss';
 import { useCategoryTree } from '@contexts/categoriesContext';
 import { useSubCategories } from '../../contexts/categoriesContext';
 import Carousel from '../../components/Carousel';
-// END TEST BLOCK
 
 const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const { productComparisonList, setCurrentListCategory, loading } = useProductComparison();
@@ -20,14 +18,12 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const prodcompRef = useRef();
   const { setSubCategories } = useSubCategories();
 
-  // ---- TEST BLOCK
   const categoryTree = useCategoryTree();
   const [currentCategory, setCurrentCategory] = useState();
 
   useEffect(() => {
     setCurrentListCategory(currentCategory);
   }, [currentCategory, setCurrentListCategory]);
-  // --- END TEST BLOCK
 
   const { setActiveCategory } = useContext(GlobalStateContext);
   let options = {
@@ -68,31 +64,11 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   return (
     <GeneralTemplate>
       <div ref={prodcompRef}
-        className="product-comparison"
-      >
-        <div className="container" style={{ paddingLeft: '280px' }}>
-          <div className="product-comparison__list" style={{ zIndex: -1 }}>
-
-            {/* ---- TEST BLOCK */}
-            <nav style={{
-              position: 'sticky',
-              top: '61px',
-              height: 50,
-              width: 1045,
-              backgroundColor: '#212121',
-              border: '1px solid white',
-              borderRadius: 6,
-              zIndex: 2,
-              marginLeft: -5,
-              marginBottom: -46,
-            }}>
-              <ul style={{
-                display: 'flex',
-                columnGap: 23,
-                padding: 10,
-                position: 'sticky',
-                zIndex: 3,
-              }} >
+        className="product-comparison">
+        <div className="container" style={{ paddingLeft: 280 }}>
+          <div className="list">
+            <nav className="nav">
+              <ul className="nav-list" >
                 {
                   categoryTree.map((category, index) => (
                     <li key={category.id}>
@@ -100,7 +76,7 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
                         : index === 0 ? "button-active" : ""].join(" ")}
                         onClick={(e) => { onCategoryLoadClick(e, category.id); onCategoryNavClick(category); }}
                       >
-                        <IfindIcon icon={category.icon} style={{ height: 15, width: 15, marginRight: 5 }} />
+                        <IfindIcon icon={category.icon} className="category-icons" />
                         <span>{(category.label.label).split(" ")[0]}</span>
                       </button>
                     </li>
@@ -108,7 +84,6 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
                 }
               </ul>
             </nav>
-            {/* ---- END TEST BLOCK */}
 
             {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
             {!loading &&
