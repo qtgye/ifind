@@ -1,10 +1,24 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import React from "react";
+import { Link } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-import { generatePluginLink } from '../../helpers/url';
+import { generatePluginLink } from "../../helpers/url";
 
-const CustomRow = ({ row: {id, position, title, image, category, url, created_at, updated_at, selected = false, confirmProductDelete }, onSelect }) => {
+const CustomRow = ({
+  row: {
+    id,
+    position,
+    title,
+    image,
+    category,
+    created_at,
+    updated_at,
+    amazon_url,
+    selected = false,
+    confirmProductDelete,
+  },
+  onSelect,
+}) => {
   return (
     <tr>
       <td>
@@ -33,27 +47,36 @@ const CustomRow = ({ row: {id, position, title, image, category, url, created_at
         <Link to={generatePluginLink(`products/${id}`)}>{category}</Link>
       </td>
       <td>
-        <Link to={generatePluginLink(`products/${id}`)}>{created_at.slice(0, 10)}</Link>
+        <Link to={generatePluginLink(`products/${id}`)} className='products-list__date'>
+          {created_at.slice(0, 10)}
+        </Link>
       </td>
       <td>
-        <Link to={generatePluginLink(`products/${id}`)}>{updated_at.slice(0, 10)}</Link>
+        <Link to={generatePluginLink(`products/${id}`)} className='products-list__date'>
+          {updated_at.slice(0, 10)}
+        </Link>
       </td>
       <td>
         <div className="products-list__product-actions">
-          {
-            url && (
-              <a href={url} className="products-list__product-action" target="_blank">
-                <FontAwesomeIcon icon='external-link-alt' color="gray" />
-              </a>
-            )
-          }
-          <button className="products-list__product-action" onClick={confirmProductDelete}>
-            <FontAwesomeIcon icon='trash-alt' color="orange" />
+          {amazon_url && (
+            <a
+              href={amazon_url}
+              className="products-list__product-action"
+              target="_blank"
+            >
+              <FontAwesomeIcon icon="external-link-alt" color="gray" />
+            </a>
+          )}
+          <button
+            className="products-list__product-action"
+            onClick={confirmProductDelete}
+          >
+            <FontAwesomeIcon icon="trash-alt" color="orange" />
           </button>
         </div>
       </td>
     </tr>
-  )
-}
+  );
+};
 
 export default CustomRow;

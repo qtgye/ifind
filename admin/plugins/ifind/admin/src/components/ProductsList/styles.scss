@@ -28,7 +28,12 @@
     }
   }
 
-  &__product-ctions {
+  &__date {
+    white-space: nowrap;
+    font-size: .8em;
+  }
+
+  &__product-actions {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;

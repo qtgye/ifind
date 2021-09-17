@@ -125,14 +125,14 @@ class ProductValidator extends BackgroundProcess {
 
     this.logger.log(`Running validator on ${foundProducts.length} product(s)...`.cyan);
 
-    for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
-      // For every chunk of products processed,
-      // add delay before continuing
-      // if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
-      //   this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
-      //   await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
-      // }
+    // TEST
+    // Move test product to start
+    const testProductIndex = foundProducts.findIndex(({ id }) => id == 554);
+    if ( testProductIndex >= 0 ) {
+      foundProducts.unshift(foundProducts.splice(testProductIndex, 1)[0]);
+    }
 
+    for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
       const product = foundProducts[i];
       const productIssues = [];
 
@@ -157,8 +157,7 @@ class ProductValidator extends BackgroundProcess {
             productIssues.push("amazon_link_unavailable");
           }
         } catch (err) {
-          console.error(err);
-          this.logger.log(err.message + err.stack, 'ERROR');
+          this.logger.log(err.stack, 'ERROR');
           productIssues.push("amazon_link_unavailable");
         }
       }
@@ -212,6 +211,23 @@ class ProductValidator extends BackgroundProcess {
         );
         productsWithIssues.push(product.id);
       }
+      else {
+        // Clear out product issues
+        await strapi.services.product.updateProduct(
+          product.id,
+          { product_issues: null },
+          { price: false, amazonDetails: false },
+          { change_type: "product_validator_results" }
+        );
+        this.logger.log('DONE'.green);
+      }
+
+      // For every chunk of products processed,
+      // add delay before continuing
+      // if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
+      // this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
+      //   await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
+      // }
     }
 
     this.logger.log(" DONE ".bgGreen.white.bold);

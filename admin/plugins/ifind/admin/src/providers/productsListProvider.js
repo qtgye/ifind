@@ -17,6 +17,7 @@ fragment ProductFragment on Product {
   title
   image
   position
+  amazon_url
   url_list {
     source { id  }
     region { id }
