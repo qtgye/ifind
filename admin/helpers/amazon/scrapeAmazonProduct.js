@@ -155,7 +155,7 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     //   return true;
     // }
 
-    if ( englishSiteResponse.status >= 400 ) {
+    if ( englishSiteResponse.status >= 400 && englishSiteResponse.status < 500 ) {
       throw new Error(`Unable to parse price for the product from Amazon. Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
     }
 
