@@ -15,7 +15,6 @@ const BackgroundProcess = require('../_lib/BackgroundProcess');
 const forced = 'force' in args;
 const RUNNING_STATUS = Symbol();
 const REQUEST_THROTTLE = 10000;
-const REQUEST_CHUNK = 10; // How many products per throttled request
 
 class ProductValidator extends BackgroundProcess {
   constructor({
@@ -222,12 +221,9 @@ class ProductValidator extends BackgroundProcess {
         this.logger.log('DONE'.green);
       }
 
-      // For every chunk of products processed,
-      // add delay before continuing
-      // if ( i > 0 && i % REQUEST_CHUNK === 0 ) {
-      // this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
-      //   await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
-      // }
+      // Pause before continuing to next product
+      this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
+      await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
     }
 
     this.logger.log(" DONE ".bgGreen.white.bold);
