@@ -222,8 +222,8 @@ class ProductValidator extends BackgroundProcess {
       }
 
       // Pause before continuing to next product
-      this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
-      await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
+      // this.logger.log(`Pausing for ${(REQUEST_THROTTLE / 1000).toFixed(2)} seconds before proceeding...`);
+      // await new Promise(resolve => setTimeout(() => resolve(), REQUEST_THROTTLE));
     }
 
     this.logger.log(" DONE ".bgGreen.white.bold);

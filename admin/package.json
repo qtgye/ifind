@@ -50,6 +50,7 @@
     "form-data": "^0.2.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
+    "got": "^11.8.2",
     "graphql-schema-typescript": "^1.5.2",
     "iconv-lite": "^0.4.7",
     "ifind-icons": "file:../ifind-icons",
@@ -80,6 +81,7 @@
     "strapi-plugin-users-permissions": "3.6.2",
     "strapi-utils": "3.6.2",
     "ts-node": "^10.2.1",
+    "tunnel": "0.0.6",
     "typescript": "^4.3.5",
     "urlencode": "^1.1.0",
     "ws": "^0.4.32"
