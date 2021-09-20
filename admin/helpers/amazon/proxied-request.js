@@ -29,7 +29,7 @@ const getProxyList = async () => {
     const dom = new JSDOM(response.body);
     const [...rows] = dom.window.document.querySelectorAll('tr[data-proxy-id]');
     // Filter only servers with highest uptimes
-    const upServers = rows.filter(row => row.querySelector('.uptime-high'));
+    const upServers = rows.filter(row => row.querySelector('.uptime-high, .uptime-medium'));
     const proxyServers = upServers.map(row => {
       const [ hostCell, portCell, lastCheck, speed, uptimeCell ] = [...row.children];
       const [ host ] = hostCell.textContent.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/);
@@ -79,12 +79,12 @@ const proxiedRequest = async (url) => {
         setTimeout(() => {
           request.cancel();
           resolve('');
-        }, 5 * 1000);
+        }, 10 * 1000);
       });
 
       const response = await Promise.race([request, p2]);
 
-      if ( !response ) {
+      if ( !response || !response.body.match(/id="centerCol"/g) ) {
         // Retry
         continue;
       }
