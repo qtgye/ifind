@@ -149,11 +149,11 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
     // So we won't be able to get product data
     // But we don't want to flag this as a product issue.
     // We'll leave the product data as is.
-    if ( englishSiteResponse.status >= 500 ) {
-      // fs.outputFileSync( path.resolve(__dirname, 'page-errors', englishPageURL + '.html'), englishPageHTML);
-      console.error(`Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
-      return true;
-    }
+    // if ( englishSiteResponse.status >= 500 ) {
+    //   // fs.outputFileSync( path.resolve(__dirname, 'page-errors', englishPageURL + '.html'), englishPageHTML);
+    //   console.error(`Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
+    //   return true;
+    // }
 
     if ( englishSiteResponse.status >= 400 ) {
       throw new Error(`Unable to parse price for the product from Amazon. Error ${englishSiteResponse.status} : ${englishSiteResponse.statusText}`);
