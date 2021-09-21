@@ -1,6 +1,7 @@
 const { JSDOM } = require('jsdom');
 const got = require('got');
 const tunnel = require('tunnel');
+const proxyServers = require('../proxy-servers');
 
 const userAgent = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36';
 const requestHeaders = {
@@ -18,34 +19,15 @@ const requestHeaders = {
   'sec-fetch-site': 'same-origin',
   'sec-fetch-user': '?1',
   'upgrade-insecure-requests': '1',
-}
-
-const getProxyList = async () => {
-  const countries = [ 'de' ];
-  const servers = [];
-
-  await Promise.all(countries.map(async (country) => {
-    const response = await got(`https://www.proxynova.com/proxy-server-list/country-${country}/`);
-    const dom = new JSDOM(response.body);
-    const [...rows] = dom.window.document.querySelectorAll('tr[data-proxy-id]');
-    // Filter only servers with highest uptimes
-    const upServers = rows.filter(row => row.querySelector('.uptime-high, .uptime-medium'));
-    const proxyServers = upServers.map(row => {
-      const [ hostCell, portCell, lastCheck, speed, uptimeCell ] = [...row.children];
-      const [ host ] = hostCell.textContent.match(/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/);
-      const port = portCell.textContent.trim();
-      const uptime = uptimeCell.textContent.match(/\d+%/);
-      return { host, port, uptime };
-    });
-    servers.push(...proxyServers);
-  }));
-
-  return servers;
 };
+
+const paddedLog = (logMessage) => console.log(' - ' + logMessage);
+
 
 const proxiedRequest = async (url) => {
   const usedIndices = [];
-  const servers = await getProxyList();
+  const servers = await proxyServers();
+  let tries = 0;
 
   while ( servers.length ) {
      let currentIndex = Math.floor(Math.random() * servers.length);
@@ -57,7 +39,7 @@ const proxiedRequest = async (url) => {
      usedIndices.push(currentIndex);
      const { host, port, uptime } = servers[currentIndex];
 
-     console.log(`Trying proxy server: ${host}:${port} (${uptime} uptime)...`);
+     paddedLog(`(${++tries}) Trying proxy server: ${host}:${port} (${uptime || '???'} uptime)...`);
 
      const headers = {
        ...requestHeaders,
@@ -82,26 +64,37 @@ const proxiedRequest = async (url) => {
         }, 10 * 1000);
       });
 
-      const response = await Promise.race([request, p2]);
+      try {
+        const response = await Promise.race([request, p2]);
 
-      if ( !response || !response.body.match(/id="centerCol"/g) ) {
-        // Retry
+        if ( !response || !response.body.match(/id="centerCol"/g) ) {
+          if ( response && response.statusCode ) {
+            throw new Error(`${response.statusCode}: ${response.statusMessage} (Must be a recaptcha page)`);
+          }
+          // Retry
+          continue;
+        }
+
+        const { body, statusCode, statusMessage } = response;
+
+        if ( statusCode <= 399 ) {
+          return body;
+        }
+
+        throw new Error(`${statusCode}: ${statusMessage}`);
+      }
+      catch (err) {
+        paddedLog(`Request Error: `.magenta + err.message.bold);
         continue;
       }
-
-      const { body, statusCode, statusMessage } = response;
-
-      if ( statusCode <= 399 ) {
-        return body;
-      }
-
-      throw new Error(`${statusCode}: ${statusMessage}`);
     }
     catch (err) {
-      console.error(err);
+      paddedLog(err);
       continue;
     }
   }
+
+  throw new Error(`Unable to fetch a proxied request for the URL: ${url.gray.bold}`);
 }
 
 module.exports = proxiedRequest;
