@@ -250,9 +250,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   return (
     <form className="product-form row">
-
       <div className="product-form__issues">
-        <ProductIssuesWarning productIssues={productIssues} status={product?.status} />
+        <ProductIssuesWarning
+          productIssues={productIssues}
+          status={product?.status}
+        />
       </div>
 
       <Panel
@@ -301,7 +303,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           name="amazon-url"
           onChange={(value) => setAmazonURL(value)}
           value={amazonURL}
-          icon='external-link-alt'
+          icon="external-link-alt"
           iconLink={amazonURL}
         />
 
@@ -374,13 +376,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         {/* Details HTML */}
         <InputBlock className="col-md-12">
           <Label>Details HTML</Label>
-          <Textarea
-            name="details-html"
-            id="details-html"
-            onChange={({ target: { value } }) => setDetailsHTML(value)}
-            value={detailsHTML}
-            disabled
-          />
+          <div className="product-form__details-html">
+            <div className="product-form__details-html-content" dangerouslySetInnerHTML={{ __html: detailsHTML }}>
+            </div>
+          </div>
         </InputBlock>
       </Panel>
 

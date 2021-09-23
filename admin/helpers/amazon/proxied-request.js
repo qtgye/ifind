@@ -29,7 +29,7 @@ const proxiedRequest = async (url) => {
   const servers = await proxyServers();
   let tries = 0;
 
-  while ( servers.length ) {
+  while ( usedIndices.length < servers.length ) {
      let currentIndex = Math.floor(Math.random() * servers.length);
 
      while ( usedIndices.includes(currentIndex) ) {

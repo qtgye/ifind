@@ -149,7 +149,8 @@ class ProductValidator extends BackgroundProcess {
           const scrapedDetails = await scrapeAmazonProduct(
             product.amazon_url,
             "en",
-            true
+            true,
+            true,
           );
 
           if (!scrapedDetails) {

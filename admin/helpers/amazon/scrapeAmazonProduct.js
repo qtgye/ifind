@@ -6,16 +6,11 @@ const { JSDOM } = require('jsdom');
 
 const { addURLParams } = require('../url');
 const proxiedRequest = require('./proxied-request');
+const regularRequest = require('./regular-request');
 
 const MONTHS = [
   'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ];
-
-/*
-Mozilla/5.0 (X11; CrOS x86_64 8172.45.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.64 Safari/537.36
-Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.111 Safari/537.36
-Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:15.0) Gecko/20100101 Firefox/15.0.1
-*/
 
 const priceSelector = [
   '#price_inside_buybox',
@@ -55,7 +50,7 @@ const selectorsToRemove = [
   'script',
 ];
 
-const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly = false) => {
+const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly = false, useProxy = false) => {
   const scrapedData = {};
 
   const urlWithLanguage = addURLParams(productURL, { language });
@@ -64,7 +59,8 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
 
   // Scrape for all amazon details if applicable
   if ( !scrapePriceOnly ) {
-    const responseBody = await proxiedRequest(urlWithLanguage);
+    console.log(' - Fetching all details for product...'.cyan);
+    const responseBody = await regularRequest(urlWithLanguage);
     const detailPageHTML = responseBody;
 
     const dom = new JSDOM(detailPageHTML);
@@ -98,7 +94,8 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
   }
 
   // Go to english site for price and release_date
-  const englishPageHTML = await proxiedRequest(englishPageURL);
+  console.log(' - Fetching price for product...'.cyan);
+  const englishPageHTML = useProxy ? await proxiedRequest(englishPageURL) : await regularRequest(englishPageURL);
   const dom = new JSDOM(englishPageHTML);
 
   // Get the price
