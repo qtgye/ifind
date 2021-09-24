@@ -95,7 +95,7 @@ const scrapeAmazonProduct = async (productURL, language = 'de', scrapePriceOnly 
 
   // Go to english site for price and release_date
   console.log(' - Fetching price for product...'.cyan);
-  const englishPageHTML = useProxy ? await proxiedRequest(englishPageURL) : await regularRequest(englishPageURL);
+  const englishPageHTML = await regularRequest(englishPageURL);
   const dom = new JSDOM(englishPageHTML);
 
   // Get the price
