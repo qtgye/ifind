@@ -15,10 +15,6 @@ class ScheduledTasks extends BackgroundProcess {
     this.config = config;
   }
 
-  afterInit() {
-    setTimeout(() => this.switch.start(), 1000);
-  }
-
   startTask(taskID) {
     const matchedTask = config.tasks.find(task => task.id === taskID);
 

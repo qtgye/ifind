@@ -36,10 +36,15 @@ class BackgroundProcess {
     // Ensure that switch is on STOP state upon initialization
     this.switch.stop();
 
+    // Initialize switch
+    this.switch.init();
+
     // After init
-    if ( typeof this.afterInit === 'function' ) {
-      this.afterInit();
-    }
+    setTimeout(() => {
+      if ( typeof this.afterInit === 'function' ) {
+        this.afterInit();
+      }
+    }, 1000);
   }
 
   watchSwitch() {
