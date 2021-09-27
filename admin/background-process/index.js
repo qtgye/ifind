@@ -16,8 +16,8 @@
 // // Start supplied background process name if exists
 // if (existsSync(backgroundProcessPath)) {
 //   // const backgroundProcess = require(backgroundProcessPath);
-//   console.log('Calling BP init...');
+//   console.log('BP Call');
 //   // backgroundProcess.init();
 // }
 
-console.trace('BP');
+console.log('BP Call');
