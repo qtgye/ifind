@@ -1,5 +1,3 @@
-const scheduledTasks = appRequire('background-process/scheduled-tasks');
-
 module.exports = {
   definition: `
   enum BACKGROUND_PROCESS_STATUS {
@@ -21,6 +19,11 @@ module.exports = {
     product_validator
   }
 
+  enum SCHEDULED_TASK_STATUS {
+    stopped
+    running
+  }
+
   type BackgroundProcessLogEntry {
     date_time: String
     type: BACKGROUND_PROCESS_LOG_TYPE
@@ -34,17 +37,24 @@ module.exports = {
 
   type ScheduledTask {
     name: String
+    status: SCHEDULED_TASK_STATUS
   }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
   triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
+  scheduledTasksList: [ScheduledTask]
   `,
   mutation: ``,
   type: {},
   resolver: {
     Query: {
+      async scheduledTasksList(_, ) {
+        const tasks = await strapi.services.ifind.scheduledTasksList();
+        console.log({ tasks });
+        return tasks;
+      },
       async getBackgroundProcess(_, { backgroundProcess }) {
         const backgroundProcessData =
           await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
@@ -58,11 +68,6 @@ module.exports = {
           );
         return backgroundProcessData;
       },
-      async triggerScheduledTask(_, { scheduledTask, status }) {
-        if ( status === 'START' ) {
-          scheduledTasks.startTask(scheduledTask.replace(/_/, '-'));
-        }
-      }
     },
   },
 };

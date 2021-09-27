@@ -7,6 +7,7 @@ const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, 'config');
 const config = existsSync(configPath) ? require(configPath) : {};
 const timer = require('./lib/Timer');
+const Tasks = require('./lib/Task');
 
 
 class ScheduledTasks extends BackgroundProcess {
@@ -32,6 +33,10 @@ class ScheduledTasks extends BackgroundProcess {
         - start the task
       - Else, wait for another minute before running
     */
+  }
+
+  async getTasks() {
+    return Tasks.getAll();
   }
 
   stopTask(taskID) {

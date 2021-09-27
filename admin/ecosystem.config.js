@@ -1,3 +1,6 @@
+const path = require('path');
+const adminRoot = path.resolve(__dirname);
+
 module.exports = {
   apps: [
     {
