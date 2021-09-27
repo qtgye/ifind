@@ -131,7 +131,7 @@ class ProductValidator extends BackgroundProcess {
       foundProducts.unshift(foundProducts.splice(testProductIndex, 1)[0]);
     }
 
-    for (let i = 0; i < foundProducts.length && this[RUNNING_STATUS]; i++) {
+    for (let i = 0; i < /* foundProducts.length */ 2 && this[RUNNING_STATUS]; i++) {
       const product = foundProducts[i];
       const productIssues = [];
 
@@ -235,10 +235,5 @@ class ProductValidator extends BackgroundProcess {
 ProductValidator.name = 'Product Validator';
 
 const productValidator = new ProductValidator({ forced });
-
-// Initialize Product Validator if provided through cli
-if ( args.init ) {
-  productValidator.init();
-}
 
 module.exports = productValidator;

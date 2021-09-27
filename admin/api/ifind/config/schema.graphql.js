@@ -1,3 +1,5 @@
+const scheduledTasks = appRequire('background-process/scheduled-tasks');
+
 module.exports = {
   definition: `
   enum BACKGROUND_PROCESS_STATUS {
@@ -15,6 +17,10 @@ module.exports = {
     ERROR
   }
 
+  enum SCHEDULED_TASK_NAME {
+    product_validator
+  }
+
   type BackgroundProcessLogEntry {
     date_time: String
     type: BACKGROUND_PROCESS_LOG_TYPE
@@ -25,10 +31,15 @@ module.exports = {
     status: BACKGROUND_PROCESS_STATUS
     logs: [BackgroundProcessLogEntry]
   }
+
+  type ScheduledTask {
+    name: String
+  }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
   triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
+  triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   `,
   mutation: ``,
   type: {},
@@ -47,6 +58,11 @@ module.exports = {
           );
         return backgroundProcessData;
       },
+      async triggerScheduledTask(_, { scheduledTask, status }) {
+        if ( status === 'START' ) {
+          scheduledTasks.startTask(scheduledTask.replace(/_/, '-'));
+        }
+      }
     },
   },
 };

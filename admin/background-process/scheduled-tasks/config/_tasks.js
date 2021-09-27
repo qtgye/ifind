@@ -1,11 +1,11 @@
+const path = require('path');
 const frequencies = require('./_frequencies');
 
 module.exports = [
   {
     id: 'product-validator',
     name: 'Product Validator',
-    // schedule: frequencies.daily,
-    test: 123,
+    schedule: frequencies.seconds * 3,
   },
   {
     id: 'product-price-updater',
@@ -15,7 +15,7 @@ module.exports = [
   {
     id: 'amazon-flash-offers',
     name: 'Amazon Flash Offers',
-    schedule: 'hourly',
+    schedule: frequencies.hourly,
   },
   {
     id: 'ebay-wow-offers',

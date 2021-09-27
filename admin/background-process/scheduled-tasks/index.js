@@ -1,10 +1,13 @@
 const path = require("path");
 const { existsSync } = require("fs-extra");
+const minimist = require('minimist');
 const BackgroundProcess = require("../_lib/BackgroundProcess");
 
 const baseDir = path.resolve(__dirname);
-const configPath = path.resolve(baseDir, 'config.js');
+const configPath = path.resolve(baseDir, 'config');
 const config = existsSync(configPath) ? require(configPath) : {};
+const timer = require('./lib/Timer');
+
 
 class ScheduledTasks extends BackgroundProcess {
   constructor(config) {
@@ -13,13 +16,19 @@ class ScheduledTasks extends BackgroundProcess {
   }
 
   afterInit() {
-    /*
-      LOGIC
-      - Timer to check the queue and trigger task to start.
-    */
+    setTimeout(() => this.switch.start(), 1000);
   }
 
   startTask(taskID) {
+    const matchedTask = config.tasks.find(task => task.id === taskID);
+
+    if ( matchedTask && matchedTask.modulePath ) {
+      const backgroundProcess = require(matchedTask.modulePath);
+
+      console.log(`Starting background process: ${taskID}`);
+      backgroundProcess.switch.start();
+    }
+
     /*
       - If no other task is running, run
         - save current task
@@ -34,7 +43,8 @@ class ScheduledTasks extends BackgroundProcess {
   }
 
   onSwitchStart() {
-
+    console.log('Switch start');
+    timer.runNextTask();
   }
 
   onSwitchStop() {
@@ -50,4 +60,5 @@ ScheduledTasks.name = 'Scheduled Tasks';
 
 // Initialize Background Process
 const scheduledTask = new ScheduledTasks(config);
-// scheduledTask.init();
+
+module.exports = scheduledTask;
