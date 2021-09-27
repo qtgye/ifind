@@ -10,6 +10,13 @@ module.exports = {
       watch: false,
     },
     {
+      name: "scheduled-tasks",
+      script: "./background-process",
+      args: "scheduled-tasks",
+      watch: false,
+      autorestart: false,
+    },
+    {
       name: "product-validator",
       script: "./background-process",
       args: "product-validator",

@@ -38,6 +38,8 @@ module.exports = {
   type ScheduledTask {
     name: String
     status: SCHEDULED_TASK_STATUS
+    frequency: String
+    next_run: Float
   }
   `,
   query: `
