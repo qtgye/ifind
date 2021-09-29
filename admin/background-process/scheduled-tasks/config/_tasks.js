@@ -5,7 +5,7 @@ module.exports = [
   {
     id: 'product-validator',
     name: 'Product Validator',
-    schedule: frequencies.seconds * 3,
+    schedule: frequencies.seconds * 30,
   },
   {
     id: 'product-price-updater',

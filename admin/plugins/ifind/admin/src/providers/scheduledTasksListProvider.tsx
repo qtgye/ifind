@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { useGQLFetch } from '../helpers/gqlFetch';
 
-export interface Task {
+export interface I_RawTask {
   name: string
   status: string
   frequency: string
-  next_run: number
+  next_run: string
 }
 
 interface I_ScheduledTasksProviderValue {
-  tasks: Task[]
+  tasks: I_RawTask[]
 }
 
 interface I_ComponentProps {
@@ -23,6 +23,8 @@ query GetTasksList {
   scheduledTasksList {
     name
     status
+    frequency
+    next_run
   }
 }
 `;

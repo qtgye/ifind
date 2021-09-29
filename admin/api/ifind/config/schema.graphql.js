@@ -54,7 +54,6 @@ module.exports = {
     Query: {
       async scheduledTasksList(_, ) {
         const tasks = await strapi.services.ifind.scheduledTasksList();
-        console.log({ tasks });
         return tasks;
       },
       async getBackgroundProcess(_, { backgroundProcess }) {

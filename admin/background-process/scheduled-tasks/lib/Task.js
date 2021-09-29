@@ -27,6 +27,11 @@ class Task extends Model {
 
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
+
+    // Compute next_run if none
+    if ( !this.next_run ) {
+      this.computeNextRun();
+    }
   }
 
   hasModule() {
@@ -95,14 +100,7 @@ class Task extends Model {
   }
 
   getData() {
-    return {
-      id: this.id,
-      name: this.name,
-      schedule: this.schedule,
-      initial_run: this.initial_run,
-      next_run: this.next_run,
-      status: this.status,
-    };
+    return this.sanitizeData(this);
   }
 }
 

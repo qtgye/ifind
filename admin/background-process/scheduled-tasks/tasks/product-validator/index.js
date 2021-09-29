@@ -18,6 +18,10 @@ class ProductValidatorTask extends Task {
   }
 
   init() {
+    if ( !this.next_run ) {
+      this.computeNextRun();
+    }
+
     productValidator.on('start', this.onProductValidatorStart.bind(this));
     productValidator.on('stop', this.onProductValidatorStop.bind(this));
     productValidator.on('error', this.onProductValidatorStop.bind(this));

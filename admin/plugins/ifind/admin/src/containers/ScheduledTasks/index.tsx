@@ -9,7 +9,7 @@ import React, {
 import { Header } from "@buffetjs/custom";
 
 import FontAwesomeIcon from "../../components/FontAwesomeIcon";
-import { useScheduledTasksList, ScheduledTasksListProvider } from '../../providers/scheduledTasksLListProvider';
+import { useScheduledTasksList, ScheduledTasksListProvider } from '../../providers/scheduledTasksListProvider';
 import TasksList from '../../components/TasksList'
 
 import "./styles.scss";

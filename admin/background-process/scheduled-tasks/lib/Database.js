@@ -7,17 +7,12 @@ const configFilePath = path.resolve(__dirname, '../config');
 
 const CONFIG = require(configFilePath);
 
-// Ensure databaseFile is present
-if ( !existsSync(databaseFilePath) ) {
-  outputFileSync(databaseFilePath, JSON.stringify({
-    tasks: [],
-  }));
-}
-
 const Database = {
   logger: new Logger(),
 
   getAll( model ) {
+    this.verifyDatabaseFile();
+
     if ( !this.modelExists(model) ) {
       return [];
     }
@@ -123,11 +118,13 @@ const Database = {
   },
 
   getState() {
+    this.verifyDatabaseFile();
     const dbContents = readFileSync(databaseFilePath);
     return JSON.parse(dbContents);
   },
 
   saveState(databaseState) {
+    this.verifyDatabaseFile();
     const json = JSON.stringify(databaseState);
     outputFileSync(databaseFilePath, json);
   },
@@ -140,7 +137,16 @@ const Database = {
     }
 
     return true;
-  }
-}
+  },
+
+  verifyDatabaseFile() {
+    // Ensure databaseFile is present
+    if ( !existsSync(databaseFilePath) ) {
+      outputFileSync(databaseFilePath, JSON.stringify({
+        tasks: [],
+      }));
+    }
+  },
+};
 
 module.exports = Database;

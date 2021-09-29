@@ -16,6 +16,16 @@ class ScheduledTasks extends BackgroundProcess {
     this.config = config;
   }
 
+  afterInit() {
+    // Ensure database contents
+    const tasks = Tasks.getAll();
+
+    if ( !tasks.length ) {
+      // Create tasks from config
+      config.tasks(task => Task.create(task));
+    }
+  }
+
   startTask(taskID) {
     const matchedTask = config.tasks.find(task => task.id === taskID);
 
