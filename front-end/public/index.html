@@ -124,27 +124,43 @@
     -->
 
   <div id="cookie-banner"></div>
-  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js" data-cfasync="false"></script>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      window.cookieconsent.initialise({
-        container: document.getElementById("cookie-banner"),
-        palette: {
-          popup: { background: "#fff" },
-          button: { background: "#aa0000" },
-        },
-        revokable: true,
-        onStatusChange: function (status) {
-          console.log(this.hasConsented() ?
-            'enable cookies' : 'disable cookies');
-        },
-        law: {
-          regionalLaw: false,
-        },
-        location: true,
-      });
-    });
+  window.cookieconsent.initialise({
+    "palette": {
+      "popup": {
+        "background": "#3c404d",
+        "text": "#d6d6d6"
+      },
+      "button": {
+        "background": "transparent",
+        "text": "#8bed4f",
+        "border": "#8bed4f"
+      }
+    },
+    "position": "bottom-right",
+    "type": "opt-in",
+    "content": {
+      "message": "Diese Website verwendet eigene Cookies und Cookies von Dritten für Analysen und Werbung. Wenn Sie Ihren Besuch fortsetzen, stimmen Sie der Verwendung solcher Cookies zu. Mehr Informationen dazu findet Ihr unter",
+      "link": "ifindilu.com/data-protection",
+      "allow": 'Einverstanden',
+      "deny": 'Nicht Einverstanden',
+      "href": "www.ifindilu.com/data-protection"
+    },
+    revokable:true,
+    onStatusChange: function(status) {
+     console.log(this.hasConsented() ?
+      'enable cookies' : 'disable cookies');
+    },
+    law: {
+     regionalLaw: false,
+    },
+    location: true,
+  });
   </script>
+
 </body>
 
 </html>
+
+
