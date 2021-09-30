@@ -85,6 +85,9 @@
   <!-- React Slick End -->
   <title>iFINDilu</title>
 
+  <!-- Cookie Consent Banner -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css">
+
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="57x57" href="/apple-icon-57x57.png">
   <link rel="apple-touch-icon" sizes="60x60" href="/apple-icon-60x60.png">
@@ -120,9 +123,28 @@
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
 
-  <link rel="stylesheet" type="text/css" href="https://cdn.wpcc.io/lib/1.0.2/cookieconsent.min.css" />
-  <script src="https://cdn.wpcc.io/lib/1.0.2/cookieconsent.min.js" defer></script>
-  <script>window.addEventListener("load", function () { window.wpcc.init({ "border": "thin", "corners": "small", "colors": { "popup": { "background": "#222222", "text": "#ffffff", "border": "#e6b3b3" }, "button": { "background": "#e6b3b3", "text": "#000000" } }, "content": { "message": "Diese Website verwendet eigene Cookies und Cookies von Dritten für Analysen und Werbung. Wenn Sie Ihren Besuch fortsetzen, stimmen Sie der Verwendung solcher Cookies zu. Alternativ können sie die Cookies unter den Link Datenschutzerklärung deaktivieren", "link": "http://ifindilu.de/datenschutz", "button": "Einverstanden" }, "position": "bottom" }) });</script>
+  <div id="cookie-banner"></div>
+  <script src="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      window.cookieconsent.initialise({
+        container: document.getElementById("cookie-banner"),
+        palette: {
+          popup: { background: "#fff" },
+          button: { background: "#aa0000" },
+        },
+        revokable: true,
+        onStatusChange: function (status) {
+          console.log(this.hasConsented() ?
+            'enable cookies' : 'disable cookies');
+        },
+        law: {
+          regionalLaw: false,
+        },
+        location: true,
+      });
+    });
+  </script>
 </body>
 
 </html>

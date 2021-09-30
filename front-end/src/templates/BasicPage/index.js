@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import Footer from '@components/Footer';
-import NewsLetter from '@components/NewsLetter';
 
 const BasicPage = ({ title, children }) => {
 
@@ -35,8 +33,6 @@ const BasicPage = ({ title, children }) => {
                     </div>
                 </div>
             </section>
-            <NewsLetter />
-            <Footer />
         </>
     )
 };

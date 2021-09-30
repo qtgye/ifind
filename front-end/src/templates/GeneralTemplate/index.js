@@ -1,6 +1,4 @@
 import { useEffect } from 'react';
-import Footer from '@components/Footer';
-import NewsLetter from '@components/NewsLetter';
 
 const GeneralTemplate = ({ children }) => {
 
@@ -12,8 +10,6 @@ const GeneralTemplate = ({ children }) => {
     return (
         <>
             {children}
-            <NewsLetter />
-            <Footer />
         </>
     )
 };

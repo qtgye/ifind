@@ -9,6 +9,8 @@ import { AuthContextProvider } from '@contexts/authContext';
 import routesPages, { dynamicRoutePages } from '@config/routesPages';
 
 import Header from '@components/Header';
+import Footer from '@components/Footer';
+import NewsLetter from '@components/NewsLetter';
 
 import './App.scss';
 
@@ -28,6 +30,8 @@ function App() {
                 ))}
               </Switch>
           </main>
+          <NewsLetter />
+          <Footer />
         </Providers>
       </AuthContextProvider>
     </Router>
