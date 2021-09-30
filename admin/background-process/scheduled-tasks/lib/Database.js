@@ -117,6 +117,27 @@ const Database = {
     return updatedModel;
   },
 
+  get(model, dataMatch) {
+    if ( !this.modelExists(model) ) {
+      return null;
+    }
+
+    const modelData = CONFIG.models[model];
+    const modelTable = modelData.table;
+    const dbContents = this.getState();
+
+    if ( !(modelTable in dbContents) ) {
+      console.warn(`No entries yet from ${model}'s table`);
+      return null;
+    }
+
+    const matchedEntry = dbContents[modelTable].find(entry => Object.entries(dataMatch).every(([ key, value ]) => (
+      entry[key] == value
+    )));
+
+    return matchedEntry || null;
+  },
+
   getState() {
     this.verifyDatabaseFile();
     const dbContents = readFileSync(databaseFilePath);

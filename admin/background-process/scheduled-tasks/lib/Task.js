@@ -1,12 +1,17 @@
 const { existsSync } = require("fs");
 const path = require("path");
+const EventEmitter = require('events');
 
+const Switch = require("../../_lib/inc/Switch");
 const { frequencies } = require("../config");
 const Database = require("./Database");
 const Logger = require("./Logger");
 const Model = require("./Model");
 
 const tasksRoot = path.resolve(__dirname, "../tasks");
+const backgroundProcessesRoot = path.resolve(__dirname, "../../");
+
+const EVENT_EMITTER = Symbol();
 
 /**
  * Task base class
@@ -27,15 +32,28 @@ class Task extends Model {
 
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
+    this.taskBackgroundProcessPath = path.resolve(backgroundProcessesRoot, this.id);
 
     // Compute next_run if none
     if ( !this.next_run ) {
       this.computeNextRun();
     }
+
+    this.backgroundProcessSwitch = new Switch({
+      baseDir: this.taskBackgroundProcessPath,
+    });
+    this.backgroundProcessSwitch.init();
+
+    // Get current state
+    this.status = this.backgroundProcessSwitch.getState() === 'START' ? 'running' : 'stopped';
+  }
+
+  init() {
+    this.watchBackgroundProcessSwitch();
   }
 
   hasModule() {
-    return this.taskModulePath ? true : false;
+    return this.taskModulePath && existsSync(this.taskModulePath);
   }
 
   // Task module should have onStart
@@ -55,16 +73,25 @@ class Task extends Model {
 
       // Run the task
       if (typeof this.onStart === "function") {
+        this.setStatus('stopped');
         this.onStart();
       }
     }
   }
 
   stop() {
-    this.update({ status: "stopped" });
+    this.setStatus('stopped');
 
     // Log
     Logger.log(`Task stops: ${this.name}`);
+  }
+
+  setStatus(status) {
+    if ( status !== this.status ) {
+      this.status = status;
+      this.update({ status });
+      this.emit('statuschange', this);
+    }
   }
 
   get running() {
@@ -101,6 +128,24 @@ class Task extends Model {
 
   getData() {
     return this.sanitizeData(this);
+  }
+
+  watchBackgroundProcessSwitch() {
+    // Listen to start
+    this.backgroundProcessSwitch.listen("START", () => {
+      this.computeNextRun();
+      this.setStatus('running');
+    });
+
+    // Listen to stop
+    this.backgroundProcessSwitch.listen("STOP", () => {
+      this.setStatus('stopped');
+    });
+
+    // Listen to error
+    this.backgroundProcessSwitch.listen("ERROR", () => {
+      this.setStatus('stopped');
+    });
   }
 }
 

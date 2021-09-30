@@ -7,7 +7,7 @@ const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, 'config');
 const config = existsSync(configPath) ? require(configPath) : {};
 const timer = require('./lib/Timer');
-const Tasks = require('./lib/Task');
+const Task = require('./lib/Task');
 
 
 class ScheduledTasks extends BackgroundProcess {
@@ -18,11 +18,11 @@ class ScheduledTasks extends BackgroundProcess {
 
   afterInit() {
     // Ensure database contents
-    const tasks = Tasks.getAll();
+    let tasks = Task.getAll();
 
     if ( !tasks.length ) {
       // Create tasks from config
-      config.tasks(task => Task.create(task));
+      tasks = config.tasks.map(task => Task.initializeWithData(task));
     }
   }
 
@@ -35,18 +35,14 @@ class ScheduledTasks extends BackgroundProcess {
       console.log(`Starting background process: ${taskID}`);
       backgroundProcess.switch.start();
     }
-
-    /*
-      - If no other task is running, run
-        - save current task
-        - trigger switch on
-        - start the task
-      - Else, wait for another minute before running
-    */
   }
 
   async getTasks() {
-    return Tasks.getAll();
+    return Task.getAll();
+  }
+
+  async getTask(taskId) {
+    Task.get(taskId);
   }
 
   stopTask(taskID) {

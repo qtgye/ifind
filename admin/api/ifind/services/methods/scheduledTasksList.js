@@ -17,7 +17,6 @@ const mapScheduleToFrequency = (scheduleMs) => {
 
   // Custom frequency
   for ( let intervalName in msIntervals ) {
-    console.log({ intervalName, scheduleMs });
     if ( scheduleMs > msIntervals[intervalName] ) {
       return [
         (scheduleMs / msIntervals[intervalName]).toFixed(2),
