@@ -27,11 +27,11 @@ class Controller {
           this[eventMethod](event);
         });
       }
-
-      if ( typeof this.onopen ) {
-        this.onopen();
-      }
     });
+
+    if ( typeof this.onopen ) {
+      this.onopen();
+    }
   }
 
   // Events

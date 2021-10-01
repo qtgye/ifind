@@ -5,7 +5,7 @@ export type I_UseWebSocket = (
   onmessage?: (data: any) => any
 ) => [
   send: (message: string) => any,
-  socket: WebSocket,
+  socket: WebSocket|null,
 ];
 
 export const useWebSocket: I_UseWebSocket = (
@@ -26,23 +26,31 @@ export const useWebSocket: I_UseWebSocket = (
     }
   }, [ socket as WebSocket, isSocketOpen as boolean ]);
 
+  const applyMessageListener = useCallback(() => {
+    if ( typeof onmessage === 'function' ) {
+      socket?.addEventListener('message', (msgEvent) => {
+        console.log('ws message', msgEvent);
+        onmessage(JSON.parse(msgEvent.data));
+        return null;
+      });
+    }
+  }, [ onmessage, socket ]);
+
+  useEffect(() => {
+    if ( isSocketOpen ) {
+      socket?.addEventListener('close', () => {
+        console.warn('Connection with Scheduled Tasks Endpoint has closed.');
+      });
+  
+      applyMessageListener();
+    }
+  }, [ isSocketOpen, applyMessageListener ]);
+
   useEffect(() => {
     if ( socket?.OPEN ) {
       setIsSocketOpen(true);
-
-      socket.addEventListener('close', () => {
-        console.warn('Connection with Scheduled Tasks Endpoint has closed.');
-      });
-      
-      if ( typeof onmessage === 'function' ) {
-        socket.addEventListener('message', (msgEvent) => {
-          console.log('ws message', msgEvent);
-          onmessage(JSON.parse(msgEvent.data));
-          return null;
-        });
-      }
     }
-  }, [ socket, onmessage ]);
+  }, [ socket ]);
 
   useEffect(() => {
     const socketProtocol: string = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
