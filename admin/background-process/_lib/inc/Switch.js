@@ -1,5 +1,5 @@
 const path = require("path");
-const { outputFileSync, readFileSync } = require("fs-extra");
+const { outputFileSync, readFileSync, existsSync } = require("fs-extra");
 const chokidar = require("chokidar");
 const EventEmitter = require("events");
 const Logger = require("./Logger");
@@ -14,6 +14,7 @@ class Switch {
     this.baseDir = path.resolve(config.baseDir)
     this.switchFilePath = path.resolve(this.baseDir, '.switch');
     this.emitter = new EventEmitter();
+    this.emitter.setMaxListeners(100);
     this.logger = new Logger(config);
   }
 
@@ -46,8 +47,13 @@ class Switch {
 
   // Returns the current switch state
   getState () {
-    const switchState = readFileSync(this.switchFilePath).toString().trim();
-    return this.isValidState(switchState) ? switchState : null;
+    if ( existsSync(this.switchFilePath) ) {
+      const switchState = readFileSync(this.switchFilePath).toString().trim();
+      return this.isValidState(switchState) ? switchState : null;
+    }
+
+
+    return 'STOP';
   };
 
   /**

@@ -14,7 +14,7 @@ import Categories from '../Categories';
 import CategoryDetail from '../CategoryDetail';
 import ProductsListing from '../ProductsListing';
 import ProductDetail from '../ProductDetail';
-import ProductValidator from '../ProductValidator';
+import ScheduledTasks from '../ScheduledTasks';
 // Components
 import LoadingOverlay from '../../components/LoadingOverlay';
 
@@ -41,8 +41,8 @@ const App = () => {
             <Route path={`/plugins/${pluginId}/products/create`} component={ProductDetail} exact />
             <Route path={`/plugins/${pluginId}/products/:productId`} component={ProductDetail} />
 
-            {/* Background Processes */}
-            <Route path={`/plugins/${pluginId}/background-processes/:backgroundProcess`} component={ProductValidator} />
+            {/* Scheduled Tasks */}
+            <Route path={`/plugins/${pluginId}/scheduled-tasks`} component={ScheduledTasks} />
 
             {/* Error Pages */}
             <Route component={NotFound} />

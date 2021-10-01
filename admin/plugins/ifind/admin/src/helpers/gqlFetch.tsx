@@ -9,7 +9,7 @@ import { useAuth } from '../providers/authProvider';
 export const useGQLFetch = () => {
   const { jwt } = useAuth();
 
-  const gqlFetch = useCallback((query, variables) => (
+  const gqlFetch = useCallback((query, variables = {}) => (
     jwt
     ? window.fetch(`/graphql`, {
       method: 'post',

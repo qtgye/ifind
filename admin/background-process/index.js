@@ -15,5 +15,7 @@ const backgroundProcessPath = path.resolve(
 
 // Start supplied background process name if exists
 if (existsSync(backgroundProcessPath)) {
-  require(backgroundProcessPath);
+  console.log('Booting up background process...'.cyan);
+  const backgroundProcess = require(backgroundProcessPath);
+  backgroundProcess.init();
 }

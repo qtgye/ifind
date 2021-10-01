@@ -7,17 +7,12 @@ const configFilePath = path.resolve(__dirname, '../config');
 
 const CONFIG = require(configFilePath);
 
-// Ensure databaseFile is present
-if ( !existsSync(databaseFilePath) ) {
-  outputFileSync(databaseFilePath, JSON.stringify({
-    tasks: [],
-  }));
-}
-
 const Database = {
   logger: new Logger(),
 
   getAll( model ) {
+    this.verifyDatabaseFile();
+
     if ( !this.modelExists(model) ) {
       return [];
     }
@@ -122,12 +117,35 @@ const Database = {
     return updatedModel;
   },
 
+  get(model, dataMatch) {
+    if ( !this.modelExists(model) ) {
+      return null;
+    }
+
+    const modelData = CONFIG.models[model];
+    const modelTable = modelData.table;
+    const dbContents = this.getState();
+
+    if ( !(modelTable in dbContents) ) {
+      console.warn(`No entries yet from ${model}'s table`);
+      return null;
+    }
+
+    const matchedEntry = dbContents[modelTable].find(entry => Object.entries(dataMatch).every(([ key, value ]) => (
+      entry[key] == value
+    )));
+
+    return matchedEntry || null;
+  },
+
   getState() {
+    this.verifyDatabaseFile();
     const dbContents = readFileSync(databaseFilePath);
     return JSON.parse(dbContents);
   },
 
   saveState(databaseState) {
+    this.verifyDatabaseFile();
     const json = JSON.stringify(databaseState);
     outputFileSync(databaseFilePath, json);
   },
@@ -140,7 +158,16 @@ const Database = {
     }
 
     return true;
-  }
-}
+  },
+
+  verifyDatabaseFile() {
+    // Ensure databaseFile is present
+    if ( !existsSync(databaseFilePath) ) {
+      outputFileSync(databaseFilePath, JSON.stringify({
+        tasks: [],
+      }));
+    }
+  },
+};
 
 module.exports = Database;

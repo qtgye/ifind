@@ -62,9 +62,9 @@ export const leftCollectionMenu = [
 export const pluginLinks = [
   {
     override: {
-      destination: generatePluginLink("background-processes/product-validator"),
-      icon: "clipboard-check",
-      label: "Product Validator",
+      destination: generatePluginLink("scheduled-tasks"),
+      icon: "calendar-check",
+      label: "Scheduled Tasks",
     },
   },
   { pattern: /\/icons/ },

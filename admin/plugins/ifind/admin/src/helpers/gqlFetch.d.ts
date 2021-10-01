@@ -1,3 +1,1 @@
-export type gqlFetch = Function<function>
-
-export default {}
+export type useGQLFetch = Function<function>

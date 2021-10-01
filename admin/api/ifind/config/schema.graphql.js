@@ -15,6 +15,15 @@ module.exports = {
     ERROR
   }
 
+  enum SCHEDULED_TASK_NAME {
+    product_validator
+  }
+
+  enum SCHEDULED_TASK_STATUS {
+    stopped
+    running
+  }
+
   type BackgroundProcessLogEntry {
     date_time: String
     type: BACKGROUND_PROCESS_LOG_TYPE
@@ -25,15 +34,28 @@ module.exports = {
     status: BACKGROUND_PROCESS_STATUS
     logs: [BackgroundProcessLogEntry]
   }
+
+  type ScheduledTask {
+    name: String
+    status: SCHEDULED_TASK_STATUS
+    frequency: String
+    next_run: Float
+  }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
   triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
+  triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
+  scheduledTasksList: [ScheduledTask]
   `,
   mutation: ``,
   type: {},
   resolver: {
     Query: {
+      async scheduledTasksList(_, ) {
+        const tasks = await strapi.services.ifind.scheduledTasksList();
+        return tasks;
+      },
       async getBackgroundProcess(_, { backgroundProcess }) {
         const backgroundProcessData =
           await strapi.services.ifind.getBackgroundProcess(backgroundProcess);

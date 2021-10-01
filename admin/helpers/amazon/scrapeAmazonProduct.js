@@ -5,7 +5,7 @@ const moment = require('moment');
 const { JSDOM } = require('jsdom');
 
 const { addURLParams } = require('../url');
-const proxiedRequest = require('./proxied-request');
+// const proxiedRequest = require('./proxied-request');
 const regularRequest = require('./regular-request');
 
 const MONTHS = [

@@ -25,6 +25,8 @@ class BackgroundProcess {
     this.logger = new Logger({
       baseDir: this.baseDir,
     });
+
+    this.watchSwitch();
   }
 
   init() {
@@ -34,11 +36,24 @@ class BackgroundProcess {
     // Ensure that switch is on STOP state upon initialization
     this.switch.stop();
 
+    // Initialize switch
+    this.switch.init();
+
+    // After init
+    setTimeout(() => {
+      if ( typeof this.afterInit === 'function' ) {
+        this.afterInit();
+      }
+    }, 1000);
+  }
+
+  watchSwitch() {
     // Listen to start
     this.switch.listen("START", () => {
       if (typeof this.onSwitchStart === "function") {
         this.onSwitchStart();
       }
+      this[EVENT_EMITTER].emit('start');
     });
 
     // Listen to stop
@@ -46,6 +61,7 @@ class BackgroundProcess {
       if (typeof this.onSwitchStop === "function") {
         this.onSwitchStop();
       }
+      this[EVENT_EMITTER].emit('stop');
     });
 
     // Listen to error
@@ -53,15 +69,8 @@ class BackgroundProcess {
       if (typeof this.onSwitchError === "function") {
         this.onSwitchError();
       }
+      this[EVENT_EMITTER].emit('error');
     });
-
-    // Initialize switch
-    this.switch.init();
-
-    // After init
-    if ( typeof this.afterInit === 'function' ) {
-      this.afterInit();
-    }
   }
 
   on(event, callback) {

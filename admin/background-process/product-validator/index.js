@@ -236,9 +236,4 @@ ProductValidator.name = 'Product Validator';
 
 const productValidator = new ProductValidator({ forced });
 
-// Initialize Product Validator if provided through cli
-if ( args.init ) {
-  productValidator.init();
-}
-
 module.exports = productValidator;
