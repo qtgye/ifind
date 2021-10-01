@@ -28,7 +28,7 @@ jobs:
       with:
         source: "."
         target: "/var/www/source" # Directory of the app
-   
+
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
@@ -51,7 +51,7 @@ jobs:
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
-          npm install && npm run config:import && npm run currencies:import && pm2 restart admin && \
+          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \

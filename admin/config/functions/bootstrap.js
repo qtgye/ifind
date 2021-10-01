@@ -1,4 +1,4 @@
-const WebSocketServer = appRequire('websocket/server');
+const WebSocketServer = require('../../websocket/server');
 
 /**
  * An asynchronous bootstrap function that runs before
