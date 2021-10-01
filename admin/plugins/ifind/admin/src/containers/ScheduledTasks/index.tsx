@@ -8,19 +8,30 @@ import React, {
 } from "react";
 import { Header } from "@buffetjs/custom";
 
-import FontAwesomeIcon from "../../components/FontAwesomeIcon";
 import { useScheduledTasksList, ScheduledTasksListProvider } from '../../providers/scheduledTasksListProvider';
-import TasksList from '../../components/TasksList'
+import TasksList from '../../components/TasksList';
 
 import "./styles.scss";
 
 const ScheduledTasks = () => {
-  const { tasks } = useScheduledTasksList();
+  const { tasks, startTask, stopTask } = useScheduledTasksList();
+
+  const onTaskAction = useCallback((action, taskID) => {
+    console.log({ action, taskID });
+    switch ( action ) {
+      case 'start':
+        startTask(taskID);
+        break;
+      case 'stop':
+        stopTask(taskID);
+        break;
+    }
+  }, [ startTask, stopTask ]);
 
   return (
     <div className="container scheduled-tasks">
       <Header title={{ label: "Scheduled Tasks" }} />
-      <TasksList tasks={tasks} />
+      <TasksList tasks={tasks} onTaskAction={onTaskAction} />
     </div>
   );
 };

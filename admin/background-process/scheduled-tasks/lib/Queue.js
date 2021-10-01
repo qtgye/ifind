@@ -15,7 +15,7 @@ const Queue = {
     const computedTasks = tasks.map((task) => {
       // Ensure there is next_run
       // Or next_run is within the runnable allowance
-      if (
+      while (
         !task.next_run ||
         (task.next_run < currentTime && !this.isTaskDueToRun(task))
       ) {

@@ -9,6 +9,11 @@ const EVENTS = [
 ];
 
 class Controller {
+  // actionHandlers to be supplied by the child class
+  actionHandlers = {
+    // actionName: payloadHandlerFunction
+  }
+
   constructor(webSocketConnection) {
     if ( webSocketConnection instanceof WebSocket ) {
       this.connection = webSocketConnection;
@@ -23,8 +28,12 @@ class Controller {
       const eventMethod = `on${event}`;
 
       if ( eventMethod in this ) {
-        this.connection.addEventListener(event, (event) => {
-          this[eventMethod](event);
+        this.connection.addEventListener(event, (eventData) => {
+          if ( event === 'message' ) {
+            this._processMessageData(JSON.parse(eventData.data));
+          } else {
+            this[eventMethod](eventData);
+          }
         });
       }
     });
@@ -35,17 +44,26 @@ class Controller {
   }
 
   // Events
-  onmessage(message) {}
   onclose(message) {}
   onerror(message) {}
   onping(message) {}
   onpong(message) {}
   onopen(message) {}
 
+  _processMessageData({ action, payload }) {
+    if ( action in this.actionHandlers && typeof this.actionHandlers[action] === 'function' ) {
+      this.actionHandlers[action].call(this, payload);
+    }
+  }
+
   // Methods
-  send(data) {
+  send(action, payload) {
+    if ( typeof action !== 'string' ) {
+      throw new Error('Please provide an action when sending a WS data');
+    }
+
     // Stringify data as JSON
-    const jsonString = JSON.stringify(data);
+    const jsonString = JSON.stringify({ action, payload });
     this.connection.send(jsonString);
   }
 }

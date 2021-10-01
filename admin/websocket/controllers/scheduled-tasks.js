@@ -1,7 +1,13 @@
 const Controller = require('../lib/Controller');
 const Task = require('../../background-process/scheduled-tasks/lib/Task');
+const ScheduledTasksBP = require('../../background-process/scheduled-tasks');
 
 class ScheduledTasks extends Controller {
+  actionHandlers = {
+    'start-task': this.startTask,
+    'stop-task': this.stopTask,
+  };
+
   constructor(connection) {
     super(connection);
   }
@@ -27,10 +33,18 @@ class ScheduledTasks extends Controller {
     });
   }
 
+  startTask(taskID) {
+    ScheduledTasksBP.startTask(taskID);
+  }
+
+  stopTask(taskID) {
+    ScheduledTasksBP.stopTask(taskID);
+  }
+
   async sendTasks() {
     const tasks = await strapi.services.ifind.scheduledTasksList();
 
-    this.send({ tasks });
+    this.send('tasks', tasks);
 
     return tasks;
   }

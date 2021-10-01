@@ -2,6 +2,7 @@ const path = require("path");
 const { existsSync } = require("fs-extra");
 const minimist = require('minimist');
 const BackgroundProcess = require("../_lib/BackgroundProcess");
+const BPSwitch = require("../_lib/inc/Switch");
 
 const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, 'config');
@@ -27,13 +28,20 @@ class ScheduledTasks extends BackgroundProcess {
   }
 
   startTask(taskID) {
-    const matchedTask = config.tasks.find(task => task.id === taskID);
+    const matchedTask = Task.get(taskID);
 
-    if ( matchedTask && matchedTask.modulePath ) {
-      const backgroundProcess = require(matchedTask.modulePath);
+    if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
+      console.log(`Starting task: ${taskID}`);
+      matchedTask.backgroundProcessSwitch.start();
+    }
+  }
 
-      console.log(`Starting background process: ${taskID}`);
-      backgroundProcess.switch.start();
+  stopTask(taskID) {
+    const matchedTask = Task.get(taskID);
+
+    if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
+      console.log(`Stopping task: ${taskID}`);
+      matchedTask.backgroundProcessSwitch.stop();
     }
   }
 
@@ -43,10 +51,6 @@ class ScheduledTasks extends BackgroundProcess {
 
   async getTask(taskId) {
     Task.get(taskId);
-  }
-
-  stopTask(taskID) {
-    // # Stop task
   }
 
   onSwitchStart() {

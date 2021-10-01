@@ -1,6 +1,6 @@
 const { existsSync } = require("fs");
 const path = require("path");
-const EventEmitter = require('events');
+const EventEmitter = require("events");
 
 const Switch = require("../../_lib/inc/Switch");
 const { frequencies } = require("../config");
@@ -32,24 +32,38 @@ class Task extends Model {
 
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
-    this.taskBackgroundProcessPath = path.resolve(backgroundProcessesRoot, this.id);
 
     // Compute next_run if none
-    if ( !this.next_run ) {
+    if (!this.next_run) {
       this.computeNextRun();
     }
 
-    this.backgroundProcessSwitch = new Switch({
-      baseDir: this.taskBackgroundProcessPath,
-    });
-    this.backgroundProcessSwitch.init();
+    const taskBackgroundProcessPath = path.resolve(
+      backgroundProcessesRoot,
+      this.id
+    );
+
+    // Initialize switch if any
+    if (existsSync(taskBackgroundProcessPath)) {
+      this.backgroundProcessSwitch = new Switch({
+        baseDir: taskBackgroundProcessPath,
+      });
+      this.backgroundProcessSwitch.init();
+      this.hasBackgroundProcess = true;
+    }
 
     // Get current state
-    this.status = this.backgroundProcessSwitch.getState() === 'START' ? 'running' : 'stopped';
+    this.status =
+      this.backgroundProcessSwitch &&
+      this.backgroundProcessSwitch.getState() === "START"
+        ? "running"
+        : "stopped";
   }
 
   init() {
-    this.watchBackgroundProcessSwitch();
+    if (this.backgroundProcessSwitch) {
+      this.watchBackgroundProcessSwitch();
+    }
   }
 
   hasModule() {
@@ -73,24 +87,24 @@ class Task extends Model {
 
       // Run the task
       if (typeof this.onStart === "function") {
-        this.setStatus('stopped');
+        this.setStatus("stopped");
         this.onStart();
       }
     }
   }
 
   stop() {
-    this.setStatus('stopped');
+    this.setStatus("stopped");
 
     // Log
     Logger.log(`Task stops: ${this.name}`);
   }
 
   setStatus(status) {
-    if ( status !== this.status ) {
+    if (status !== this.status) {
       this.status = status;
       this.update({ status });
-      this.emit('statuschange', this);
+      this.emit("statuschange", this);
     }
   }
 
@@ -134,17 +148,17 @@ class Task extends Model {
     // Listen to start
     this.backgroundProcessSwitch.listen("START", () => {
       this.computeNextRun();
-      this.setStatus('running');
+      this.setStatus("running");
     });
 
     // Listen to stop
     this.backgroundProcessSwitch.listen("STOP", () => {
-      this.setStatus('stopped');
+      this.setStatus("stopped");
     });
 
     // Listen to error
     this.backgroundProcessSwitch.listen("ERROR", () => {
-      this.setStatus('stopped');
+      this.setStatus("stopped");
     });
   }
 }
@@ -159,7 +173,15 @@ Task.model = "task";
  *
  */
 Task.initializeWithData = function (rawData) {
-  const instance = new this(rawData);
+  const taskPath = path.resolve(tasksRoot, rawData.id);
+  let taskClass = Task;
+
+  // If this task has a child Task class, use it
+  if (existsSync(taskPath)) {
+    taskClass = require(taskPath);
+  }
+
+  const instance = new taskClass(rawData);
 
   if (typeof instance.init === "function") {
     instance.init();
@@ -167,23 +189,21 @@ Task.initializeWithData = function (rawData) {
 
   return instance;
 };
+Task.get = function (taskID) {
+  const matchedTask = Database.get(this.model, { id: taskID });
+
+  if (matchedTask) {
+    return Task.initializeWithData(matchedTask);
+  } else {
+    return null;
+  }
+};
 Task.getAll = function () {
   return (
     // Get alll database entries
     Database.getAll(this.model)
       // Instantiate as Task instances
-      .map((rawData) => {
-        const taskPath = path.resolve(tasksRoot, rawData.id);
-
-        // If this task has a child Task class, use it
-        if (existsSync(taskPath)) {
-          const TaskModule = require(taskPath);
-          return TaskModule.initializeWithData(rawData);
-        }
-
-        // Use base Task class by default
-        return Task.initializeWithData(rawData);
-      })
+      .map(Task.initializeWithData)
   );
 };
 

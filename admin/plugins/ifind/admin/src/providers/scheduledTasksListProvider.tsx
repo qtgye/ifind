@@ -1,24 +1,23 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
-
 import { useWebSocket } from '../helpers/useWebSocket';
 
+// Types
 export interface I_RawTask {
+  id: string
   name: string
   status: string
   frequency: string
   next_run: string
+  hasBackgroundProcess: boolean
 }
-
 interface I_ScheduledTasksProviderValue {
   tasks: I_RawTask[]
+  startTask: (taskId: string) => any
+  stopTask: (taskId: string) => any
 }
-
 interface I_ComponentProps {
   children: any
 }
-
-export const ScheduledTasksListContext = createContext({});
-
 export interface Task {
   frequency: string
   id: string
@@ -26,45 +25,52 @@ export interface Task {
   next_run: number
   status: string
 }
+interface I_TaskList {
+  tasks: I_RawTask[]
+}
 
+interface T_MessageDataPayload {
+  tasks?: I_RawTask[]
+}
+interface I_MessageData {
+  action: string
+  payload?: T_MessageDataPayload
+}
+type T_TaskListActionHandlerCallback = (tasks: I_RawTask[]) => any;
+
+// Context
+export const ScheduledTasksListContext = createContext({});
+
+// Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [ tasks, setTasks ] = useState<I_RawTask[]>([]);
+  const [ connected, setConnected ] = useState(false);
 
-  interface I_TaskList {
-    tasks: I_RawTask[]
-  }
-
-  type T_MessageEventData = I_TaskList|string;
-
-  interface TasksListMessage {
-    tasks: I_RawTask[]
-    event?: string
-    data?: T_MessageEventData
-  }
-
-  const onEvent = useCallback((event: string, data?: T_MessageEventData) => {
-    console.log({ event, data });
+  const tasksListActionHandler = useCallback<T_TaskListActionHandlerCallback>((tasks = []) => {
+    setTasks(tasks);
   }, []);
 
-  type T_OnWSMessage = (wsData: TasksListMessage) => any;
-  const onWSMessage = useCallback<T_OnWSMessage>((wsData) => {
-    if ( Array.isArray(wsData?.tasks) ) {
-      setTasks(wsData.tasks);
-    }
+  const [ send, socket ] = useWebSocket('/scheduled-tasks', {
+    tasks: tasksListActionHandler
+  });
 
-    if ( wsData.event ) {
-      onEvent(wsData.event, wsData.data);
-    }
-  }, [ onEvent ]);
+  const startTask = useCallback((taskID) => {
+    send('start-task', taskID);
+  }, [ send ]);
 
-  const [ send ] = useWebSocket('/scheduled-tasks', onWSMessage);
+  const stopTask = useCallback((taskID) => {
+    send('stop-task', taskID);
+  }, [ send ]);
+
+  useEffect(() => {
+    if ( socket ) {
+      socket.onopen = () => setConnected(true);
+      socket.onclose = () => setConnected(false);
+    }
+  }, [ socket ]);
 
   return (
-    <ScheduledTasksListContext.Provider value={
-      {
-        tasks: tasks
-      } as I_ScheduledTasksProviderValue
-    }>
+    <ScheduledTasksListContext.Provider value={{ tasks, startTask, stopTask, connected }}>
       {children}
     </ScheduledTasksListContext.Provider>
   )
