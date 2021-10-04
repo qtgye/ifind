@@ -69,7 +69,7 @@ export const useWebSocket: I_UseWebSocket = (
   const connect = useCallback(() => {
     const socketProtocol: string = (window.location.protocol === 'https:' ? 'wss:' : 'ws:')
     const port: string = window.location.port ? `:${window.location.port}` : '';
-    const sanitizedPath: string = '/' + path.replace(/^\/+/, '');
+    const sanitizedPath: string = '/ws/' + path.replace(/^\/+/, '');
     const socketURL: string = socketProtocol + '//' + window.location.hostname + port + sanitizedPath;
     const socket = new WebSocket(socketURL);
 

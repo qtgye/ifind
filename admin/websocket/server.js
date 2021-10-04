@@ -27,7 +27,8 @@ class WebSocketServer {
   }
 
   mapConnectionToRoute(wsConnection) {
-    const route = wsConnection.upgradeReq.url;
+    // Get the actual route, removing the /ws/
+    const route = '/' + (wsConnection.upgradeReq.url || '/').split('/').slice(2).join('/');
 
     if ( route in ROUTES && ROUTES[route].prototype instanceof Controller ) {
       const controller = new ROUTES[route](wsConnection);
