@@ -1,4 +1,9 @@
 /**
+ * NOTE
+ * Discontinued due to unable to connect on nginx server
+ * Needs further exploration
+ * 
+ * 
  * useWebSockets hook
  * 
  * USAGE:

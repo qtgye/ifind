@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { useWebSocket } from '../helpers/useWebSocket';
+import { useGQLFetch } from '../helpers/gqlFetch';
 
 // Types
 export interface I_RawTask {
@@ -25,52 +25,56 @@ export interface Task {
   next_run: number
   status: string
 }
-interface I_TaskList {
-  tasks: I_RawTask[]
-}
-
-interface T_MessageDataPayload {
-  tasks?: I_RawTask[]
-}
-interface I_MessageData {
-  action: string
-  payload?: T_MessageDataPayload
-}
-type T_TaskListActionHandlerCallback = (tasks: I_RawTask[]) => any;
 
 // Context
 export const ScheduledTasksListContext = createContext({});
 
+export const tasksListsQuery = `
+query {
+  scheduledTasksList {
+    id
+    name
+    status
+    frequency
+    next_run
+    hasBackgroundProcess
+  }
+}
+`;
+
 // Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
+  const gqlFetch = useGQLFetch();
   const [ tasks, setTasks ] = useState<I_RawTask[]>([]);
   const [ connected, setConnected ] = useState(false);
 
-  const tasksListActionHandler = useCallback<T_TaskListActionHandlerCallback>((tasks = []) => {
-    setTasks(tasks);
-  }, []);
+  const fetchTasksList = useCallback(() => {
+    gqlFetch(tasksListsQuery)
+    .then(data => {
+      if ( data?.scheduledTasksList ) {
+        setTasks(data.scheduledTasksList);
+      }
+    })
+  }, [ tasksListsQuery, gqlFetch ]);
 
-  const [ send, socket ] = useWebSocket('/scheduled-tasks', {
-    tasks: tasksListActionHandler
-  });
+  const triggerTask = useCallback((taskID, action) => {
+
+  }, [ useGQLFetch ]);
 
   const startTask = useCallback((taskID) => {
-    send('start-task', taskID);
-  }, [ send ]);
+    triggerTask(taskID, 'start');
+  }, []);
 
   const stopTask = useCallback((taskID) => {
-    send('stop-task', taskID);
-  }, [ send ]);
+    triggerTask(taskID, 'stop');
+  }, []);
 
   useEffect(() => {
-    if ( socket ) {
-      socket.onopen = () => setConnected(true);
-      socket.onclose = () => setConnected(false);
-    }
-  }, [ socket ]);
+    fetchTasksList();
+  }, []);
 
   return (
-    <ScheduledTasksListContext.Provider value={{ tasks, startTask, stopTask, connected }}>
+    <ScheduledTasksListContext.Provider value={{ tasks, startTask, stopTask }}>
       {children}
     </ScheduledTasksListContext.Provider>
   )

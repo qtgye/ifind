@@ -36,10 +36,12 @@ module.exports = {
   }
 
   type ScheduledTask {
+    id: String
     name: String
     status: SCHEDULED_TASK_STATUS
     frequency: String
     next_run: Float
+    hasBackgroundProcess: Boolean
   }
   `,
   query: `
@@ -47,12 +49,18 @@ module.exports = {
   triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   scheduledTasksList: [ScheduledTask]
+  triggerTask: [ScheduledTask]
   `,
   mutation: ``,
   type: {},
   resolver: {
     Query: {
       async scheduledTasksList(_, ) {
+        const tasks = await strapi.services.ifind.scheduledTasksList();
+        return tasks;
+      },
+      async triggerTask(_, args) {
+        await strapi.services.ifind.triggerTask( args.task, args.action );
         const tasks = await strapi.services.ifind.scheduledTasksList();
         return tasks;
       },
