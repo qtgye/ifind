@@ -15,6 +15,7 @@ import CategoryDetail from '../CategoryDetail';
 import ProductsListing from '../ProductsListing';
 import ProductDetail from '../ProductDetail';
 import ScheduledTasks from '../ScheduledTasks';
+import BackgroundProcess from '../BackgroundProcess';
 // Components
 import LoadingOverlay from '../../components/LoadingOverlay';
 
@@ -43,6 +44,9 @@ const App = () => {
 
             {/* Scheduled Tasks */}
             <Route path={`/plugins/${pluginId}/scheduled-tasks`} component={ScheduledTasks} />
+            
+            {/* Background Processes */}
+            <Route path={`/plugins/${pluginId}/background-process/:backgroundProcess`} component={BackgroundProcess} />
 
             {/* Error Pages */}
             <Route component={NotFound} />

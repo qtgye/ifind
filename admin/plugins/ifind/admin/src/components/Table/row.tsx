@@ -1,6 +1,9 @@
 import React, { ReactNode } from 'react';
 
-export type T_Column = JSX.Element|string;
+export type T_Column = {
+  property: string
+  content?: JSX.Element|string
+};
 
 export interface I_RowProps {
   columns: Array<T_Column>
@@ -13,7 +16,7 @@ const Row : T_Row = ({ columns = [], className = '' }) => {
   return (
     <tr className={[ 'table-row', className ].join(' ')}>
       {columns.map(column => (
-        <td>{column}</td>
+        <td className={`table-column--${column.property}`}>{column.content}</td>
       ))}
     </tr>
   );

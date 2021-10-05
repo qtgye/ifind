@@ -8,4 +8,10 @@
       color: darkred;
     }
   }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
 }

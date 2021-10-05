@@ -79,7 +79,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         if (data?.scheduledTasksList) {
           setTasks(data.scheduledTasksList);
         }
-      }),
+      }).catch(err => err),
       new Promise(resolve => setTimeout(resolve, 1000)),
     ]);
 

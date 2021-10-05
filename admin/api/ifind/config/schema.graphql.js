@@ -6,10 +6,6 @@ module.exports = {
     ERROR
   }
 
-  enum BACKGROUND_PROCESS_NAME {
-    product_validator
-  }
-
   enum BACKGROUND_PROCESS_LOG_TYPE {
     INFO
     ERROR
@@ -31,6 +27,7 @@ module.exports = {
   }
 
   type BackgroundProcess {
+    title: String!
     status: BACKGROUND_PROCESS_STATUS
     logs: [BackgroundProcessLogEntry]
   }
@@ -50,8 +47,7 @@ module.exports = {
   }
   `,
   query: `
-  getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
-  triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
+  getBackgroundProcess ( backgroundProcess: String! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   scheduledTasksList: [ScheduledTask]
   `,
@@ -61,7 +57,7 @@ module.exports = {
   type: {},
   resolver: {
     Query: {
-      async scheduledTasksList(_, ) {
+      async scheduledTasksList() {
         const tasks = await strapi.services.ifind.scheduledTasksList();
         return tasks;
       },
@@ -70,18 +66,10 @@ module.exports = {
           await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
         return backgroundProcessData;
       },
-      async triggerBackgroundProcess(_, { backgroundProcess, status }) {
-        const backgroundProcessData =
-          await strapi.services.ifind.triggerBackgroundProcess(
-            backgroundProcess,
-            status
-          );
-        return backgroundProcessData;
-      },
     },
     Mutation: {
       async triggerTask(_, args) {
-        await strapi.services.ifind.triggerTask( args.taskID, args.action );
+        await strapi.services.ifind.triggerTask(args.taskID, args.action);
         const tasks = await strapi.services.ifind.scheduledTasksList();
         return tasks;
       },

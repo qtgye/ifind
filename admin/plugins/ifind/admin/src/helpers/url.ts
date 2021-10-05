@@ -2,6 +2,8 @@ import { useCallback, useState, useEffect } from 'react';
 import pluginId from '../pluginId';
 import { useLocation } from 'react-router-dom';
 
+type T_IndexSignature = {[key: string]: any};
+
 const TAG = 'ifind01-21';
 
 export const mapSearchParam = () => (
@@ -45,7 +47,7 @@ const toSearchParams = (paramsObject = {}) => {
   )
 }
 
-export const generatePluginLink = (relativeToPlugin = null, _searchParams = false, withParentRoute = false) => {
+export const generatePluginLink = (relativeToPlugin: string|null = null, _searchParams: T_IndexSignature|null = null, withParentRoute = false) => {
   const adminRoot = withParentRoute ? '/admin' : '';
   const searchParams = _searchParams ? toSearchParams(_searchParams) : '';
 
@@ -60,7 +62,7 @@ export const generatePluginLink = (relativeToPlugin = null, _searchParams = fals
 export const amazonLink = (originalLink = '') => {
   const [ baseURL, searchParamsString ] = originalLink.split('?');
 
-  const searchParamsObj = searchParamsString.split('&').reduce((obj, param) => {
+  const searchParamsObj = searchParamsString.split('&').reduce((obj: T_IndexSignature, param) => {
     const [ key, value ] = param.split('=');
 
     if ( key && value ) {

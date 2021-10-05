@@ -23,7 +23,10 @@ const Table: T_Table = ({ headers = {}, rows = [], className = "" }: I_TableProp
   const rowDataToColumns = useCallback<T_RowDataToColumnsCallback>((rowData) => {
     const columns = Object.keys(headers).reduce(
       (all, property) => {
-        all.push(rowData[property]);
+        all.push({
+          property,
+          content: rowData[property]
+        });
         return all;
       },
       [] as T_Column[]

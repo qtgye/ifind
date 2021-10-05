@@ -1,8 +1,7 @@
 .logs {
   &__entries {
     display: flex;
-    align-content: flex-end;
-    flex-wrap: wrap;
+    flex-direction: column-reverse;
     margin-top: 10px;
     padding: 10px 10px 50px;
     background-color: darkslategray;
