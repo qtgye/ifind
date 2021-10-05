@@ -43,24 +43,25 @@ module.exports = {
     next_run: Float
     hasBackgroundProcess: Boolean
   }
+
+  enum SCHEDULED_TASK_ACTION {
+    start
+    stop
+  }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME! ): BackgroundProcess
   triggerBackgroundProcess ( backgroundProcess: BACKGROUND_PROCESS_NAME!, status: BACKGROUND_PROCESS_STATUS! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   scheduledTasksList: [ScheduledTask]
-  triggerTask: [ScheduledTask]
   `,
-  mutation: ``,
+  mutation: `
+  triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): [ScheduledTask]
+  `,
   type: {},
   resolver: {
     Query: {
       async scheduledTasksList(_, ) {
-        const tasks = await strapi.services.ifind.scheduledTasksList();
-        return tasks;
-      },
-      async triggerTask(_, args) {
-        await strapi.services.ifind.triggerTask( args.task, args.action );
         const tasks = await strapi.services.ifind.scheduledTasksList();
         return tasks;
       },
@@ -76,6 +77,13 @@ module.exports = {
             status
           );
         return backgroundProcessData;
+      },
+    },
+    Mutation: {
+      async triggerTask(_, args) {
+        await strapi.services.ifind.triggerTask( args.taskID, args.action );
+        const tasks = await strapi.services.ifind.scheduledTasksList();
+        return tasks;
       },
     },
   },

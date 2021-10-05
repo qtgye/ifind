@@ -30,6 +30,8 @@ class ScheduledTasks extends BackgroundProcess {
   startTask(taskID) {
     const matchedTask = Task.get(taskID);
 
+    console.log({ matchedTask });
+
     if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
       console.log(`Starting task: ${taskID}`);
       matchedTask.backgroundProcessSwitch.start();
@@ -38,6 +40,8 @@ class ScheduledTasks extends BackgroundProcess {
 
   stopTask(taskID) {
     const matchedTask = Task.get(taskID);
+
+    console.log({ matchedTask });
 
     if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
       console.log(`Stopping task: ${taskID}`);
