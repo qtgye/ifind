@@ -93,7 +93,7 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
     status: getTaskStatus(task),
     name: task.name,
     frequency: task.frequency,
-    next_run: moment(task.next_run).format("YYYY-MMM-DD hh:MM A"),
+    next_run: moment(task.next_run).format("YYYY-MMM-DD hh:mm:ss A"),
     action: task.hasBackgroundProcess ? getTaskActions(task) : "-",
   }));
 

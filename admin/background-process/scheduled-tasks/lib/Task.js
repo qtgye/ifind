@@ -1,6 +1,9 @@
+/**
+ * TODO
+ * - Drop the use of status. Get directly from the switch instead.
+ */
 const { existsSync } = require("fs");
 const path = require("path");
-const EventEmitter = require("events");
 
 const Switch = require("../../_lib/inc/Switch");
 const { frequencies } = require("../config");
@@ -48,7 +51,6 @@ class Task extends Model {
       this.backgroundProcessSwitch = new Switch({
         baseDir: taskBackgroundProcessPath,
       });
-      this.backgroundProcessSwitch.init();
       this.hasBackgroundProcess = true;
     }
 
@@ -62,6 +64,7 @@ class Task extends Model {
 
   init() {
     if (this.backgroundProcessSwitch) {
+      this.backgroundProcessSwitch.init();
       this.watchBackgroundProcessSwitch();
     }
   }
@@ -72,24 +75,29 @@ class Task extends Model {
 
   // Task module should have onStart
   start() {
+    if ( !this.backgroundProcessSwitch ) {
+      return;;
+    }
+
     // If process is already runnning,
     // no need to proceed
-    if (this.running) {
+    if (/start/i.test(this.backgroundProcessSwitch.getState()) ) {
       return;
     }
 
-    if (this.taskModulePath) {
-      // Log
-      Logger.log(`Triggered a Task run: ${this.name}`);
+    // Log
+    Logger.log(`Triggered a Task run: ${this.name}`);
 
-      // Compute for the next run
-      this.computeNextRun();
+    // Compute for the next run
+    this.computeNextRun();
 
-      // Run the task
-      if (typeof this.onStart === "function") {
-        this.setStatus("stopped");
-        this.onStart();
-      }
+    // Run the process
+    this.backgroundProcessSwitch.start();
+
+    // Run the task
+    if (typeof this.onStart === "function") {
+      this.setStatus("running");
+      this.onStart();
     }
   }
 
@@ -109,7 +117,11 @@ class Task extends Model {
   }
 
   get running() {
-    return this.status === "running";
+    if ( this.backgroundProcessSwitch ) {
+      return /start/i.test(this.backgroundProcessSwitch.getState());
+    }
+
+    return false;
   }
 
   log(message = "", type) {
@@ -124,7 +136,10 @@ class Task extends Model {
     const now = Date.now();
     const { schedule } = this;
 
-    while (!this.next_run || this.next_run < now) {
+
+    const oldNextRun = this.next_run;
+
+    while (!this.next_run || this.next_run <= now) {
       this.next_run = now + (schedule || frequencies["daily"]); // Default to daily
     }
 
@@ -134,10 +149,10 @@ class Task extends Model {
 
   // Adjusts next run by the given milliseconds
   adjustNextRun(milliseconds = 0) {
-    this.next_run = (this.next_run || 0) + milliseconds;
+    const next_run = (this.next_run || Date.now()) + milliseconds;
 
     // Save
-    this.update({ next_run: this.next_run });
+    this.update({ next_run });
   }
 
   getData() {
@@ -172,7 +187,7 @@ Task.model = "task";
  * Static methods
  *
  */
-Task.initializeWithData = function (rawData) {
+Task.initializeWithData = function (rawData, willInitialize = false) {
   const taskPath = path.resolve(tasksRoot, rawData.id);
   let taskClass = Task;
 
@@ -183,27 +198,27 @@ Task.initializeWithData = function (rawData) {
 
   const instance = new taskClass(rawData);
 
-  if (typeof instance.init === "function") {
+  if (typeof instance.init === "function" && willInitialize) {
     instance.init();
   }
 
   return instance;
 };
-Task.get = function (taskID) {
+Task.get = function (taskID, willInitialize) {
   const matchedTask = Database.get(this.model, { id: taskID });
 
   if (matchedTask) {
-    return Task.initializeWithData(matchedTask);
+    return Task.initializeWithData(matchedTask, willInitialize);
   } else {
     return null;
   }
 };
-Task.getAll = function () {
+Task.getAll = function (willInitialize = false) {
   return (
     // Get alll database entries
     Database.getAll(this.model)
       // Instantiate as Task instances
-      .map(Task.initializeWithData)
+      .map(taskData => Task.initializeWithData(taskData, willInitialize))
   );
 };
 

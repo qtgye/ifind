@@ -1,17 +1,19 @@
+const moment = require('moment');
 const Task = require("./Task");
 
-// When checking for a task's next_run, allow this allowance in milliseconds
-// To determine whether the task is due to run (plus/minus)
-const TASK_NEXT_RUN_ALLOWANCE = 1000 * 10; // +/- 10 seconds allowance
-
 const Queue = {
+  // When checking for a task's next_run, allow this allowance in milliseconds
+  // To determine whether the task is due to run (plus/minus)
+  TASK_NEXT_RUN_ALLOWANCE: 1000 * 10, // +/- 10 seconds allowance
+
   getList() {
     // Current Time
     const currentTime = Date.now();
 
-    // Get queue
+    // Get tasks
     let tasks = Task.getAll();
 
+    // Compute tasks' next run values
     const computedTasks = tasks.map((task) => {
       // Ensure there is next_run
       // Or next_run is within the runnable allowance
@@ -53,7 +55,7 @@ const Queue = {
 
     // Returns true if time difference between time now and next_run
     // is within the allowance
-    return nextRunDiff <= TASK_NEXT_RUN_ALLOWANCE;
+    return nextRunDiff <= this.TASK_NEXT_RUN_ALLOWANCE;
   },
 };
 

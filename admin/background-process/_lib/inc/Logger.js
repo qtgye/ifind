@@ -47,7 +47,6 @@ class Logger {
     const logType = this.isValidLogType(type) ? type : logTypes[0];
     const colorFn = logTypeToColor[logType];
     const dateTime = moment.utc().format("YYYY-MM-DD hh:mm:ss");
-    console.log({ dateTime });
     const logEntry = [
       dateTime.bold,
       logType.padEnd(10).substr(0, 5)[colorFn], // Ensure log type string will have the same spacings

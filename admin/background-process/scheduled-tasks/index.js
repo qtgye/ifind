@@ -19,18 +19,11 @@ class ScheduledTasks extends BackgroundProcess {
 
   afterInit() {
     // Ensure database contents
-    let tasks = Task.getAll();
-
-    if ( !tasks.length ) {
-      // Create tasks from config
-      tasks = config.tasks.map(task => Task.initializeWithData(task));
-    }
+    timer.runNextTask();
   }
 
   startTask(taskID) {
     const matchedTask = Task.get(taskID);
-
-    console.log({ matchedTask });
 
     if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
       console.log(`Starting task: ${taskID}`);
@@ -40,8 +33,6 @@ class ScheduledTasks extends BackgroundProcess {
 
   stopTask(taskID) {
     const matchedTask = Task.get(taskID);
-
-    console.log({ matchedTask });
 
     if ( matchedTask && matchedTask.backgroundProcessSwitch ) {
       console.log(`Stopping task: ${taskID}`);
@@ -58,8 +49,7 @@ class ScheduledTasks extends BackgroundProcess {
   }
 
   onSwitchStart() {
-    console.log('Switch start');
-    timer.runNextTask();
+    // console.log('Switch start');
   }
 
   onSwitchStop() {
