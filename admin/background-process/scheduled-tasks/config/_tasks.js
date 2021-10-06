@@ -10,7 +10,7 @@ module.exports = [
   {
     id: 'product-price-updater',
     name: 'Product Price Updater',
-    schedule: frequencies.daily,
+    schedule: frequencies.seconds * 30,
   },
   {
     id: 'amazon-flash-offers',

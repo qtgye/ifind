@@ -46,6 +46,12 @@ const Queue = {
       taskA.next_run < taskB.next_run ? -1 : 1
     );
 
+    // Place the currently running task at the beginning
+    const runningTaskIndex = computedTasks.findIndex(task => task.running);
+    if ( runningTaskIndex >= 0 ) {
+      computedTasks.unshift( computedTasks.splice(runningTaskIndex, 1)[0] )
+    };
+
     return computedTasks;
   },
 

@@ -15,6 +15,8 @@ const getDetailsFromURL = async(productURL) => {
   const [ itemID ] = productURL.match(/[0-9]{9,12}/g) || [];
 
   if ( itemID ) {
+
+    console.log({ itemID });
     const requestParams = {
       ...params,
       callname: 'GetSingleItem',
@@ -23,6 +25,8 @@ const getDetailsFromURL = async(productURL) => {
     };
     const res = await fetch(BASE_URL + toSearchParams(requestParams));
     const { Item } = await res.json();
+
+    console.log({ Item });
 
     if ( Item ) {
       const data = {};
