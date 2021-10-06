@@ -19,8 +19,6 @@ module.exports = (backgroundProcessName) => {
   // Get background process title
   const backgroundProcessInstance = require(backgroundProcessFolder);
 
-  console.log(backgroundProcessInstance.name);
-
   // Get current status through the switch file
   const [switchFilePath] = glob.sync(
     path.resolve(backgroundProcessFolder, ".switch")
@@ -65,6 +63,7 @@ module.exports = (backgroundProcessName) => {
   });
 
   return {
+    name: backgroundProcessInstance.name,
     status,
     logs: logs.reverse(),
   };

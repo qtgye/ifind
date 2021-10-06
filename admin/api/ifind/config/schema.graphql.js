@@ -27,7 +27,7 @@ module.exports = {
   }
 
   type BackgroundProcess {
-    title: String!
+    name: String!
     status: BACKGROUND_PROCESS_STATUS
     logs: [BackgroundProcessLogEntry]
   }

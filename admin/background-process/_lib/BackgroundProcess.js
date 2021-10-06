@@ -12,6 +12,8 @@ const EVENT_EMITTER = Symbol();
  */
 class BackgroundProcess {
   constructor(config) {
+    this.name = this.__proto__.constructor.backgroundProcessName;
+
     this.baseDir = config.baseDir;
 
     this[EVENT_EMITTER] = new EventEmitter();

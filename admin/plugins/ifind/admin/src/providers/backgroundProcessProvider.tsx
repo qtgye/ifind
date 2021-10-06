@@ -9,16 +9,16 @@ import React, {
 import { useParams } from "react-router-dom";
 import { useGQLFetch } from "../helpers/gqlFetch";
 
-interface I_LogEntry {
+export interface I_LogEntry {
   date_time: string;
   type: string;
   message: string;
 }
-interface I_BackgroundProcessRouteParam {
+export interface I_BackgroundProcessRouteParam {
   backgroundProcess: string;
 }
 export interface I_BackgroundProcessProviderValues {
-  status?: string | null;
+  name?: string;
   logs?: Array<I_LogEntry | never>;
   start?: () => void;
   stop?: () => void;
@@ -30,7 +30,7 @@ query GetBackgroundProcess (
   $backgroundProcess: String!
 ) {
   getBackgroundProcess ( backgroundProcess: $backgroundProcess ) {
-    status
+    name
     logs {
       date_time
       message
@@ -48,7 +48,7 @@ export const BackgroundProcessProvider: FunctionComponent = ({ children }) => {
 
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [status, setStatus] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
+  const [name, setName] = useState<string>("");
 
   const fetchBackgroundProcess = useCallback(async () => {
     const data = await gqlFetch(getBackgroundProcessQuery, {
@@ -56,14 +56,13 @@ export const BackgroundProcessProvider: FunctionComponent = ({ children }) => {
     });
 
     if (data?.getBackgroundProcess) {
-      setLogs([...data.getBackgroundProcess?.logs || []]);
+      setLogs([...(data.getBackgroundProcess?.logs || [])]);
       setStatus(data.getBackgroundProcess?.status || "");
-      setStatus(data.getBackgroundProcess?.name || "");
+      setName(data.getBackgroundProcess?.name || "");
     }
   }, [backgroundProcess]);
 
   useEffect(() => {
-    console.log({ backgroundProcess });
     if (backgroundProcess) {
       fetchBackgroundProcess();
     }
@@ -74,7 +73,7 @@ export const BackgroundProcessProvider: FunctionComponent = ({ children }) => {
       value={
         {
           status,
-          title,
+          name,
           logs,
           refetch: fetchBackgroundProcess,
         } as I_BackgroundProcessProviderValues

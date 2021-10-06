@@ -61,7 +61,7 @@ class ScheduledTasks extends BackgroundProcess {
   }
 }
 
-ScheduledTasks.name = 'Scheduled Tasks';
+ScheduledTasks.backgroundProcessName = 'Scheduled Tasks';
 
 // Initialize Background Process
 const scheduledTask = new ScheduledTasks(config);

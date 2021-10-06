@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from "react";
-import LogEntry, { LogEntryProps } from "./entry";
+import LogEntry from "./entry";
+import { I_LogEntry } from '../../providers/backgroundProcessProvider';
 
 import './styles.scss';
 
-export type LogsListProps = {
-  logs: LogEntryProps[]
+export type T_LogsListProps = {
+  logs: I_LogEntry[]
 };
 
-interface I_LogsListMap {
-  [key: string]: LogEntryProps
-}
-
-const LogsList = ({ logs }: LogsListProps) => {
-  const [ logsList, setLogsList ] = useState<LogEntryProps[]>([]);
+const LogsList = ({ logs }: T_LogsListProps) => {
+  const [ logsList, setLogsList ] = useState<I_LogEntry[]>([]);
 
   useEffect(() => {
-    // Ensure logs are sorted in ascending datetime
     setLogsList([...logs.reverse()]);
   }, [ logs ]);
 
@@ -24,7 +20,7 @@ const LogsList = ({ logs }: LogsListProps) => {
       <h3 className="logs__heading">Logs</h3>
       <div className="logs__entries">
         {logsList?.length &&
-          logsList.map((props: LogEntryProps) => (
+          logsList.map((props: I_LogEntry) => (
             <LogEntry key={props.date_time + props.message} {...props} />
           ))}
       </div>

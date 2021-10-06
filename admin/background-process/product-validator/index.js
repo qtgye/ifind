@@ -17,8 +17,6 @@ const RUNNING_STATUS = Symbol();
 const REQUEST_THROTTLE = 10000;
 
 class ProductValidator extends BackgroundProcess {
-  name = 'Product Validator';
-
   constructor({
     forced = false,
   }) {
@@ -234,7 +232,7 @@ class ProductValidator extends BackgroundProcess {
   }
 }
 
-ProductValidator.name = 'Product Validator';
+ProductValidator.backgroundProcessName = 'Product Validator';
 
 const productValidator = new ProductValidator({ forced });
 

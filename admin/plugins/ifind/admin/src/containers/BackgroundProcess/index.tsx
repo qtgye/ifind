@@ -17,15 +17,13 @@ export type statusLabelMapType = {
 };
 
 const BackgroundProcess = (): JSX.Element => {
-  const { logs, refetch }: I_BackgroundProcessProviderValues = useBackgroundProcess()
+  const { name, logs, refetch }: I_BackgroundProcessProviderValues = useBackgroundProcess()
 
   const statusLabelMap: statusLabelMapType = {
     STOP: 'Stopped',
     START: 'Running',
     ERROR: 'Stopped with Error',
   };
-
-  const statusLabel: string = typeof status === 'string' ? statusLabelMap[status] : 'STOP';
 
   const refetchData = useCallback(() => {
     refetch && refetch();
@@ -38,10 +36,7 @@ const BackgroundProcess = (): JSX.Element => {
   return (
     <div className="container">
       <div className="row">
-        <Header title={{ label: "Product Validator" }} />
-        <div className="background-process__header">
-          {status && <div className="background-process__status">Current status: <strong>{statusLabel}</strong></div>}
-        </div>
+        <Header title={{ label: name }} />
         <div className="background-process__logs">
           { logs?.length && (
             <LogsList logs={logs} />
