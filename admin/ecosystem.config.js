@@ -23,5 +23,12 @@ module.exports = {
       watch: false,
       autorestart: false,
     },
+    {
+      name: "product-price-updater",
+      script: "./background-process",
+      args: "product-price-updater",
+      watch: false,
+      autorestart: false,
+    },
   ],
 };
