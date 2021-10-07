@@ -1,14 +1,13 @@
 const path = require("path");
 const { existsSync } = require("fs-extra");
-const minimist = require('minimist');
 const BackgroundProcess = require("../_lib/BackgroundProcess");
-const BPSwitch = require("../_lib/inc/Switch");
 
 const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, 'config');
 const config = existsSync(configPath) ? require(configPath) : {};
 const timer = require('./lib/Timer');
 const Task = require('./lib/Task');
+const Database = require('./lib/Database');
 
 
 class ScheduledTasks extends BackgroundProcess {
@@ -18,6 +17,22 @@ class ScheduledTasks extends BackgroundProcess {
   }
 
   afterInit() {
+    // Check tasks config for changes and apply updates
+    const configTasks = config.tasks;
+    const dbTasks = Database.getAll(Task.model);
+
+    configTasks.forEach(configTask => {
+      const dbTask = dbTasks.find(task => task.id === configTask.id);
+
+      // Check for changes and save if there is any
+      if ( dbTask.name !== configTask.name || dbTask.schedule !== configTask.schedule ) {
+        Database.update(Task.model, configTask.id, {
+          name: configTask.name,
+          schedule: configTask.schedule
+        });
+      }
+    });
+
     // Ensure database contents
     timer.runNextTask();
   }

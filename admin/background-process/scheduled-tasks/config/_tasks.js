@@ -5,7 +5,7 @@ module.exports = [
   {
     id: 'product-validator',
     name: 'Product Validator',
-    schedule: frequencies.daily,
+    schedule: frequencies.seconds * 35,
   },
   {
     id: 'product-price-updater',
@@ -20,6 +20,11 @@ module.exports = [
   {
     id: 'ebay-wow-offers',
     name: 'Ebay Wow Offers',
+    schedule: frequencies.hourly,
+  },
+  {
+    id: 'test-task',
+    name: 'Test Task',
     schedule: frequencies.hourly,
   },
 ];
