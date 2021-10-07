@@ -116,10 +116,11 @@ class ProductPriceUpdater extends BackgroundProcess {
 
     for (let i = 0; i < foundProducts.length && this.running; i++) {
       const product = foundProducts[i];
+      const productUpdates = {};
 
       this.logger.log(
         `[ ${i + 1} of ${foundProducts.length} ]`.cyan.bold +
-          ` Validating - [${String(product.id).bold}] ${product.title}`
+          ` Updating - [${String(product.id).bold}] ${product.title}`
       );
 
       // Scrape amazon price
@@ -135,8 +136,8 @@ class ProductPriceUpdater extends BackgroundProcess {
             true
           );
 
-          if (scrapedDetails) {
-            console.log({ scrapedDetails });
+          if (scrapedDetails && scrapedDetails.price) {
+            productUpdates.price = Number(scrapedDetails.price);
           }
         } catch (err) {
           this.logger.log(err.stack, "ERROR");
@@ -145,12 +146,24 @@ class ProductPriceUpdater extends BackgroundProcess {
 
       // Scrape price for other URLs
       if (product.url_list && product.url_list.length) {
+        productUpdates.url_list = [];
+
         for (const urlData of product.url_list) {
+          // Get old data
+          const urlDataUpdate = {
+            id: urlData.id,
+            source: urlData.source.id,
+            price: urlData.price,
+          };
+
           switch (urlData.source.id) {
             // Get Ebay Price
             case ebaySource.id:
               const ebayDetails = await getDetailsFromEbayURL(urlData.url);
-              console.log({ ebayDetails });
+
+              if ( ebayDetails && ebayDetails.price ) {
+                urlDataUpdate.price = Number(ebayDetails.price);
+              }
               break;
 
             // Get AliExpress Price
@@ -159,17 +172,29 @@ class ProductPriceUpdater extends BackgroundProcess {
                 const aliExpressDetails = await getDetailsFromAliExppressURL(
                   urlData.url
                 );
-                console.log({ aliExpressDetails });
+                if ( aliExpressDetails && aliExpressDetails.price ) {
+                  urlDataUpdate.price = Number(aliExpressDetails.price);
+                }
               } catch (err) {
-                productIssues.push("aliexpress_link_invalid");
+                this.logger.log('AliEpress error: Product link is non-affiliate'.red, 'ERROR');
               }
               break;
           }
+
+          productUpdates.url_list.push(urlDataUpdate);
         }
       }
 
       // Save amazon price update as well as url_list updates
-      // ......
+      await strapi.services.product.updateProduct(
+        product.id,
+        productUpdates,
+        { price: false, amazonDetails: false },
+        { change_type: "price_updater_results" }
+      );
+
+      this.logger.log(" DONE ".bold.green);
+
     }
 
     this.logger.log(" DONE ".bgGreen.white.bold);
