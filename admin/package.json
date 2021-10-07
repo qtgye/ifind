@@ -46,6 +46,7 @@
     "@types/react-dom": "^17.0.9",
     "apollo-link": "^1.2.14",
     "chokidar": "^3.5.2",
+    "ebay-oauth-nodejs-client": "^1.2.1",
     "form-data": "^0.2.0",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
