@@ -1,4 +1,4 @@
-const WebSocketServer = require('../../websocket/server');
+// const WebSocketServer = require('../../websocket/server');
 
 /**
  * An asynchronous bootstrap function that runs before
@@ -12,8 +12,8 @@ const WebSocketServer = require('../../websocket/server');
 
 module.exports = async () => {
   // https://github.com/strapi/strapi/issues/5869#issuecomment-619508153
-  process.nextTick(() =>{
-    const webSocketServer = new WebSocketServer;
-    webSocketServer.init(strapi.server);
-  });
+  // process.nextTick(() =>{
+  //   const webSocketServer = new WebSocketServer;
+  //   webSocketServer.init(strapi.server);
+  // });
 };
