@@ -4,6 +4,7 @@ import React, {
   useCallback,
   createContext,
   useContext,
+  useRef,
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
 
@@ -69,6 +70,7 @@ mutation TriggerTask (
 
 // Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
+  const refetchFlag = useRef(false);
   const gqlFetch = useGQLFetch();
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
 
@@ -83,8 +85,10 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
       new Promise(resolve => setTimeout(resolve, 1000)),
     ]);
 
-    fetchTasksList();
-  }, [tasksListsQuery, gqlFetch]);
+    if ( refetchFlag.current ) {
+      fetchTasksList();
+    }
+  }, [tasksListsQuery, gqlFetch, refetchFlag]);
 
   const triggerTask = useCallback(
     (taskID, action) => {
@@ -105,8 +109,13 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   }, []);
 
   useEffect(() => {
+    refetchFlag.current = true;
     fetchTasksList();
-  }, []);
+
+    return () => {
+      refetchFlag.current = false;
+    }
+  }, [ refetchFlag ]);
 
   return (
     <ScheduledTasksListContext.Provider value={{ tasks, startTask, stopTask }}>
