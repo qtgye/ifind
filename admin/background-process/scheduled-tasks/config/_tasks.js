@@ -5,12 +5,12 @@ module.exports = [
   {
     id: 'product-validator',
     name: 'Product Validator',
-    schedule: frequencies.seconds * 35,
+    schedule: frequencies.daily / 2,
   },
   {
     id: 'product-price-updater',
     name: 'Product Price Updater',
-    schedule: frequencies.seconds * 30,
+    schedule: frequencies.seconds / 2,
   },
   {
     id: 'amazon-flash-offers',
