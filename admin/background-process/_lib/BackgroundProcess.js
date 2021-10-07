@@ -82,6 +82,10 @@ class BackgroundProcess {
   emit(event, data) {
     this[EVENT_EMITTER].emit(event, data);
   }
+
+  get running() {
+    return /start/i.test(this.switch.getState());
+  }
 }
 
 module.exports = BackgroundProcess;
