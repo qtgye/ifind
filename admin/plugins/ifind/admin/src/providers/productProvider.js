@@ -13,6 +13,7 @@ fragment ProductDataFragment on Product {
   position
   clicks_count
   website_tab
+  deal_type
   amazon_url
   price
   details_html
@@ -93,6 +94,7 @@ $user: ID!
 $image: String!
 $title: String!
 $website_tab: String!
+$deal_type: ENUM_PRODUCT_DEAL_TYPE
 $category: ID!
 $position: Int
 $amazon_url: String!
@@ -106,6 +108,7 @@ export const productMutationCommonInput = `
 image: $image
 title: $title
 website_tab: $website_tab
+deal_type: $deal_type
 category: $category
 amazon_url: $amazon_url
 price: $price
