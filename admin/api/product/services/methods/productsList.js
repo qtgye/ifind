@@ -23,6 +23,14 @@ module.exports = async (args) => {
     whereParams.status = args.where.status;
   }
 
+  if (args.where && args.where.website_tab) {
+    whereParams.website_tab = args.where.website_tab;
+  }
+
+  if (args.where && args.where.deal_type) {
+    whereParams.deal_type = args.where.deal_type;
+  }
+
   const [count, products] = await Promise.all([
     strapi.services.product.count({
       ...whereParams,

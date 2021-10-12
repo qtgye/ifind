@@ -1,7 +1,15 @@
-import React, { useState, useEffect, useCallback, createContext, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { useQuery, useMutation } from '../helpers/query';
-import { useAdminUser } from './adminUserProvider';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  createContext,
+  useContext,
+} from "react";
+import { useParams } from "react-router-dom";
+import { useQuery, useMutation } from "../helpers/query";
+import { useAdminUser } from "./adminUserProvider";
+
+export interface I_Product {}
 
 export const ProductContext = createContext([]);
 
@@ -165,77 +173,79 @@ mutation CreateProduct (
     }
   }
 }
-`
+`;
 
 export const ProductProvider = ({ children }) => {
   const { adminUser } = useAdminUser();
   const { productId } = useParams();
-  const [ getProductQuery, setGetProductQuery ] = useState(null);
-  const { data: queryData, loading: queryLoading } = useQuery(getProductQuery, { id: productId });
+  const [getProductQuery, setGetProductQuery] = useState(null);
+  const { data: queryData, loading: queryLoading } = useQuery(getProductQuery, {
+    id: productId,
+  });
   const [
     addOrUpdateProduct,
     {
       // loading,
       error: mutationError,
       data: mutationData,
-    }
+    },
   ] = useMutation();
-  const [ productData, setProductData ] = useState(null);
-  const [ loading, setLoading ] = useState(true);
-  const [ error, setError ] = useState(false);
-  
-  const addProduct = useCallback((data) => {
-    data.user = adminUser?.id;
+  const [productData, setProductData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-    addOrUpdateProduct(addProductMutation, data);
-  }, [ adminUser, addProductMutation ]);
-  
-  const updateProduct = useCallback((data) => {
-    if ( data?.id ) {
+  const addProduct = useCallback(
+    (data) => {
       data.user = adminUser?.id;
-      addOrUpdateProduct(updateProductMutation, data);
-    }
-  }, [ updateProductMutation, adminUser ]);
-  
+
+      addOrUpdateProduct(addProductMutation, data);
+    },
+    [adminUser, addProductMutation]
+  );
+
+  const updateProduct = useCallback(
+    (data) => {
+      if (data?.id) {
+        data.user = adminUser?.id;
+        addOrUpdateProduct(updateProductMutation, data);
+      }
+    },
+    [updateProductMutation, adminUser]
+  );
+
   useEffect(() => {
-    if ( productId ) {
+    if (productId) {
       setGetProductQuery(productQuery);
-    }
-    else {
+    } else {
       setProductData(null);
     }
-  }, [ productId ]);
-  
-  useEffect(() => {
-    if ( queryData?.product ) {
-      setProductData(queryData.product);
-    }
-  }, [ queryData ]);
-  
-  useEffect(() => {
-    if ( mutationData?.createProduct?.product ) {
-      setProductData(mutationData.createProduct.product);
-    }
-    else if ( mutationData?.updateProduct?.product ) {
-      setProductData(mutationData.updateProduct.product);
-    }
-  }, [ mutationData ]);
+  }, [productId]);
 
   useEffect(() => {
-    if ( mutationError ) {
+    if (queryData?.product) {
+      setProductData(queryData.product);
+    }
+  }, [queryData]);
+
+  useEffect(() => {
+    if (mutationData?.createProduct?.product) {
+      setProductData(mutationData.createProduct.product);
+    } else if (mutationData?.updateProduct?.product) {
+      setProductData(mutationData.updateProduct.product);
+    }
+  }, [mutationData]);
+
+  useEffect(() => {
+    if (mutationError) {
       console.error(mutationError);
       setError(mutationError);
     }
-  }, [ mutationError ]);
+  }, [mutationError]);
 
   return (
-    <ProductContext.Provider value={[
-      productData,
-      addProduct,
-      updateProduct,
-      error,
-      queryLoading,
-    ]}>
+    <ProductContext.Provider
+      value={[productData, addProduct, updateProduct, error, queryLoading]}
+    >
       {children}
     </ProductContext.Provider>
   );

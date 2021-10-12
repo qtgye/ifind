@@ -10,7 +10,6 @@ import pluginId from '../../pluginId';
 
 import { Header } from '@buffetjs/custom';
 
-import { composeComponents } from '../../helpers/composeComponents';
 import { ProductsListProvider } from '../../providers/productsListProvider';
 import ProductsList from '../../components/ProductsList';
 

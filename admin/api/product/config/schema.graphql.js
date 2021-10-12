@@ -10,6 +10,8 @@ module.exports = {
       search: String
       category: ID
       status: String
+      website_tab: String
+      deal_type: String
     }
     type ProductsListPayload {
       count: Int
