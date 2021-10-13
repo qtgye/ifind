@@ -64,7 +64,7 @@
     },
     "amazon_url": {
       "type": "text",
-      "required": true
+      "required": false
     },
     "product_changes": {
       "via": "product",

@@ -3,11 +3,14 @@ const { existsSync } = require("fs-extra");
 const adminStrapi = appRequire("scripts/strapi-custom");
 const BackgroundProcess = require("../_lib/BackgroundProcess");
 const { getValueDeals } = require("../../helpers/aliexpress/value-deals");
-const { getDetailsFromURL } = require('../../helpers/aliexpress/api');
+const { getDetailsFromURL } = require("../../helpers/aliexpress/api");
 
 const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, "config");
 const config = existsSync(configPath) ? require(configPath) : {};
+
+const RETRY_WAIT = 30000;
+const PRODUCTS_COUNT = 20;
 
 class AliExpressValueDeals extends BackgroundProcess {
   constructor(config) {
@@ -18,6 +21,7 @@ class AliExpressValueDeals extends BackgroundProcess {
   afterInit() {}
 
   onSwitchStart() {
+    this.logger.log("Fetching AliExpress Super Value Deals...".cyan);
     this.fetchValueDeals();
   }
 
@@ -57,68 +61,105 @@ class AliExpressValueDeals extends BackgroundProcess {
     });
 
     const strapi = await adminStrapi();
-    const [
-      aliexpressSource,
-      germanRegion,
-    ] = await Promise.all([
-      strapi.services.source.findOne({ name_contains: 'aliexpress' }),
-      strapi.services.region.findOne({ code: 'de' }),
+    const [aliexpressSource, germanRegion] = await Promise.all([
+      strapi.services.source.findOne({ name_contains: "aliexpress" }),
+      strapi.services.region.findOne({ code: "de" }),
     ]);
 
-    console.log({ aliexpressSource, germanRegion });
-
     try {
-      const valueDealsLinks = await getValueDeals();
+      let valueDealsLinks = [];
 
-    const productsData = [];
+      await new Promise(async (resolve) => {
+        while (!valueDealsLinks.length) {
+          try {
+            this.logger.log("Fetching from Super Value Deals Page...".cyan);
+            valueDealsLinks = await getValueDeals();
+          } catch (err) {
+            console.error(err);
+            this.logger.log(
+              `Unable to fetch deals page. Retrying in ${Number(
+                RETRY_WAIT / 1000
+              )} second(s)...`.red,
+              ERROR
+            );
+            await new Promise((resolve) => setTimeout(resolve, RETRY_WAIT));
+          }
+        }
+        resolve();
+      });
 
-    for (let productLink of valueDealsLinks) {
-      console.log(`Fetching data for: ${productLink}`.gray);
+      const productsData = [];
 
-      try {
-        const productData = await getDetailsFromURL(productLink);
-        productsData.push(productData);
-
-        console.log(
-          `[ ${productsData.length} ] Details fetched for ${productData.title.bold}`
-            .green
+      while (!productsData.length) {
+        this.logger.log(
+          `Getting product details for ${valueDealsLinks.length} product link(s) scraped...`
+            .cyan
         );
 
-        // Save new product
+        for (let productLink of valueDealsLinks) {
+          this.logger.log(`Fetching data for: ${productLink}`.gray);
 
-        // We only need 20 products
-        if (productsData.length == 20) {
-          break;
+          try {
+            const productData = await getDetailsFromURL(productLink);
+            productsData.push(productData);
+
+            this.logger.log(
+              `[ ${productsData.length} ] Details fetched for ${productData.title.bold}`
+                .green
+            );
+
+            // We only need a certain amount of products
+            if (productsData.length == PRODUCTS_COUNT) {
+              break;
+            }
+          } catch (err) {
+            this.logger.log(
+              `Error while fetching ${productLink}: ${err.message}`,
+              "ERROR"
+            );
+          }
         }
-      } catch (err) {
-        console.log(`Error while fetching ${productLink}: ${err.message}`);
+
+        this.logger.log(
+          `Total of ${productsData.length} products has been fetched.`
+        );
+
+        if (!productsData.length) {
+          this.logger.log(
+            `No products fetched. Retring in ${Number(
+              RETRY_WAIT / 1000
+            )} second(s)...`.magenta
+          );
+          await new Promise((resolve) => setTimeout(resolve, RETRY_WAIT));
+        }
       }
-    }
 
-    console.log({ productsData });
-    console.log(`Total of ${productsData.length} products has been fetched.`);
+      this.logger.log("Saving new products...".green);
+      for (const productData of productsData) {
+        const newData = {
+          website_tab: "home",
+          deal_type: "aliexpress_value_deals",
+          title: productData.title,
+          image: productData.image,
+          url_list: [
+            {
+              url: productData.affiliateLink,
+              source: aliexpressSource.id,
+              region: germanRegion.id,
+              price: productData.price,
+            },
+          ],
+        };
 
-    // const queryParams = {
-    //   _limit: 9999,
-    //   _sort: "id:desc",
-    // };
+        this.logger.log(`Successfully saved: ${newData.title.bold}`.green);
 
-    // const sources = await strapi.services.source.find();
-    // const foundProducts = await strapi.services.product.find(queryParams);
+        await strapi.services.product.create(newData);
+      }
 
-    // // Sources
-    // const ebaySource = sources.find(({ name }) => /ebay/i.test(name));
-    // const aliexpressSource = sources.find(({ name }) => /ali/i.test(name));
-
-    // this.logger.log(
-    //   `Running price updater on ${foundProducts.length} product(s)...`.cyan
-    // );
-
-    this.logger.log(" DONE ".bgGreen.white.bold);
-    this.switch.stop();
-    }
-    catch (err) {
-      console.error(err);
+      this.logger.log(" DONE ".bgGreen.white.bold);
+      this.switch.stop();
+    } catch (err) {
+      console.error(err, err.data);
       this.switch.stop();
     }
   }
