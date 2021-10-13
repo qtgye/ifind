@@ -124,8 +124,10 @@ const Footer = () => {
                                     <p>
                                         {
                                             footerFootnote || `
-                                            *Affiliate-Links. Wir erhalten bei einem Kauf eine kleine Provision. Vielen Dank für Eure Unterstützung!
-                                            `
+                                            *Diese seite verwendet Affiliate-Links. 
+                                            Wir erhalten bei einem Kauf eine kleine Provision. 
+                                            Als Amazon-Partnerund Co. verdiene ich an qualifizierten Verkäufen.
+                                            Vielen Dank für Eure Unterstützung! `
                                         }
                                     </p>
                                 </div>
