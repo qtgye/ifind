@@ -134,6 +134,10 @@ class AliExpressValueDeals extends BackgroundProcess {
         }
       }
 
+      // Remove old products
+      // this.logger.log("Removing old products...".green);
+
+      // Save new products
       this.logger.log("Saving new products...".green);
       for (const productData of productsData) {
         const newData = {

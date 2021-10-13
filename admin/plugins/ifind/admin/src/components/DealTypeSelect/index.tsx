@@ -4,8 +4,13 @@ import InputBlock from "../InputBlock";
 
 import "./styles.scss";
 
+export type T_DealTypes = [
+  'amazon_flash_offers',
+  'ebay_wow_offers',
+  'aliexpress_value_deals',
+];
 export interface I_DealTypeOption {
-  value: string;
+  value: T_DealTypes;
   label: string;
 }
 
