@@ -126,7 +126,7 @@ const Footer = () => {
                                             footerFootnote || `
                                             *Diese seite verwendet Affiliate-Links. 
                                             Wir erhalten bei einem Kauf eine kleine Provision. 
-                                            Als Amazon-Partnerund Co. verdiene ich an qualifizierten Verkäufen.
+                                            Als Amazon-Partner und Co. verdiene ich an qualifizierten Verkäufen.
                                             Vielen Dank für Eure Unterstützung! `
                                         }
                                     </p>
