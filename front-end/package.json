@@ -91,8 +91,8 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "node scripts/copy-admin-types.js && node scripts/start.js",
+    "build": "node scripts/copy-admin-types.js && node scripts/build.js",
     "test": "node scripts/test.js",
     "serve": "node server.js",
     "storybook": "start-storybook -p 6006 -s ./public",
@@ -136,13 +136,13 @@
     "@storybook/react": "^6.2.9",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.10",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.29",
     "@types/react-dom": "^17.0.9",
     "bootstrap": "^5.0.0-beta3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
-    "node-sass": "^5.0.0",
+    "sass": "^1.43.2",
     "typescript": "^4.4.2"
   }
 }

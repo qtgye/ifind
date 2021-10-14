@@ -6,7 +6,7 @@ import { readFileSync } from "fs-extra";
 import { generateTypeScriptTypes } from "graphql-schema-typescript";
 
 const projectRoot = path.resolve(__dirname, "../");
-const outputPath = path.resolve(projectRoot, "types/admin.graphql.d.ts");
+const outputPath = path.resolve(projectRoot, "typings/admin.graphql.d.ts");
 
 const [schemaFile] = glob.sync(
   path.resolve(projectRoot, "../admin/exports/**/*.graphql")

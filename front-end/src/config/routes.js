@@ -43,17 +43,17 @@ const routes = [
     //     componentName: 'AboutUsPage',
     //     label: 'About Us',
     // },
-    // {   
+    // {
     //     path: '/agb',
     //     componentName: 'AGBPage',
     //     label: 'AGB',
     // },
-    // {   
+    // {
     //     path: '/impressum',
     //     componentName: 'ImpressumPage',
     //     label: 'Impressum',
     // },
-    // {   
+    // {
     //     path: '/data-protection',
     //     componentName: 'DataProtectionPage',
     //     label: 'Data Protection',

@@ -64,7 +64,7 @@
     },
     "amazon_url": {
       "type": "text",
-      "required": true
+      "required": false
     },
     "product_changes": {
       "via": "product",
@@ -96,6 +96,15 @@
       "type": "component",
       "repeatable": false,
       "component": "atoms.product-issues"
+    },
+    "deal_type": {
+      "type": "enumeration",
+      "enum": [
+        "amazon_flash_offers",
+        "ebay_wow_offers",
+        "aliexpress_value_deals"
+      ],
+      "default": "amazon_flash_offers"
     }
   }
 }

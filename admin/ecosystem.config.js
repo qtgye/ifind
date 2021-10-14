@@ -30,5 +30,12 @@ module.exports = {
       watch: false,
       autorestart: false,
     },
+    {
+      name: "aliexpress-value-deals",
+      script: "./background-process",
+      args: "aliexpress-value-deals",
+      watch: false,
+      autorestart: false,
+    },
   ],
 };

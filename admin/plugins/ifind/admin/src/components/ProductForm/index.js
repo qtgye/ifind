@@ -7,6 +7,7 @@ import ImagePreview from "../ImagePreview";
 import CategorySelect from "../CategorySelect";
 import ProductURLInput from "../ProductURLInput";
 import RegionSelect from "../RegionSelect";
+import DealTypeSelect from "../DealTypeSelect";
 import TextInput from "../TextInput";
 import NumberInput from "../NumberInput";
 import ProductAttributesRating from "../ProductAttributesRating";
@@ -35,6 +36,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   // Field states
   const [websiteTab, setWebsiteTab] = useState("product_comparison");
+  const [dealType, setDealType] = useState("");
   const [region, setRegion] = useState(null);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(null);
@@ -54,6 +56,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     return {
       id,
       websiteTab,
+      dealType,
       title,
       category,
       image,
@@ -70,6 +73,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   }, [
     id,
     websiteTab,
+    dealType,
     title,
     category,
     image,
@@ -90,6 +94,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.details_html = formData.detailsHTML;
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
+    formData.deal_type = formData.dealType;
 
     // Process urlList
     formData.url_list = formData.urlList.length
@@ -133,6 +138,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.urlList;
     delete formData.attrsRating;
     delete formData.finalRating;
+    delete formData.dealType;
 
     return formData;
   }, []);
@@ -166,6 +172,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     if (product) {
       setId(product.id);
       setWebsiteTab(product.website_tab);
+      setDealType(product.deal_type);
       setTitle(product.title);
       setImage(product.image);
       setCategory(product.category?.id);
@@ -207,6 +214,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       // Reset to defaults
       setId(null);
       setWebsiteTab("product_comparison");
+      setDealType('');
       setTitle("");
       setImage("");
       setCategory(null);
@@ -234,6 +242,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   }, [
     id,
     websiteTab,
+    dealType,
     title,
     category,
     region,
@@ -247,6 +256,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     attrsRating,
     finalRating,
   ]);
+
+  useEffect(() => {
+    console.log({ dealType });
+  }, [ dealType ]);
 
   return (
     <form className="product-form row">
@@ -276,14 +289,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         </InputBlock>
 
         {/* Region */}
-        <RegionSelect
-          className="col-md-4"
-          label="Region"
-          onChange={(regionID) => setRegion(regionID)}
-          disabled={true}
-          value={region}
-          error={formErrors.region}
-        />
+        {websiteTab === "home" ? (
+          <DealTypeSelect
+            className="col-md-4"
+            label="Deal Type"
+            onChange={(deal) => setDealType(deal)}
+            disabled={false}
+            value={dealType}
+            error={formErrors.dealType}
+          />
+        ) : null}
 
         {/* Change Date */}
         <TextInput
@@ -325,6 +340,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
           name="clicks-count"
           value={clicksCount}
           disabled
+        />
+
+        {/* Region */}
+        <RegionSelect
+          className="col-md-4"
+          label="Region"
+          onChange={(regionID) => setRegion(regionID)}
+          disabled={true}
+          value={region}
+          error={formErrors.region}
         />
 
         {/* Category */}
@@ -377,8 +402,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
         <InputBlock className="col-md-12">
           <Label>Details HTML</Label>
           <div className="product-form__details-html">
-            <div className="product-form__details-html-content" dangerouslySetInnerHTML={{ __html: detailsHTML }}>
-            </div>
+            <div
+              className="product-form__details-html-content"
+              dangerouslySetInnerHTML={{ __html: detailsHTML }}
+            ></div>
           </div>
         </InputBlock>
       </Panel>
