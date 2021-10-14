@@ -30,7 +30,7 @@ module.exports = {
       products: [Product]
     }
     type ProductsByDeal {
-      deal_type: String
+      deal_type: DealType
       products: [Product]
     }
   `,

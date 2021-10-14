@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
-const GeneralTemplate = ({ children }) => {
+const GeneralTemplate = ({ children }: React.PropsWithChildren<any>) => {
 
     // Scroll to top of page on mount
     useEffect(() => {

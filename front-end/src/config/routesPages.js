@@ -9,7 +9,6 @@ import DataProtection from "@pages/DataProtection";
 import AboutUs from "@pages/AboutUs";
 
 import { PageContextProvider } from "@contexts/pageContext";
-import { HomepageContextProvider } from "@contexts/homepageContext";
 import { ProductComparisonContextProvider } from "@contexts/productComparisonContext";
 
 /**
@@ -35,7 +34,6 @@ export const dynamicPages = [BasicPage];
 
 const providers = [
   PageContextProvider,
-  HomepageContextProvider,
   ProductComparisonContextProvider,
 ];
 
