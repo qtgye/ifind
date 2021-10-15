@@ -21,7 +21,6 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
 
   const categoryTree = useCategoryTree();
   const [currentCategory, setCurrentCategory] = useState();
-  const [showButton, setShowButton] = useState(false);
 
   useEffect(() => {
     setCurrentListCategory(currentCategory);

@@ -27,7 +27,12 @@
       grid-template-columns: repeat(2, 1fr);
     }
 
-    @include xl_desktop {
+    @include desktop {
+      grid-template-columns: repeat(4, 1fr);
+      grid-gap: 25px;
+    }
+
+    @include desktop-up {
       grid-template-columns: repeat(4, 1fr);
       grid-gap: 25px;
     }
