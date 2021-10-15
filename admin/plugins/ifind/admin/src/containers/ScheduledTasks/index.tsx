@@ -17,7 +17,6 @@ const ScheduledTasks = () => {
   const history = useHistory();
 
   const onTaskAction = useCallback((action, taskID) => {
-    console.log({ action, taskID });
     switch ( action ) {
       case 'start':
         startTask(taskID);

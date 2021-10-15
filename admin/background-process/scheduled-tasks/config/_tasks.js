@@ -25,6 +25,6 @@ module.exports = [
   {
     id: "aliexpress-value-deals",
     name: "AliExpress Super Value Deals",
-    schedule: frequencies.daily / 4,
+    schedule: frequencies.hourly,
   },
 ];
