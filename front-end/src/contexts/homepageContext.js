@@ -6,13 +6,13 @@ export const HomepageContext = createContext({});
 
 export const HomepageContextProvider = ({ children }) => {
     const {
-        // loading,
+        loading,
         // error,
-        data
+        data,
     } = useQuery(homepageQuery);
 
     return (
-        <HomepageContext.Provider value={data}>
+        <HomepageContext.Provider value={{ data, loading }}>
             {children}
         </HomepageContext.Provider>
     )

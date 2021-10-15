@@ -6,8 +6,9 @@ import { useHomepageData } from '@contexts/homepageContext';
 import NaturalList from '@components/NaturalList';
 
 const Home = () => {
-    const homepageData = useHomepageData();
+    const { homepageData, loading } = useHomepageData();
     const [isLoading, setIsLoading] = useState(true);
+    const icon = '/images/loading.png';
 
     const [items, setItems] = useState([]);
 
@@ -23,10 +24,13 @@ const Home = () => {
         <GeneralTemplate>
             <div className="home">
                 <div className="container" style={{ paddingLeft: '280px' }}>
-                    <NaturalList
-                        loading={isLoading}
-                        items={items}
-                    />
+                    {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
+                    {!loading &&
+                        <NaturalList
+                            loading={isLoading}
+                            items={items}
+                        />
+                    }
                 </div>
             </div>
         </GeneralTemplate>

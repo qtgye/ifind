@@ -5,7 +5,9 @@ import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import { useProductDetail } from '@contexts/productContext';
+import { useWindowSize } from '../../utilities/WindowResize';
 import Item from './item';
+import Modal from './modal';
 
 import './natural-list.scss';
 
@@ -19,6 +21,9 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { focusedCategory } = useContext(GlobalStateContext);
     const itemRef = useRef();
+    const [isOpen, SetIsOpen] = useState(false);
+    const [priceCatOpen, setPriceCatOpen] = useState(false);
+    const [width] = useWindowSize();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
@@ -84,57 +89,106 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         return ["Q" + qtr, "/" + yr];
     }
 
+    const activeModal = () => {
+        if (width < 611) {
+            SetIsOpen(true);
+        }
+    }
+
+    //console.log("Price Category State: ", priceCatOpen);
+
     return (
-        <div className="natural-list">
-            {currentRouteConfig.path === '/' ? null :
-                <>
-                    <div className="natural-list__separator" ref={itemRef} data-category={id}>
-                        <span>{label.toUpperCase()}</span>
-                        <div className="natural-list__mfd">
-                            {getQuarter(date)}
+        <>
+            <div className="natural-list">
+                {currentRouteConfig.path === '/' ? null :
+                    <>
+                        <div className="natural-list__separator" ref={itemRef} data-category={id}>
+                            {
+                                width > 560 ? (<span className="label">{label.toUpperCase()}</span>) :
+                                    (
+                                        <span className="label-2">
+                                            {label.toUpperCase()}
+                                            <span className={["ellipsis", priceCatOpen === true ? "active" : ""].join(" ")}
+                                                onClick={() => setPriceCatOpen(!priceCatOpen)}
+                                            >
+                                                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                            </span>
+                                            {
+                                                priceCatOpen ?
+                                                    <div className="price-option">
+                                                        <button>$</button>
+                                                        <button>$$</button>
+                                                        <button>$$$</button>
+                                                    </div> : null
+                                            }
+                                        </span>
+                                    )
+                            }
+                            {
+                                width > 560 ?
+                                    <div className="natural-list__mfd">
+                                        {getQuarter(date)}
+                                    </div> : null
+                            }
                         </div>
-                    </div>
-                    <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
-                    <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
-                    {/* <div className="natural-list__price-cat"> */}
-                    <div className="natural-list__price-cat">
-                        <button>$</button>
-                        <button>$$</button>
-                        <button>$$$</button>
-                    </div>
-                </>
-            }
-            {currentRouteConfig.path === '/findtube' ? null : (
-                <>
-                    {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
-                    <div className="natural-list__content" >
-                        {!loading && (
-                            <ul className="natural-list__grid">
-                                <li className="natural-list__item">
-                                    {
-                                        activeProduct &&
-                                        <ProductDetails
-                                            product={activeProduct}
-                                            isLoading={isDetailsLoading}
+                        <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
+                        <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
+                        {/* <div className="natural-list__price-cat"> */}
+                        <div className="natural-list__price-cat">
+                            {width > 560 ?
+                                <>
+                                    <button>$</button>
+                                    <button>$$</button>
+                                    <button>$$$</button>
+                                </>
+                                : null
+                            }
+                        </div>
+                    </>
+                }
+                {currentRouteConfig.path === '/findtube' ? null : (
+                    <>
+                        <Modal open={isOpen} close={() => SetIsOpen(false)}>
+                            {
+                                activeProduct &&
+                                <ProductDetails
+                                    product={activeProduct}
+                                    isLoading={isDetailsLoading}
+                                />
+                            }
+                        </Modal>
+                        {loading &&
+                            <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>
+                        }
+                        <div className="natural-list__content" >
+                            {!loading && (
+                                <ul className="natural-list__grid">
+                                    <li className="natural-list__item">
+                                        {
+                                            activeProduct &&
+                                            <ProductDetails
+                                                product={activeProduct}
+                                                isLoading={isDetailsLoading}
+                                            />
+                                        }
+                                    </li>
+                                    {items.map((item, index) => (
+                                        <Item
+                                            {...item}
+                                            active={activeProduct && activeProduct.id === item.id}
+                                            withBadge={index === 0}
+                                            onClick={() => { onProductClick(item); activeModal(); }}
+                                            key={item.id}
                                         />
-                                    }
-                                </li>
-                                {items.map((item, index) => (
-                                    <Item
-                                        {...item}
-                                        active={activeProduct && activeProduct.id === item.id}
-                                        withBadge={index === 0}
-                                        onClick={() => onProductClick(item)}
-                                        key={item.id}
-                                    />
-                                ))}
-                            </ul>
-                        )}
-                    </div>
-                </>
-            )
-            }
-        </div>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+                    </>
+                )
+                }
+            </div>
+        </>
     )
 };
 

@@ -1,4 +1,5 @@
 @import 'base/scss';
+@import 'base/global';
 
 .header-nav {
     display: flex;
@@ -7,12 +8,21 @@
     background-color: $gray-900;
     transition: all 0.3s;
 
+    @include tablet {
+        width: 103%;
+    }
+
+    @include large_mobile {
+        width: 102%;
+    }
+
     .header--sticked & {
         background-color: $white;
     }
 
     &__container {
         @include bootstrap(container);
+
     }
 
     &__row {
@@ -26,7 +36,7 @@
         display: flex;
         height: 100%;
 
-        @include custom_laptop {
+        @include laptop {
             width: 70%;
         }
 
@@ -34,8 +44,12 @@
             width: 50%;
         }
 
-        @include smaller_tablet {
-            width: 40%;
+        @include large_mobile {
+            width: 60%;
+        }
+
+        @include small_mobile {
+            position: fixed;
         }
     }
 
@@ -70,8 +84,44 @@
         }
 
         @include tablet {
+            margin-left: 8rem;
+        }
+
+        
+        @include ms_tablet {
+            margin-left: 10rem;
+        }
+
+
+        @include xs_tablet {
+            margin-left: 11rem;
+        }
+
+        @include large_mobile {
+            margin-left: 8rem;
+
             a {
                 font-size: 12px;
+            }
+        }
+
+        @include sl_mobile {
+            margin-left: 5.6rem;
+        }
+
+        @include sm_mobile {
+            margin-left: 4rem;
+        }
+
+        @include small_mobile {
+            position: sticky;
+            margin-top: 29rem;
+            margin-left: -12px;
+            height: 8%;
+            background-color: $gray-900;
+
+            a {
+                padding: 0 25px;
             }
         }
     }
