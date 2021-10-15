@@ -1,10 +1,10 @@
 import React from 'react';
 import Slider from "react-slick";
 import IfindIcon from '@components/IfindIcon';
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-
-import './carousel.scss';
+import './styles.scss';
 
 const Carousel = ({ categories, currentCategory, onCategoryLoadClick, onCategoryNavClick }) => {
 
@@ -17,15 +17,15 @@ const Carousel = ({ categories, currentCategory, onCategoryLoadClick, onCategory
     };
 
     return (
-        <div className="carousel">
+        <div className="carousel-area">
             <Slider {...settings}>
                 {categories.map((category, i) => (
                     <div className="items" key={i}>
-                        <button className={["carousel-button", currentCategory ? category.id === currentCategory ? "active" : ""
+                        <button className={["carousel-buttons", currentCategory ? category.id === currentCategory ? "active" : ""
                             : i === 0 ? "active" : ""].join(" ")}
                             onClick={(e) => { onCategoryLoadClick(e, category.id); onCategoryNavClick(category); }}>
-                            <IfindIcon icon={category.icon} className="carousel-icon" />
-                            <span className="carousel-label">{(category.label.label).split(" ")[0]}</span>
+                            <IfindIcon icon={category.icon} className="carousel-icons" />
+                            <span className="carousel-labels">{(category.label.label).split(" ")[0]}</span>
                         </button>
                     </div>
                 ))}

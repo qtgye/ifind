@@ -30,7 +30,7 @@ const HeaderSideNavButton = () => {
     }
 
     return (
-        <div className="header-side-nav__arrow" onClick={onClick}>
+        <div className="arrow-button" onClick={onClick}>
             <i className="fa fa-chevron-down"></i>
         </div>
     )

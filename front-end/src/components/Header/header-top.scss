@@ -12,21 +12,50 @@
 
     &__content {
         @include bootstrap(row);
+
+        @include laptop {
+            display: none;
+        }
+
+        @include tablet {
+            display: none;
+        }
+
+        @include large_mobile {
+            display: none;
+        }
+
+        @include mobile {
+            display: none;
+        }
     }
 
     &__left {
         @include bootstrap(col-lg-5 col-md-12 col-12);
 
         .list-main {
-            @include custom_laptop {
+            @include laptop {
                 li {
                     margin-top: 35px;
                 }
             }  
-            
-            @include smaller_tablet {
+
+            @include tablet {
                 li {
-                    margin-left: -85px;
+                    display: none;
+                }
+            }
+            
+
+            @include large_mobile {
+                li {
+                    display: none;
+                }
+            }
+
+            @include mobile {
+                li {
+                    display: none;
                 }
             }
         }
@@ -39,7 +68,7 @@
             @include bootstrap(float-end);
         }
         
-        @include custom_laptop {
+        @include laptop {
             .list-main {
                 position: absolute;
                 margin-top: -25px;
@@ -47,11 +76,21 @@
             }
         }
 
-        @include smaller_tablet {
+        @include tablet {
             .list-main {
-                position: absolute;
-                margin-top: -25px;
-                margin-left: 22em;
+                display: none;
+            }
+        }
+
+        @include large_mobile {
+            .list-main {
+                display: none;
+            }
+        }
+
+        @include mobile {
+            .list-main {
+                display: none;
             }
         }
     }
