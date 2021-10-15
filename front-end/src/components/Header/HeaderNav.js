@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { navigationRoutes } from '@config/routes';
 import routes from '@config/routes';
@@ -9,7 +10,9 @@ import './header-nav.scss';
 const navigationItems = navigationRoutes.map(path => routes.find(route => route.path === path));
 
 const HeaderNav = ({ withSideNav }) => {
+
     const { pathname } = useLocation();
+
     // let time = new Date().toLocaleTimeString();
     // const [currentTime, setCurrentTime] = useState(time);
 

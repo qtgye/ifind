@@ -1,4 +1,12 @@
+@import 'base/scss';
+
 .price-change-graph {
+
+    @include tablet {
+        margin-top: 5.8rem;
+        margin-left: -15rem;
+    }
+
     .highcharts-credits {
         display: none;
     }
