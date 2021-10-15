@@ -71,27 +71,6 @@ const ProductDetail = () => {
     }
   }, [ productFormData, updateProduct, addProduct ]);
 
-  const publishProduct = useCallback(() => {
-    // Prepare data for graphql request
-    const { success, errors } = validateData(productFormData, productValidationRules);
-
-    setFormErrors(errors);
-
-    // Don't save if validation fails
-    if ( !success ) {
-      return;
-    }
-
-    // Save product
-    else {
-      setIsPublishing(true);
-      updateProduct({
-        ...productFormData,
-        status: 'published',
-      });
-    }
-  }, [ productFormData, updateProduct, addProduct ]);
-
   const onProductDataUpdate = useCallback((newProductData) => {
     if ( !newProductData ) {
       setTitle('Create New Product');

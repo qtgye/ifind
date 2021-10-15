@@ -1,5 +1,5 @@
 import moment from "moment";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@buffetjs/core";
 
 import { generatePluginLink } from "../../helpers/url";
@@ -24,11 +24,15 @@ export type I_GetTaskStatusCallback = (task: I_RawTask) => JSX.Element;
 
 // TaskList Component
 const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
-  const someTaskRuns = tasks.some((task) => /run/i.test(task.status));
+  const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
+  const [triggeredTask, setTriggeredTask] = useState<string>("");
+  const [triggeredAction, setTriggeredAction] = useState<string>("");
 
   const onTaskActionClick = useCallback(
     (action, taskID) => {
       if (typeof onTaskAction === "function") {
+        setTriggeredAction(action);
+        setTriggeredTask(taskID);
         onTaskAction(action, taskID);
       }
     },
@@ -38,11 +42,18 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
       const isRunning = /run/i.test(task.status);
-      const isDisabled = someTaskRuns && !isRunning ? true : false;
-      const icon = isRunning ? "stop" : "play";
-      const label = isRunning ? "Stop" : "Run";
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
+      const label = isRunning ? "Stop" : "Run";
+      let iconPulse = false;
+      let icon = isRunning ? "stop" : "play";
+      let isDisabled = someTaskRuns && !isRunning ? true : false;
+
+      if (triggeredTask === task.id) {
+        isDisabled = true;
+        icon = "spinner";
+        iconPulse = true;
+      }
 
       return (
         <div className="tasks-list__actions">
@@ -51,7 +62,7 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
             color={color}
             onClick={() => onTaskActionClick(buttonAction, task.id)}
           >
-            <FontAwesomeIcon icon={icon} /> {label}
+            <FontAwesomeIcon icon={icon} pulse={iconPulse} /> {label}
           </Button>
           <ButtonLink
             color={E_ButtonLinkColor.secondary}
@@ -62,12 +73,13 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
             )}
             title="Show Logs"
           >
-            <FontAwesomeIcon icon="terminal" /><span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs`}} />
+            <FontAwesomeIcon icon="terminal" />
+            <span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs` }} />
           </ButtonLink>
         </div>
       );
     },
-    [someTaskRuns, onTaskAction]
+    [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
   );
 
   const getTaskStatus = useCallback<I_GetTaskStatusCallback>((task) => {
@@ -80,6 +92,15 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
       </span>
     );
   }, []);
+
+  useEffect(() => {
+    setTriggeredAction("");
+    setTriggeredTask("");
+  }, [someTaskRuns]);
+
+  useEffect(() => {
+    setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
+  }, [tasks]);
 
   const headers: T_ColumnHeader = {
     status: "Status",

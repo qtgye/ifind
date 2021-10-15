@@ -10,6 +10,8 @@ module.exports = {
       search: String
       category: ID
       status: String
+      website_tab: String
+      deal_type: String
     }
     type ProductsListPayload {
       count: Int
@@ -27,12 +29,17 @@ module.exports = {
       count: Int
       products: [Product]
     }
+    type ProductsByDeal {
+      deal_type: DealType
+      products: [Product]
+    }
   `,
   query: `
     productDetails (id: ID!, language: String): Product
     productComparisonList (language: String, root: ID): [NaturalList]
     categoryProducts (language: String, categories: [ID], includeDescendants: Boolean): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
+    productsByDeals: [ProductsByDeal]
   `,
   mutation: `
     addProductClick (id: ID!): ProductClicksDetails
@@ -52,6 +59,9 @@ module.exports = {
       },
       async categoryProducts(_, args) {
         return await strapi.services.product.categoryProducts(args.language, args.categories, args.includeDescendants);
+      },
+      async productsByDeals() {
+        return await strapi.services.product.productsByDeals();
       }
     },
     Mutation: {

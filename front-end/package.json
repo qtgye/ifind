@@ -92,7 +92,7 @@
     "workbox-webpack-plugin": "5.1.4"
   },
   "scripts": {
-    "start": "node scripts/start.js",
+    "start": "node scripts/copy-admin-types.js && node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "serve": "node server.js",
@@ -137,7 +137,7 @@
     "@storybook/react": "^6.2.9",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.10",
-    "@types/react": "^17.0.19",
+    "@types/react": "^17.0.29",
     "@types/react-dom": "^17.0.9",
     "bootstrap": "^5.0.0-beta3",
     "cors": "^2.8.5",

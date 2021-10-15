@@ -1,3 +1,7 @@
+/**
+ * TODO: Abstract out custom Schema definitions for better structure
+ */
+
 module.exports = {
   definition: `
   enum BACKGROUND_PROCESS_STATUS {
@@ -44,6 +48,12 @@ module.exports = {
   enum SCHEDULED_TASK_ACTION {
     start
     stop
+  }
+
+  type DealType {
+      name: String
+      label: String
+      source: Source
   }
   `,
   query: `
