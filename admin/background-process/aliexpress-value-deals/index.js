@@ -135,7 +135,9 @@ class AliExpressValueDeals extends BackgroundProcess {
       }
 
       // Remove old products
-      // this.logger.log("Removing old products...".green);
+      this.logger.log("Removing old products...".green);
+      const deletedProducts = await strapi.services.product.delete({ deal_type: "aliexpress_value_deals" });
+      this.logger.log(`Deleted ${deletedProducts.length} product(s).`.cyan);
 
       // Save new products
       this.logger.log("Saving new products...".green);
