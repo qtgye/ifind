@@ -1,16 +1,15 @@
 import './ifind-icon.scss';
 import PropTypes from 'prop-types';
 
-const IfindIcon = ({ icon, dark, ...props }) => {
-
-    props.className = [
-        props.className,
+const IfindIcon = ({ icon, dark, className, ...props }: IfindIconProps) => {
+    const processedClassName = [
+        className,
         'ifind-icon',
         dark ? 'ifind-icon--dark' : ''
     ].filter(Boolean).join(' ');
 
     return (
-        <svg {...props}>
+        <svg className={processedClassName} {...props}>
             <use xlinkHref={`#${icon.replace(/_/g, '-')}`} ></use>
         </svg>
     )

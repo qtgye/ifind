@@ -1,4 +1,4 @@
-const routes = [
+const routes: RouteConfig[] = [
 
     /**
      * Routes visible in Header Navigation
@@ -63,7 +63,7 @@ const routes = [
 /**
  * Dynamic Routes
  */
-export const dynamicRoutes = [
+export const dynamicRoutes: RouteConfig[] = [
     {
         path: '/:slug',
         componentName: 'BasicPage',
@@ -71,7 +71,7 @@ export const dynamicRoutes = [
 ];
 
 
-export const navigationRoutes = ['/', '/productcomparison', '/contact'];
+export const navigationRoutes: string[] = ['/', '/productcomparison', '/contact'];
 export const footerRoutes = [
     // '/about-us',
     // '/agb',

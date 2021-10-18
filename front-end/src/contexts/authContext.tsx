@@ -23,8 +23,7 @@ export const AuthContextProvider = ({ children }) => {
                 variables: {
                     username: BASIC_USER_NAME,
                     password: BASIC_USER_PASSWORD
-                },
-                context: { apiSource: apiSourceHandle }
+                }
             });
         }
     }, [ token, loginUser ]);

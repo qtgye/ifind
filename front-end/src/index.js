@@ -19,9 +19,9 @@ const token = localStorage.getItem(userTokenHandle) || null;
 // Admin Link
 const adminApiLink = new HttpLink({
   uri: ADMIN_API_ROOT,
-  headers: {
-    authorization: `Bearer ${token}`,
-  },
+  // headers: {
+  //   authorization: `Bearer ${token}`,
+  // },
 });
 
 const client = new ApolloClient({
