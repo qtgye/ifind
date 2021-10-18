@@ -4,6 +4,11 @@
   }
 }
 
+@mixin desktop-up {
+  @media screen and (min-width: 1400px) {
+    @content;
+  }
+}
 
 @mixin desktop {
     @media screen and (max-width: 1399px) {
@@ -106,7 +111,7 @@
     @content;
   }
 }
-  
+
 @mixin small_mobile {
     @media screen and (max-width: 280px) {
       @content;
