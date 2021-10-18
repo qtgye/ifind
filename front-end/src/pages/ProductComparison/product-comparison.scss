@@ -107,7 +107,7 @@
         @include laptop {
             column-gap: 21.5px;
             scroll-behavior: smooth;
-            overflow-x: scroll;
+            overflow-x: auto;
             overflow: hidden;
         }
 
@@ -548,10 +548,14 @@
     }
 
     .progress {
-        position: absolute;
-        top: 70%;
-        left: 44%;
+        position: relative;
+        top: 60%;
+        left: 41%;
         height: 20px;
         background-color: $white;
+
+        @include xxl_mobile {
+            left: 33%;
+        }
     }
 }
