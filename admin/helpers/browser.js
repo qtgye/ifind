@@ -10,6 +10,8 @@ class Browser {
     Browser.on("close", () => {
       this.page = null;
     });
+
+    this.class = this.__proto__.constructor;
   }
 
   async getBrowserInstance() {
@@ -63,6 +65,45 @@ class Browser {
       page.close(); // no need to await
       this.page = null;
     }, 1000 * 60);
+  }
+
+  async callPageFunction(pageFunction, ...args) {
+    const page = await this.getPageInstance();
+    return page[pageFunction].apply(page, args);
+  }
+
+  /**
+   * Puppeteer page methods
+   */
+  async goto(...args) {
+    return this.callPageFunction("goto", ...args);
+  }
+  async waitForSelector(...args) {
+    return this.callPageFunction("waitForSelector", ...args);
+  }
+  async click(...args) {
+    return this.callPageFunction("click", ...args);
+  }
+  async evaluate(...args) {
+    return this.callPageFunction("evaluate", ...args);
+  }
+  async $eval(...args) {
+    return this.callPageFunction("$eval", ...args);
+  }
+  async $$eval(...args) {
+    return this.callPageFunction("$$eval", ...args);
+  }
+  async waitForResponse(...args) {
+    return this.callPageFunction("waitForResponse", ...args);
+  }
+  async reload(...args) {
+    return this.callPageFunction("reload", ...args);
+  }
+  async setViewport(...args) {
+    return this.callPageFunction("setViewport", ...args);
+  }
+  async screenshot(...args) {
+    return this.callPageFunction("screenshot", ...args);
   }
 }
 

@@ -2,7 +2,7 @@ const path = require("path");
 const { existsSync } = require("fs-extra");
 const adminStrapi = appRequire("scripts/strapi-custom");
 const BackgroundProcess = require("../_lib/BackgroundProcess");
-const getLightningOffers = appRequire('helpers/amazon/lighning-offers');
+const getLightningOffers = appRequire('helpers/amazon/lightning-offers');
 
 const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, "config");
