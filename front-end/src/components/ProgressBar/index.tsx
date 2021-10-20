@@ -17,7 +17,7 @@ const ProgressBars = () => {
 
                 return newValue;
             });
-        }, 1000);
+        }, 1300);
     }, []);
 
     return (
