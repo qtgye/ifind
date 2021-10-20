@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import ReactShadowRoot from "react-shadow-root";
+import ReactShadowRoot from "react-shadow-root";
 import { v4 as uuid } from "uuid";
 
 import { useSourceRegion } from "@contexts/sourceRegionContext";
@@ -7,7 +7,7 @@ import PriceChangeGraph from "@components/PriceChangeGraph";
 import ProductRating from "@components/ProductRating";
 import ProductURLLink from "./product-url-link";
 
-// import inlineStyles from "./detail-styles";
+import inlineStyles from "./detail-styles";
 import "./product-details.scss";
 
 const icon = "/images/loading.png";
@@ -16,12 +16,13 @@ const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
   const { sources } = useSourceRegion();
   const amazonSource = sources?.find((source) => /amazon/i.test(source.name));
   const [urlItems, setURLItems] = useState<URLListItemWithKey[]>([]);
-  const productChanges = product?.product_changes?.map(productChange => {
-    return {
-      ...productChange,
-      state: JSON.parse(productChange?.state || '{}'),
-    } as ProductChangeWithStateObject
-  }) || [];
+  const productChanges =
+    product?.product_changes?.map((productChange) => {
+      return {
+        ...productChange,
+        state: JSON.parse(productChange?.state || "{}"),
+      } as ProductChangeWithStateObject;
+    }) || [];
 
   useEffect(() => {
     // Add keys to urlList
@@ -45,12 +46,12 @@ const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
         <div className="product-details__content">
           <h1 className="product-details__title">{product.title}</h1>
           <div className="product-details__body">
-            {/* <ReactShadowRoot>
+            <ReactShadowRoot>
               <style>{inlineStyles}</style>
               <div
                 dangerouslySetInnerHTML={{ __html: product.details_html || "" }}
               ></div>
-            </ReactShadowRoot> */}
+            </ReactShadowRoot>
           </div>
           <div className="product-details__additional">
             <div className="product-details__links">
@@ -78,10 +79,11 @@ const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
             {product?.product_changes?.length ? (
               <PriceChangeGraph
                 priceChanges={productChanges.map(
-                  (productChange) => (productChange && {
-                    price: productChange?.state?.price || 0,
-                    date_time: productChange.date_time,
-                  })
+                  (productChange) =>
+                    productChange && {
+                      price: productChange?.state?.price || 0,
+                      date_time: productChange.date_time,
+                    }
                 )}
               />
             ) : null}
