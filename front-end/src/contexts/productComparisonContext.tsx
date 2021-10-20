@@ -1,12 +1,18 @@
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { createContext, PropsWithChildren, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { locale } from "@config/locale";
 import { apiSourceHandle } from "@config/adminApi";
 import getProductComparisonListQuery from "@gql/getProductComparisonListQuery";
 
-export const ProductComparisonContext = createContext({});
+declare interface ProductComparisonContextData {
+  productComparisonList?: NaturalList[];
+  loading?: boolean;
+  setCurrentListCategory?: (args: any) => any;
+}
 
-export const ProductComparisonContextProvider = ({ children }) => {
+export const ProductComparisonContext = createContext<ProductComparisonContextData>({});
+
+export const ProductComparisonContextProvider = ({ children }: PropsWithChildren<ReactNode>) => {
   const [category, setCategory] = useState(null);
   const [productComparisonList, setProductComparisonList] = useState([]);
   const {

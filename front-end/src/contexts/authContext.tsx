@@ -1,11 +1,11 @@
-import { createContext, useEffect, useContext, useState } from 'react';
+import { createContext, useEffect, useContext, useState, PropsWithChildren } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { BASIC_USER_NAME, BASIC_USER_PASSWORD, apiSourceHandle, userTokenHandle } from '@config/adminApi';
+import { BASIC_USER_NAME, BASIC_USER_PASSWORD, userTokenHandle } from '@config/adminApi';
 import loginUserQuery from '@gql/loginUserQuery';
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext<AuthContextData>({ token: null });
 
-export const AuthContextProvider = ({ children }) => {
+export const AuthContextProvider = ({ children }: PropsWithChildren<JSX.Element>) => {
     const [
         loginUser,
         {

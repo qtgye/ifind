@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, queryByDisplayValue } from '@testing-library/react'
+import { render } from '@testing-library/react'
 import { BrowserRouter } from 'react-router-dom';
 
 import Newsletter from '../';

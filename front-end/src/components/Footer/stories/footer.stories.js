@@ -1,5 +1,5 @@
 import { component } from '@sb';
-import FoooterComponent from '../';
+import FoooterComponent from '..';
 
 export default component({
     title: 'Footer',

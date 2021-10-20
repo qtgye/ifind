@@ -1,20 +1,21 @@
 import emailjs from 'emailjs-com';
+import React from 'react';
 
 const ContactForm = () => {
 
-    const sendEmail = (e) => {
+    const sendEmail = (e: React.FormEvent) => {
         e.preventDefault();
 
-        emailjs.sendForm("ionos", "template_sjy5hvg", e.target, "user_NZBqX55LWZGHJiJDgGB7r")
+        emailjs.sendForm("ionos", "template_sjy5hvg", e.target as HTMLFormElement, "user_NZBqX55LWZGHJiJDgGB7r")
             .then((result) => {
                 console.log(result.text);
-                alert("Your message is Successfully Sent!");
+                window.alert("Your message is Successfully Sent!");
             }, (error) => {
                 console.log(error.text);
-                alert("There's an error on sending your message!");
+                window.alert("There's an error on sending your message!");
             });
 
-        e.target.reset();
+        (e.target as HTMLFormElement).reset();
     }
 
     return (

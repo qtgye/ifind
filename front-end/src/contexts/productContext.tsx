@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useCallback, useState } from 'react';
+import { createContext, useContext, useEffect, useCallback, useState, PropsWithChildren, ReactNode } from 'react';
 import { useMutation, useLazyQuery } from "@apollo/react-hooks";
 import { apiSourceHandle } from '@config/adminApi'
 import getProductDetailQuery from '@gql/getProductDetailQuery';
@@ -6,10 +6,10 @@ import incrementProductClickMutation from '@gql/incrementProductClickMutation';
 
 import { locale } from '@config/locale';
 
-export const ProductContext = createContext({});
+export const ProductContext = createContext<ProductContextData>({});
 
-export const ProductContextProvider = ({ children }) => {
-    const [ productDetail, setProductDetail ] = useState(null);
+export const ProductContextProvider = ({ children }: PropsWithChildren<ReactNode>) => {
+    const [ productDetail, setProductDetail ] = useState<Product>();
     const [
         fetchProductDetails,
         {
@@ -28,7 +28,7 @@ export const ProductContextProvider = ({ children }) => {
             context: {
                 apiSource: apiSourceHandle,
             },
-            variables: { 
+            variables: {
                 id: productID,
                 language: locale,
             }

@@ -1,4 +1,4 @@
-const SideBar = ({ phone, supportPhone, supportEmail }) => (
+const SideBar = ({ phone, supportPhone, supportEmail }: ContactSidebarProps) => (
     <div className="col-lg-4 col-12">
         <div className="single-head">
             <div className="single-info">

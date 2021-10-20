@@ -5,9 +5,9 @@ import dayjs from "dayjs";
 
 import "./styles.scss";
 
-const PriceChangeGraph = ({ priceChanges }) => {
+const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
   const thirtyDaysBefore = dayjs().subtract(30, "days").valueOf;
-  const defaultChartOptions = {
+  const defaultChartOptions: { [key: string]: any} = {
     title: {
       text: null,
     },
@@ -53,8 +53,8 @@ const PriceChangeGraph = ({ priceChanges }) => {
   useEffect(() => {
     if (priceChanges?.length) {
       const prices = priceChanges
-        .filter(({ price }) => !!Number(price))
-        .map(({ price }) => Number(price));
+        .filter(priceChange => !!Number(priceChange?.price))
+        .map(priceChange => Number(priceChange?.price));
       const min = Math.min(...prices);
       const max = Math.max(...prices);
       const ave = prices.reduce((sum, price) => sum + price, 0) / prices.length;
@@ -71,12 +71,12 @@ const PriceChangeGraph = ({ priceChanges }) => {
       setHighchartsOptions({
         series: [
           {
-            data: priceChanges.map((priceChange) => {
-              return [
+            data: priceChanges.map((priceChange) => (
+              priceChange ? [
                 dayjs(priceChange.date_time).valueOf(),
                 Number(priceChange.price),
-              ];
-            }),
+              ]: null
+            )),
             pointStart: thirtyDaysBefore,
           },
         ],

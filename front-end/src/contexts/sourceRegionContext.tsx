@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 import { apiSourceHandle } from '@config/adminApi'
 import sourceRegionQuery from '../gql/getSourceRegionQuery';
 
-export const SourceRegionContext = createContext({});
+export const SourceRegionContext = createContext<SourceRegionContextData>({});
 
-export const SourceRegionProvider = ({ children }) => {
+export const SourceRegionProvider = ({ children }: PropsWithChildren<React.ReactNode>) => {
     const [ regions, setRegions ] = useState([]);
     const [ sources, setSources ] = useState([]);
     const { data } = useQuery(sourceRegionQuery, {

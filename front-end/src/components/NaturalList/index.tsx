@@ -11,28 +11,32 @@ import Modal from './modal';
 
 import './natural-list.scss';
 
-const NaturalList = ({ items = [], loading = false, category, observeItem, id, label, date }) => {
+const NaturalList = ({ items = [], loading = false, category, observeItem, id, label, date }: NaturalListProps) => {
     const { incrementProductClick, productDetail: productDetailFromContext, getProductDetails } = useProductDetail();
 
     const icon = '/images/loading.png';
-    const [activeProduct, setActiveProduct] = useState(null);
+    const [activeProduct, setActiveProduct] = useState<Product>();
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { focusedCategory } = useContext(GlobalStateContext);
-    const itemRef = useRef();
+    const itemRef = useRef<HTMLDivElement|null>();
     const [isOpen, SetIsOpen] = useState(false);
     const [priceCatOpen, setPriceCatOpen] = useState(false);
     const [width] = useWindowSize();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
-        incrementProductClick(product.id);
+        if ( incrementProductClick ) {
+          incrementProductClick(product.id);
+        }
     }, [setActiveProduct, incrementProductClick]);
 
     const populateProductDetails = useCallback(async (productID) => {
         setIsDetailsLoading(true);
-        getProductDetails(productID);
+        if ( getProductDetails ) {
+          getProductDetails(productID);
+        }
     }, [getProductDetails]);
 
     const productHasDetails = useCallback((productData) => (
@@ -82,8 +86,8 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         //console.log(date);
     }, [focusedCategory, id]);
 
-    const getQuarter = (date) => {
-        date = new Date(date);
+    const getQuarter = (_date: string) => {
+        const date = new Date(_date);
         let qtr = Math.ceil((date.getMonth() + 1) / 3);
         let yr = date.getFullYear();
         return ["Q" + qtr, "/" + yr];
@@ -100,14 +104,14 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     return (
         <>
             <div className="natural-list">
-                {currentRouteConfig.path === '/' ? null :
+                {currentRouteConfig?.path === '/' ? null :
                     <>
-                        <div className="natural-list__separator" ref={itemRef} data-category={id}>
+                        <div className="natural-list__separator" ref={itemRef as React.LegacyRef<HTMLDivElement>} data-category={id}>
                             {
-                                width > 560 ? (<span className="label">{label.toUpperCase()}</span>) :
+                                width > 560 ? (<span className="label">{label?.toUpperCase()}</span>) :
                                     (
                                         <span className="label-2">
-                                            {label.toUpperCase()}
+                                            {label?.toUpperCase()}
                                             <span className={["ellipsis", priceCatOpen === true ? "active" : ""].join(" ")}
                                                 onClick={() => setPriceCatOpen(!priceCatOpen)}
                                             >
@@ -127,7 +131,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                             {
                                 width > 560 ?
                                     <div className="natural-list__mfd">
-                                        {getQuarter(date)}
+                                        {getQuarter(date || '')}
                                     </div> : null
                             }
                         </div>
@@ -146,7 +150,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                         </div>
                     </>
                 }
-                {currentRouteConfig.path === '/findtube' ? null : (
+                {currentRouteConfig?.path === '/findtube' ? null : (
                     <>
                         <Modal open={isOpen} close={() => SetIsOpen(false)}>
                             {
@@ -175,10 +179,10 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                     {items.map((item, index) => (
                                         <Item
                                             {...item}
-                                            active={activeProduct && activeProduct.id === item.id}
+                                            active={activeProduct && activeProduct.id === item?.id}
                                             withBadge={index === 0}
                                             onClick={() => { onProductClick(item); activeModal(); }}
-                                            key={item.id}
+                                            key={item?.id}
                                         />
                                     ))}
                                 </ul>

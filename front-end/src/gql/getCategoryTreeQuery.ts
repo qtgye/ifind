@@ -1,6 +1,6 @@
 import { gql } from "apollo-boost";
 
-const generateParentCategoryFragment = (iterationsLeft) => (iterationsLeft && `
+const generateParentCategoryFragment = (iterationsLeft: number): string => (iterationsLeft && `
     parent {
         id
         label {
@@ -10,7 +10,7 @@ const generateParentCategoryFragment = (iterationsLeft) => (iterationsLeft && `
     }
 `) || '';
 
-const generateChildCategory = (iterationsLeft) => {
+const generateChildCategory = (iterationsLeft: number): string => {
     return `
         id
         icon

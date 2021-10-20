@@ -8,7 +8,7 @@ const NewsLetter = () => (
                             <h4 className='title'>Newsletter</h4>
                             <p className='ptext'> Subscribe to our newsletter</p>
                             <form action="mail/mail.php" method="get" target="_blank" className="newsletter-inner">
-                                <input name="EMAIL" placeholder="Your email address" required="" type="email" />
+                                <input name="EMAIL" placeholder="Your email address" type="email" />
                                 <button className="btn">Subscribe</button>
                             </form>
                         </div>

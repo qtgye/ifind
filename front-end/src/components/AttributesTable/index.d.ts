@@ -1,3 +1,3 @@
 declare interface AttributesTableProps {
-  attributes: ComponentAtomsProductAttrRating[]
+  attributes: (ComponentAtomsProductAttrRating|null)[]
 }

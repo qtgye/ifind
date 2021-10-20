@@ -10,10 +10,10 @@ const logo = '/images/NewLogowith1Warp_White.png';
 
 const Footer = () => {
     const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
-    const [informationLinks, setInformationLinks] = useState(mockInfoLinks);
+    const [informationLinks, setInformationLinks] = useState<FooterLink[]>(mockInfoLinks);
     const [footerText, setFooterText] = useState('');
     const [footerFootnote, setFooterFootnote] = useState('');
-    const [socialLinks, setSocialLinks] = useState([]);
+    const [socialLinks, setSocialLinks] = useState<SocialNetworkLink[]>([]);
 
     useEffect(() => {
         if (footerSetting?.footer_links?.length) {
@@ -79,7 +79,7 @@ const Footer = () => {
                                 <ul>
                                     {informationLinks.map(infoRoute => (
                                         infoRoute && <li key={infoRoute.path}>
-                                            <Link to={infoRoute.path}>{infoRoute.label}</Link>
+                                            <Link to={infoRoute?.path || '/'}>{infoRoute.label}</Link>
                                         </li>
                                     ))}
                                 </ul>
@@ -124,8 +124,8 @@ const Footer = () => {
                                     <p>
                                         {
                                             footerFootnote || `
-                                            *Diese Seite verwendet Affiliate-Links. 
-                                            Wir erhalten bei einem Kauf eine kleine Provision. 
+                                            *Diese Seite verwendet Affiliate-Links.
+                                            Wir erhalten bei einem Kauf eine kleine Provision.
                                             Als Amazon-Partner und Co. verdienen wir an qualifizierten Verkäufen.
                                             Vielen Dank für Eure Unterstützung! `
                                         }

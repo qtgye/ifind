@@ -71,10 +71,12 @@ export const sleep = (ms = 0) => {
     return new Promise((resolve) => setTimeout(resolve, ms));
 };
 
-export const createItem = (position, idx) => {
+export const createItem = (position: number, idx: number) => {
     const item = {
         styles: {
             transform: `translateX(${position * slideWidth}rem)`,
+            filter: '',
+            opacity: 1,
         },
         category: _items[idx].category,
     };

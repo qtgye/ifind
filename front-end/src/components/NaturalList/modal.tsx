@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import './modal.scss';
 
-const modal = ({ open, close, children }) => {
+const modal = ({ open, close, children }: NaturalListModalProps) => {
 
     if (!open) {
         return null;
@@ -16,7 +16,7 @@ const modal = ({ open, close, children }) => {
                 <div className="modal-content">{children}</div>
             </div>
         </div>,
-        document.getElementById("portal")
+        document.getElementById("portal") as HTMLElement
     )
 }
 

@@ -1,4 +1,4 @@
-const TiIcon = ({ icon }) => (
+const TiIcon = ({ icon }: TiIconProps) => (
     <i className={ `ti-${icon}` }></i>
 );
 

@@ -15,3 +15,5 @@ import  "./ProductDetails/index.d";
 import  "./ProductRating/index.d";
 import  "./ProgressBar/index.d";
 import  "./RatingWarps/index.d";
+import  "./ShadowRoot/index.d";
+import  "./TiIcon/index.d";

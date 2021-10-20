@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { toAdminURL } from '@utilities/url';
 import { trackClick } from '@utilities/tracking';
 
-const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency }) => {
+const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency }: ProductURLLinkProps) => {
 
     const percentDifference = 100 * (price - basePrice) / basePrice;
 

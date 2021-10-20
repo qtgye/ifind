@@ -9,13 +9,6 @@ import NewsLetter from "@components/NewsLetter";
 
 import "./App.scss";
 
-// TODO: Move these to declaration files
-interface DynamicRoute {
-  component?: React.FunctionComponent;
-  path: string;
-  exact?: boolean;
-}
-
 function App() {
   return (
     <Router>
@@ -25,12 +18,12 @@ function App() {
           <Switch>
             {routesPages
               .concat(dynamicRoutePages)
-              .filter(({ component }: DynamicRoute) => component || null)
-              .map(({ path, component, exact = false }: DynamicRoute) => (
+              .filter(({ component }) => component || null)
+              .map(({ path, component, exact = false }) => (
                 <Route
                   key={path}
                   path={path}
-                  component={component}
+                  component={component as React.ComponentType<any>}
                   exact={exact}
                 />
               ))}

@@ -1,4 +1,4 @@
-const Item = ({ active, image, title, price, withBadge, onClick }) => {
+const Item = ({ active, image, title, price, withBadge, onClick }: NaturalListItemProps) => {
     const itemClassnames = [
         'natural-list__item',
         active && 'natural-list__item--active ',

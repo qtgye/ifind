@@ -6,7 +6,7 @@ import { withComponentName, withProvider } from '@utilities/component';
 
 const BasicPage = () => {
     const { data, loading } = usePageData();
-    const [ pageData, setPageData ] = useState({});
+    const [ pageData, setPageData ] = useState<ComponentEntryFieldsPageFields>();
 
     useEffect(() => {
         if ( data && data.data ) {
@@ -15,10 +15,10 @@ const BasicPage = () => {
     }, [ data ]);
 
     return (
-        <BasicPageTemplate title={ pageData.title || '' }>
-            <div dangerouslySetInnerHTML={{ __html: loading ? 'Loading Page...' : pageData.body  }}></div>
+        <BasicPageTemplate title={ pageData?.title || '' }>
+            <div dangerouslySetInnerHTML={{ __html: loading ? 'Loading Page...' : pageData?.body || ''  }}></div>
         </BasicPageTemplate>
     )
 };
 
-export default withProvider('PageContextProvider')(withComponentName('BasicPage')(BasicPage));
+export default withProvider('PageContextProvider')(withComponentName('BasicPage')(BasicPage) || undefined);

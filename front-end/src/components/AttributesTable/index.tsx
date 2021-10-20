@@ -16,11 +16,11 @@ const AttributesTable = ({ attributes }: AttributesTableProps) => {
                 </tr>
             </thead>
             <tbody>
-                {attributes.map((attribute: ComponentAtomsProductAttrRating, index: number) => (
+                {attributes.map((attribute, index: number) => (
                     <tr key={attribute?.product_attribute?.name}>
                         <td><strong>{attribute?.product_attribute?.name}</strong></td>
                         <td>{attribute?.rating}</td>
-                        <td><RatingWarps rating={attribute?.rating} /></td>
+                        <td><RatingWarps rating={attribute?.rating || 0} /></td>
                         <td>{attribute?.factor}</td>
                         <td>{attribute?.points}</td>
                     </tr>

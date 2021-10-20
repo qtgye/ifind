@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { LegacyRef, useContext, useEffect, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 
-const List = ({ index, observeItem }) => {
+const List = ({ index, observeItem }: ListProps) => {
     const { focusedIndex } = useContext(GlobalStateContext);
-    const itemRef = useRef();
+    const itemRef = useRef<HTMLDivElement>();
 
     useEffect(() => {
+      if ( itemRef.current && observeItem ) {
         const unObserve = observeItem(itemRef.current);
         return unObserve;
+      }
     }, [observeItem]);
 
     useEffect(() => {
@@ -20,9 +22,8 @@ const List = ({ index, observeItem }) => {
         }
     }, [focusedIndex, index]);
 
-
     return (
-        <div ref={itemRef} data-index={index} className="prodcomp-area-list">
+        <div ref={itemRef as LegacyRef<HTMLDivElement>} data-index={index} className="prodcomp-area-list">
             List {index}
         </div>
     );

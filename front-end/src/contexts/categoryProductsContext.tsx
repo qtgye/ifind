@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react';
 import { useLazyQuery } from "@apollo/react-hooks";
 import { locale } from '@config/locale';
 import { apiSourceHandle } from '@config/adminApi';
@@ -6,7 +6,7 @@ import getCategoryProductsQuery from '@gql/getCategoryProductsQuery';
 
 export const CategoryProductsContext = createContext({});
 
-export const CategoryProductsContextProvider = ({ children }) => {
+export const CategoryProductsContextProvider = ({ children }: PropsWithChildren<JSX.Element>) => {
     const [ categories, setCategories ] = useState([]);
     const [ categoryProducts, setCategoryProducts ] = useState([]);
     const [

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useWindowScroll } from 'react-use';
 import eventBus from '@utilities/EventBus';
 
-const HeaderSideNavButton = () => {
+const HeaderSideNavButton = (): JSX.Element => {
 
     const { y: pageYOffset } = useWindowScroll();
     const [isVisible, setIsVisible] = useState(false);
@@ -10,12 +10,12 @@ const HeaderSideNavButton = () => {
 
     const onClick = useCallback(() => {
         //console.log("clicked");
-        dispatch('scrollPanelScroll');
+        dispatch('scrollPanelScroll', null);
     }, [dispatch]);
 
 
     useEffect(() => {
-        if (pageYOffset === document.height) {
+        if (pageYOffset === window.document.documentElement.offsetHeight) {
             setIsVisible(false);
         }
         else {
@@ -26,7 +26,7 @@ const HeaderSideNavButton = () => {
 
 
     if (!isVisible) {
-        return false;
+        return <></>;
     }
 
     return (

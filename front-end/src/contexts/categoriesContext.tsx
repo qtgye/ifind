@@ -1,14 +1,14 @@
-import { createContext, useEffect, useContext, useState } from 'react';
+import React, { createContext, useEffect, useContext, useState} from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { apiSourceHandle } from '@config/adminApi';
 import getCategoryTree from '@gql/getCategoryTreeQuery';
 import { locale as language } from '@config/locale';
 
-export const CategoriesContext = createContext({});
+export const CategoriesContext = createContext<CategoriesContextData>({});
 
-export const CategoriesContextProvider = ({ children }) => {
-    const [categoryTree, setCategoryTree] = useState([]);
-    const [subCategories, setSubCategories] = useState([]);
+export const CategoriesContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
+    const [categoryTree, setCategoryTree] = useState<(CategoryWithChild|null)[]>([]);
+    const [subCategories, setSubCategories] = useState<(CategoryWithChild|null)[]>([]);
 
     const {
         data,

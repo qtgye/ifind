@@ -72,7 +72,7 @@ export const dynamicRoutes: RouteConfig[] = [
 
 
 export const navigationRoutes: string[] = ['/', '/productcomparison', '/contact'];
-export const footerRoutes = [
+export const footerRoutes: string[] = [
     // '/about-us',
     // '/agb',
     // '/impressum',

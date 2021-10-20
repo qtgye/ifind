@@ -6,15 +6,12 @@ import reportWebVitals from "./reportWebVitals";
 
 import {
   ADMIN_API_ROOT,
-  userTokenHandle,
 } from "@config/adminApi";
 
 import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 
 import { spriteContents } from "ifind-icons";
-
-const token = localStorage.getItem(userTokenHandle) || null;
 
 // Admin Link
 const adminApiLink = new HttpLink({

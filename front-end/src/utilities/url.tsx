@@ -1,7 +1,7 @@
 import { ADMIN_API_ROOT } from '@config/adminApi'
 
 /**
- * 
+ *
  * @param {String} relativeURL - the relative pathname
  * @returns {String}
  */
@@ -14,9 +14,9 @@ export const toAdminURL = (relativeURL = '') => (
         .replace(/^\/+/, '/')
 )
 
-export const addURLParams = (url = '', paramsObject) => {
+export const addURLParams = (url = '', paramsObject: {[key: string]: any}) => {
     const [ baseURL, searchParams = '' ] = url.split('?');
-    const searchParamsObject = searchParams.split('&').filter(Boolean).reduce((all, keyValue) => {
+    const searchParamsObject = searchParams.split('&').filter(Boolean).reduce((all: {[key: string]: any}, keyValue) => {
       const [ key, value ] = keyValue.split('=');
       all[key] = value;
       return all;
@@ -26,6 +26,6 @@ export const addURLParams = (url = '', paramsObject) => {
       ...paramsObject,
     };
     const newParamsString = Object.entries(newParams).map(([ key, value ]) => `${key}=${value}`).join('&');
-  
+
     return baseURL + '?' + newParamsString;
   }

@@ -1,4 +1,4 @@
-export const trackClick = (element, fields) => {
+export const trackClick = (element: HTMLElement, fields: {[key: string]: any}) => {
     if ( window.gtag ) {
         window.gtag('event', fields.action, {
             'event_category': fields.category,

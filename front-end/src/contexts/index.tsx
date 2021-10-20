@@ -4,8 +4,9 @@ import { ProductContextProvider } from "./productContext";
 import { CategoriesContextProvider } from "@contexts/categoriesContext";
 import { GlobalStateContextProvider } from "@contexts/globalStateContext";
 import { SourceRegionProvider } from "@contexts/sourceRegionContext";
+import { PropsWithChildren } from "react";
 
-export const Providers = ({ children }) => {
+export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
   return (
     <GlobalContextProvider>
       <GlobalStateContextProvider>

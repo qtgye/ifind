@@ -1,24 +1,29 @@
 import { useParams } from 'react-router-dom';
-import { createContext, useContext } from 'react';
+import React, { createContext, useContext } from 'react';
 import { useQuery } from "@apollo/react-hooks";
+import { ApolloError } from "@apollo/client";
 
 import pageBySlugQuery from '@gql/pageBySlugQuery';
 import { locale as language } from '@config/locale';
-import { apiSourceHandle } from '@config/adminApi'
 
-export const PageContext = createContext({});
+interface PageContextData {
+  loading?: boolean;
+  error?: ApolloError
+  data?: {
+    data?: ComponentEntryFieldsPageFields
+  }
+}
 
-export const PageContextProvider = ({ children }) => {
-    const { slug } = useParams();
+export const PageContext = createContext<PageContextData>({});
+
+export const PageContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
+    const { slug } = useParams<{ slug: string }>();
     const {
         loading,
         error,
         data
     } = useQuery(pageBySlugQuery, {
         variables: { slug, language },
-        context: {
-            apiSource: apiSourceHandle,
-        }
     });
 
     return (

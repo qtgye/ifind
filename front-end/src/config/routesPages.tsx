@@ -30,14 +30,11 @@ export const pages = [
   AboutUs,
 ];
 
-export const dynamicPages = [BasicPage];
+export const dynamicPages: (ComponentWithProvider | null)[] = [BasicPage];
 
-const providers = [
-  PageContextProvider,
-  ProductComparisonContextProvider,
-];
+const providers = [PageContextProvider, ProductComparisonContextProvider];
 
-const wrapWithProvider = (PageComponent) => {
+const wrapWithProvider = (PageComponent?: ComponentWithProvider) => {
   if (PageComponent?.provider) {
     const MatchedProvider = providers.find(
       (provider) => provider.providerName === PageComponent.provider
@@ -57,13 +54,13 @@ export default routes.map((route) => ({
   ...route,
   component:
     wrapWithProvider(
-      pages.find((page) => page.componentName === route.componentName)
-    ) || pages.find((page) => page.componentName === route.componentName),
+      pages.find((page) => page?.componentName === route.componentName) || undefined
+    ) || pages.find((page) => page?.componentName === route.componentName),
 }));
 
 export const dynamicRoutePages = dynamicRoutes.map((route) => ({
   ...route,
   component: wrapWithProvider(
-    dynamicPages.find((page) => page.componentName === route.componentName)
+    dynamicPages.find((page) => page?.componentName === route.componentName) || undefined
   ),
 }));

@@ -1,5 +1,5 @@
 import { component } from '@sb';
-import ContactFormComponent from '../';
+import ContactFormComponent from '..';
 
 export default component({
     title: 'Contact Form',

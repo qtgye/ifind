@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, LegacyRef } from 'react';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
@@ -11,14 +11,14 @@ import './header-side-nav.scss';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import HeaderSideNavButton from './HeaderSideNavButton';
 
-const HeaderSideNav = ({ withSideNav }) => {
+const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
 
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { subCategories } = useSubCategories();
     //const categoryTree = useCategoryTree();
     const { on } = eventBus;
-    const listRef = useRef();
+    const listRef = useRef<HTMLDivElement|null>();
 
     const [isVisible, setIsVisible] = useState(false);
     //const changeVisibility = () => setIsVisible(!isVisible);
@@ -27,7 +27,9 @@ const HeaderSideNav = ({ withSideNav }) => {
     const [width] = useWindowSize();
     // const [isHovered, setisHovered] = useState(false);
     const triggerScroll = useCallback(() => {
+      if ( listRef.current ) {
         listRef.current.scrollTop += listRef.current.offsetHeight;
+      }
     }, [listRef]);
 
     const handleScroll = useCallback(() => {
@@ -48,14 +50,14 @@ const HeaderSideNav = ({ withSideNav }) => {
                 >
                     <i aria-hidden="true" className="fa fa-bars"></i>{width > 991 ? "CATEGORIES" : ""}
                 </h3>
-                {isVisible ? <div ref={listRef}
+                {isVisible ? <div ref={listRef as LegacyRef<HTMLDivElement>}
                     className="header-side-nav__list"
                     onMouseEnter={() => setIsVisible(true)}
                     onMouseLeave={() => setIsVisible(false)}
                 >
 
                     {
-                        currentRouteConfig.path === '/' ?
+                        currentRouteConfig?.path === '/' ?
                             (<div>
                                 {homedata.map((item, index) => {
                                     return (
@@ -89,7 +91,6 @@ const HeaderSideNav = ({ withSideNav }) => {
                                     {
                                         checked ?
                                             <HeaderSideNavSubMenu
-                                                id={subCategories}
                                                 categories={subCategories}
                                                 checked={checked}
                                                 //checkChange={checkChange}
@@ -113,7 +114,7 @@ const HeaderSideNav = ({ withSideNav }) => {
                     onMouseLeave={() => setIsVisible(false)}
                 >
                     {
-                        currentRouteConfig.path === '/productcomparison' ?
+                        currentRouteConfig?.path === '/productcomparison' ?
                             <HeaderSideNavButton /> : null
                     }
                 </div> : null

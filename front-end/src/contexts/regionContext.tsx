@@ -1,8 +1,8 @@
-import { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react';
 
 export const RegionContext = createContext({});
 
-export const RegionContextProvider = ({ children }) => {
+export const RegionContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
     //  TODO: use localStorage once FE region selection is implemented
     const [ region ] = useState('de');
 

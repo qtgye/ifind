@@ -1,8 +1,8 @@
-import { createContext, useState, useCallback } from 'react';
+import React, { createContext, useState, useCallback } from 'react';
 
-export const GlobalStateContext = createContext({});
+export const GlobalStateContext = createContext<GlobalStateContextData>({});
 
-export const GlobalStateContextProvider = ({ children }) => {
+export const GlobalStateContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
 
     const [activeCategory, setActiveCategory] = useState(null);
     const [focusedCategory, setFocusedCategory] = useState(0);
@@ -13,7 +13,7 @@ export const GlobalStateContextProvider = ({ children }) => {
 
     return (
         <GlobalStateContext.Provider value={{
-            activeCategory: parseInt(activeCategory, 10),
+            activeCategory: parseInt(activeCategory || '', 10),
             setActiveCategory,
             focusedCategory,
             onCategoryClick,

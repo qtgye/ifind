@@ -3,7 +3,7 @@ import AttributesTable from "@components/AttributesTable";
 
 import './styles.scss';
 
-const ProductRating = ({ finalRating, attributes }) => {
+const ProductRating = ({ finalRating, attributes }: ProductRatingProps) => {
     return (
         <div className="product-rating">
             <strong className="rating-warps__title">Rating:</strong>

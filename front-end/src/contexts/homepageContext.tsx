@@ -1,10 +1,10 @@
-import { createContext, useContext } from 'react';
+import { createContext, PropsWithChildren, useContext } from 'react';
 import { useQuery } from "@apollo/react-hooks";
 import homepageQuery from '@gql/homepageQuery';
 
 export const HomepageContext = createContext({});
 
-export const HomepageContextProvider = ({ children }) => {
+export const HomepageContextProvider = ({ children }: PropsWithChildren<JSX.Element>) => {
     const {
         loading,
         // error,

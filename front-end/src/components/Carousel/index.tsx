@@ -37,7 +37,7 @@ const Carousel = ({
               className={[
                 "carousel-buttons",
                 currentCategory
-                  ? category.id === currentCategory
+                  ? category?.id === currentCategory
                     ? "active"
                     : ""
                   : i === 0
@@ -46,7 +46,7 @@ const Carousel = ({
               ].join(" ")}
               onClick={(e) => onClick(e, category)}
             >
-              <IfindIcon icon={category.icon as string} className="carousel-icons" />
+              <IfindIcon icon={category?.icon as string} className="carousel-icons" />
               <span className="carousel-labels">
                 {category?.label?.label?.split(" ")[0]}
               </span>

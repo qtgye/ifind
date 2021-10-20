@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
 
-const BasicPage = ({ title, children }) => {
+interface BasicPageProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const BasicPage = ({ title, children }: BasicPageProps) => {
 
     // Scroll to top of page on mount
     useEffect(() => {
