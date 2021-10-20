@@ -49,6 +49,8 @@ module.exports = async () => {
       amazon_url: product.amazon_url,
       url_list: product.url_list,
     });
+
+    console.log(`[ ${productsWithNewLinks.length} of ${allProducts.length} ] - Fetched new links for ${product.title}`.green);
   }
 
   // Save product changes
