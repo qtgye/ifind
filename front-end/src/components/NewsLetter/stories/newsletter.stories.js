@@ -1,5 +1,5 @@
 import { component } from '@sb';
-import NewsLetterComponent from '../';
+import NewsLetterComponent from '..';
 
 export default component({
     title: 'News Letter',

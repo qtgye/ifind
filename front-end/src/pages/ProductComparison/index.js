@@ -6,6 +6,7 @@ import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import NaturalList from '@components/NaturalList';
 import IfindIcon from '@components/IfindIcon';
+import { useWindowSize } from '../../utilities/WindowResize';
 
 import './product-comparison.scss';
 import { useCategoryTree } from '@contexts/categoriesContext';
@@ -21,6 +22,9 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
 
   const categoryTree = useCategoryTree();
   const [currentCategory, setCurrentCategory] = useState();
+  const [showButton, setShowButton] = useState(false);
+  const [rshowButton, rsetShowButton] = useState(true);
+  const [width] = useWindowSize();
 
   useEffect(() => {
     setCurrentListCategory(currentCategory);
@@ -66,18 +70,24 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
     e.preventDefault();
     const content = document.getElementById("navlist");
     content.scrollBehavior = "smooth";
-    content.scrollLeft += 50;
+    content.scrollLeft += 100;
 
-    return content.scrollLeft;
+    const scrollable = content.scrollWidth - window.innerWidth;
+
+    if (content.scrollLeft > scrollable) {
+      rsetShowButton(false);
+    }
   }
 
   const scrollToLeft = (e) => {
     e.preventDefault();
     const content = document.getElementById("navlist");
     content.scrollBehavior = "smooth";
-    content.scrollLeft -= 50;
+    content.scrollLeft -= 100;
 
-    return content.scrollLeft;
+    if (content.scrollLeft < 50) {
+      setShowButton(false);
+    }
   }
 
   return (
@@ -87,11 +97,11 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
         <div className="container">
           <div className="list">
             <nav className="nav">
-              {scrollToLeft === 0 ? <div></div> :
-                <>
+              {width < 995 ?
+                showButton && <>
                   <div className="rarrow-area"></div>
-                  <div className="rarrow" onClick={(e) => { scrollToLeft(e) }}><i className="fa fa-chevron-left"></i></div>
-                </>
+                  <div className="rarrow" onClick={(e) => { scrollToLeft(e); rsetShowButton(true); }}><i className="fa fa-chevron-left"></i></div>
+                </> : null
               }
               <ul id="navlist" className="nav-list" >
                 {
@@ -108,8 +118,12 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
                   ))
                 }
               </ul>
-              <div className="larrow-area"></div>
-              <div className="larrow" onClick={(e) => { scrollToRight(e); }}><i className="fa fa-chevron-right"></i></div>
+              {width < 995 ?
+                rshowButton && <>
+                  <div className="larrow-area"></div>
+                  <div className="larrow" onClick={(e) => { scrollToRight(e); setShowButton(true); }}><i className="fa fa-chevron-right"></i></div>
+                </> : null
+              }
             </nav>
 
             {loading && <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>}
