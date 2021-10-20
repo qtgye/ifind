@@ -21,27 +21,9 @@ const categoryFieldsOverviewFragment = `
 
 const categoryFieldsDetailsFragment = `
  fragment CategoryFieldsDetails on Category {
-   url
    parent {
      id
      label: label_preview
-   }
-   language {
-     id
-     code
-     name
-   }
-   products {
-     id
-     title
-   }
-   source {
-     id
-     name
-   }
-   region {
-     id
-     code
    }
    products_count
    children_count
