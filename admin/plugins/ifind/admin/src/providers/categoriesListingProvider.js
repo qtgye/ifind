@@ -88,30 +88,30 @@ export const flattenCategoriesTree = (tree, currentDepth = 0) => {
  * @returns object
  */
 export const mapCategoriesTree = (rawCategories) => {
-  const categoryTree = {};
-  const byId = rawCategories.reduce(
-    (all, category) => ({
-      ...all,
-      [category.id]: category,
-    }),
-    {}
-  );
+  let categoryTree = {};
+  let byIdIndex = {};
+
+  rawCategories.forEach((category, index) => {
+    byIdIndex[category.id] = index;
+  });
 
   if (rawCategories) {
     rawCategories.forEach((category) => {
       // Check if category has existing parent
-      if (category.parent && category.parent.id in byId) {
+      if (category.parent && category.parent.id in byIdIndex && category.parent.id !== category.id) {
+        const parentIndex = byIdIndex[category.parent.id];
+        const parentCategory = rawCategories[parentIndex];
+
         // Append to the parent's children
-        byId[category.parent.id].children =
-          byId[category.parent.id].children || {};
-        byId[category.parent.id].children[category.id] = category;
+        parentCategory.children = parentCategory.children || {};
+        parentCategory.children[category.id] = category;
 
         // Determine depth acc. to parent
         let currentDepthCount = 1;
-        let currentParent = byId[category.parent.id];
-        while (currentParent?.parent) {
+        let currentParent = parentCategory;
+        while (currentParent?.parent && currentParent.parent.id !== category.id ) {
           currentDepthCount++;
-          currentParent = byId[currentParent.parent.id];
+          currentParent = rawCategories[byIdIndex[currentParent.parent.id]];
         }
         category.depth = currentDepthCount;
       }
