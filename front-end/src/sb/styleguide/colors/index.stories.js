@@ -8,7 +8,7 @@ const ColorsComponent = () => (
     { Object.entries(colors).map(([colorName, colorValue]) => (
       <div key={colorName} className={`styleguide-colors__color`} >
         <div className={`styleguide-colors__preview bg-${colorName}`}>
-          <div className="styleguide-colors__value">{colorValue}</div>  
+          <div className="styleguide-colors__value">{colorValue}</div>
         </div>
         <div className="styleguide-colors__name">{colorName}</div>
       </div>

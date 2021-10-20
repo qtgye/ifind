@@ -1,0 +1,1 @@
+import './ProductComparison/index.d';
