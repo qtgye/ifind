@@ -1,3 +1,5 @@
+const bpm = appRequire('scheduled-tasks');
+
 /**
  * TODO: Abstract out custom Schema definitions for better structure
  */
@@ -55,11 +57,22 @@ module.exports = {
       label: String
       source: Source
   }
+
+  type ScheduledTaskList {
+    id: String
+    status: String
+  }
+
+  type ScheduledTaskPayload {
+    error: String
+    data: [ScheduledTaskList]
+  }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: String! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   scheduledTasksList: [ScheduledTask]
+  sheduledTasks: ScheduledTaskPayload
   `,
   mutation: `
   triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): [ScheduledTask]
@@ -67,6 +80,9 @@ module.exports = {
   type: {},
   resolver: {
     Query: {
+      async sheduledTasks(_, { command, id }) {
+        bpm.runCommand(command, id);
+      },
       async scheduledTasksList() {
         const tasks = await strapi.services.ifind.scheduledTasksList();
         return tasks;

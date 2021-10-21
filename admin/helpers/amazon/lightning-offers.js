@@ -21,11 +21,6 @@ const getLightningOffers = async () => {
   const strapi = await createStrapiInstance();
 
   try {
-    await browser.setViewport({
-      width: 1440,
-      height: 900,
-    });
-
     console.log("Getting to Lightning Offers Page...");
     await browser.goTo(LIGHTNING_OFFERS_PAGE);
     await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
