@@ -27,8 +27,9 @@ const MONTHS = [
   "Dec",
 ];
 
-const priceSelector = [
+const PRICE_SELECTOR = [
   "#dealsAccordionRow .a-color-price",
+  "#corePrice_desktop .a-price",
   "#corePrice_feature_div .a-text-price",
   "#price_inside_buybox",
   "#priceblock_dealprice",
@@ -157,14 +158,15 @@ const scrapeAmazonProduct = async (
   while (tries) {
     try {
       await browser.goto(englishPageURL);
-      await browser.waitForSelector(priceSelector, { timeout: 10000 });
-      priceMatch = await browser.$eval(priceSelector, (priceElement) =>
+      await browser.waitForSelector(PRICE_SELECTOR, { timeout: 10000 });
+      priceMatch = await browser.$eval(PRICE_SELECTOR, (priceElement) =>
         priceElement.textContent.match(/[0-9.,]+/)
       );
       break;
     } catch (err) {
       console.error(err);
-      console.log("Unable to fetch price. Retrying...".red);
+      console.log(`Unable to fetch price for URL: ${englishPageURL}. Retrying...`.red);
+      await screenshotPageError(englishPageURL);
       tries--;
     }
   }

@@ -13,7 +13,7 @@ const ZIP_CHANGE_POPOVER_BUTTON = "#nav-global-location-popover-link";
 const ZIP_INPUT_SECTION = "#GLUXZipInputSection";
 const ZIP_INPUT_INPUT = `#GLUXZipUpdateInput`;
 const ZIP_INPUT_APPLY = `#GLUXZipUpdate input[type="submit"]`;
-const PRODUCT_CARD = '[class^="DealGridItem-module"]';
+const PRODUCT_CARD = '[class^="DealGridItem-module__dealItem_"]';
 const ADDRESS_CHANGE_URL =
   "https://www.amazon.de/gp/delivery/ajax/address-change.html";
 
@@ -71,7 +71,10 @@ const getLightningOffers = async () => {
     const productLinks = await browser.$$eval(PRODUCT_CARD, (elements) =>
       [...elements]
         .slice(0, 50)
-        .map((card) => card.querySelector(".a-link-normal").href)
+        .map((card) => {
+          const cardLink = card.querySelector(".a-link-normal");
+          return cardLink ? cardLink.href : null;
+        })
     );
 
     console.log(
@@ -99,7 +102,7 @@ const getLightningOffers = async () => {
 
       // Save product
 
-      const newProduct = await strapi.services.product.create(productData);
+      const newProduct = await strapi.query('product').create(productData);
       console.log(
         `[ ${++scrapedProducts} of 20 ] Saved new product: ${
           newProduct.title.bold

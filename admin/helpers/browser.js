@@ -5,6 +5,9 @@ require("colors");
 const puppeteer = require("puppeteer");
 const EventEmitter = require("events");
 
+const BROWSER_IDLE_TIMEOUT = 1000 * 60 * 3;
+const PAGE_IDLE_TIMEOUT = 1000 * 60 * 2;
+
 class Browser {
   constructor() {
     Browser.on("close", () => {
@@ -24,6 +27,10 @@ class Browser {
     if (!this.page) {
       const browser = await this.getBrowserInstance();
       this.page = await browser.newPage();
+      await this.page.setViewport({
+        width: 1920,
+        height: 1280,
+      });
     }
 
     return this.page;
@@ -64,7 +71,7 @@ class Browser {
       const page = await this.page;
       page.close(); // no need to await
       this.page = null;
-    }, 1000 * 60);
+    }, PAGE_IDLE_TIMEOUT);
   }
 
   async callPageFunction(pageFunction, ...args) {
@@ -147,7 +154,7 @@ Browser.resetBrowserIdleWatcher = async function () {
     browser.close(); // no need to await
     this.browser = null;
     this.eventEmitter.emit("close");
-  }, 1000 * 60 * 3);
+  }, BROWSER_IDLE_TIMEOUT);
 };
 
 module.exports = new Browser();
