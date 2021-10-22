@@ -1,16 +1,17 @@
+const bpm = appRequire('scheduled-tasks');
+
 /**
  * TODO: Abstract out custom Schema definitions for better structure
  */
 
 module.exports = {
   definition: `
-  enum BACKGROUND_PROCESS_STATUS {
+  enum TASK_STATUS {
     START
     STOP
     ERROR
   }
-
-  enum BACKGROUND_PROCESS_LOG_TYPE {
+  enum TASK_LOG_TYPE {
     INFO
     ERROR
   }
@@ -24,16 +25,16 @@ module.exports = {
     running
   }
 
-  type BackgroundProcessLogEntry {
+  type TaskLogEntry {
     date_time: String
-    type: BACKGROUND_PROCESS_LOG_TYPE
+    type: TASK_LOG_TYPE
     message: String
   }
 
-  type BackgroundProcess {
+  type Task {
     name: String!
-    status: BACKGROUND_PROCESS_STATUS
-    logs: [BackgroundProcessLogEntry]
+    status: TASK_STATUS
+    logs: [TaskLogEntry]
   }
 
   type ScheduledTask {
@@ -55,11 +56,16 @@ module.exports = {
       label: String
       source: Source
   }
+
+  type ScheduledTaskPayload {
+    error: String
+    data: [ScheduledTask]
+  }
   `,
   query: `
-  getBackgroundProcess ( backgroundProcess: String! ): BackgroundProcess
-  triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
+  getTask ( id: String! ): Task
   scheduledTasksList: [ScheduledTask]
+  sheduledTasks ( command: String, id: String ): ScheduledTaskPayload
   `,
   mutation: `
   triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): [ScheduledTask]
@@ -67,20 +73,22 @@ module.exports = {
   type: {},
   resolver: {
     Query: {
+      async sheduledTasks(_, { command, id }) {
+        const data = bpm.runCommand(command, id);
+        return { data };
+      },
       async scheduledTasksList() {
-        const tasks = await strapi.services.ifind.scheduledTasksList();
+        const tasks = bpm.list();
         return tasks;
       },
-      async getBackgroundProcess(_, { backgroundProcess }) {
-        const backgroundProcessData =
-          await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
-        return backgroundProcessData;
+      async getTask(_, { id }) {
+        return bpm.getTask(id);
       },
     },
     Mutation: {
       async triggerTask(_, args) {
-        await strapi.services.ifind.triggerTask(args.taskID, args.action);
-        const tasks = await strapi.services.ifind.scheduledTasksList();
+        const { action: command, taskID: id } = args;
+        const tasks = bpm.runCommand(command, id);
         return tasks;
       },
     },
