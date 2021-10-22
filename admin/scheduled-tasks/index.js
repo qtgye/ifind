@@ -18,6 +18,13 @@ class ScheduledTasks {
   runningTask = null;
 
   init() {
+
+    if ( !this.initialized ) {
+      return;
+    }
+
+    this.initialized = true;
+
     // Check tasks config for changes and apply updates
     const configTasks = config.tasks;
     const dbTasks = Database.getAll(Task.model);
@@ -104,6 +111,5 @@ class ScheduledTasks {
 };
 
 const scheduledTasks = new ScheduledTasks;
-scheduledTasks.init();
 
 module.exports = scheduledTasks;
