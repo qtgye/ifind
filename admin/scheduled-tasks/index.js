@@ -17,9 +17,12 @@ class ScheduledTasks {
   // ID of the currently running task
   runningTask = null;
 
-  init() {
+  constructor() {
+    this.ID = Date.now();
+  }
 
-    if ( !this.initialized ) {
+  init() {
+    if ( this.initialized ) {
       return;
     }
 
@@ -46,6 +49,8 @@ class ScheduledTasks {
     // Initialize timer
     timer.on('taskstart', this.start.bind(this));
     timer.init();
+
+    LOGGER.log('Scheduled Tasks Runner initialized'.green);
   }
 
   runCommand(command, id) {
@@ -110,6 +115,8 @@ class ScheduledTasks {
   }
 };
 
-const scheduledTasks = new ScheduledTasks;
+// const scheduledTasks = new ScheduledTasks;
+// // TODO: Determine where to init, accounting for custom strapi instance
+// // scheduledTasks.init()
 
-module.exports = scheduledTasks;
+module.exports = ScheduledTasks;

@@ -1,5 +1,3 @@
-const bpm = appRequire('scheduled-tasks');
-
 /**
  * TODO: Abstract out custom Schema definitions for better structure
  */
@@ -74,21 +72,22 @@ module.exports = {
   resolver: {
     Query: {
       async sheduledTasks(_, { command, id }) {
-        const data = bpm.runCommand(command, id);
+        const data = strapi.scheduledTasks.runCommand(command, id);
         return { data };
       },
       async scheduledTasksList() {
-        const tasks = bpm.list();
+        console.log(strapi.scheduledTasks.ID);
+        const tasks = strapi.scheduledTasks.list();
         return tasks;
       },
       async getTask(_, { id }) {
-        return bpm.getTask(id);
+        return strapi.scheduledTasks.getTask(id);
       },
     },
     Mutation: {
       async triggerTask(_, args) {
         const { action: command, taskID: id } = args;
-        const tasks = bpm.runCommand(command, id);
+        const tasks = strapi.scheduledTasks.runCommand(command, id);
         return tasks;
       },
     },
