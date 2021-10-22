@@ -7,6 +7,9 @@ const config = existsSync(configPath) ? require(configPath) : {};
 const timer = require('./lib/Timer');
 const Task = require('./lib/Task');
 const Database = require('./lib/Database');
+const Logger = require('./lib/Logger');
+
+const LOGGER = new Logger({ baseDir });
 
 class ScheduledTasks {
   // List of all available processes, by id
@@ -39,16 +42,20 @@ class ScheduledTasks {
   }
 
   runCommand(command, id) {
-    if ( command in this ) {
+    const validCommands = [ 'start', 'stop' ];
+    if ( validCommands.includes(command) ) {
       this[command].call(this, id);
     }
+
+    return this.list();
   }
 
   /**
    * Gets the list of all available tasks
    */
   list() {
-    return Object.values(this.tasks);
+    const tasks = Object.values(this.tasks);
+    return tasks;
   }
 
   start(id) {
@@ -56,7 +63,7 @@ class ScheduledTasks {
       return;
     }
 
-    console.log('Starting task: ', id);
+    LOGGER.log('Starting task: ', id);
     const task = this.tasks[id];
     task.start();
   }
@@ -64,8 +71,14 @@ class ScheduledTasks {
   stop(id) {
     if ( id in this.tasks ) {
       const _process = this.tasks[id];
-      console.log('Killing task: ', id);
-      _process.kill();
+      LOGGER.log('Killing task: ', id);
+      _process.stop();
+    }
+  }
+
+  getTask(taskID) {
+    if ( id in this.tasks ) {
+      return this.tasks[id].getLogs();
     }
   }
 
@@ -81,12 +94,12 @@ class ScheduledTasks {
   }
 
   onProcessMessage(processArgs) {
-    console.log({ processArgs });
+    LOGGER.log({ processArgs });
   }
 
   onProcessExit(id) {
-    console.log({ processExited: id });
     this.runningTask = null;
+    LOGGER.log(`Process exitted: ${id}`);
   }
 };
 

@@ -15,6 +15,9 @@ const Model = require("./Model");
 const tasksRoot = path.resolve(__dirname, "../tasks");
 const EVENT_EMITTER_KEY = Symbol();
 
+const STATUS_RUNNING = 'running';
+const STATUS_STOPPED = 'stopped';
+
 /**
  * Task base class
  *
@@ -24,7 +27,6 @@ const EVENT_EMITTER_KEY = Symbol();
  */
 class Task extends Model {
   process = null;
-  running = false;
 
   constructor(config) {
     super();
@@ -33,7 +35,7 @@ class Task extends Model {
     this.name = config.name;
     this.schedule = config.schedule;
     this.next_run = config.next_run;
-    this.status = config.status || "stopped";
+    this.status = config.status || STATUS_STOPPED;
 
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
@@ -51,6 +53,10 @@ class Task extends Model {
     this.logger = new Logger({ baseDir: this.taskModulePath });
   }
 
+  get running() {
+    return this.status === STATUS_RUNNING;
+  }
+
   on(event, handler) {
     this[EVENT_EMITTER_KEY].on(event, handler);
   }
@@ -59,20 +65,20 @@ class Task extends Model {
     if ( this.hasModule() && !this.running ) {
       this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
 
-      this.running = true;
+      this.setRunning();
 
       this.process.stdout.on('data', (data) => this.log(data.toString()));
       this.process.stderr.on('data', (data) => this.log(data.toString(), 'ERROR'));
 
       this.process.on('error', (data) => {
         this[EVENT_EMITTER_KEY].emit('error', data);
-        this.running = false;
+        this.setStopped();
       });
 
       this.process.on('exit', () => {
         console.log('process exits');
         this[EVENT_EMITTER_KEY].emit('exit');
-        this.running = false;
+        this.setStopped();
         this.process = null;
       });
     }
@@ -82,6 +88,18 @@ class Task extends Model {
     if ( this.running && this.process ) {
       this.process.kill();
     }
+  }
+
+  setRunning() {
+    this.status = STATUS_RUNNING;
+  }
+
+  setStopped() {
+    this.status = STATUS_STOPPED;
+  }
+
+  getLogs() {
+    return this.logger.getAll();
   }
 
   hasModule() {

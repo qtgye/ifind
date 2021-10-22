@@ -31,5 +31,10 @@ module.exports = [
     id: 'test',
     name: 'Test Task',
     schedule: frequencies.seconds * 30,
+  },
+  {
+    id: 'task-2',
+    name: 'Test Task 2',
+    schedule: frequencies.seconds * 30,
   }
 ];

@@ -1,6 +1,7 @@
 require('colors');
 const { ensureDirSync } = require("fs-extra");
 const path = require("path");
+const glob = require("glob");
 const { ensureFileSync, appendFileSync } = require("fs-extra");
 const moment = require("moment");
 
@@ -71,6 +72,46 @@ class Logger {
 
     // Write to file
     appendFileSync(logFile, logEntry);
+  }
+
+  // Get all logs
+  getAll() {
+    const logFilesPaths = glob.sync(
+      path.resolve(this.logDir, "*.log")
+    );
+
+    // Get only recent 100 logs
+    const logs = [];
+
+    // Get log entries from recent to oldest
+    logFilesPaths.reverse().some((logFilePath) => {
+      const logFileContents = readFileSync(logFilePath).toString();
+      const logEntries = logFileContents.split("\n");
+      const logsCountToGet = 100 - logs.length;
+
+      logEntries
+        .reverse()
+        .slice(0, logsCountToGet)
+        .some((logEntry) => {
+          const [date_time = "", type = "", message = ""] = logEntry.split(" | ");
+
+          if (message || type || message) {
+            // Remove ANSI formatting on some properties
+            logs.push({
+              date_time: date_time.replace(/\u001b\[\d+m/gi, "").trim(),
+              type: type.replace(/\u001b\[\d+m/gi, "").trim() || "INFO",
+              message,
+            });
+          }
+        });
+
+      // Break loop if there's already 100 log entries
+      if (logs.length >= 100) {
+        return true;
+      }
+    });
+
+    return logs.reverse();
   }
 }
 

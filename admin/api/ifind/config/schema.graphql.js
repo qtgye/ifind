@@ -58,21 +58,16 @@ module.exports = {
       source: Source
   }
 
-  type ScheduledTaskList {
-    id: String
-    status: String
-  }
-
   type ScheduledTaskPayload {
     error: String
-    data: [ScheduledTaskList]
+    data: [ScheduledTask]
   }
   `,
   query: `
   getBackgroundProcess ( backgroundProcess: String! ): BackgroundProcess
   triggerScheduledTask ( scheduledTask: SCHEDULED_TASK_NAME!, status: BACKGROUND_PROCESS_STATUS! ): ScheduledTask
   scheduledTasksList: [ScheduledTask]
-  sheduledTasks: ScheduledTaskPayload
+  sheduledTasks ( command: String, id: String ): ScheduledTaskPayload
   `,
   mutation: `
   triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): [ScheduledTask]
@@ -81,22 +76,21 @@ module.exports = {
   resolver: {
     Query: {
       async sheduledTasks(_, { command, id }) {
-        bpm.runCommand(command, id);
+        const data = bpm.runCommand(command, id);
+        return { data };
       },
       async scheduledTasksList() {
-        const tasks = await strapi.services.ifind.scheduledTasksList();
+        const tasks = bpm.list();
         return tasks;
       },
       async getBackgroundProcess(_, { backgroundProcess }) {
-        const backgroundProcessData =
-          await strapi.services.ifind.getBackgroundProcess(backgroundProcess);
-        return backgroundProcessData;
+        return bpm.getTask(backgroundProcess);
       },
     },
     Mutation: {
       async triggerTask(_, args) {
-        await strapi.services.ifind.triggerTask(args.taskID, args.action);
-        const tasks = await strapi.services.ifind.scheduledTasksList();
+        const { action: command, taskID: id } = args;
+        const tasks = bpm.runCommand(command, id);
         return tasks;
       },
     },
