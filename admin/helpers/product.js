@@ -22,6 +22,9 @@ const getProductDetails = async (
     return null;
   }
 
+  // Prepare to save product issues
+  scrapedData.product_issues = productData.product_issues || {};
+
   await Promise.all([
     // Scrape amazon
     (async () => {
@@ -52,9 +55,6 @@ const getProductDetails = async (
         strapi.services.source.findOne({ name_contains: "ebay" }),
         strapi.services.source.findOne({ name_contains: "ali" }),
       ]);
-
-      // Prepare to save product issues
-      scrapedData.product_issues = productData.product_issues || {};
 
       scrapedData.url_list = await Promise.all(
         productData.url_list.map(async (urlData) => {
