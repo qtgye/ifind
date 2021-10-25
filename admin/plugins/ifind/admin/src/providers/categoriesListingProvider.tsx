@@ -57,26 +57,29 @@ mutation UpdateCategories(
   }
   `;
 
-export const flattenCategoriesTree = (tree, currentDepth = 0) => {
+export const flattenCategoriesTree = (
+  tree: CategoryWithChild[],
+  currentDepth = 0
+): CategoryWithChild[] => {
   const list = Object.values(tree)
     // Sort items first
     .sort((catA, catB) => (catA.order > catB.order ? 1 : -1))
     // Process each item
-    .reduce((list, currentNode) => {
+    .reduce((_list: CategoryWithChild[], currentNode: CategoryWithChild) => {
       currentNode.depth = currentDepth;
 
-      list.push(currentNode);
+      _list.push(currentNode);
 
       // Flat-append this item's children
       if (currentNode.children) {
-        list.push(
+        _list.push(
           ...flattenCategoriesTree(currentNode.children, currentDepth + 1)
         );
         // Remove this item's children prop to avoid confusion
         delete currentNode.children;
       }
 
-      return list;
+      return _list;
     }, []);
 
   return list;
@@ -87,7 +90,9 @@ export const flattenCategoriesTree = (tree, currentDepth = 0) => {
  * @param {array} rawCategories
  * @returns object
  */
-export const mapCategoriesTree = (rawCategories) => {
+export const mapCategoriesTree = (
+  rawCategories: Category[]
+): CategoryWithChild[] => {
   let categoryTree = {};
   let byIdIndex = {};
 
@@ -98,7 +103,11 @@ export const mapCategoriesTree = (rawCategories) => {
   if (rawCategories) {
     rawCategories.forEach((category) => {
       // Check if category has existing parent
-      if (category.parent && category.parent.id in byIdIndex && category.parent.id !== category.id) {
+      if (
+        category.parent &&
+        category.parent.id in byIdIndex &&
+        category.parent.id !== category.id
+      ) {
         const parentIndex = byIdIndex[category.parent.id];
         const parentCategory = rawCategories[parentIndex];
 
@@ -109,7 +118,10 @@ export const mapCategoriesTree = (rawCategories) => {
         // Determine depth acc. to parent
         let currentDepthCount = 1;
         let currentParent = parentCategory;
-        while (currentParent?.parent && currentParent.parent.id !== category.id ) {
+        while (
+          currentParent?.parent &&
+          currentParent.parent.id !== category.id
+        ) {
           currentDepthCount++;
           currentParent = rawCategories[byIdIndex[currentParent.parent.id]];
         }
@@ -190,81 +202,61 @@ export const buildCategoryPath = (categoryID, categories = []) => {
 
 export const CategoriesListingProvider = memo(({ children }) => {
   const gqlFetch = useGQLFetch();
-  const [
-    callMutation,
-    { data: updatedCategoriesData, error: updateCategoriesError },
-  ] = useMutation();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState<CategoryWithChild[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const updateCategories = useCallback(
-    (updatedCategories) => {
-      callMutation(categoriesMutation, {
-        categories: updatedCategories.map(({ id, ...data }) => ({
-          where: { id },
-          data,
-        })),
-      });
-    },
-    [callMutation]
-  );
-
-  const updateCategoriesList = useCallback(
-    (updatedCategoriesList) => {
-      // Map updated categories by id
-      const newCategoriesMap = Object.values(updatedCategoriesList).reduce(
-        (all, category) => {
-          all[category.id] = category;
-          return all;
-        },
-        {}
-      );
-
-      // Replace matching categories with updated ones
-      const updatedCategories = categories.map((category) => {
-        if (category.id in newCategoriesMap) {
-          return newCategoriesMap[category.id];
-        }
-        return category;
-      });
-
-      // Save updated categories
-      replaceCategories(updatedCategories);
-    },
-    [categories]
-  );
-
   const replaceCategories = useCallback((newCategories) => {
     // Process and update categories
-    const categoryTree = mapCategoriesTree(newCategories);
-    const categoryList = flattenCategoriesTree(categoryTree);
+    const categoryTree: CategoryWithChild[] = mapCategoriesTree(newCategories);
+    const categoryList: CategoryWithChild[] =
+      flattenCategoriesTree(categoryTree);
 
     setLoading(false);
     setCategories(categoryList);
-  });
+  }, []);
 
-  useEffect(() => {
-    if (updatedCategoriesData?.updateCategories) {
-      updateCategoriesList(updatedCategoriesData.updateCategories);
-    }
-  }, [updatedCategoriesData]);
+  const fetchCategories = useCallback(() => {
+    setLoading(true);
+    gqlFetch(categoriesQuery).then(({ categories }) => {
+      if (categories?.length) {
+        replaceCategories(categories);
+      }
+    });
+  }, []);
 
-  useEffect(() => {
-    if (updateCategoriesError) {
-      setError(updateCategoriesError);
-    }
-  }, [updateCategoriesError]);
+  const updateCategories = useCallback(
+    async (newCategoriesData) => {
+      // Create chunk requests of 100 categories each so as to prevent timing out from server
+      const categoryChunks: Category[][] = [];
 
-  useEffect(() => {
-    if (!categories.length) {
-      gqlFetch(categoriesQuery).then(({ categories }) => {
-        if (categories?.length) {
-          replaceCategories(categories);
-        }
+      newCategoriesData.forEach((categoryData: Category, index: number) => {
+        const chunkIndex = Math.floor(index / 100);
+        categoryChunks[chunkIndex] = categoryChunks[chunkIndex] || [];
+        categoryChunks[chunkIndex].push(categoryData);
       });
-    }
-  }, [categories]);
+
+      try {
+        for (let categories of categoryChunks) {
+          await gqlFetch(categoriesMutation, {
+            categories: categories.map(({ id, ...data }) => ({
+              where: { id },
+              data,
+            })),
+          });
+        }
+
+        fetchCategories();
+      } catch (err: any) {
+        setError(err);
+      }
+    },
+    [categoriesMutation, fetchCategories]
+  );
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   return (
     <CategoriesListingContext.Provider
