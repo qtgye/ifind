@@ -76,6 +76,7 @@ const getLightningOffers = async () => {
       `Scraping details for ${productLinks.length} products...`.green
     );
 
+    // TO DO: Move this under scheduled-tasks instead
     let scrapedProducts = 0;
     for (const productLink of productLinks) {
       const productData = await scrapeAmazonProduct(productLink, "de", false);

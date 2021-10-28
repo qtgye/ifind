@@ -1,27 +1,27 @@
 const fetch = require("node-fetch");
-const { appId } = require("./config");
+const { appId, marketPlace } = require("./config");
 const { toSearchParams } = require("../url");
 const token = require("./token");
 
-const BASE_URL = "https://open.api.ebay.com/shopping";
-const params = {
-  responseencoding: "JSON",
-  siteid: 0,
-  version: 967,
-  appId: appId,
-};
-
 const getDetailsFromURL = async (productURL) => {
+  const BASE_URL = "https://open.api.ebay.com/shopping";
+  const params = {
+    responseencoding: "JSON",
+    siteid: 0,
+    version: 967,
+    appId: appId,
+    callname: "GetSingleItem",
+    IncludeSelector: "Details",
+  };
+
   // Extract ebay itemID
   const [itemID] = productURL.match(/[0-9]{9,12}/g) || [];
 
   if (itemID) {
-    const accessToken = await token.getToken();
+    const accessToken = await token.getToken("shopping");
     const requestParams = {
       ...params,
-      callname: "GetSingleItem",
       ItemID: itemID,
-      IncludeSelector: "Details",
     };
     const headers = {
       "X-EBAY-API-IAF-TOKEN": accessToken,
@@ -32,7 +32,7 @@ const getDetailsFromURL = async (productURL) => {
     const data = await res.json();
     const { Item, Errors } = data;
 
-    if ( Errors ) {
+    if (Errors) {
       console.error(Errors[0]);
     }
 
@@ -40,7 +40,10 @@ const getDetailsFromURL = async (productURL) => {
       const data = {};
 
       if (Item && Item.CurrentPrice && Item.CurrentPrice.Value) {
-        data.price = Item.CurrentPrice.Value;
+        data.price = Number(Item.CurrentPrice.Value);
+        data.quantity_total = Number(Item.Quantity);
+        data.quantity_sold = Number(Item.QuantitySold);
+        data.image = (Item.PictureURL && Item.PictureURL[0]) || null;
       }
 
       return data;
@@ -52,6 +55,95 @@ const getDetailsFromURL = async (productURL) => {
   return null;
 };
 
+const getMultipleFromIDs = async (itemIDs = []) => {
+  const BASE_URL = "https://open.api.ebay.com/shopping";
+  const accessToken = await token.getToken("shopping");
+  const params = {
+    callname: "GetMultipleItems",
+    responseencoding: "JSON",
+    appid: appId,
+    siteid: 0,
+    version: 967,
+    IncludeSelector: 'Details',
+  };
+  const headers = {
+    "X-EBAY-API-IAF-TOKEN": accessToken,
+  };
+
+  // Append itemIDs param
+  params.ItemID = itemIDs.join(",");
+
+  const res = await fetch(BASE_URL + toSearchParams(params), {
+    headers,
+  });
+  const { Item, Errors } = await res.json();
+
+  if (Errors) {
+    console.error(Errors[0]);
+  }
+
+  if (Item) {
+    // Return as object map by itemID for easier access
+    const itemsMap = {};
+
+    // Ensure exact order as with the itemIDs parameter
+    itemIDs.forEach(itemID => {
+      const matchedProductData = Item.find(({ ItemID }) => ItemID === itemID);
+
+      if ( matchedProductData ) {
+        const itemData = {
+          itemID: matchedProductData.ItemID,
+          price: Number(matchedProductData.CurrentPrice.Value),
+          quantity_total: Number(matchedProductData.Quantity),
+          quantity_sold: Number(matchedProductData.QuantitySold),
+          image: (matchedProductData.PictureURL && matchedProductData.PictureURL[0]) || null,
+        };
+
+        itemsMap[itemData.itemID] = itemData;
+      }
+    });
+
+    return itemsMap;
+  } else {
+    return {};
+  }
+};
+
+const getWowOffers = async (limit = 100, offset = 0) => {
+  const accessToken = await token.getToken("deals");
+  const BASE_URL = "https://api.ebay.com/buy/deal/v1/deal_item";
+  const params = { limit, offset };
+  const headers = {
+    "X-EBAY-C-MARKETPLACE-ID": marketPlace.germany,
+    Authorization: `Bearer ${accessToken}`,
+  };
+
+  // Process with request
+  const res = await fetch(BASE_URL + toSearchParams(params), {
+    headers,
+  });
+  const { errors, dealItems } = await res.json();
+
+  if (errors && errors.length) {
+    console.log(errors);
+    return [];
+  }
+
+  const filtered = dealItems.filter((dealItem) => "marketingPrice" in dealItem);
+
+  return filtered.map((dealItem) => ({
+    itemID: dealItem.legacyItemId,
+    title: dealItem.title,
+    url: dealItem.itemWebUrl,
+    image: (dealItem.image && dealItem.image.imageUrl) || null,
+    price: Number(dealItem.price.value),
+    price_original: Number(dealItem.marketingPrice.originalPrice.value),
+    discount_percent: Number(dealItem.marketingPrice.discountPercentage),
+  }));
+};
+
 module.exports = {
   getDetailsFromURL,
+  getMultipleFromIDs,
+  getWowOffers,
 };
