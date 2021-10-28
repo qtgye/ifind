@@ -43,7 +43,7 @@ const Container = Styled.div`
   }
 ` as FunctionComponent<{ color?: string; width?: string }>;
 
-const ProgressBar = ({ value, max, color, width }) => {
+const ProgressBar = ({ value, max, color, width }: ProgressProps) => {
     return (
         <Container width={width} color={color}>
             <progress value={value} max={max} />
