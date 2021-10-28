@@ -3,6 +3,7 @@ const {
   clientId,
   clientSecret,
   redirectUri,
+  api_scopes,
 } = require('./config');
 const EbayAuthToken = require('ebay-oauth-nodejs-client');
 
@@ -15,26 +16,11 @@ const ebayAuthToken = new EbayAuthToken({
 const CURRENT_TOKEN = Symbol();
 const CURRENT_TOKEN_EXPIRY = Symbol();
 
-const getNewToken = async () => {
-  const response = await ebayAuthToken.getApplicationToken('PRODUCTION');
-  const tokenData = JSON.parse(response);
-  return tokenData;
+// @param apiName - Should match key from config.api_scopes
+const getNewToken = async ( apiName ) => {
+  const response = await ebayAuthToken.getApplicationToken('PRODUCTION', api_scopes[apiName]);
+  return JSON.parse(response);
 };
-
-// (async () => {
-//   const response = await ebayAuthToken.getApplicationToken('PRODUCTION');
-//   const tokenData = JSON.parse(response);
-//   const { access_token } = tokenData;
-
-//   console.log(tokenData);
-
-//   const req = await fetch('https://open.api.ebay.com/shopping?callname=GetSingleItem&responseencoding=JSON&appid=KirillKr-ifindilu-PRD-9afbfbe27-8527205b&siteid=0&version=967&IncludeSelector=Details&ItemID=223840934857', {
-//     headers: {
-//       'X-EBAY-API-IAF-TOKEN': access_token,
-//     }
-//   });
-
-// })();
 
 module.exports = {
   // Currently fetched token
@@ -44,23 +30,27 @@ module.exports = {
   [CURRENT_TOKEN_EXPIRY]: null,
 
   // Get new token
-  async getToken() {
+  async getToken(apiName = 'shopping') {
     const now = Date.now();
 
     if ( !this[CURRENT_TOKEN] || now <= this[CURRENT_TOKEN_EXPIRY] ) {
-      await this._getNewToken();
+      await this._getNewToken(apiName);
     }
 
     return this[CURRENT_TOKEN];
   },
 
-  async _getNewToken() {
+  async _getNewToken(apiName) {
     const now = Date.now();
-    const { access_token, expires_in } = await getNewToken();
+    const { access_token, expires_in, error_description } = await getNewToken(apiName);
 
-    this[CURRENT_TOKEN] = access_token;
+    if ( error_description ) {
+      console.error(error_description);
+    } else {
+      this[CURRENT_TOKEN] = access_token;
     // Subtract 10s from actual expiration
     // Allows us to fetch just before the token expires
     this[CURRENT_TOKEN_EXPIRY] = now + ((expires_in - 10) * 1000);
+    }
   }
 }

@@ -9,5 +9,12 @@ module.exports = {
     mkcid: 1,
     toolid: 10001,
     mkrid: '707-53477-19255-0',
+  },
+  marketPlace: {
+    germany: 'EBAY_DE',
+  },
+  api_scopes: {
+    shopping: 'https://api.ebay.com/oauth/api_scope',
+    deals: 'https://api.ebay.com/oauth/api_scope/buy.deal',
   }
 };
