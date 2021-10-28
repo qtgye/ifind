@@ -16,6 +16,12 @@
     }
 }
 
+@mixin small-desktop-up {
+  @media screen and (min-width: 1200px) {
+    @content;
+  }
+}
+
 @mixin small_desktop {
   @media screen and (max-width: 1280px) {
     @content;
@@ -34,17 +40,43 @@
     }
 }
 
+@mixin laptop-up {
+  @media screen and (min-width: 1000px){
+    @content;
+  }
+}
+
 @mixin small_laptop {
   @media screen and (max-width: 991px){
     @content;
   }
 }
 
+@mixin small-laptop-up {
+  @media screen and (min-width: 800px){
+    @content;
+  }
+}
+
+
 @mixin tablet {
   @media screen and (max-width: 767px) {
     @content;
   }
 }
+
+@mixin tablet-up {
+  @media screen and (min-width: 600px) {
+    @content;
+  }
+}
+
+@mixin medium_tablet {
+  @media screen and (max-width: 700px) {
+    @content;
+  }
+}
+
 
 @mixin small_tablet {
   @media screen and (max-width: 630px) {
@@ -54,12 +86,6 @@
 
 @mixin ms_tablet {
   @media screen and (max-width: 600px) {
-    @content;
-  }
-}
-
-@mixin mxs_tablet {
-  @media screen and (max-width: 579px) {
     @content;
   }
 }
@@ -82,8 +108,20 @@
   }
 }
 
+@mixin xxl_mobile-up {
+  @media screen and (min-width: 500px) {
+    @content;
+  }
+}
+
 @mixin xl_mobile {
   @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin xml_mobile {
+  @media screen and (max-width: 428px) {
     @content;
   }
 }
@@ -94,8 +132,20 @@
   }
 }
 
+@mixin medlarge_mobile {
+  @media screen and (max-width: 390px) {
+    @content;
+  }
+}
+
 @mixin mobile {
   @media screen and (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin mobile-up {
+  @media screen and (min-width: 400px) {
     @content;
   }
 }

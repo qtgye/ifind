@@ -1,8 +1,9 @@
 @import 'base/scss';
 
 .carousel-area {
+    display: none;
     position: relative;
-    display: flex;
+    //display: flex;
     align-items: center;
     justify-content: center;
     margin-left: -10rem;

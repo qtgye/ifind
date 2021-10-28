@@ -90,7 +90,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     }
 
     const activeModal = () => {
-        if (width < 611) {
+        if (width < 504) {
             SetIsOpen(true);
         }
     }

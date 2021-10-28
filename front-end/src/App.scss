@@ -2522,8 +2522,13 @@
 		width: 380px;
 	}
 
-	@include ms_tablet {
+	@include mxs_tablet {
 		width: 370px;
+		margin-left: 10px;
+	}
+
+	@include ms_tablet {
+		width: 340px;
 		margin-left: 10px;
 	}
 
@@ -2532,11 +2537,22 @@
 		width: 310px;
 	}
 
+	@include xl_mobile {
+		margin-left: -5px;
+		font-size: 12px;
+		height: 48px;
+		width: 270px;
+	}
+
 	@include large_mobile {
 		margin-left: 0;
 		font-size: 12px;
 		height: 45px;
-		width: 250px;
+		width: 248px;
+	}
+
+	@include medlarge_mobile {
+		width: 230px;
 	}
 
 	@include mobile {
@@ -2546,8 +2562,13 @@
 		width: 220px;
 	}
 
-	@include sm_mobile {
+	@include sl_mobile {
+		margin-left: -5px;
 		width: 190px;
+	}
+
+	@include sm_mobile {
+		width: 165px;
 	}
 
 	@include small_mobile {
@@ -2576,13 +2597,17 @@
 	font-weight: 500;
 	text-transform: uppercase;
 
-	@include large_mobile {
-		margin-top: -2px;
+	@include xl_mobile {
+		top: 2px;
 		font-size: 12px;
-		height: 45px;
+		height: 50px;
 	}
 
 	@include large_mobile {
+		height: 45px;
+	}
+
+	@include mobile {
 		height: 40px;
 	}
 
@@ -2592,7 +2617,7 @@
 
 	@include sm_mobile {
 		font-size: 10px;
-		padding: 10px 25px;
+		padding: 10px 23px;
 	}
 
 	@include small_mobile {

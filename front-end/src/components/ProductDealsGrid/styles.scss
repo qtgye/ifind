@@ -5,38 +5,62 @@
   margin-bottom: 10px;
 
   &__heading {
-    background-color: color(black);
-    padding: 20px;
+    background-color: $gray-900;
+    border: 1px solid $white;
+    padding: 9px;
     color: color(white);
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
     border-radius: var(--corner-radius) var(--corner-radius) 0 0;
     position: sticky;
+    margin-left: -16rem;
     top: 60px;
     z-index: 1;
   }
 
-  &__items {
-    display: grid;
-    grid-template-columns: 1fr;
-    margin-top: 10px;
-    overflow: visible;
+ &__items {
+      display: grid;
+      grid-template-columns: 1fr;
+      margin-top: 10px;
+      margin-left: -16rem;
+      overflow: visible;
+  
+      @include mobile-up {
+        grid-template-columns: repeat(1, 1fr);
+      }
 
-    @include tablet {
-      grid-template-columns: repeat(2, 1fr);
+      @include xxl_mobile-up {
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 0 12px;
+      }
+  
+      @include tablet-up {
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 12px;
+      }
+
+      @include small-laptop-up {
+        grid-template-columns: repeat(3, 1fr);
+        grid-gap: 14px;
+      }
+  
+      @include laptop-up {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 15px;
+      }
+  
+      @include small-desktop-up {
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 25px;
+      }
+  
+      @include desktop-up {
+        grid-template-columns: repeat(5, 1fr);
+        grid-gap: 20px;
+      }
     }
 
-    @include desktop {
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 25px;
-    }
-
-    @include desktop-up {
-      grid-template-columns: repeat(4, 1fr);
-      grid-gap: 25px;
-    }
-  }
 }
 
 .product-deal-item {
@@ -48,8 +72,13 @@
   box-shadow: 0 0 var(--shadow-width) rgba(color(gray-dark), var(--shadow-opacity));
   font-size: 16px;
   line-height: 1.5;
+  margin-bottom: 0.6rem;
   transition: all .3s;
   will-change: transform;
+
+  @include mobile-up {
+    margin-bottom: 15px;
+  }
 
   &:hover {
     --text-opacity: 1;

@@ -6,11 +6,22 @@
     align-items: center;
     position: relative;
 
+    @include small_laptop {
+        position: absolute;
+        top: 22rem;
+        right: 6.4rem;
+        height: 2.5rem;
+    }
+
     @include tablet{
         position: absolute;
         top: 20rem;
         right: 8rem;
         height: 2rem;
+    }
+
+    @include xs_tablet {
+        right: 4rem;
     }
 
     @include large_mobile {

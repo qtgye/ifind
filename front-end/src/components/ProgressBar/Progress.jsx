@@ -5,6 +5,7 @@ import Styled from "styled-components";
 const Container = Styled.div`
   progress {
     margin-right: 8px;
+    margin-bottom: -2px;
   }
 
   span {
@@ -16,42 +17,52 @@ const Container = Styled.div`
     width: ${props => props.width};
 
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
+    border: none; 
+    height: 15px;
+    border-radius: 20px;
   }
 
   progress[value]::-webkit-progress-bar {
     height: 15px;
     border-radius: 20px;
     background-color: #eee;
+  }
+  
+  progress[value]::-moz-progress-bar {
+    height: 15px;
+    border-radius: 20px;
+    background-color: ${props => props.color};
   }  
 
   progress[value]::-webkit-progress-value {
     height: 15px;
     border-radius: 20px;
-    background-color: #dc3545;
+    background-color: ${props => props.color};
   }
 `;
 
 const ProgressBar = ({ value, max, color, width }) => {
-  return (
-    <Container color={color} width={width}>
-      <progress value={value} max={max} />
-      <span>{(value / max) * 100}%</span>
-    </Container>
-  );
+    return (
+        <Container width={width} color={color}>
+            <progress value={value} max={max} />
+            <span>{(value / max) * 100}%</span>
+        </Container>
+    );
 };
 
 ProgressBar.propTypes = {
-  value: PropTypes.number.isRequired,
-  max: PropTypes.number,
-  color: PropTypes.string,
-  width: PropTypes.string
+    value: PropTypes.number.isRequired,
+    max: PropTypes.number,
+    color: PropTypes.string,
+    width: PropTypes.string
 };
 
 ProgressBar.defaultProps = {
-  max: 100,
-  color: "lightBlue",
-  width: "250px"
+    max: 100,
+    color: "none",
+    width: "150px"
 };
 
 export default ProgressBar;
