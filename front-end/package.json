@@ -100,7 +100,8 @@
     "storybook": "start-storybook -p 6006 -s ./public",
     "build-storybook": "build-storybook -s ./public --quiet",
     "proxy": "node ./proxy.js",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "prerender": "react-snap"
   },
   "eslintConfig": {
     "extends": [
@@ -150,6 +151,8 @@
     "express": "^4.17.1",
     "node-fetch": "^2.6.1",
     "node-sass": "^5.0.0",
+    "puppeteer": "^10.4.0",
+    "react-snap": "^1.23.0",
     "typescript": "^4.4.2"
   }
 }

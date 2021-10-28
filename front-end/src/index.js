@@ -1,5 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { hydrate, render } from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
@@ -13,6 +13,12 @@ import { ApolloProvider } from "@apollo/react-hooks";
 
 import { spriteContents } from "ifind-icons";
 
+// Grab the state from a global variable injected into the server-generated HTML
+const preloadedState = window.__APOLLO_STORE__;
+
+// Allow the passed state to be garbage-collected
+delete window.__APOLLO_STORE__;
+
 // Admin Link
 const adminApiLink = new HttpLink({
   uri: ADMIN_API_ROOT,
@@ -23,10 +29,20 @@ const adminApiLink = new HttpLink({
 
 const client = new ApolloClient({
   link: adminApiLink,
-  cache: new InMemoryCache().restore({}),
+  cache: new InMemoryCache().restore(preloadedState || {}),
 });
 
-ReactDOM.render(
+// Tell react-snap how to save state
+window.snapSaveState = () => ({
+  "__APOLLO_STORE__": client.store.getCache().extract()
+});
+
+window.apolloClient = client;
+
+const rootElement = document.getElementById("root");
+const renderMethod = rootElement.hasChildNodes() ? hydrate : render;
+
+renderMethod(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
