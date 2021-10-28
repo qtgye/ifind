@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import ProgressBar from "./Progress";
+import ProgressBar from './Progress';
 
 const ProgressBars = () => {
 
@@ -21,7 +21,7 @@ const ProgressBars = () => {
     }, []);
 
     return (
-        <ProgressBar color={"#ff7979"} width={"150px"} value={value} max={100} />
+        <ProgressBar value={value} max={100} color="#dc3545" />
     )
 }
 

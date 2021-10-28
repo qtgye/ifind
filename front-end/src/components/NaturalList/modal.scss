@@ -28,9 +28,18 @@
     background: #fff;
     z-index: 100;
 
+    @include xml_mobile {
+        left: 48.5%;
+        width: 380px;
+    }
+
     @include large_mobile {
         left: 49%;
         width: 390px;
+    }
+
+    @include medlarge_mobile {
+        width: 375px;
     }
 
     @include mobile {
@@ -59,9 +68,11 @@
     font-weight: bold;
     cursor: pointer;
     color: black;
+
+    &:hover {
+        color: $red;
+    }
 }
-
-
 
 .modal-content {
     border-top: 2px solid black;

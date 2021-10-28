@@ -2,9 +2,13 @@
 
 .price-change-graph {
 
+    @include small_laptop {
+        margin-top: 7.2rem;
+        margin-left: -15rem;
+    }
+
     @include tablet {
         margin-top: 5.8rem;
-        margin-left: -15rem;
     }
 
     .highcharts-credits {

@@ -11,7 +11,7 @@ import { useWindowSize } from '../../utilities/WindowResize';
 import './product-comparison.scss';
 import { useCategoryTree } from '@contexts/categoriesContext';
 import { useSubCategories } from '../../contexts/categoriesContext';
-import Carousel from '../../components/Carousel';
+//import Carousel from '../../components/Carousel';
 import ProgressBars from '../../components/ProgressBar';
 
 const ProductComparison = withComponentName('ProductComparisonPage')(() => {
@@ -22,7 +22,7 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
 
   const categoryTree = useCategoryTree();
   const [currentCategory, setCurrentCategory] = useState();
-  const [showButton, setShowButton] = useState(false);
+  const [lshowButton, lsetShowButton] = useState(false);
   const [rshowButton, rsetShowButton] = useState(true);
   const [width] = useWindowSize();
 
@@ -58,37 +58,64 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
 
   const onCategoryNavClick = useCallback((category) => {
     setSubCategories(category.children);
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
   }, [setSubCategories]);
 
   const onCategoryLoadClick = useCallback((e, id) => {
     e.preventDefault();
     setCurrentCategory(id);
+    //window.scrollTo(0, 0);
   }, [setCurrentCategory]);
 
   const scrollToRight = (e) => {
     e.preventDefault();
     const content = document.getElementById("navlist");
-    content.scrollBehavior = "smooth";
-    content.scrollLeft += 100;
-
     const scrollable = content.scrollWidth - window.innerWidth;
+    content.scrollBehavior = "smooth";
+
+    if (content.scrollLeft != null) {
+      if (scrollable < 0) {
+        content.scrollLeft += 255;
+      }
+      else {
+        content.scrollLeft += 150;
+      }
+    }
 
     if (content.scrollLeft > scrollable) {
       rsetShowButton(false);
     }
+
+    return content.scrollLeft;
   }
 
   const scrollToLeft = (e) => {
     e.preventDefault();
     const content = document.getElementById("navlist");
+    const scrollable = content.scrollWidth - window.innerWidth;
     content.scrollBehavior = "smooth";
-    content.scrollLeft -= 100;
+
+    if (content.scrollLeft != null) {
+      if (scrollable < 0) {
+        content.scrollLeft -= 255;
+      }
+      else {
+        content.scrollLeft -= 150;
+      }
+    }
 
     if (content.scrollLeft < 50) {
-      setShowButton(false);
+      lsetShowButton(false);
     }
+    //console.log(content.scrollLeft);
   }
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      rsetShowButton(true);
+    }
+    //console.log(window.innerWidth);
+  }, [window.innerWidth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <GeneralTemplate>
@@ -98,12 +125,12 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
           <div className="list">
             <nav className="nav">
               {width < 995 ?
-                showButton && <>
-                  <div className="rarrow-area"></div>
-                  <div className="rarrow" onClick={(e) => { scrollToLeft(e); rsetShowButton(true); }}><i className="fa fa-chevron-left"></i></div>
+                lshowButton && <>
+                  <div className="larrow-area"></div>
+                  <div className="larrow" onClick={(e) => { scrollToLeft(e); rsetShowButton(true); }}><i className="fa fa-chevron-left"></i></div>
                 </> : null
               }
-              <ul id="navlist" className="nav-list" >
+              <ul id="navlist" className="nav-list">
                 {
                   categoryTree.map((category, index) => (
                     <li key={category.id}>
@@ -120,8 +147,8 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
               </ul>
               {width < 995 ?
                 rshowButton && <>
-                  <div className="larrow-area"></div>
-                  <div className="larrow" onClick={(e) => { scrollToRight(e); setShowButton(true); }}><i className="fa fa-chevron-right"></i></div>
+                  <div className="rarrow-area"></div>
+                  <div className="rarrow" onClick={(e) => { scrollToRight(e); lsetShowButton(true); }}><i className="fa fa-chevron-right"></i></div>
                 </> : null
               }
             </nav>
@@ -145,13 +172,13 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
           </div>
         </div>
       </div>
-      <div className="carousel-container">
+      {/* <div className="carousel-container">
         <Carousel categories={categoryTree}
           currentCategory={currentCategory}
           onCategoryLoadClick={onCategoryLoadClick}
           onCategoryNavClick={onCategoryNavClick}
         />
-      </div>
+      </div> */}
     </GeneralTemplate >
   )
 });

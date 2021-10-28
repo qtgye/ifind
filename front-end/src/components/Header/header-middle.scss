@@ -111,16 +111,24 @@
         }
 
         @include xs_tablet {
-            margin-left: 10.8rem;
+            margin-left: 10.4rem;
         }
 
         @include xxl_mobile {
             margin-left: 10rem;
         }
 
-        @include large_mobile {
+        @include xml_mobile {
             position: absolute;
+            left: -2.1rem;
+        }
+
+        @include large_mobile {
             left: -2rem;
+        }
+
+        @include medlarge_mobile {
+            left: -2.9rem;
         }
 
         @include mobile {
@@ -168,13 +176,13 @@
 
         @include laptop {
             left: 10.5rem;
-            width: 500px;
+            width: 492px;
         }
 
         @include small_laptop {
             top: 0;
             left: 9rem;
-            width: 400px;
+            width: 405px;
         }
 
         @include tablet {
@@ -187,9 +195,22 @@
             left: 0;
         }
 
+        @include xs_tablet {
+            left: -0.3rem;
+        }
+
+        @include xml_mobile {
+            left: -0.4rem;
+            width: 350px;
+        }
+
         @include large_mobile {
             width: 300px;
             height: 45px;
+        }
+
+        @include medlarge_mobile {
+            left: -0.2rem;
         }
 
         @include sl_mobile {
@@ -213,13 +234,26 @@
             width: 450px;
             text-align: center;
 
+            @include laptop {
+                width: 430px;
+            }
+
+            @include small_laptop {
+                width: 340px;
+            }
+
             @include tablet {
                 margin-left: -3.7rem;
                 width: 328px;
             }
 
-            @include large_mobile {
+            @include xml_mobile {
                 position: relative;
+                font-size: 13px;
+                width: 280px;
+            }
+
+            @include large_mobile {
                 height: 45px;
                 width: 230px;
                 bottom: 3px;
