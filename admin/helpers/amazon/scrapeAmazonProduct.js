@@ -4,9 +4,13 @@ const fs = require("fs-extra");
 const moment = require("moment");
 const { JSDOM } = require("jsdom");
 
+const browserInstance = require("../browser");
 const { addURLParams } = require("../url");
 // const proxiedRequest = require('./proxied-request');
 const regularRequest = require("./regular-request");
+
+// Use a separate browser instance
+const browser = new browserInstance.class();
 
 const MONTHS = [
   "Jan",
@@ -23,10 +27,13 @@ const MONTHS = [
   "Dec",
 ];
 
-const priceSelector = [
+const PRICE_SELECTOR = [
+  "#dealsAccordionRow .a-color-price",
+  "#corePrice_desktop .a-price",
+  "#corePrice_feature_div .a-text-price",
   "#price_inside_buybox",
-  "#priceblock_ourprice",
   "#priceblock_dealprice",
+  "#priceblock_ourprice",
   '[data-action="show-all-offers-display"] .a-color-price',
   "#usedOnlyBuybox .offer-price",
   "#olp_feature_div .a-color-price",
@@ -61,6 +68,24 @@ const selectorsToRemove = [
   "script",
 ];
 
+const requestHtml = async (url, waitForSelector = "body") => {
+  await browser.goto(url);
+  await browser.waitForSelector(waitForSelector);
+  return await browser.$eval("body", (el) => el.innerHTML);
+};
+
+const screenshotPageError = async (url) => {
+  const pageHTML = await browser.evaluate(
+    () => document.documentElement.innerHTML
+  );
+  const [urlPath] = url.split("?");
+  const directoryTree = urlPath.replace(/^.+amazon[^/]+\//i, "").split("/");
+  const dirPath = path.resolve(__dirname, "page-errors", ...directoryTree);
+  fs.ensureDirSync(dirPath);
+  await browser.screenshot({ path: path.resolve(dirPath, "index.png") });
+  fs.outputFileSync(path.resolve(dirPath, "index.html"), pageHTML);
+};
+
 const scrapeAmazonProduct = async (
   productURL,
   language = "de",
@@ -74,70 +99,82 @@ const scrapeAmazonProduct = async (
 
   // Scrape for all amazon details if applicable
   if (!scrapePriceOnly) {
-    console.log(" - Fetching all details for product...".cyan);
-    const responseBody = await regularRequest(urlWithLanguage);
-    const detailPageHTML = responseBody;
+    try {
+      console.log(" - Fetching all details for product...".cyan);
+      const responseBody = await requestHtml(urlWithLanguage, detailSelector);
+      const detailPageHTML = responseBody;
 
-    const dom = new JSDOM(detailPageHTML);
-    const titleElement = dom.window.document.querySelector(titleSelector);
-    const imageElement = dom.window.document.querySelector(imageSelector);
-    const detailElement = dom.window.document.querySelector(detailSelector);
+      const dom = new JSDOM(detailPageHTML);
+      const titleElement = dom.window.document.querySelector(titleSelector);
+      const imageElement = dom.window.document.querySelector(imageSelector);
+      const detailElement = dom.window.document.querySelector(detailSelector);
 
-    // Select highres image from dynamic image data
-    const imageData = (scrapedData.image = imageElement
-      ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
-      : {});
-    const highResImage = Object.entries(imageData).reduce(
-      (selectedEntry, [url, dimensions]) =>
-        !selectedEntry
-          ? [url, dimensions]
-          : dimensions[0] > selectedEntry[1][0]
-          ? [url, dimensions]
-          : selectedEntry,
-      null
-    );
+      // Select highres image from dynamic image data
+      const imageData = (scrapedData.image = imageElement
+        ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
+        : {});
+      const highResImage = Object.entries(imageData).reduce(
+        (selectedEntry, [url, dimensions]) =>
+          !selectedEntry
+            ? [url, dimensions]
+            : dimensions[0] > selectedEntry[1][0]
+            ? [url, dimensions]
+            : selectedEntry,
+        null
+      );
 
-    // Remove unnecessary elements from detail section
-    const allSelectorsToRemove = selectorsToRemove.join(",");
-    [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
-      (element) => {
-        try {
-          element.remove();
-        } catch (err) {
-          /**/
+      // Remove unnecessary elements from detail section
+      const allSelectorsToRemove = selectorsToRemove.join(",");
+      [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
+        (element) => {
+          try {
+            element.remove();
+          } catch (err) {
+            /**/
+          }
         }
-      }
-    );
+      );
 
-    // Apply scraped details
-    scrapedData.title = titleElement
-      ? titleElement.textContent.trim().replace(/\n/, "")
-      : "";
-    scrapedData.image = highResImage ? highResImage[0] : "";
+      // Apply scraped details
+      scrapedData.title = titleElement
+        ? titleElement.textContent.trim().replace(/\n/, "")
+        : "";
+      scrapedData.image = highResImage ? highResImage[0] : "";
 
-    // Apply details_html
-    scrapedData.details_html = detailElement.outerHTML
-      .trim()
-      .replace(/\n+/g, "\n");
+      // Apply details_html
+      scrapedData.details_html = detailElement.outerHTML
+        .trim()
+        .replace(/\n+/g, "\n");
+    } catch (err) {
+      console.error(err.message.red, urlWithLanguage.bold);
+      await screenshotPageError(urlWithLanguage);
+    }
   }
 
   // Go to english site for price and release_date
   console.log(" - Fetching price for product...".cyan);
-  const englishPageHTML = await regularRequest(englishPageURL);
-  const dom = new JSDOM(englishPageHTML);
-
-  // Get the price
-  const priceElement = dom.window.document.querySelector(priceSelector);
-  const priceMatch = priceElement && priceElement.textContent.match(/[0-9.,]+/);
+  let priceMatch;
+  let tries = 3;
+  while (tries) {
+    try {
+      await browser.goto(englishPageURL);
+      await browser.waitForSelector(PRICE_SELECTOR, { timeout: 10000 });
+      priceMatch = await browser.$eval(PRICE_SELECTOR, (priceElement) =>
+        priceElement.textContent.match(/[0-9.,]+/)
+      );
+      break;
+    } catch (err) {
+      console.error(err);
+      console.log(`Unable to fetch price for URL: ${englishPageURL}. Retrying...`.red);
+      await screenshotPageError(englishPageURL);
+      tries--;
+    }
+  }
 
   // Product must be unavailable if there's no price parsed
   if (!priceMatch) {
     // Output file
-    const [urlPath] = englishPageURL.split("?");
-    const directoryTree = urlPath.replace(/^.+amazon[^/]+\//i, "").split("/");
-    const dirPath = path.resolve(__dirname, "page-errors", ...directoryTree);
-    fs.ensureDirSync(dirPath);
-    fs.outputFileSync(path.resolve(dirPath, "index.html"), englishPageHTML);
+    await screenshotPageError(englishPageURL);
     throw new Error(
       "Unable to parse price for the product from Amazon. Please make sure that it's currently available: " +
         englishPageURL.bold.gray,
@@ -145,14 +182,16 @@ const scrapeAmazonProduct = async (
     );
   }
 
-  scrapedData.price = (priceMatch && priceMatch[0].replace(",", "")) || 0;
+  scrapedData.price = Number(
+    (priceMatch && priceMatch[0].replace(",", "")) || 0
+  );
 
   // Get the release date if applicable
   if (!scrapePriceOnly) {
-    const parsedReleaseDates = [
+    const parsedReleaseDates = await Promise.all([
       // Some products have additional info table,
-      (() => {
-        const additionalInfoTable = dom.window.document.querySelector(
+      browser.evaluate((additionalInfoTableSelector) => {
+        const additionalInfoTable = document.querySelector(
           additionalInfoTableSelector
         );
         if (!additionalInfoTable) return;
@@ -164,11 +203,11 @@ const scrapeAmazonProduct = async (
         return releaseDateRow && releaseDateRow.cells[1]
           ? releaseDateRow.cells[1].textContent.trim()
           : "";
-      })(),
+      }, additionalInfoTableSelector),
       // Some products have details list
-      (() => {
+      browser.evaluate((detailsListSelector) => {
         const detailsListContainer =
-          dom.window.document.querySelector(detailsListSelector);
+          document.querySelector(detailsListSelector);
         if (!detailsListContainer) return;
         const releaseDateItemText = [
           ...detailsListContainer.querySelectorAll(".a-list-item"),
@@ -179,8 +218,8 @@ const scrapeAmazonProduct = async (
           ? releaseDateItemText.match(/[0-9]+[^0-9]+[0-9]{4}/i)
           : null;
         return dateMatch ? dateMatch[0] : null;
-      })(),
-    ];
+      }, detailsListSelector),
+    ]);
 
     const releaseDateString = parsedReleaseDates.find((date) => date);
 

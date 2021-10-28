@@ -1,7 +1,14 @@
-declare interface NamedComponent extends React.FunctionComponent {
-  componentName?: string;
-}
+export declare global {
+  interface Window {
+    gtag: (event: string, action: string, data: {[key: string]: any}) => any;
+  }
 
-declare interface ComponentWithProvider extends React.FunctionComponent {
-  provider?: string;
+  interface NamedComponent extends React.FunctionComponent {
+    componentName?: string;
+  }
+
+  interface ComponentWithProvider extends NamedComponent {
+    provider?: string;
+  }
+
 }

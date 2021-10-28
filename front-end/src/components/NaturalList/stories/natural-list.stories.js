@@ -1,5 +1,5 @@
 import { component } from '@sb';
-import NaturalListComponent from '../';
+import NaturalListComponent from '..';
 
 import { items } from '@mocks/components/natural-list';
 

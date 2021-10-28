@@ -21,16 +21,21 @@ module.exports = async () => {
       await Promise.all(
         product.url_list.map(async (urlData) => {
           if (urlData.source) {
-            switch (true) {
-              case /ebay/i.test(urlData.source.name):
-                urlData.url = ebayLink(urlData.url);
-                break;
-              case /ali/i.test(urlData.source.name):
-                const aliExpressData = await getDetailsFromURL(urlData.url);
-                urlData.url = aliExpressData.affiliateLink
-                  ? aliExpressData.affiliateLink
-                  : urlData.url;
-                break;
+            try {
+              switch (true) {
+                case /ebay/i.test(urlData.source.name):
+                  urlData.url = ebayLink(urlData.url);
+                  break;
+                case /ali/i.test(urlData.source.name):
+                  const aliExpressData = await getDetailsFromURL(urlData.url);
+                  urlData.url = aliExpressData.affiliateLink
+                    ? aliExpressData.affiliateLink
+                    : urlData.url;
+                  break;
+              }
+            }
+            catch(err) {
+              console.error(err);
             }
           }
         })
@@ -44,6 +49,8 @@ module.exports = async () => {
       amazon_url: product.amazon_url,
       url_list: product.url_list,
     });
+
+    console.log(`[ ${productsWithNewLinks.length} of ${allProducts.length} ] - Fetched new links for ${product.title}`.green);
   }
 
   // Save product changes

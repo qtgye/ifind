@@ -4,19 +4,24 @@
  * @returns {[Category]}
  */
 module.exports = async (categoriesInput) => {
-  const CategoryModel = await strapi.query("category").model;
   const updateDataList = categoriesInput.map(({ where, data }) => ({
     id: where.id,
     ...data,
   }));
 
+  updatedCategories = [];
+
   // Update each category
   // Bookshelf guide: https://bookshelfjs.org/api.html#Model-instance-save
-  const updatedCategories = await Promise.all(
-    updateDataList.map(async (newCategoryData) =>
-      (await CategoryModel.forge(newCategoryData).save()).serialize()
-    )
-  );
+  for (let { id, ...newData } of updateDataList) {
+    console.log(`Saving category: [${id}]`);
+    const updatedCategory = await strapi.services.category.update(
+      { id },
+      newData
+    );
+    console.log("DONE");
+    updatedCategories.push(updatedCategory);
+  }
 
   return updatedCategories;
 };

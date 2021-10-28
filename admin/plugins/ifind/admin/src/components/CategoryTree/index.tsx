@@ -103,7 +103,7 @@ const CategoryTree = (onChange) => {
 
     // Set ascendants IDs
     const itemsToUpdate = itemsToChange.map((newItemData: CategoryTreeItem) => {
-      if ("parent" in newItemData) {
+      if (newItemData.parent) {
         const ascendants = [];
         let currentNode =
           itemsToChange.find((item) => item.id == newItemData.parent) ||
@@ -127,6 +127,9 @@ const CategoryTree = (onChange) => {
         }
 
         newItemData.ascendants = ascendants;
+      }
+      else {
+        newItemData.ascendants = [];
       }
 
       return newItemData;

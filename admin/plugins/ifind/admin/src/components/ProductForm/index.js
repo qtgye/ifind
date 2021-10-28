@@ -36,7 +36,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   // Field states
   const [websiteTab, setWebsiteTab] = useState("product_comparison");
-  const [dealType, setDealType] = useState("");
+  const [dealType, setDealType] = useState("none");
   const [region, setRegion] = useState(null);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState(null);
@@ -214,7 +214,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       // Reset to defaults
       setId(null);
       setWebsiteTab("product_comparison");
-      setDealType('');
+      setDealType("none");
       setTitle("");
       setImage("");
       setCategory(null);
@@ -259,7 +259,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
   useEffect(() => {
     console.log({ dealType });
-  }, [ dealType ]);
+  }, [dealType]);
 
   return (
     <form className="product-form row">

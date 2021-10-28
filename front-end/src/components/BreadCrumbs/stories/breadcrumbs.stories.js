@@ -1,5 +1,5 @@
 import { component } from '@sb';
-import BreadcrumbsComponent from '../';
+import BreadcrumbsComponent from '..';
 
 export default component({
     title: 'Breadcrumbs',

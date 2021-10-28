@@ -5,11 +5,16 @@ require("colors");
 const puppeteer = require("puppeteer");
 const EventEmitter = require("events");
 
+const BROWSER_IDLE_TIMEOUT = 1000 * 60 * 3;
+const PAGE_IDLE_TIMEOUT = 1000 * 60 * 2;
+
 class Browser {
   constructor() {
     Browser.on("close", () => {
       this.page = null;
     });
+
+    this.class = this.__proto__.constructor;
   }
 
   async getBrowserInstance() {
@@ -22,6 +27,10 @@ class Browser {
     if (!this.page) {
       const browser = await this.getBrowserInstance();
       this.page = await browser.newPage();
+      await this.page.setViewport({
+        width: 1920,
+        height: 1280,
+      });
     }
 
     return this.page;
@@ -62,7 +71,46 @@ class Browser {
       const page = await this.page;
       page.close(); // no need to await
       this.page = null;
-    }, 1000 * 60);
+    }, PAGE_IDLE_TIMEOUT);
+  }
+
+  async callPageFunction(pageFunction, ...args) {
+    const page = await this.getPageInstance();
+    return page[pageFunction].apply(page, args);
+  }
+
+  /**
+   * Puppeteer page methods
+   */
+  async goto(...args) {
+    return this.callPageFunction("goto", ...args);
+  }
+  async waitForSelector(...args) {
+    return this.callPageFunction("waitForSelector", ...args);
+  }
+  async click(...args) {
+    return this.callPageFunction("click", ...args);
+  }
+  async evaluate(...args) {
+    return this.callPageFunction("evaluate", ...args);
+  }
+  async $eval(...args) {
+    return this.callPageFunction("$eval", ...args);
+  }
+  async $$eval(...args) {
+    return this.callPageFunction("$$eval", ...args);
+  }
+  async waitForResponse(...args) {
+    return this.callPageFunction("waitForResponse", ...args);
+  }
+  async reload(...args) {
+    return this.callPageFunction("reload", ...args);
+  }
+  async setViewport(...args) {
+    return this.callPageFunction("setViewport", ...args);
+  }
+  async screenshot(...args) {
+    return this.callPageFunction("screenshot", ...args);
   }
 }
 
@@ -106,7 +154,7 @@ Browser.resetBrowserIdleWatcher = async function () {
     browser.close(); // no need to await
     this.browser = null;
     this.eventEmitter.emit("close");
-  }, 1000 * 60 * 3);
+  }, BROWSER_IDLE_TIMEOUT);
 };
 
 module.exports = new Browser();

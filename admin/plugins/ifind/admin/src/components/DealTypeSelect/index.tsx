@@ -51,7 +51,7 @@ const DealTypeSelect = ({
         );
 
         if (typeof onChange === "function") {
-          onChange(matchedOption?.value || "");
+          onChange(matchedOption?.value || "none");
         }
       }
     },

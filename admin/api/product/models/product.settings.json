@@ -100,11 +100,12 @@
     "deal_type": {
       "type": "enumeration",
       "enum": [
+        "none",
         "amazon_flash_offers",
         "ebay_wow_offers",
         "aliexpress_value_deals"
       ],
-      "default": "amazon_flash_offers"
+      "default": "none"
     }
   }
 }

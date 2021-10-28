@@ -117,6 +117,7 @@
     text-overflow: ellipsis;
     color: rgba(color(black), var(--text-opacity));
     transition: all .3s;
+    word-break: break-word;
   }
 
   &__price {

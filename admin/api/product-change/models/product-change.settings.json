@@ -37,7 +37,8 @@
         "draft",
         "trash",
         "category_post_update",
-        "product_validator_results"
+        "product_validator_results",
+        "price_updater_results"
       ],
       "default": "script_update"
     }
