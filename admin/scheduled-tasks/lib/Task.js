@@ -40,6 +40,7 @@ class Task extends Model {
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
     this.taskModuleFile = path.resolve(this.taskModulePath, 'index.js');
+    this.hasModule = existsSync(this.taskModuleFile);
 
     // Event emitter
     this[EVENT_EMITTER_KEY] = new EventEmitter();
@@ -62,7 +63,7 @@ class Task extends Model {
   }
 
   start() {
-    if ( this.hasModule() && !this.running ) {
+    if ( this.hasModule && !this.running ) {
       this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
 
       this.setRunning();
@@ -100,10 +101,6 @@ class Task extends Model {
 
   getLogs() {
     return this.logger.getAll();
-  }
-
-  hasModule() {
-    return this.taskModulePath && existsSync(this.taskModuleFile);
   }
 
   log(message = "", type) {

@@ -41,7 +41,7 @@ module.exports = {
     status: SCHEDULED_TASK_STATUS
     frequency: String
     next_run: Float
-    hasBackgroundProcess: Boolean
+    hasModule: Boolean
   }
 
   enum SCHEDULED_TASK_ACTION {
