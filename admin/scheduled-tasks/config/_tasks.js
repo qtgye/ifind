@@ -12,11 +12,11 @@ module.exports = [
   //   name: "Product Price Updater",
   //   schedule: frequencies.daily / 2,
   // },
-  // {
-  //   id: "amazon-flash-offers",
-  //   name: "Amazon Flash Offers",
-  //   schedule: frequencies.hourly,
-  // },
+  {
+    id: "amazon-flash-offers",
+    name: "Amazon Flash Offers",
+    schedule: frequencies.seconds * 30,
+  },
   // {
   //   id: "ebay-wow-offers",
   //   name: "Ebay Wow Offers",
@@ -27,14 +27,14 @@ module.exports = [
   //   name: "AliExpress Super Value Deals",
   //   schedule: frequencies.hourly,
   // },
-  {
-    id: 'test',
-    name: 'Test Task',
-    schedule: frequencies.seconds * 30,
-  },
-  {
-    id: 'task-2',
-    name: 'Test Task 2',
-    schedule: frequencies.seconds * 30,
-  }
+  // {
+  //   id: 'test',
+  //   name: 'Test Task',
+  //   schedule: frequencies.seconds * 30,
+  // },
+  // {
+  //   id: 'task-2',
+  //   name: 'Test Task 2',
+  //   schedule: frequencies.seconds * 30,
+  // }
 ];
