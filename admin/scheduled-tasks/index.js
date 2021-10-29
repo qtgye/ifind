@@ -72,8 +72,11 @@ class ScheduledTasks {
 
   start(id) {
     if ( this.runningTask || !(id in this.tasks) ) {
+      LOGGER.log(`Unable to run ${id}. Another task is currently running.`);
       return;
     }
+
+    this.runningTask = id;
 
     LOGGER.log(`Starting task: ${id}`);
     const task = this.tasks[id];

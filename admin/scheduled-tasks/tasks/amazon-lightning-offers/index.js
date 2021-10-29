@@ -41,33 +41,49 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
 
       let scrapedProducts = 0;
       for (const productLink of offerProducts) {
-        const productData = await scrapeAmazonProduct(productLink, "de", false);
+        try {
+          const productData = await scrapeAmazonProduct(
+            productLink,
+            "de",
+            false
+          );
 
-        // Additional props
-        productData.release_date = productData.releaseDate;
-        productData.amazon_url = amazonLink(productLink);
-        productData.deal_type = "amazon_flash_offers";
-        productData.website_tab = "home";
+          if (!productData || !productData.title || !productData.price) {
+            continue;
+          }
 
-        // Preprocess data props
-        productData.updateScope = {
-          amazonDetails: false,
-          price: false,
-        };
+          console.log('productData.releaseDate', productData.releaseDate);
+          console.log('productLink', productLink);
 
-        // Remove unnecessary props
-        delete productData.releaseDate;
+          // Additional props
+          productData.release_date = productData.releaseDate;
+          productData.amazon_url = amazonLink(productLink);
+          productData.deal_type = "amazon_flash_offers";
+          productData.website_tab = "home";
 
-        // Save product
-        const newProduct = await strapi.query("product").create(productData);
-        console.log(
-          `[ ${++scrapedProducts} of 20 ] Saved new product: ${
-            newProduct.title.bold
-          }`.green
-        );
+          // Preprocess data props
+          productData.updateScope = {
+            amazonDetails: false,
+            price: false,
+          };
 
-        if (scrapedProducts === 20) {
-          break;
+          // Remove unnecessary props
+          delete productData.releaseDate;
+
+          // Save product
+          const newProduct = await strapi.query("product").create(productData);
+          console.log(
+            `[ ${++scrapedProducts} of 20 ] Saved new product: ${
+              newProduct.title.bold
+            }`.green
+          );
+
+          if (scrapedProducts === 20) {
+            break;
+          }
+        } catch (err) {
+          console.error(err);
+          continue;
         }
       }
     }

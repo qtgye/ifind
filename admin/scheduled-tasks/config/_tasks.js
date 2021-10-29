@@ -15,7 +15,7 @@ module.exports = [
   {
     id: "amazon-lightning-offers",
     name: "Amazon Lightning Offers",
-    schedule: frequencies.seconds * 30,
+    schedule: hourly,
   },
   // {
   //   id: "ebay-wow-offers",
