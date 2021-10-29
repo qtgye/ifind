@@ -1,20 +1,9 @@
 const path = require("path");
 const { getWowOffers, getMultipleFromIDs } = require('./api');
-const ebayLink = require('./ebayLink');
-const createStrapiInstance = require("../../scripts/strapi-custom");
 
-const EBAY_DEAL_TYPE = 'ebay_wow_offers';
 
 const getEbayWowOffers = async () => {
-  const strapi = await createStrapiInstance();
-  const [ebaySource, germanRegion] = await Promise.all([
-    strapi.services.source.findOne({ name_contains: "ebay" }),
-    strapi.services.region.findOne({ code: "de" }),
-  ]);
-
   try {
-    console.log('Getting Ebay Wow Offers...');
-
     const fetchedOffers = [];
     let page = 1;
 
@@ -34,16 +23,6 @@ const getEbayWowOffers = async () => {
           price: productDeal.price,
           price_original: productDeal.price_original,
           discount_percent: productDeal.discount_percent,
-          // url_list: [{
-          //   url: productDeal.url,
-          //   price: productDeal.price,
-          //   price_original: productDeal.price_original,
-          //   discount_percent: productDeal.discount_percent,
-          //   quantity_total: additionalProductDetails.quantity_total,
-          //   quantity_available: productDeal.quantity_total - additionalProductDetails.quantity_sold,
-          //   source: ebaySource.id,
-          //   region: germanRegion.id,
-          // }]
         });
 
         if ( fetchedOffers.length >= 20 ) {
@@ -60,56 +39,31 @@ const getEbayWowOffers = async () => {
     const itemIDs = fetchedOffers.map(({ itemID }) => itemID);
     const additionalProductDetails = await getMultipleFromIDs(itemIDs);
 
-    let savedProducts = 0;
-
-    // Remove old products
-    console.log("Removing old products...".green);
-    const deletedProducts = await strapi.services.product.delete({ deal_type: EBAY_DEAL_TYPE });
-    console.log(`Deleted ${deletedProducts.length} product(s).`.cyan);
-
-    // Create sanitized product data
-    // Merging details from deals and additionalDetails
-    // Then save products
-    for ( const productOfferData of fetchedOffers ) {
+    return fetchedOffers.map(productOfferData => {
       const additionalDetails = additionalProductDetails[productOfferData.itemID];
 
       // Sanitized product data
       if ( additionalDetails ) {
         const newProductData = {
-          website_tab: "home",
-          deal_type: EBAY_DEAL_TYPE,
           title: productOfferData.title,
           image: productOfferData.image,
-          url_list: [{
-            source: ebaySource.id,
-            region: germanRegion.id,
-            url: ebayLink(productOfferData.url),
-            price: productOfferData.price,
-            price_original: productOfferData.price_original,
-            discount_percent: productOfferData.discount_percent,
-            quantity_total: additionalDetails.quantity_total,
-            quantity_available: additionalDetails.quantity_total - additionalDetails.quantity_sold,
-          }],
+          url: productOfferData.url,
+          price: productOfferData.price,
+          price_original: productOfferData.price_original,
+          discount_percent: productOfferData.discount_percent,
+          quantity_total: additionalDetails.quantity_total,
+          quantity_available: additionalDetails.quantity_total - additionalDetails.quantity_sold,
         };
 
-        // Save new product
-        await strapi.services.product.create(newProductData);
-        console.log(`[ ${++savedProducts} of ${fetchedOffers.length} ] Saved new product: ${newProductData.title}`.green);
+        return newProductData;
       }
-    }
 
-    console.log(" DONE ".white.bgGreen);
+      return productOfferData;
+    });
   } catch (err) {
     console.error(err.message.red, err.stack);
-    await page.screenshot({
-      path: path.resolve(__dirname, "test.png"),
-    });
+    return [];
   }
 };
-
-(async () => {
-  await getEbayWowOffers();
-  process.exit();
-})();
 
 module.exports = getEbayWowOffers;

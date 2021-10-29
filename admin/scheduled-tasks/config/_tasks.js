@@ -7,34 +7,34 @@ module.exports = [
   //   name: "Product Validator",
   //   schedule: frequencies.daily / 2,
   // },
+  {
+    id: "product-price-updater",
+    name: "Product Price Updater",
+    schedule: frequencies.daily,
+  },
   // {
-  //   id: "product-price-updater",
-  //   name: "Product Price Updater",
-  //   schedule: frequencies.daily / 2,
-  // },
-  // {
-  //   id: "amazon-flash-offers",
-  //   name: "Amazon Flash Offers",
-  //   schedule: frequencies.hourly,
+  //   id: "amazon-lightning-offers",
+  //   name: "Amazon Lightning Offers",
+  //   schedule: hourly,
   // },
   // {
   //   id: "ebay-wow-offers",
   //   name: "Ebay Wow Offers",
-  //   schedule: frequencies.hourly,
+  //   schedule: frequencies.seconds * 30,
   // },
   // {
   //   id: "aliexpress-value-deals",
   //   name: "AliExpress Super Value Deals",
-  //   schedule: frequencies.hourly,
+  //   schedule: frequencies.daily,
   // },
-  {
-    id: 'test',
-    name: 'Test Task',
-    schedule: frequencies.seconds * 30,
-  },
-  {
-    id: 'task-2',
-    name: 'Test Task 2',
-    schedule: frequencies.seconds * 30,
-  }
+  // {
+  //   id: 'test',
+  //   name: 'Test Task',
+  //   schedule: frequencies.seconds * 30,
+  // },
+  // {
+  //   id: 'task-2',
+  //   name: 'Test Task 2',
+  //   schedule: frequencies.seconds * 30,
+  // }
 ];
