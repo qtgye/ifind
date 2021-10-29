@@ -42,6 +42,7 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
       let scrapedProducts = 0;
       for (const productLink of offerProducts) {
         try {
+          console.log(`Scraping: ${productLink}`);
           const productData = await scrapeAmazonProduct(
             productLink,
             "de",
@@ -51,9 +52,6 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
           if (!productData || !productData.title || !productData.price) {
             continue;
           }
-
-          console.log('productData.releaseDate', productData.releaseDate);
-          console.log('productLink', productLink);
 
           // Additional props
           productData.release_date = productData.releaseDate;

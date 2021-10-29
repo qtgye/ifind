@@ -12,21 +12,21 @@ module.exports = [
   //   name: "Product Price Updater",
   //   schedule: frequencies.daily / 2,
   // },
-  {
-    id: "amazon-lightning-offers",
-    name: "Amazon Lightning Offers",
-    schedule: hourly,
-  },
+  // {
+  //   id: "amazon-lightning-offers",
+  //   name: "Amazon Lightning Offers",
+  //   schedule: hourly,
+  // },
   // {
   //   id: "ebay-wow-offers",
   //   name: "Ebay Wow Offers",
   //   schedule: frequencies.hourly,
   // },
-  // {
-  //   id: "aliexpress-value-deals",
-  //   name: "AliExpress Super Value Deals",
-  //   schedule: frequencies.hourly,
-  // },
+  {
+    id: "aliexpress-value-deals",
+    name: "AliExpress Super Value Deals",
+    schedule: frequencies.daily,
+  },
   // {
   //   id: 'test',
   //   name: 'Test Task',
