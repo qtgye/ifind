@@ -7,11 +7,11 @@ module.exports = [
   //   name: "Product Validator",
   //   schedule: frequencies.daily / 2,
   // },
-  // {
-  //   id: "product-price-updater",
-  //   name: "Product Price Updater",
-  //   schedule: frequencies.daily / 2,
-  // },
+  {
+    id: "product-price-updater",
+    name: "Product Price Updater",
+    schedule: frequencies.daily,
+  },
   // {
   //   id: "amazon-lightning-offers",
   //   name: "Amazon Lightning Offers",
