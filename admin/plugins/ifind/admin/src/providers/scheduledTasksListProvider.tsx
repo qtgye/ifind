@@ -44,7 +44,7 @@ query {
     status
     frequency
     next_run
-    hasBackgroundProcess
+    hasModule
   }
 }
 `;
