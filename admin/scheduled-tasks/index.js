@@ -37,7 +37,7 @@ class ScheduledTasks {
 
       // Check for changes and save if there is any
       if ( dbTask.name !== configTask.name || dbTask.schedule !== configTask.schedule ) {
-        dbTask.update({
+        Database.update(Task.model, dbTask.id, {
           name: configTask.name,
           schedule: configTask.schedule
         });
@@ -71,11 +71,14 @@ class ScheduledTasks {
   }
 
   start(id) {
-    if ( this.runningTask === id || !(id in this.tasks) ) {
+    if ( this.runningTask || !(id in this.tasks) ) {
+      LOGGER.log(`Unable to run ${id}. Another task is currently running.`);
       return;
     }
 
-    LOGGER.log('Starting task: ', id);
+    this.runningTask = id;
+
+    LOGGER.log(`Starting task: ${id}`);
     const task = this.tasks[id];
     task.start();
   }

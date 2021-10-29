@@ -1,9 +1,5 @@
 const browser = require("../browser");
 const path = require("path");
-const scrapeAmazonProduct = require("./scrapeAmazonProduct");
-const amazonLink = require("./amazonLink");
-
-const createStrapiInstance = require("../../scripts/strapi-custom");
 
 const LIGHTNING_OFFERS_PAGE =
   "https://www.amazon.de/-/en/gp/angebote?ref_=nav_cs_gb_c869dbce88784497bfc3906e5456094e&deals-widget=%257B%2522version%2522%253A1%252C%2522viewIndex%2522%253A0%252C%2522presetId%2522%253A%2522deals-collection-lightning-deals%2522%252C%2522dealType%2522%253A%2522LIGHTNING_DEAL%2522%252C%2522sorting%2522%253A%2522BY_SCORE%2522%257D";
@@ -18,8 +14,6 @@ const ADDRESS_CHANGE_URL =
   "https://www.amazon.de/gp/delivery/ajax/address-change.html";
 
 const getLightningOffers = async () => {
-  const strapi = await createStrapiInstance();
-
   try {
     console.log("Getting to Lightning Offers Page...");
     await browser.goTo(LIGHTNING_OFFERS_PAGE);
@@ -72,56 +66,15 @@ const getLightningOffers = async () => {
         })
     );
 
-    console.log(
-      `Scraping details for ${productLinks.length} products...`.green
-    );
-
-    // TO DO: Move this under scheduled-tasks instead
-    let scrapedProducts = 0;
-    for (const productLink of productLinks) {
-      const productData = await scrapeAmazonProduct(productLink, "de", false);
-
-      // Additional props
-      productData.release_date = productData.releaseDate;
-      productData.amazon_url = amazonLink(productLink);
-      productData.deal_type = "amazon_flash_offers";
-      productData.website_tab = "home";
-
-      // Preprocess data props
-      productData.updateScope = {
-        amazonDetails: false,
-        price: false,
-      };
-
-      // Remove unnecessary props
-      delete productData.releaseDate;
-
-      // Save product
-
-      const newProduct = await strapi.query('product').create(productData);
-      console.log(
-        `[ ${++scrapedProducts} of 20 ] Saved new product: ${
-          newProduct.title.bold
-        }`.green
-      );
-
-      if (scrapedProducts === 20) {
-        break;
-      }
-    }
-
-    console.log(" DONE ".yellow.bgGreen);
+    return productLinks;
   } catch (err) {
     console.error(err.message.red, err.stack);
     await page.screenshot({
       path: path.resolve(__dirname, "test.png"),
     });
+
+    return [];
   }
 };
-
-(async () => {
-  await getLightningOffers();
-  process.exit();
-})();
 
 module.exports = getLightningOffers;
