@@ -20,13 +20,13 @@ module.exports = [
   // {
   //   id: "ebay-wow-offers",
   //   name: "Ebay Wow Offers",
-  //   schedule: frequencies.hourly,
+  //   schedule: frequencies.seconds * 30,
   // },
-  {
-    id: "aliexpress-value-deals",
-    name: "AliExpress Super Value Deals",
-    schedule: frequencies.daily,
-  },
+  // {
+  //   id: "aliexpress-value-deals",
+  //   name: "AliExpress Super Value Deals",
+  //   schedule: frequencies.daily,
+  // },
   // {
   //   id: 'test',
   //   name: 'Test Task',
