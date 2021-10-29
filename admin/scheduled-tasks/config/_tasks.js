@@ -13,8 +13,8 @@ module.exports = [
   //   schedule: frequencies.daily / 2,
   // },
   {
-    id: "amazon-flash-offers",
-    name: "Amazon Flash Offers",
+    id: "amazon-lightning-offers",
+    name: "Amazon Lightning Offers",
     schedule: frequencies.seconds * 30,
   },
   // {
