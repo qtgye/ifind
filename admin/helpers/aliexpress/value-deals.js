@@ -34,7 +34,7 @@ const getValueDeals = async () => {
     });
 
     // Go to value deals page
-    await page.goto(VALUE_DEALS_PAGE_URL);
+    await page.goto(VALUE_DEALS_PAGE_URL, { timeout: 99999999 });
 
     try {
       // Await for required selector
