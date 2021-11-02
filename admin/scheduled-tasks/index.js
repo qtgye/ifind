@@ -1,13 +1,14 @@
-const path = require('path');
+const path = require("path");
 const { existsSync } = require("fs-extra");
 
 const baseDir = path.resolve(__dirname);
-const configPath = path.resolve(baseDir, 'config');
+const configPath = path.resolve(baseDir, "config");
 const config = existsSync(configPath) ? require(configPath) : {};
-const timer = require('./lib/Timer');
-const Task = require('./lib/Task');
-const Database = require('./lib/Database');
-const Logger = require('./lib/Logger');
+const timer = require("./lib/Timer");
+const Task = require("./lib/Task");
+const Database = require("./lib/Database");
+const Logger = require("./lib/Logger");
+const mapScheduleToFrequency = require("./utils/mapScheduleToFrequency");
 
 const LOGGER = new Logger({ baseDir });
 
@@ -22,7 +23,7 @@ class ScheduledTasks {
   }
 
   init() {
-    if ( this.initialized ) {
+    if (this.initialized) {
       return;
     }
 
@@ -32,14 +33,17 @@ class ScheduledTasks {
     const configTasks = config.tasks;
     const dbTasks = Database.getAll(Task.model);
 
-    configTasks.forEach(configTask => {
-      const dbTask = dbTasks.find(task => task.id === configTask.id);
+    configTasks.forEach((configTask) => {
+      const dbTask = dbTasks.find((task) => task.id === configTask.id);
 
       // Check for changes and save if there is any
-      if ( dbTask.name !== configTask.name || dbTask.schedule !== configTask.schedule ) {
-        dbTask.update({
+      if (
+        dbTask.name !== configTask.name ||
+        dbTask.schedule !== configTask.schedule
+      ) {
+        Database.update(Task.model, dbTask.id, {
           name: configTask.name,
-          schedule: configTask.schedule
+          schedule: configTask.schedule,
         });
       }
 
@@ -47,15 +51,15 @@ class ScheduledTasks {
     });
 
     // Initialize timer
-    timer.on('taskstart', this.start.bind(this));
+    timer.on("taskstart", this.start.bind(this));
     timer.init();
 
-    LOGGER.log('Scheduled Tasks Runner initialized'.green);
+    LOGGER.log("Scheduled Tasks Runner initialized".green);
   }
 
   runCommand(command, id) {
-    const validCommands = [ 'start', 'stop' ];
-    if ( validCommands.includes(command) ) {
+    const validCommands = ["start", "stop"];
+    if (validCommands.includes(command)) {
       this[command].call(this, id);
     }
 
@@ -67,29 +71,35 @@ class ScheduledTasks {
    */
   list() {
     const tasks = Object.values(this.tasks);
-    return tasks;
+    return tasks.map((task) => ({
+      ...task,
+      frequency: mapScheduleToFrequency(task.schedule),
+    }));
   }
 
   start(id) {
-    if ( this.runningTask === id || !(id in this.tasks) ) {
+    if (this.runningTask || !(id in this.tasks)) {
+      LOGGER.log(`Unable to run ${id}. Another task is currently running.`);
       return;
     }
 
-    LOGGER.log('Starting task: ', id);
+    this.runningTask = id;
+
+    LOGGER.log(`Starting task: ${id}`);
     const task = this.tasks[id];
     task.start();
   }
 
   stop(id) {
-    if ( id in this.tasks ) {
+    if (id in this.tasks) {
       const _process = this.tasks[id];
-      LOGGER.log('Killing task: ', id);
+      LOGGER.log("Killing task: ", id);
       _process.stop();
     }
   }
 
   getTask(taskID) {
-    if ( id in this.tasks ) {
+    if (id in this.tasks) {
       return this.tasks[id].getLogs();
     }
   }
@@ -98,8 +108,8 @@ class ScheduledTasks {
     const task = Task.initializeWithData(taskData);
 
     // Handle task events
-    task.on('message', (...args) => this.onProcessMessage(args));
-    task.on('exit', () => this.onProcessExit(task.id));
+    task.on("message", (...args) => this.onProcessMessage(args));
+    task.on("exit", () => this.onProcessExit(task.id));
 
     // Save task to list
     this.tasks[task.id] = task;
@@ -113,7 +123,7 @@ class ScheduledTasks {
     this.runningTask = null;
     LOGGER.log(`Process exitted: ${id}`);
   }
-};
+}
 
 // const scheduledTasks = new ScheduledTasks;
 // // TODO: Determine where to init, accounting for custom strapi instance

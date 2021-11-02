@@ -44,7 +44,7 @@ class Browser {
    */
   async goTo(url, waitForSelector = "body") {
     const page = await this.getPageInstance();
-    await page.goto(url);
+    await page.goto(url, { timeout: 9999999 });
     await page.waitForSelector(waitForSelector);
     return page;
   }

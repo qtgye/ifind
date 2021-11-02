@@ -32,11 +32,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache().restore(preloadedState || {}),
 });
 
-// Tell react-snap how to save state
-window.snapSaveState = () => ({
-  "__APOLLO_STORE__": client.store.getCache().extract()
-});
-
 window.apolloClient = client;
 
 const rootElement = document.getElementById("root");

@@ -29,6 +29,11 @@ const Timer = {
     // Next reset will depend if there's task to run
     let resetTimeInterval = 0;
 
+    if ( !firstTask ) {
+      console.log(`Scheduled Tasks doesn't detect any task in the config. Aborting`.red);
+      return;
+    }
+
     // If task is not yet due to run,
     // just reset the timer
     if (!Queue.isTaskDueToRun(firstTask)) {
