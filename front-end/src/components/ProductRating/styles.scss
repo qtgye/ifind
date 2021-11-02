@@ -9,19 +9,27 @@
     @include small_laptop {
         position: absolute;
         top: 22rem;
-        right: 6.4rem;
+        right: 5.5rem;
         height: 2.5rem;
     }
 
     @include tablet{
         position: absolute;
         top: 20rem;
-        right: 8rem;
+        right: 5rem;
         height: 2rem;
     }
 
     @include xs_tablet {
-        right: 4rem;
+        right: 8.2rem;
+    }
+
+    @include xl_mobile {
+        right: 8rem;
+    }
+
+    @include xml_mobile {
+        right: 6.3rem;
     }
 
     @include large_mobile {
@@ -57,14 +65,24 @@
         box-shadow: 0 0 3px rgba(0,0,0,.3);
         display: none;
 
+        @include small_laptop {
+            right: -4.3rem;
+            padding: 15px 8px;
+        }
+
         @include tablet {
             bottom: 2rem;
-            right: -3rem;
+            right: -3.2rem;
             padding: 10px 5px;
         }
 
         @include large_mobile {
             right: -3.2rem;
+        }
+
+        @include small_mobile {
+            padding-left: 0;
+            padding-right: 0;
         }
 
     }

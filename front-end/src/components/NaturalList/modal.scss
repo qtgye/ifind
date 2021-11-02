@@ -29,12 +29,10 @@
     z-index: 100;
 
     @include xml_mobile {
-        left: 48.5%;
         width: 380px;
     }
 
     @include large_mobile {
-        left: 49%;
         width: 390px;
     }
 

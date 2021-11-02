@@ -84,7 +84,7 @@
     
     .nav {
         position: sticky;
-        top: 61px;
+        top: 0;
         height: 50px;
         width: 101.3%;
         margin-right: auto;
@@ -125,26 +125,31 @@
         display: flex;
         position: sticky;
         margin-top: -1px;
-        column-gap: 38px;
+        //column-gap: 38px; //English Names
+        column-gap: 30px; //German Names
         padding: 10px;
-        margin-right: auto;
+        //margin-right: auto;
         z-index: 3;
 
         @include desktop {
-            column-gap: 27.5px;
+            //column-gap: 27.5px; //English Names
+            column-gap: 19.5px;
         }
 
         @include small_desktop {
-            column-gap: 27.4px;
+            //column-gap: 27.4px; //English Names
+            column-gap: 19.4px; //German Names
         }
 
         @include large_laptop {
-            column-gap: 18px;
+            //column-gap: 18px; //English Names
+            column-gap: 11.2px; //German Names
             margin-left: -2px;
         }
 
         @include laptop {
-            column-gap: 17.9px;
+            //column-gap: 17.9px; //English Names
+            column-gap: 11.4px; //German Names
             scroll-behavior: smooth;
             overflow-x: scroll;
             overflow: hidden;

@@ -15,19 +15,24 @@
     border-radius: var(--corner-radius) var(--corner-radius) 0 0;
     position: sticky;
     margin-left: -16rem;
-    top: 60px;
+    top: 0;
     z-index: 1;
+
+    @include laptop {
+      margin-left: -16.7rem;
+    }
   }
 
  &__items {
       display: grid;
       grid-template-columns: 1fr;
       margin-top: 10px;
-      margin-left: -16rem;
+      margin-left: -16.7rem;
       overflow: visible;
   
       @include mobile-up {
-        grid-template-columns: repeat(1, 1fr);
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 0 10px;
       }
 
       @include xxl_mobile-up {

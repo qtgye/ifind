@@ -92,7 +92,12 @@ $item-layout: (
         padding: 5px;
         background-color: color(gray);
 
-        @include xxl_mobile {
+        @include small_laptop {
+            grid-template-columns: repeat(16, 1fr);
+            grid-template-rows: repeat(9, 1fr);
+        }
+
+        @include xs_tablet {
             grid-template-columns: repeat(16, 1fr);
             grid-template-rows: repeat(24, 1fr);
         }
@@ -165,7 +170,51 @@ $item-layout: (
                 }
             }
 
-            @include xxl_mobile {
+            @include small_laptop {
+                &:nth-child(1) {
+                    grid-column-start: 1;
+                    grid-row-start: 1;
+                    grid-column-end: span 9;
+                    grid-row-end: span 9;
+                }
+
+                &:nth-child(2) {
+                    grid-column-start: 10;
+                    grid-row-start: 1;
+                    grid-column-end: span 8;
+                    grid-row-end: span 5;
+                }
+
+                &:nth-child(3) {
+                    grid-column-start: 14;
+                    grid-row-start: 6;
+                    grid-column-end: span 4;
+                    grid-row-end: span 4;
+                }
+
+                &:nth-child(4) {
+                    grid-column-start: 10;
+                    grid-row-start: 8;
+                    grid-column-end: span 4;
+                    grid-row-end: span 2;
+                }
+
+                &:nth-child(5) {
+                    grid-column-start: 10;
+                    grid-row-start: 6;
+                    grid-column-end: span 2;
+                    grid-row-end: span 2;
+                }
+
+                &:nth-child(6) {
+                    grid-column-start: 12;
+                    grid-row-start: 6;
+                    grid-column-end: span 2;
+                    grid-row-end: span 2;
+                }
+            }
+
+            @include xs_tablet {
                 &:nth-child(1) {
                     display: none;
                 }
@@ -864,6 +913,10 @@ $item-layout: (
         line-height: 20px;
     
         padding: 0 4px 0 5px;
+
+        @include xs_tablet {
+            font-size: 10px;
+        }
 
         @include large_mobile {
             font-size: 10px;
