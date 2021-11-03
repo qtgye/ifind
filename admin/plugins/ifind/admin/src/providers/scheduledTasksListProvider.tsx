@@ -38,7 +38,7 @@ mutation TriggerTask (
     status
     frequency
     next_run
-    hasBackgroundProcess
+    hasModule
   }
 }
 `;
