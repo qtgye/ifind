@@ -20,22 +20,22 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { focusedCategory } = useContext(GlobalStateContext);
-    const itemRef = useRef<HTMLDivElement|null>();
+    const itemRef = useRef<HTMLDivElement | null>();
     const [isOpen, SetIsOpen] = useState(false);
     const [priceCatOpen, setPriceCatOpen] = useState(false);
     const [width] = useWindowSize();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
-        if ( incrementProductClick ) {
-          incrementProductClick(product.id);
+        if (incrementProductClick) {
+            incrementProductClick(product.id);
         }
     }, [setActiveProduct, incrementProductClick]);
 
     const populateProductDetails = useCallback(async (productID) => {
         setIsDetailsLoading(true);
-        if ( getProductDetails ) {
-          getProductDetails(productID);
+        if (getProductDetails) {
+            getProductDetails(productID);
         }
     }, [getProductDetails]);
 
@@ -94,7 +94,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     }
 
     const activeModal = () => {
-        if (width < 504) {
+        if (width < 545) {
             SetIsOpen(true);
         }
     }

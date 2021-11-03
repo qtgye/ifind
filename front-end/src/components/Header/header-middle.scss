@@ -54,6 +54,7 @@
     }
 
     &__search {
+        display: none;
         @include bootstrap(col-lg-8 col-md-7 col-12);
     }
 
@@ -80,72 +81,75 @@
 
     .logo {
         margin-top: 0;
+        z-index: -10;
 
         @include laptop {
             position: absolute;
-            top: -3rem;
-            margin-left: 24rem;
+            top: -3.6rem;
+            margin-left: 22.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 10rem;
-            width: 10rem;
+            height: 13rem;
+            width: 15rem;
         }
 
         @include small_laptop {
-            position: absolute;
-            top: -3rem;
-            margin-left: 16.5rem;
+            margin-left: 14rem;
         }
 
         @include tablet {
-            position: absolute;
-            top: -3rem;
-            margin-left: 11rem;
+            margin-left: 9rem;
         }
 
         @include small_tablet {
-            position: absolute;
-            top: -3rem;
-            margin-left: 10.5rem;
+            margin-left: 8rem;
+        }
+
+        @include mxs_tablet {
+            margin-left: 7;
         }
 
         @include xs_tablet {
-            margin-left: 10.4rem;
+            margin-left: 8.1rem;
         }
 
         @include xxl_mobile {
-            margin-left: 10rem;
+            margin-left: 7rem;
         }
 
         @include xml_mobile {
-            position: absolute;
-            left: -2.1rem;
+            top: -3.1rem;
+            left: -0.8rem;
+            height: 12rem;
+            width: 14rem;
         }
 
         @include large_mobile {
-            left: -2rem;
+            left: -1.1rem;
         }
 
         @include medlarge_mobile {
-            left: -2.9rem;
+            left: -2rem;
         }
 
         @include mobile {
-            position: absolute;
-            left: -3.4rem;
+            left: -2.3rem;
         }
    
         @include sl_mobile {
-            left: -4rem;
+            left: -2.8rem;
         }
 
         @include sm_mobile {
-            left: -5.2rem;
+            top: -2.6rem;
+            left: -3.5rem;
+            height: 11rem;
+            width: 13rem;
         }
 
         @include small_mobile {
-            left: -6.4rem;
+            left: -4.7rem;
         }
 
     }
@@ -159,6 +163,7 @@
     }
 
     .search-bar {
+        display: none;
     	width: 535px;
     	height: 50px;
     	display: inline-flex;

@@ -11,11 +11,35 @@
 
     &__title {
         font-size: 32px;
+
+        @include xml_mobile {
+            font-size: 30px;
+        }
+
+        @include mobile {
+            font-size: 28px;
+        }
+
+        @include sl_mobile {
+            font-size: 27px;
+        }
+
+        @include small_mobile {
+            font-size: 26px;
+        }
+
+        @include small_mobile {
+            font-size: 24px;
+        }
     }
 
     &__content {
         display: flex;
         flex-wrap: wrap;
+
+        @include sm_mobile {
+            font-size: 14px;
+        }
     }
 
     &__additional {
@@ -119,7 +143,8 @@
     }
 
     .loading {
-	    text-align: center;
+	    //text-align: center;
+        width: 100%;
 
         .loading-icon {
             margin-top: 38%;
@@ -127,33 +152,52 @@
             height: 150px;
             pointer-events: none;
 
+            @include small_laptop {
+                margin-right: 55%;
+            }
+
+            @include tablet {
+                position: absolute;
+                top: -1%;
+                left: -5%;
+                height: 140px;
+            }
+            
+            @include xs_tablet {
+                left: -2%;
+                height: 125px;
+            }
+
             @include xl_mobile {
-                margin-top: 30%;
-                margin-left: 36%;
                 height: 120px;
             }
 
+            @include xml_mobile {
+                top: 6%;
+                height: 110px;
+            }
+
             @include large_mobile {
-                margin-top: 50%;
-                margin-left: 36%;
                 height: 105px;
             }
 
-            @include mobile {
-                margin-left: 35%;
-            }
+            // @include mobile {
+            //     margin-left: 35%;
+            // }
 
             @include sl_mobile {
-                margin-left: 35%;
+                top: 10%;
                 height: 100px;
             }
 
             @include sm_mobile {
-                margin-left: 33%;
+                top: 6%;
                 height: 95px;
             }
 
             @include small_mobile {
+                top: 10%;
+                left: -5.5%;
                 height: 90px;
             }
         }
