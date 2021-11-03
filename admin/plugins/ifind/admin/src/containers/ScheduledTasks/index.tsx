@@ -31,15 +31,6 @@ const ScheduledTasks = () => {
     <div className="container scheduled-tasks">
       <Header
         title={{ label: "Scheduled Tasks" }}
-        actions={[
-          {
-            label: 'Runner Logs',
-            onClick: () => history.push(`/plugins/${pluginId}/background-process/scheduled-tasks`),
-            color: 'secondary',
-            type: 'button',
-            icon: <FontAwesomeIcon icon="terminal" />
-          },
-        ]}
       />
       <TasksList tasks={tasks} onTaskAction={onTaskAction} />
     </div>

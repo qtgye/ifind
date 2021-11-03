@@ -1,5 +1,5 @@
 require('colors');
-const { ensureDirSync } = require("fs-extra");
+const { ensureDirSync, readFileSync } = require("fs-extra");
 const path = require("path");
 const glob = require("glob");
 const { ensureFileSync, appendFileSync } = require("fs-extra");

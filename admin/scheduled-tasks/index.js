@@ -99,8 +99,12 @@ class ScheduledTasks {
   }
 
   getTask(taskID) {
-    if (id in this.tasks) {
-      return this.tasks[id].getLogs();
+    if (taskID in this.tasks) {
+      const taskData = this.tasks[taskID];
+      return {
+        ...taskData,
+        logs: this.tasks[taskID].getLogs(),
+      };
     }
   }
 

@@ -67,7 +67,7 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
           <ButtonLink
             color={E_ButtonLinkColor.secondary}
             href={generatePluginLink(
-              `/background-process/${task.id}`,
+              `/scheduled-task/${task.id}`,
               null,
               true
             )}
