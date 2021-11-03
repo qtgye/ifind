@@ -29,7 +29,8 @@
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-SKT6JF4VR9"></script>
 
-  <meta name="description" content="Finde die neusten Angebote und die besten Geschenke in einer übersichtlichen Darstellung. Klick hier, um mehr darüber zu erfahren." />
+  <meta name="description"
+    content="Finde die neusten Angebote und die besten Geschenke in einer übersichtlichen Darstellung. Klick hier, um mehr darüber zu erfahren." />
   <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
   <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -137,8 +138,8 @@
         "button": {
           "background": "transparent",
           "text": "#8bed4f",
-          "border": "#8bed4f"
-        }
+          "border": "#8bed4f",
+        },
       },
       position: "bottom-right",
       type: "opt-in",
@@ -160,6 +161,20 @@
       },
       location: true,
     });
+  </script>
+
+  <script>
+    function hideCookies(x) {
+      if (x.matches) { // If media query matches
+        document.getElementById("cookie-banner").style.display = "none";
+      } else {
+        document.getElementById("cookie-banner").style.display = "";
+      }
+    }
+
+    var x = window.matchMedia("(max-width: 540px)")
+    hideCookies(x) // Call listener function at run time
+    x.addListener(hideCookies) // Attach listener function on state changes
   </script>
 
 </body>

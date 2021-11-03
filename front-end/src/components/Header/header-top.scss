@@ -6,6 +6,10 @@
     align-items: center;
     height: 64px;
 
+    @include laptop {
+        display: none;
+    }
+
     &__container {
         @include bootstrap(container);
     }
@@ -62,6 +66,7 @@
     }
 
     &__right {
+        display: none;
         @include bootstrap(col-lg-7 col-md-12 col-12);
 
         .list-main {
