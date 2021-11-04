@@ -102,6 +102,8 @@ const PRODUCTS_COUNT = 20;
             source: aliexpressSource.id,
             region: germanRegion.id,
             price: productData.price,
+            price_original: productData.price_original,
+            discount_percent: productData.discount_percent,
           },
         ],
       };
