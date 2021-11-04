@@ -43,6 +43,7 @@
     "@types/node": "^16.7.1",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
+    "ansi-to-html": "^0.7.2",
     "apollo-link": "^1.2.14",
     "axios": "^0.24.0",
     "chokidar": "^3.5.2",

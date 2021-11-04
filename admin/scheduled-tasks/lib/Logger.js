@@ -98,8 +98,8 @@ class Logger {
           if (message || type || message) {
             // Remove ANSI formatting on some properties
             logs.push({
-              date_time: date_time.replace(/\u001b\[\d+m/gi, "").trim(),
-              type: type.replace(/\u001b\[\d+m/gi, "").trim() || "INFO",
+              date_time: date_time.trim(),
+              type: type || "INFO",
               message,
             });
           }

@@ -10,10 +10,6 @@ module.exports = {
     STOP
     ERROR
   }
-  enum TASK_LOG_TYPE {
-    INFO
-    ERROR
-  }
 
   enum SCHEDULED_TASK_NAME {
     product_validator
@@ -26,7 +22,7 @@ module.exports = {
 
   type TaskLogEntry {
     date_time: String
-    type: TASK_LOG_TYPE
+    type: String
     message: String
   }
 

@@ -48,6 +48,10 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
                 <h3 className="header-side-nav__heading"
                     onMouseLeave={() => setIsVisible(false)}
                 >
+                  {/*
+                    TODO: Instead of dynamically rendering depending on width,
+                    display/hide the "CATEGORIES" text instead through CSS
+                  */}
                     <i aria-hidden="true" className="fa fa-bars"></i>{width > 991 ? "CATEGORIES" : ""}
                 </h3>
                 {isVisible ? <div ref={listRef as LegacyRef<HTMLDivElement>}

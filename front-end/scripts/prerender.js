@@ -31,7 +31,10 @@ const prerender = async () => {
 
   const page = await browser.newPage();
 
-  // page.on('console', (message) => console.log(message.text()));
+  await page.setViewport({
+    width: 1920,
+    height: 1080
+  });
 
   for (const route of routes) {
     const url = `http://127.0.0.1:${PORT}${route}`;

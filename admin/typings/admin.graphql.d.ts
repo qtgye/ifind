@@ -74,11 +74,6 @@ declare global {
     ERROR = 'ERROR'
   }
   
-  export const enum TASK_LOG_TYPE {
-    INFO = 'INFO',
-    ERROR = 'ERROR'
-  }
-  
   export const enum SCHEDULED_TASK_NAME {
     product_validator = 'product_validator'
   }
@@ -90,7 +85,7 @@ declare global {
   
   export interface TaskLogEntry {
     date_time?: string;
-    type?: TASK_LOG_TYPE;
+    type?: string;
     message?: string;
   }
   
@@ -3492,7 +3487,7 @@ declare global {
     emailConfirmation?: UsersPermissionsLoginPayload;
     updateCategories?: Array<Category | null>;
     updateProductCounts?: Array<Category | null>;
-    triggerTask?: ScheduledTaskPayload;
+    triggerTask?: ScheduledTaskListPayload;
     addProductClick?: ProductClicksDetails;
     fixProducts?: FixedProductsPayload;
     updateProductLinks?: FixedProductsPayload;

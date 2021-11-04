@@ -47,7 +47,6 @@ const getDetailsFromURL = async (productURL) => {
     data.currency = target_app_sale_price_currency;
     data.price_original = target_original_price;
     data.discount_percent = String(discount).replace('%','');
-    console.log({ target_original_price, discount });
   } else {
     throw new Error(
       `Unable to get details for the AliExpress Link. The product link might be non-affiliate, please select another link.`
