@@ -22,11 +22,10 @@ const PRODUCTS_COUNT = 20;
           valueDealsLinks = await getValueDeals();
         } catch (err) {
           console.error(err);
-          console.log(
+          console.error(
             `Unable to fetch deals page. Retrying in ${Number(
               RETRY_WAIT / 1000
-            )} second(s)...`.red,
-            ERROR
+            )} second(s)...`.red
           );
           await new Promise((resolve) => setTimeout(resolve, RETRY_WAIT));
         }
@@ -59,9 +58,8 @@ const PRODUCTS_COUNT = 20;
             break;
           }
         } catch (err) {
-          console.log(
-            `Error while fetching ${productLink}: ${err.message}`,
-            "ERROR"
+          console.error(
+            `Error while fetching ${productLink}: ${err.message}`
           );
         }
       }

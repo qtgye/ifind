@@ -2455,6 +2455,9 @@ declare global {
     region?: Region;
     is_base?: boolean;
     price?: number;
+    price_original?: number;
+    discount_percent?: number;
+    quantity_available_percent?: number;
   }
   
   export interface ComponentAtomsUrlWithTypeInput {
@@ -2463,6 +2466,9 @@ declare global {
     region?: string;
     is_base?: boolean;
     price?: number;
+    price_original?: number;
+    discount_percent?: number;
+    quantity_available_percent?: number;
   }
   
   export interface editComponentAtomsUrlWithTypeInput {
@@ -2472,6 +2478,9 @@ declare global {
     region?: string;
     is_base?: boolean;
     price?: number;
+    price_original?: number;
+    discount_percent?: number;
+    quantity_available_percent?: number;
   }
   
   export interface ComponentComponentsNaturalList {
@@ -8574,6 +8583,9 @@ declare global {
     region?: ComponentAtomsUrlWithTypeToRegionResolver<TParent>;
     is_base?: ComponentAtomsUrlWithTypeToIs_baseResolver<TParent>;
     price?: ComponentAtomsUrlWithTypeToPriceResolver<TParent>;
+    price_original?: ComponentAtomsUrlWithTypeToPrice_originalResolver<TParent>;
+    discount_percent?: ComponentAtomsUrlWithTypeToDiscount_percentResolver<TParent>;
+    quantity_available_percent?: ComponentAtomsUrlWithTypeToQuantity_available_percentResolver<TParent>;
   }
   
   export interface ComponentAtomsUrlWithTypeToIdResolver<TParent = any, TResult = any> {
@@ -8597,6 +8609,18 @@ declare global {
   }
   
   export interface ComponentAtomsUrlWithTypeToPriceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ComponentAtomsUrlWithTypeToPrice_originalResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ComponentAtomsUrlWithTypeToDiscount_percentResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ComponentAtomsUrlWithTypeToQuantity_available_percentResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

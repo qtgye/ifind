@@ -25,6 +25,15 @@
       "type": "decimal",
       "min": 0,
       "required": false
+    },
+    "price_original": {
+      "type": "decimal"
+    },
+    "discount_percent": {
+      "type": "decimal"
+    },
+    "quantity_available_percent": {
+      "type": "decimal"
     }
   }
 }

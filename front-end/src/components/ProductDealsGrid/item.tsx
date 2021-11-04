@@ -45,6 +45,9 @@ const ProductDealItem: ProductDealItemComponent = ({
         if (matchedOtherSiteDetails) {
           setProductURL(matchedOtherSiteDetails.url || "");
           setProductPrice(String(matchedOtherSiteDetails.price));
+          setOriginalPrice(matchedOtherSiteDetails.price_original);
+          setDiscountPercent(matchedOtherSiteDetails.discount_percent);
+          setStockPercent(matchedOtherSiteDetails.quantity_available_percent);
         }
       }
     }

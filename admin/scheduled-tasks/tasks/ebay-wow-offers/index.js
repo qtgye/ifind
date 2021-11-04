@@ -40,8 +40,7 @@ const EBAY_DEAL_TYPE = "ebay_wow_offers";
             price: offer.price,
             price_original: offer.price_original,
             discount_percent: offer.discount_percent,
-            quantity_total: offer.quantity_total,
-            quantity_available: offer.quantity_total - offer.quantity_sold,
+            quantity_available_percent: offer.quantity_available_percent,
           },
         ],
       };

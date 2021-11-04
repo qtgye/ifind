@@ -27,6 +27,9 @@ const productsByDealsQuery = gql`
           }
           price
           url
+          price_original
+          discount_percent
+          quantity_available_percent
         }
       }
     }
