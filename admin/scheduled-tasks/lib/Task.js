@@ -73,7 +73,7 @@ class Task extends Model {
 
       this.process.on('error', (data) => {
         this[EVENT_EMITTER_KEY].emit('error', data);
-        this.setStopped();
+        this.stop();
       });
 
       this.process.on('exit', () => {

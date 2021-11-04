@@ -106,6 +106,15 @@
         "aliexpress_value_deals"
       ],
       "default": "none"
+    },
+    "quantity_available_percent": {
+      "type": "decimal"
+    },
+    "discount_percent": {
+      "type": "decimal"
+    },
+    "price_original": {
+      "type": "decimal"
     }
   }
 }

@@ -3,6 +3,8 @@ const getLightningOffers = require("../../../helpers/amazon/lightning-offers");
 const scrapeAmazonProduct = require("../../../helpers/amazon/scrapeAmazonProduct");
 const amazonLink = require("../../../helpers/amazon/amazonLink");
 
+const RETRY_WAIT = 10000;
+
 (async () => {
   try {
     let offerProducts = [];

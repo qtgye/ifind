@@ -4,4 +4,6 @@ declare interface GlobalStateContextData {
   focusedCategory?: string | any;
   onCategoryClick?: (args: any) => any;
   focusedIndex?: number;
+  spritesRendered?: boolean;
+  setSpritesRendered?: (args: boolean) => any;
 }
