@@ -4,7 +4,10 @@ const path = require("path");
 const puppeteer = require("puppeteer");
 const express = require("express");
 
-const routes = ["/productcomparison"];
+const routes = [
+  // "/productcomparison"
+];
+
 const PORT = 5678;
 const APP_ROOT = path.resolve(__dirname, "../");
 const BUILD_ROOT = path.resolve(APP_ROOT, "build");
