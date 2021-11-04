@@ -123,11 +123,7 @@ const Footer = () => {
                                 <div className="right">
                                     <p>
                                         {
-                                            footerFootnote || `
-                                            *Diese Seite verwendet Affiliate-Links.
-                                            Wir erhalten bei einem Kauf eine kleine Provision.
-                                            Als Amazon-Partner und Co. verdienen wir an qualifizierten Verkäufen.
-                                            Vielen Dank für Eure Unterstützung! `
+                                            footerFootnote || ``
                                         }
                                     </p>
                                 </div>
