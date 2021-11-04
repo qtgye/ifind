@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@buffetjs/core";
 
 import { generatePluginLink } from "../../helpers/url";
-import { I_RawTask } from "../../providers/scheduledTasksListProvider";
 
 import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import FontAwesomeIcon from "../FontAwesomeIcon";
@@ -11,19 +10,13 @@ import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 
 import "./styles.scss";
 
-// Types Definitions
-export interface I_TasksListProps {
-  tasks: I_RawTask[];
-  onTaskAction?: (action: string, taskID: string) => any;
-}
-export type T_TaskList = (props: I_TasksListProps) => JSX.Element;
 export type I_GetTaskActionsCallback = (
   task: I_RawTask
 ) => JSX.Element | JSX.Element[];
 export type I_GetTaskStatusCallback = (task: I_RawTask) => JSX.Element;
 
 // TaskList Component
-const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
+const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
@@ -93,6 +86,17 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
     );
   }, []);
 
+  const formatNextRun = useCallback((nextRunUnix) => {
+    const nextRunTime = moment(nextRunUnix);
+    const localTimeFormatted = nextRunTime.format('YYYY-MMM-DD HH:mm:ss');
+    const utcTimeFormatted = nextRunTime.utc().format('YYYY-MMM-DD HH:mm:ss');
+
+    return [
+      <div>{utcTimeFormatted} (UTC)</div>,
+      <small className="tasks-list__task-schedule-local">• Local Time: {localTimeFormatted}</small>,
+    ]
+  }, []);
+
   useEffect(() => {
     setTriggeredAction("");
     setTriggeredTask("");
@@ -114,7 +118,7 @@ const TasksList: T_TaskList = ({ tasks, onTaskAction }) => {
     status: getTaskStatus(task),
     name: task.name,
     frequency: task.frequency,
-    next_run: moment(task.next_run).format("YYYY-MMM-DD hh:mm:ss A"),
+    next_run: formatNextRun(task.next_run),
     action: task.hasModule ? getTaskActions(task) : "-",
   }));
 

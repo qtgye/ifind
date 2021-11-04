@@ -26,9 +26,11 @@ declare interface I_RawTask {
 }
 
 declare interface I_ScheduledTasksProviderValue {
-  tasks: I_RawTask[];
-  startTask: (taskId: string) => any;
-  stopTask: (taskId: string) => any;
+  tasks?: I_RawTask[];
+  startTask?: (taskId: string) => any;
+  stopTask?: (taskId: string) => any;
+  serverTimeUnix?: number|string;
+  serverTimeFormatted?: string;
 }
 
 declare interface I_ComponentProps {

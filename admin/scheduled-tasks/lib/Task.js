@@ -66,6 +66,7 @@ class Task extends Model {
     if ( this.hasModule && !this.running ) {
       this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
 
+      this.computeNextRun();
       this.setRunning();
 
       this.process.stdout.on('data', (data) => this.log(data.toString()));
@@ -113,9 +114,7 @@ class Task extends Model {
     const now = Date.now();
     const { schedule } = this;
 
-    while (!this.next_run || this.next_run <= now) {
-      this.next_run = this.next_run + (schedule || frequencies["daily"]); // Default to daily
-    }
+    this.next_run = now + (schedule || frequencies["daily"]); // Default to daily
 
     // Save to DB
     Database.update(Task.model, this.id, { next_run: this.next_run });

@@ -14,4 +14,14 @@
     align-items: center;
     column-gap: 5px;
   }
+
+  &__task-schedule-local {
+    color: color(gray);
+  }
+
+  .table-row {
+    td {
+      vertical-align: middle;
+    }
+  }
 }
