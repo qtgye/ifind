@@ -24,6 +24,11 @@ query {
       next_run
       hasModule
     }
+    logs {
+      date_time
+      type
+      message
+    }
   }
 }
 `;
@@ -52,35 +57,30 @@ mutation TriggerTask (
 
 // Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
-  const refetchFlag = useRef(false);
   const gqlFetch = useGQLFetch();
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
+  const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
 
-  // Continuously called for realtime update
   const fetchTasksList = useCallback(async () => {
-    await Promise.all([
-      gqlFetch(tasksListsQuery)
-        .then((data) => {
-          if (data?.scheduledTasksList?.tasks) {
-            setTasks(data.scheduledTasksList.tasks);
-          }
-          if (data?.scheduledTasksList?.serverTimeUnix) {
-            setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
-          }
-          if (data?.scheduledTasksList?.serverTimeFormatted) {
-            setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
-          }
-        })
-        .catch((err) => err),
-      new Promise((resolve) => setTimeout(resolve, 1000)),
-    ]);
-
-    if (refetchFlag.current) {
-      fetchTasksList();
-    }
-  }, [tasksListsQuery, gqlFetch, refetchFlag]);
+    gqlFetch(tasksListsQuery)
+      .then((data) => {
+        if (data?.scheduledTasksList?.tasks) {
+          setTasks(data.scheduledTasksList.tasks);
+        }
+        if (data?.scheduledTasksList?.serverTimeUnix) {
+          setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
+        }
+        if (data?.scheduledTasksList?.serverTimeFormatted) {
+          setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
+        }
+        if (data?.scheduledTasksList?.logs) {
+          setLogs(data.scheduledTasksList.logs);
+        }
+      })
+      .catch((err) => err);
+  }, [tasksListsQuery, gqlFetch]);
 
   const triggerTask = useCallback(
     (taskID, action) => {
@@ -101,17 +101,23 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   }, []);
 
   useEffect(() => {
-    refetchFlag.current = true;
-    fetchTasksList();
+    window.setTimeout(() => fetchTasksList(), 1000);
+  }, [tasks]);
 
-    return () => {
-      refetchFlag.current = false;
-    };
-  }, [refetchFlag]);
+  useEffect(() => {
+    fetchTasksList();
+  }, []);
 
   return (
     <ScheduledTasksListContext.Provider
-      value={{ tasks, startTask, stopTask, serverTimeUnix, serverTimeFormatted }}
+      value={{
+        tasks,
+        startTask,
+        stopTask,
+        serverTimeUnix,
+        serverTimeFormatted,
+        logs,
+      }}
     >
       {children}
     </ScheduledTasksListContext.Provider>

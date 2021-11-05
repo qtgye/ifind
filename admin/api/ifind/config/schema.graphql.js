@@ -61,6 +61,7 @@ module.exports = {
     serverTimeUnix: String
     serverTimeFormatted: String
     tasks: [ScheduledTask]
+    logs: [TaskLogEntry]
   }
   `,
   query: `
@@ -83,8 +84,9 @@ module.exports = {
         const serverTimeUnix = String(serverTime.valueOf());
         const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
         const tasks = strapi.scheduledTasks.list();
+        const logs = strapi.scheduledTasks.getLogs();
 
-        return { serverTimeUnix, serverTimeFormatted, tasks };
+        return { serverTimeUnix, serverTimeFormatted, tasks, logs };
       },
       async getTask(_, { id }) {
         return strapi.scheduledTasks.getTask(id);

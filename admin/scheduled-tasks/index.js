@@ -77,7 +77,7 @@ class ScheduledTasks {
       const matchedCachedTask = this.tasks[dbTask.id];
 
       if (matchedCachedTask) {
-        matchedCachedTask.next_run = dbTask.next_run;
+        matchedCachedTask.next_run = dbTask.next_run
       }
     });
 
@@ -109,6 +109,10 @@ class ScheduledTasks {
       LOGGER.log("Killing task: ", id);
       _process.stop();
     }
+  }
+
+  getLogs() {
+    return LOGGER.getAll();
   }
 
   getTask(taskID) {

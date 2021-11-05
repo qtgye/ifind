@@ -1,4 +1,4 @@
-const { frequencies } = appRequire('background-process/scheduled-tasks/config');
+const { frequencies } = appRequire('scheduled-tasks/config');
 
 const msIntervals = {
   days: 1000 * 60 * 60 * 24,

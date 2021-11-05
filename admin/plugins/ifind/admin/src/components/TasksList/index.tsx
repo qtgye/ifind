@@ -58,12 +58,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
             <FontAwesomeIcon icon={icon} pulse={iconPulse} /> {label}
           </Button>
           <ButtonLink
+            routerLink
+            href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
             color={E_ButtonLinkColor.secondary}
-            href={generatePluginLink(
-              `/scheduled-task/${task.id}`,
-              null,
-              true
-            )}
             title="Show Logs"
           >
             <FontAwesomeIcon icon="terminal" />
@@ -88,13 +85,15 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
 
   const formatNextRun = useCallback((nextRunUnix) => {
     const nextRunTime = moment(nextRunUnix);
-    const localTimeFormatted = nextRunTime.format('YYYY-MMM-DD HH:mm:ss');
-    const utcTimeFormatted = nextRunTime.utc().format('YYYY-MMM-DD HH:mm:ss');
+    const localTimeFormatted = nextRunTime.format("YYYY-MMM-DD HH:mm:ss");
+    const utcTimeFormatted = nextRunTime.utc().format("YYYY-MMM-DD HH:mm:ss");
 
     return [
       <div>{utcTimeFormatted} (UTC)</div>,
-      <small className="tasks-list__task-schedule-local">• Local Time: {localTimeFormatted}</small>,
-    ]
+      <small className="tasks-list__task-schedule-local">
+        • Local Time: {localTimeFormatted}
+      </small>,
+    ];
   }, []);
 
   useEffect(() => {
