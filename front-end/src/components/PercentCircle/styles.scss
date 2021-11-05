@@ -46,5 +46,29 @@
     opacity: 0;
     visibility: hidden;
     transform-origin: bottom right;
+
+    @include large_laptop {
+      min-width: 170px;
+    }
+
+    @include tablet {
+      min-width: 120px;
+    }
+
+    @include xs_tablet {
+      min-width: 190px;
+    }
+
+    @include xl_mobile {
+      min-width: 155px;
+    }
+
+    @include xml_mobile {
+      min-width: 145px;
+    }
+
+    @include medlarge_mobile {
+      min-width: 200px;
+    }
   }
 }

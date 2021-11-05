@@ -28,6 +28,10 @@
         @include small_laptop {
             position: absolute;
             width: 71px;
+
+            span {
+                display: none;
+            }
         }
 
         @include tablet {

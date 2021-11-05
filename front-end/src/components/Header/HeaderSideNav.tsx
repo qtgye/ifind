@@ -5,7 +5,6 @@ import routes from '@config/routes';
 import { useSubCategories } from '@contexts/categoriesContext';
 import { homedata } from '@mocks/components/homesidenav';
 import eventBus from '@utilities/EventBus';
-import { useWindowSize } from '../../utilities/WindowResize';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 
 import './header-side-nav.scss';
@@ -24,7 +23,6 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
     const [isVisible, setIsVisible] = useState(false);
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
-    const [width] = useWindowSize();
 
     const ecommerceClick = useCallback((catName) => {
         if (onOffersClick) {
@@ -55,11 +53,11 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
                 <h3 className="header-side-nav__heading"
                     onMouseLeave={() => setIsVisible(false)}
                 >
-                  {/*
+                    {/*
                     TODO: Instead of dynamically rendering depending on width,
                     display/hide the "CATEGORIES" text instead through CSS
                   */}
-                    <i aria-hidden="true" className="fa fa-bars"></i>{width > 991 ? "CATEGORIES" : ""}
+                    <i aria-hidden="true" className="fa fa-bars"></i><span>CATEGORIES</span>
                 </h3>
                 {isVisible ? <div ref={listRef as LegacyRef<HTMLDivElement>}
                     className="header-side-nav__list"

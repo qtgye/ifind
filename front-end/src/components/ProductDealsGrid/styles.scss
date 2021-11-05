@@ -14,20 +14,14 @@
     font-weight: bold;
     border-radius: var(--corner-radius) var(--corner-radius) 0 0;
     position: sticky;
-    margin-left: -16.7rem;
     top: 61px;
     z-index: 1;
-
-    @include laptop {
-      margin-left: -16.7rem;
-    }
   }
 
  &__items {
       display: grid;
       grid-template-columns: 1fr;
       margin-top: 10px;
-      margin-left: -16.7rem;
       overflow: visible;
 
       @include mobile-up {
@@ -42,27 +36,27 @@
 
       @include tablet-up {
         grid-template-columns: repeat(3, 1fr);
-        grid-gap: 12px;
+        grid-gap: 0 12px;
       }
 
       @include small-laptop-up {
         grid-template-columns: repeat(3, 1fr);
-        grid-gap: 14px;
+        grid-gap: 0 14px;
       }
 
       @include laptop-up {
         grid-template-columns: repeat(4, 1fr);
-        grid-gap: 15px;
+        grid-gap: 0 15px;
       }
 
       @include small-desktop-up {
         grid-template-columns: repeat(4, 1fr);
-        grid-gap: 25px;
+        grid-gap: 0 25px;
       }
 
       @include desktop-up {
         grid-template-columns: repeat(5, 1fr);
-        grid-gap: 20px;
+        grid-gap: 0 20px;
       }
     }
 

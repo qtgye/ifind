@@ -7,15 +7,20 @@ import {
 import GeneralTemplate from "@templates/GeneralTemplate";
 import ProductDealsGrid from "@components/ProductDealsGrid";
 import React from "react";
+import "./home.scss";
 
 const Home: React.FunctionComponent = () => {
-  const { productsByDeals } = useProductsByDeals();
+  const { loading = false, productsByDeals } = useProductsByDeals();
+  const icon = '/images/loading.png';
 
   return (
     <GeneralTemplate>
       <div className="home">
-        <div className="container" style={{ paddingLeft: "280px" }}>
-          {(productsByDeals || []).map((productsByDeal => (
+        <div className="container">
+          {loading &&
+            <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>
+          }
+          {!loading && (productsByDeals || []).map((productsByDeal => (
             <ProductDealsGrid key={productsByDeal.deal_type.name} {...productsByDeal} />
           )))}
         </div>
