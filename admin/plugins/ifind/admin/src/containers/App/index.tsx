@@ -45,7 +45,7 @@ const App = () => {
             {/* Scheduled Tasks */}
             <Route path={`/plugins/${pluginId}/scheduled-tasks`} component={ScheduledTasks} />
             
-            {/* Background Processes */}
+            {/* Scheduled Task Logs */}
             <Route path={`/plugins/${pluginId}/scheduled-task/:taskID`} component={ScheduledTask} />
 
             {/* Error Pages */}

@@ -173,20 +173,19 @@ const scrapeAmazonProduct = async (
         originalPriceMatch,
         discountPercentMatch,
         quantityAvailablePercentMatch,
-      ] = await Promise.all([
-        browser.$eval(PRICE_SELECTOR, (priceElement) =>
-          priceElement.textContent.match(/[0-9.,]+/)
-        ),
-        browser.$eval(ORIGINAL_PRICE_SELECTOR, (priceElement) =>
-          priceElement.textContent.match(/[0-9.,]+/)
-        ),
-        browser.$eval(DISCOUNT_SELECTOR, (discountElement) =>
-          discountElement.textContent.match(/[0-9]+(?=\s*%)/)
-        ),
-        browser.$eval(QUANTITY_AVAILABLE_PERCENT_SELECTOR, (quantityElement) =>
-          quantityElement.textContent.match(/[0-9]+/)
-        ),
-      ]);
+      ] = await browser.$eval(PRICE_SELECTOR, (priceElement, ORIGINAL_PRICE_SELECTOR, DISCOUNT_SELECTOR, QUANTITY_AVAILABLE_PERCENT_SELECTOR) =>{
+        const priceMatch = priceElement.textContent.match(/[0-9.,]+/);
+        originalPriceElement = document.querySelector(ORIGINAL_PRICE_SELECTOR);
+        discountPercentElement = document.querySelector(DISCOUNT_SELECTOR);
+        quantityAvailablePercentElement = document.querySelector(QUANTITY_AVAILABLE_PERCENT_SELECTOR);
+
+        return [
+          priceMatch,
+          originalPriceElement ? originalPriceElement.textContent.match(/[0-9.,]+/) : null,
+          discountPercentElement ? discountPercentElement.textContent.match(/[0-9]+(?=\s*%)/) : null,
+          quantityAvailablePercentElement ? quantityAvailablePercentElement.textContent.match(/[0-9.,]+/) : null,
+        ]
+      }, ORIGINAL_PRICE_SELECTOR, DISCOUNT_SELECTOR, QUANTITY_AVAILABLE_PERCENT_SELECTOR);
       break;
     } catch (err) {
       console.error(err);

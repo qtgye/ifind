@@ -31,6 +31,7 @@ declare interface I_ScheduledTasksProviderValue {
   stopTask?: (taskId: string) => any;
   serverTimeUnix?: number|string;
   serverTimeFormatted?: string;
+  logs?: I_LogEntry[];
 }
 
 declare interface I_ComponentProps {

@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react";
 import LogEntry from "./entry";
-import { I_LogEntry } from '../../providers/backgroundProcessProvider';
 
-import './styles.scss';
+import "./styles.scss";
 
 export type T_LogsListProps = {
-  logs: I_LogEntry[]
+  logs: I_LogEntry[];
+  title: string;
 };
 
-const LogsList = ({ logs }: T_LogsListProps) => {
-  const [ logsList, setLogsList ] = useState<I_LogEntry[]>([]);
+const LogsList = ({ logs, title = "Logs" }: T_LogsListProps) => {
+  const [logsList, setLogsList] = useState<I_LogEntry[]>([]);
 
   useEffect(() => {
     setLogsList([...logs.reverse()]);
-  }, [ logs ]);
+  }, [logs]);
 
   return (
     <div className="logs">
-      <h3 className="logs__heading">Logs</h3>
+      <h3 className="logs__heading">{title}</h3>
       <div className="logs__entries">
         {logsList?.length &&
           logsList.map((props: I_LogEntry) => (

@@ -9,11 +9,13 @@ import pluginId from '../../pluginId';
 import { useScheduledTasksList, ScheduledTasksListProvider } from '../../providers/scheduledTasksListProvider';
 import TasksList from '../../components/TasksList';
 import FontAwesomeIcon from '../../components/FontAwesomeIcon';
+import LogsList from '../../components/LogsList';
 
 import "./styles.scss";
 
 const ScheduledTasks = () => {
-  const { tasks, startTask, stopTask, serverTimeFormatted } = useScheduledTasksList();
+  const history = useHistory();
+  const { tasks, startTask, stopTask, serverTimeFormatted, logs } = useScheduledTasksList();
 
   const onTaskAction = useCallback((action, taskID) => {
     switch ( action ) {
@@ -30,11 +32,23 @@ const ScheduledTasks = () => {
     <div className="container scheduled-tasks">
       <Header
         title={{ label: "Scheduled Tasks" }}
+        actions={[
+          {
+            label: 'Runner Logs',
+            onClick: () => history.push(`/plugins/${pluginId}/background-process/scheduled-tasks`),
+            color: 'secondary',
+            type: 'button',
+            icon: <FontAwesomeIcon icon="terminal" />
+          },
+        ]}
       />
       <div className="scheduled-tasks__server-time">
-        <strong>Server Time: </strong> {serverTimeFormatted} (UTC)
+        <strong>Server Time:&nbsp;</strong> {serverTimeFormatted} (UTC)
       </div>
       <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
+      <div className="scheduled-tasks__logs">
+        <LogsList logs={logs || []} title="Runner Logs" />
+      </div>
     </div>
   );
 };

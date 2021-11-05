@@ -42,7 +42,7 @@ const Timer = {
       LOGGER.log(
         `None found, next task runs in ${Number(
           resetTimeInterval / 1000
-        ).toFixed(2)} second(s)`
+        ).toFixed(2)} second(s) : ${firstTask.id.bold}`
       );
     }
 
@@ -50,7 +50,7 @@ const Timer = {
     else {
       // Run
       if (!firstTask.running) {
-        LOGGER.log("[TIMER] Will run: " + firstTask.id);
+        LOGGER.log("Will run: " + firstTask.id);
         // Run the task
         // This will also update firstTask's next_run
         EVENTEMITTER.emit('taskstart', firstTask.id);
