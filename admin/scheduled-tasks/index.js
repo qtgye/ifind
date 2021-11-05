@@ -8,6 +8,7 @@ const timer = require("./lib/Timer");
 const Task = require("./lib/Task");
 const Database = require("./lib/Database");
 const Logger = require("./lib/Logger");
+const Queue = require("./lib/Queue");
 const mapScheduleToFrequency = require("./utils/mapScheduleToFrequency");
 
 const LOGGER = new Logger({ baseDir });
@@ -54,7 +55,7 @@ class ScheduledTasks {
     timer.on("taskstart", this.start.bind(this));
     timer.init();
 
-    LOGGER.log("Scheduled Tasks Runner initialized".green);
+    LOGGER.log("Scheduled Tasks Runner initialized".green.bold);
   }
 
   runCommand(command, id) {
@@ -71,7 +72,7 @@ class ScheduledTasks {
    */
   list() {
     // Get updated tasks list
-    const tasks = Task.getAll();
+    const tasks = Queue.getList();
 
     tasks.forEach((dbTask) => {
       const matchedCachedTask = this.tasks[dbTask.id];
@@ -92,13 +93,13 @@ class ScheduledTasks {
 
   start(id) {
     if (this.runningTask || !(id in this.tasks)) {
-      LOGGER.log(`Unable to run ${id}. Another task is currently running.`);
+      LOGGER.log(`Unable to run ${id.bold}. Another task is currently running.`);
       return;
     }
 
     this.runningTask = id;
 
-    LOGGER.log(`Starting task: ${id}`);
+    LOGGER.log(`Starting task: ${id.bold}`.green);
     const task = this.tasks[id];
 
     // Manually running a task allows
@@ -115,7 +116,7 @@ class ScheduledTasks {
   stop(id) {
     if (id in this.tasks) {
       const _process = this.tasks[id];
-      LOGGER.log("Killing task: ", id);
+      LOGGER.log(`Killing task: ${id.bold}`);
       _process.stop();
     }
   }
@@ -151,7 +152,7 @@ class ScheduledTasks {
 
   onProcessExit(id) {
     this.runningTask = null;
-    LOGGER.log(`Process exitted: ${id}`);
+    LOGGER.log(`Process exitted: ${id.bold}`);
   }
 }
 
