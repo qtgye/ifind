@@ -33,6 +33,7 @@
     .menu-area {
         @include bootstrap(col-lg-9 col-12);
         display: flex;
+        //position: sticky;
         height: 100%;
 
         @include laptop {

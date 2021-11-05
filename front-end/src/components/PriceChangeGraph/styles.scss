@@ -4,13 +4,22 @@
 
     @include small_laptop {
         position: absolute;
-        margin-top: 8rem;
+        margin-top: 10rem;
         margin-left: 1rem;
         width: 330px;
     }
 
     @include tablet {
+        margin-top: 8rem;
         margin-left: 0;
+    }
+
+    @include ms_tablet {
+        width: 310px;
+    }
+
+    @include mxs_tablet {
+        width: 300px;
     }
 
     @include xs_tablet {

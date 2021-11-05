@@ -6,9 +6,14 @@ export const GlobalStateContextProvider = ({ children }: React.PropsWithChildren
 
     const [activeCategory, setActiveCategory] = useState(null);
     const [focusedCategory, setFocusedCategory] = useState(0);
+    const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
 
     const onCategoryClick = useCallback((id) => {
         setFocusedCategory(id);
+    }, []);
+
+    const onOffersClick = useCallback((name) => {
+        setDealTypeName(name);
     }, []);
 
     return (
@@ -17,6 +22,8 @@ export const GlobalStateContextProvider = ({ children }: React.PropsWithChildren
             setActiveCategory,
             focusedCategory,
             onCategoryClick,
+            dealTypeName,
+            onOffersClick,
         }}>
             {children}
         </GlobalStateContext.Provider>

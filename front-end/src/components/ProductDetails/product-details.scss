@@ -153,7 +153,9 @@
             pointer-events: none;
 
             @include small_laptop {
-                margin-right: 55%;
+                position: absolute;
+                top: -1%;
+                left: -2%;
             }
 
             @include tablet {

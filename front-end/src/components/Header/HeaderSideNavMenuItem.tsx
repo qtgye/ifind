@@ -13,12 +13,12 @@ const HeaderSideNavMenuItem = ({ category }: HeaderSideNavMenuItemProps) => {
     const len = grandChildren.length;
     const str = category?.label?.label || '';
     const withSpace = str.indexOf(" ");
-    const categoryRef = useRef<HTMLDivElement|null>();
+    const categoryRef = useRef<HTMLDivElement | null>();
 
     const onItemClick = useCallback((id) => {
-      if ( onCategoryClick ) {
-        onCategoryClick(id);
-      }
+        if (onCategoryClick) {
+            onCategoryClick(id);
+        }
         //console.log(id);
     }, [onCategoryClick]);
 

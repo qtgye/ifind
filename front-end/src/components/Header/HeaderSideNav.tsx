@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect, LegacyRef } from 'react';
+import React, { useState, useRef, useCallback, useEffect, LegacyRef, useContext } from 'react';
 import { find } from 'lodash';
 import { useLocation } from 'react-router-dom';
 import routes from '@config/routes';
@@ -6,6 +6,7 @@ import { useSubCategories } from '@contexts/categoriesContext';
 import { homedata } from '@mocks/components/homesidenav';
 import eventBus from '@utilities/EventBus';
 import { useWindowSize } from '../../utilities/WindowResize';
+import { GlobalStateContext } from '@contexts/globalStateContext';
 
 import './header-side-nav.scss';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
@@ -16,20 +17,26 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
     const { subCategories } = useSubCategories();
-    //const categoryTree = useCategoryTree();
     const { on } = eventBus;
-    const listRef = useRef<HTMLDivElement|null>();
+    const listRef = useRef<HTMLDivElement | null>();
+    const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
 
     const [isVisible, setIsVisible] = useState(false);
-    //const changeVisibility = () => setIsVisible(!isVisible);
     const [checked, setChecked] = useState(true);
     const checkChange = () => setChecked(!checked);
     const [width] = useWindowSize();
-    // const [isHovered, setisHovered] = useState(false);
+
+    const ecommerceClick = useCallback((catName) => {
+        if (onOffersClick) {
+            onOffersClick(catName);
+        }
+        //console.log(catName);
+    }, [onOffersClick]);
+
     const triggerScroll = useCallback(() => {
-      if ( listRef.current ) {
-        listRef.current.scrollTop += listRef.current.offsetHeight;
-      }
+        if (listRef.current) {
+            listRef.current.scrollTop += listRef.current.offsetHeight;
+        }
     }, [listRef]);
 
     const handleScroll = useCallback(() => {
@@ -58,21 +65,21 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
 
                     {
                         currentRouteConfig?.path === '/' ?
-                            (<div>
+                            (<div className="home-sidenav">
                                 {homedata.map((item, index) => {
                                     return (
                                         <div key={index}
-                                            className={["list", index === 0 ? "active" : ""].join(" ")}
+                                            className={["list", dealTypeName === item.categoryName ? "active" : ""].join(" ")}
                                         >
-                                            <button>
-                                                {item.categoryIcon}
-                                                <span>{item.categoryLabel}</span>
+                                            <button onClick={() => ecommerceClick(item.categoryName)}>
+                                                <span className="home-icon">{item.categoryIcon}</span>
+                                                <span className="home-label">{item.categoryLabel}</span>
                                             </button>
                                         </div>
                                     )
                                 })}
                             </div>
-                            ) : (<div>
+                            ) : (<div className="prodcomp-sidenav">
 
                                 <div className="header-side-nav__label">
 

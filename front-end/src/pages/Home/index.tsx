@@ -1,4 +1,5 @@
-// import { useState, useEffect } from "react";
+//import { useEffect, useRef } from "react";
+
 import {
   useProductsByDeals,
   ProductsByDealsContextProvider,
@@ -15,7 +16,7 @@ const Home: React.FunctionComponent = () => {
       <div className="home">
         <div className="container" style={{ paddingLeft: "280px" }}>
           {(productsByDeals || []).map((productsByDeal => (
-            <ProductDealsGrid key={productsByDeal.deal_type.name} {...productsByDeal}/>
+            <ProductDealsGrid key={productsByDeal.deal_type.name} {...productsByDeal} />
           )))}
         </div>
       </div>
