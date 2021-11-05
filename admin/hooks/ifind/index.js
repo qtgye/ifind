@@ -1,4 +1,5 @@
 const ScheduledTasks = appRequire('scheduled-tasks');
+const generateAdminTypes = appRequire('scripts/generateAdminTypes');
 
 module.exports = strapi => {
   return {
@@ -7,6 +8,11 @@ module.exports = strapi => {
       if ( strapi.config.serveAdminPanel ) {
         strapi.scheduledTasks = new ScheduledTasks();
         strapi.scheduledTasks.init();
+
+        // Always export admin types when Strapi is loaded,
+        // In order for external consuming modules to always have the
+        // updated admin types
+        generateAdminTypes();
       }
     },
   };

@@ -38,11 +38,15 @@ const getDetailsFromURL = async (productURL) => {
       target_app_sale_price,
       target_app_sale_price_currency,
       product_main_image_url,
+      target_original_price,
+      discount,
     } = productDetailsResponse.resp_result.result.products.product[0];
     data.title = product_title;
     data.image = product_main_image_url;
     data.price = target_app_sale_price;
     data.currency = target_app_sale_price_currency;
+    data.price_original = target_original_price;
+    data.discount_percent = String(discount).replace('%','');
   } else {
     throw new Error(
       `Unable to get details for the AliExpress Link. The product link might be non-affiliate, please select another link.`
@@ -92,7 +96,7 @@ const getProductDetails = async (
     tracking_id,
     format: "json",
     symplify: true,
-    fields: "target_app_sale_price,target_app_sale_price_currency",
+    fields: "target_app_sale_price,target_app_sale_price_currency,target_original_price,discount",
   });
 };
 

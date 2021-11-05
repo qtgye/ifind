@@ -9,6 +9,7 @@ import  "./HeroSlider/index.d";
 import  "./IfindIcon/index.d";
 import  "./NaturalList/index.d";
 import  "./NewsLetter/index.d";
+import  "./PercentCircle/index.d";
 import  "./PriceChangeGraph/index.d";
 import  "./ProductDealsGrid/index.d";
 import  "./ProductDetails/index.d";

@@ -1,16 +1,13 @@
 /**
  * TODO: Abstract out custom Schema definitions for better structure
  */
+const moment = require("moment");
 
 module.exports = {
   definition: `
   enum TASK_STATUS {
     START
     STOP
-    ERROR
-  }
-  enum TASK_LOG_TYPE {
-    INFO
     ERROR
   }
 
@@ -25,7 +22,7 @@ module.exports = {
 
   type TaskLogEntry {
     date_time: String
-    type: TASK_LOG_TYPE
+    type: String
     message: String
   }
 
@@ -59,26 +56,35 @@ module.exports = {
     error: String
     data: [ScheduledTask]
   }
+
+  type ScheduledTaskListPayload {
+    serverTimeUnix: String
+    serverTimeFormatted: String
+    tasks: [ScheduledTask]
+  }
   `,
   query: `
   getTask ( id: String! ): Task
-  scheduledTasksList: [ScheduledTask]
+  scheduledTasksList: ScheduledTaskListPayload
   sheduledTasks ( command: String, id: String ): ScheduledTaskPayload
   `,
   mutation: `
-  triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): [ScheduledTask]
+  triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): ScheduledTaskListPayload
   `,
   type: {},
   resolver: {
     Query: {
       async sheduledTasks(_, { command, id }) {
-        const data = strapi.scheduledTasks.runCommand(command, id);
-        return { data };
+        const tasks = strapi.scheduledTasks.runCommand(command, id);
+        return { tasks };
       },
       async scheduledTasksList() {
-        console.log(strapi.scheduledTasks.ID);
+        const serverTime = moment.utc();
+        const serverTimeUnix = String(serverTime.valueOf());
+        const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
         const tasks = strapi.scheduledTasks.list();
-        return tasks;
+
+        return { serverTimeUnix, serverTimeFormatted, tasks };
       },
       async getTask(_, { id }) {
         return strapi.scheduledTasks.getTask(id);
@@ -88,7 +94,7 @@ module.exports = {
       async triggerTask(_, args) {
         const { action: command, taskID: id } = args;
         const tasks = strapi.scheduledTasks.runCommand(command, id);
-        return tasks;
+        return { tasks };
       },
     },
   },

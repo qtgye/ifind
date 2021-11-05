@@ -4,7 +4,10 @@ const path = require("path");
 const puppeteer = require("puppeteer");
 const express = require("express");
 
-const routes = ["/productcomparison"];
+const routes = [
+  // "/productcomparison"
+];
+
 const PORT = 5678;
 const APP_ROOT = path.resolve(__dirname, "../");
 const BUILD_ROOT = path.resolve(APP_ROOT, "build");
@@ -31,7 +34,10 @@ const prerender = async () => {
 
   const page = await browser.newPage();
 
-  // page.on('console', (message) => console.log(message.text()));
+  await page.setViewport({
+    width: 1920,
+    height: 1080
+  });
 
   for (const route of routes) {
     const url = `http://127.0.0.1:${PORT}${route}`;

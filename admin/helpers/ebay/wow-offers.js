@@ -51,8 +51,7 @@ const getEbayWowOffers = async () => {
           price: productOfferData.price,
           price_original: productOfferData.price_original,
           discount_percent: productOfferData.discount_percent,
-          quantity_total: additionalDetails.quantity_total,
-          quantity_available: additionalDetails.quantity_total - additionalDetails.quantity_sold,
+          quantity_available_percent: Math.round(100 * (additionalDetails.quantity_total - additionalDetails.quantity_sold) / additionalDetails.quantity_total),
         };
 
         return newProductData;

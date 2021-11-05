@@ -1,11 +1,7 @@
-.product-validator {
-  &__status {
-    strong {
-      text-transform: uppercase;
-    }
-  }
-
-  &__logs {
-    margin-top: 20px;
+.scheduled-tasks {
+  &__server-time {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 15px;
   }
 }

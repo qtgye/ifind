@@ -14,8 +14,7 @@
     "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
-    "currencies:import": "node scripts/currencies-import.js",
-    "admin-types": "ts-node -r tsconfig-paths/register ./scripts/generateAdminTypes.ts"
+    "currencies:import": "node scripts/currencies-import.js"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
@@ -44,6 +43,7 @@
     "@types/node": "^16.7.1",
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
+    "ansi-to-html": "^0.7.2",
     "apollo-link": "^1.2.14",
     "axios": "^0.24.0",
     "chokidar": "^3.5.2",

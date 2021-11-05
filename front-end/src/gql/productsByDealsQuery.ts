@@ -11,6 +11,9 @@ const productsByDealsQuery = gql`
         id
         amazon_url
         price
+        price_original
+        discount_percent
+        quantity_available_percent
         title
         deal_type
         image
@@ -24,6 +27,9 @@ const productsByDealsQuery = gql`
           }
           price
           url
+          price_original
+          discount_percent
+          quantity_available_percent
         }
       }
     }

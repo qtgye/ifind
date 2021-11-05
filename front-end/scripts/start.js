@@ -128,7 +128,8 @@ checkBrowsers(paths.appPath, isInteractive)
         return console.log(err);
       }
       if (isInteractive) {
-        clearConsole();
+        // Disabling console clearing in order for easier debugging
+        // clearConsole();
       }
 
       if (env.raw.FAST_REFRESH && semver.lt(react.version, '16.10.0')) {

@@ -6,4 +6,6 @@ declare interface GlobalStateContextData {
   focusedIndex?: number;
   dealTypeName?: string | any;
   onOffersClick?: (args: any) => any;
+  spritesRendered?: boolean;
+  setSpritesRendered?: (args: boolean) => any;
 }

@@ -70,11 +70,24 @@ class ScheduledTasks {
    * Gets the list of all available tasks
    */
   list() {
-    const tasks = Object.values(this.tasks);
-    return tasks.map((task) => ({
-      ...task,
-      frequency: mapScheduleToFrequency(task.schedule),
-    }));
+    // Get updated tasks list
+    const tasks = Task.getAll();
+
+    tasks.forEach((dbTask) => {
+      const matchedCachedTask = this.tasks[dbTask.id];
+
+      if (matchedCachedTask) {
+        matchedCachedTask.next_run = dbTask.next_run;
+      }
+    });
+
+    // Apply formated schedule datetime
+    return Object.values(this.tasks)
+      .map((task) => ({
+        ...task,
+        frequency: mapScheduleToFrequency(task.schedule),
+      }))
+      .sort((taskA, taskB) => (taskA.next_run < taskB.next_run ? -1 : 1));
   }
 
   start(id) {
@@ -99,8 +112,12 @@ class ScheduledTasks {
   }
 
   getTask(taskID) {
-    if (id in this.tasks) {
-      return this.tasks[id].getLogs();
+    if (taskID in this.tasks) {
+      const taskData = this.tasks[taskID];
+      return {
+        ...taskData,
+        logs: this.tasks[taskID].getLogs(),
+      };
     }
   }
 

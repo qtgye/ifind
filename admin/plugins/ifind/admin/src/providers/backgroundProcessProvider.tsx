@@ -9,22 +9,6 @@ import React, {
 import { useParams } from "react-router-dom";
 import { useGQLFetch } from "../helpers/gqlFetch";
 
-export interface I_LogEntry {
-  date_time: string;
-  type: string;
-  message: string;
-}
-export interface I_BackgroundProcessRouteParam {
-  backgroundProcess: string;
-}
-export interface I_BackgroundProcessProviderValues {
-  name?: string;
-  logs?: Array<I_LogEntry | never>;
-  start?: () => void;
-  stop?: () => void;
-  refetch?: () => void;
-}
-
 export const getBackgroundProcessQuery = `
 query GetBackgroundProcess (
   $backgroundProcess: String!

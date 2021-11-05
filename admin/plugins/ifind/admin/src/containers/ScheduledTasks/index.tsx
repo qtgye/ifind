@@ -13,16 +13,15 @@ import FontAwesomeIcon from '../../components/FontAwesomeIcon';
 import "./styles.scss";
 
 const ScheduledTasks = () => {
-  const { tasks, startTask, stopTask } = useScheduledTasksList();
-  const history = useHistory();
+  const { tasks, startTask, stopTask, serverTimeFormatted } = useScheduledTasksList();
 
   const onTaskAction = useCallback((action, taskID) => {
     switch ( action ) {
       case 'start':
-        startTask(taskID);
+        startTask && startTask(taskID);
         break;
       case 'stop':
-        stopTask(taskID);
+        stopTask && stopTask(taskID);
         break;
     }
   }, [ startTask, stopTask ]);
@@ -31,17 +30,11 @@ const ScheduledTasks = () => {
     <div className="container scheduled-tasks">
       <Header
         title={{ label: "Scheduled Tasks" }}
-        actions={[
-          {
-            label: 'Runner Logs',
-            onClick: () => history.push(`/plugins/${pluginId}/background-process/scheduled-tasks`),
-            color: 'secondary',
-            type: 'button',
-            icon: <FontAwesomeIcon icon="terminal" />
-          },
-        ]}
       />
-      <TasksList tasks={tasks} onTaskAction={onTaskAction} />
+      <div className="scheduled-tasks__server-time">
+        <strong>Server Time: </strong> {serverTimeFormatted} (UTC)
+      </div>
+      <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 require('colors');
-const { ensureDirSync } = require("fs-extra");
+const { ensureDirSync, readFileSync } = require("fs-extra");
 const path = require("path");
 const glob = require("glob");
 const { ensureFileSync, appendFileSync } = require("fs-extra");
@@ -47,7 +47,7 @@ class Logger {
   formatLogMessage(logMessage = "", type) {
     const logType = this.isValidLogType(type) ? type : logTypes[0];
     const colorFn = logTypeToColor[logType];
-    const dateTime = moment.utc().format("YYYY-MM-DD hh:mm:ss");
+    const dateTime = moment.utc().format("YYYY-MM-DD HH:mm:ss");
     const logEntry = [
       dateTime.bold,
       logType.padEnd(10).substr(0, 5)[colorFn], // Ensure log type string will have the same spacings
@@ -98,8 +98,8 @@ class Logger {
           if (message || type || message) {
             // Remove ANSI formatting on some properties
             logs.push({
-              date_time: date_time.replace(/\u001b\[\d+m/gi, "").trim(),
-              type: type.replace(/\u001b\[\d+m/gi, "").trim() || "INFO",
+              date_time: date_time.trim(),
+              type: type || "INFO",
               message,
             });
           }

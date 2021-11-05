@@ -8,43 +8,22 @@ import React, {
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
 
-// Types
-export interface I_RawTask {
-  id: string;
-  name: string;
-  status: string;
-  frequency: string;
-  next_run: string;
-  hasModule: boolean;
-}
-interface I_ScheduledTasksProviderValue {
-  tasks: I_RawTask[];
-  startTask: (taskId: string) => any;
-  stopTask: (taskId: string) => any;
-}
-interface I_ComponentProps {
-  children: any;
-}
-export interface Task {
-  frequency: string;
-  id: string;
-  name: string;
-  next_run: number;
-  status: string;
-}
-
 // Context
-export const ScheduledTasksListContext = createContext({});
+export const ScheduledTasksListContext =
+  createContext<I_ScheduledTasksProviderValue>({});
 
 export const tasksListsQuery = `
 query {
   scheduledTasksList {
-    id
-    name
-    status
-    frequency
-    next_run
-    hasModule
+    serverTimeFormatted
+    tasks {
+      id
+      name
+      status
+      frequency
+      next_run
+      hasModule
+    }
   }
 }
 `;
@@ -58,12 +37,15 @@ mutation TriggerTask (
     taskID: $taskID
     action: $action
   ) {
-    id
-    name
-    status
-    frequency
-    next_run
-    hasBackgroundProcess
+    serverTimeFormatted
+    tasks {
+      id
+      name
+      status
+      frequency
+      next_run
+      hasModule
+    }
   }
 }
 `;
@@ -73,19 +55,29 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const refetchFlag = useRef(false);
   const gqlFetch = useGQLFetch();
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
+  const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
+  const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
 
   // Continuously called for realtime update
   const fetchTasksList = useCallback(async () => {
     await Promise.all([
-      gqlFetch(tasksListsQuery).then((data) => {
-        if (data?.scheduledTasksList) {
-          setTasks(data.scheduledTasksList);
-        }
-      }).catch(err => err),
-      new Promise(resolve => setTimeout(resolve, 1000)),
+      gqlFetch(tasksListsQuery)
+        .then((data) => {
+          if (data?.scheduledTasksList?.tasks) {
+            setTasks(data.scheduledTasksList.tasks);
+          }
+          if (data?.scheduledTasksList?.serverTimeUnix) {
+            setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
+          }
+          if (data?.scheduledTasksList?.serverTimeFormatted) {
+            setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
+          }
+        })
+        .catch((err) => err),
+      new Promise((resolve) => setTimeout(resolve, 1000)),
     ]);
 
-    if ( refetchFlag.current ) {
+    if (refetchFlag.current) {
       fetchTasksList();
     }
   }, [tasksListsQuery, gqlFetch, refetchFlag]);
@@ -114,15 +106,17 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
 
     return () => {
       refetchFlag.current = false;
-    }
-  }, [ refetchFlag ]);
+    };
+  }, [refetchFlag]);
 
   return (
-    <ScheduledTasksListContext.Provider value={{ tasks, startTask, stopTask }}>
+    <ScheduledTasksListContext.Provider
+      value={{ tasks, startTask, stopTask, serverTimeUnix, serverTimeFormatted }}
+    >
       {children}
     </ScheduledTasksListContext.Provider>
   );
 };
 
 export const useScheduledTasksList = () =>
-  useContext(ScheduledTasksListContext) as I_ScheduledTasksProviderValue;
+  useContext(ScheduledTasksListContext);

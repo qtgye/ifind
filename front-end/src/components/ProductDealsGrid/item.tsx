@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
 import dealTypes from "@config/deal-types";
 
+import PercentCircle from "@components/PercentCircle";
+
 const ProductDealItem: ProductDealItemComponent = ({
   title,
   image,
@@ -8,15 +10,24 @@ const ProductDealItem: ProductDealItemComponent = ({
   amazon_url,
   url_list,
   price,
+  price_original,
+  discount_percent,
+  quantity_available_percent,
 }) => {
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
+  const [originalPrice, setOriginalPrice] = useState<number>();
+  const [discountPercent, setDiscountPercent] = useState<number>();
+  const [stockPercent, setStockPercent] = useState<number>();
 
   const getProductDetails = useCallback(() => {
     // Use default product details if amazon
     if (/amazon/.test(deal_type as string)) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
+      setOriginalPrice(price_original);
+      setDiscountPercent(discount_percent);
+      setStockPercent(quantity_available_percent);
     } else {
       // Determine url and price according to product.deal_type
       const [dealKey, dealData] =
@@ -34,23 +45,56 @@ const ProductDealItem: ProductDealItemComponent = ({
         if (matchedOtherSiteDetails) {
           setProductURL(matchedOtherSiteDetails.url || "");
           setProductPrice(String(matchedOtherSiteDetails.price));
+          setOriginalPrice(matchedOtherSiteDetails.price_original);
+          setDiscountPercent(matchedOtherSiteDetails.discount_percent);
+          setStockPercent(matchedOtherSiteDetails.quantity_available_percent);
         }
       }
     }
-  }, [deal_type, amazon_url, url_list, price]);
+  }, [
+    deal_type,
+    amazon_url,
+    url_list,
+    price,
+    price_original,
+    discount_percent,
+    quantity_available_percent,
+  ]);
 
   useEffect(() => {
     getProductDetails();
   }, [deal_type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <a className="product-deal-item" href={productURL}>
-      <div className="product-deal-item__image">
-        <img src={image} alt="" />
-      </div>
-      <div className="product-deal-item__details">
-        <div className="product-deal-item__title">{title}</div>
-        <strong className="product-deal-item__price">€ {productPrice}</strong>
+    <a className="product-deal-item" href={productURL} target="_blank" rel="noreferrer">
+      <div className="product-deal-item__content">
+        {discountPercent ? (
+          <div className="product-deal-item__discount">{`-${discountPercent}%`}</div>
+        ) : (
+          ""
+        )}
+        <div className="product-deal-item__image">
+          <img src={image} alt="" />
+        </div>
+        <div className="product-deal-item__details">
+          <div className="product-deal-item__title">{title}</div>
+          <div className="product-deal-item__deal-info">
+            <div className="product-deal-item__price">
+              {originalPrice ? (
+                <small className="product-deal-item__price-original">
+                  {" "}
+                  €{originalPrice}{" "}
+                </small>
+              ) : (
+                ""
+              )}
+              <strong className="product-deal-item__price-discounted">
+                €{productPrice}
+              </strong>
+            </div>
+            <PercentCircle percent={stockPercent === null ? null : stockPercent || null} />
+          </div>
+        </div>
       </div>
     </a>
   );

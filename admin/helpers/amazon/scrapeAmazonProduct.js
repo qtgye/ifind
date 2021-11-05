@@ -38,6 +38,11 @@ const PRICE_SELECTOR = [
   "#usedOnlyBuybox .offer-price",
   "#olp_feature_div .a-color-price",
 ].join(",");
+const ORIGINAL_PRICE_SELECTOR =
+  '#corePrice_desktop .a-text-price[data-a-color="secondary"] > :first-child';
+const DISCOUNT_SELECTOR = "#corePrice_feature_div";
+const QUANTITY_AVAILABLE_PERCENT_SELECTOR = '[id^="dealStatusPercentage_"]';
+
 const imageSelector = "#landingImage[data-a-dynamic-image]";
 const titleSelector = "#title";
 const additionalInfoTableSelector = "#productDetails_detailBullets_sections1";
@@ -151,21 +156,43 @@ const scrapeAmazonProduct = async (
     }
   }
 
-  // Go to english site for price and release_date
+  // Go to english site for
+  // price, price_original, quantity_available_percent, and release_date
   console.log(" - Fetching price for product...".cyan);
-  let priceMatch;
+  let priceMatch,
+    originalPriceMatch,
+    discountPercentMatch,
+    quantityAvailablePercentMatch;
   let tries = 3;
   while (tries) {
     try {
       await browser.goto(englishPageURL);
       await browser.waitForSelector(PRICE_SELECTOR, { timeout: 10000 });
-      priceMatch = await browser.$eval(PRICE_SELECTOR, (priceElement) =>
-        priceElement.textContent.match(/[0-9.,]+/)
-      );
+      [
+        priceMatch,
+        originalPriceMatch,
+        discountPercentMatch,
+        quantityAvailablePercentMatch,
+      ] = await Promise.all([
+        browser.$eval(PRICE_SELECTOR, (priceElement) =>
+          priceElement.textContent.match(/[0-9.,]+/)
+        ),
+        browser.$eval(ORIGINAL_PRICE_SELECTOR, (priceElement) =>
+          priceElement.textContent.match(/[0-9.,]+/)
+        ),
+        browser.$eval(DISCOUNT_SELECTOR, (discountElement) =>
+          discountElement.textContent.match(/[0-9]+(?=\s*%)/)
+        ),
+        browser.$eval(QUANTITY_AVAILABLE_PERCENT_SELECTOR, (quantityElement) =>
+          quantityElement.textContent.match(/[0-9]+/)
+        ),
+      ]);
       break;
     } catch (err) {
       console.error(err);
-      console.log(`Unable to fetch price for URL: ${englishPageURL}. Retrying...`.red);
+      console.log(
+        `Unable to fetch price for URL: ${englishPageURL}. Retrying...`.red
+      );
       await screenshotPageError(englishPageURL);
       tries--;
     }
@@ -182,9 +209,19 @@ const scrapeAmazonProduct = async (
     );
   }
 
+  // Append prices and discount data
   scrapedData.price = Number(
     (priceMatch && priceMatch[0].replace(",", "")) || 0
   );
+  scrapedData.price_original = Number(
+    (originalPriceMatch && originalPriceMatch[0]) || null
+  );
+  scrapedData.discount_percent = Number(
+    (discountPercentMatch && discountPercentMatch[0]) || null
+  );
+  scrapedData.quantity_available_percent = quantityAvailablePercentMatch
+    ? 100 - Number(quantityAvailablePercentMatch[0])
+    : null;
 
   // Get the release date if applicable
   if (!scrapePriceOnly) {
