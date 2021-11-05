@@ -3,7 +3,7 @@ const Task = require("./Task");
 const Queue = {
   // When checking for a task's next_run, allow this allowance in milliseconds
   // To determine whether the task is due to run (plus/minus)
-  TASK_NEXT_RUN_ALLOWANCE: 1000 * 10, // +/- 10 seconds allowance
+  TASK_NEXT_RUN_ALLOWANCE: 1000 * 1, // +/- 1 seconds allowance
 
   getList() {
     // Current Time

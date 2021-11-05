@@ -32,15 +32,6 @@ const ScheduledTasks = () => {
     <div className="container scheduled-tasks">
       <Header
         title={{ label: "Scheduled Tasks" }}
-        actions={[
-          {
-            label: 'Runner Logs',
-            onClick: () => history.push(`/plugins/${pluginId}/background-process/scheduled-tasks`),
-            color: 'secondary',
-            type: 'button',
-            icon: <FontAwesomeIcon icon="terminal" />
-          },
-        ]}
       />
       <div className="scheduled-tasks__server-time">
         <strong>Server Time:&nbsp;</strong> {serverTimeFormatted} (UTC)

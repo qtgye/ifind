@@ -77,7 +77,7 @@ class ScheduledTasks {
       const matchedCachedTask = this.tasks[dbTask.id];
 
       if (matchedCachedTask) {
-        matchedCachedTask.next_run = dbTask.next_run
+        matchedCachedTask.next_run = dbTask.next_run;
       }
     });
 
@@ -100,6 +100,15 @@ class ScheduledTasks {
 
     LOGGER.log(`Starting task: ${id}`);
     const task = this.tasks[id];
+
+    // Manually running a task allows
+    // to reset the next_run at the current time
+    // so that the computed next_run will base on the current time
+    task.update({
+      next_run: Date.now(),
+    });
+
+    // Start task
     task.start();
   }
 
