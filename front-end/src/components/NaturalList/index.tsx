@@ -137,7 +137,6 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                         </div>
                         <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
                         <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
-                        {/* <div className="natural-list__price-cat"> */}
                         <div className="natural-list__price-cat">
                             {width > 560 ?
                                 <>

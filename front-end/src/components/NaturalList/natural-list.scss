@@ -612,18 +612,6 @@ $item-layout: (
             margin-left: 32.2rem;
         }
 
-        @media screen and (max-width: 530px) {
-            margin-left: 31.6rem;
-        }
-
-        @media screen and (max-width: 520px) {
-            margin-left: 31rem;
-        }
-
-        @media screen and (max-width: 510px) {
-            margin-left: 30.4rem;
-        }
-
         @include xxl_mobile {
             margin-left: 28.7rem;
         }
@@ -632,32 +620,8 @@ $item-layout: (
             margin-left: 28.1rem;
         }
 
-        @media screen and (max-width: 460px) {
-            margin-left: 26.9rem;
-        }
-
-        @media screen and (max-width: 450px) {
-            margin-left: 26.3rem;
-        }
-
-        @media screen and (max-width: 440px) {
-            margin-left: 25.5rem;
-        }
-
-        @media screen and (max-width: 430px) {
-            margin-left: 25rem;
-        }
-
-        @media screen and (max-width: 420px) {
-            margin-left: 24.4rem;
-        }
-
         @include large_mobile {
             margin-left: 23.8rem;
-        }
-
-        @media screen and (max-width: 411px) {
-            margin-left: 23.5rem;
         }
 
         @include mobile {

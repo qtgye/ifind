@@ -1,0 +1,75 @@
+@import 'base/scss';
+@import 'base/global';
+
+.home {
+
+	.container {
+		@include bootstrap(container);
+	}
+
+    .loading {
+	    text-align: center;
+    }
+
+    .loading-icon {
+        margin-top: 8%;
+        margin-left: 41%;
+	    height: 150px;
+	    pointer-events: none;
+
+		@include small_laptop {
+			height: 130px;
+		}
+
+		@include tablet {
+			height: 120px;
+		}
+
+		@include xs_tablet {
+			margin-left: 40%;
+		}
+
+		@include xl_mobile {
+			margin-left: 37%;
+			height: 115px;
+		}
+
+		@include xml_mobile {
+			height: 110px;
+		}
+		
+		@include mobile {
+			margin-left: 36%;
+		}
+
+		@include sl_mobile {
+			height: 105px;
+		}
+
+		@include sm_mobile {
+			margin-left: 35%;
+			height: 100px;
+		}
+
+		@include small_mobile {
+			margin-left: 33%;
+			height: 95px;
+		}
+    }
+  
+    @media (prefers-reduced-motion: no-preference) {
+	    .loading-icon {
+	        animation: loading-icon-spin infinite 1.5s linear;
+	    }
+    }
+  
+    @keyframes loading-icon-spin {
+	    from {
+	        transform: rotate(0deg);
+	    }
+	    to {
+	        transform: rotate(360deg);
+	    }
+    }
+
+}
