@@ -30,7 +30,7 @@ class ScheduledTasks {
     }
 
     // Info from queue
-    Queue.on('info', info => LOGGER.log(info));
+    Queue.on("info", (info) => LOGGER.log(info));
 
     this.initialized = true;
 
@@ -65,7 +65,16 @@ class ScheduledTasks {
   runCommand(command, id) {
     const validCommands = ["start", "stop"];
     if (validCommands.includes(command)) {
-      this[command].call(this, id);
+      const args = [id];
+
+      switch (command) {
+        case "start":
+          args.push(true);
+          break;
+        default:
+      }
+
+      this[command].apply(this, args);
     }
 
     return this.list();
@@ -95,9 +104,30 @@ class ScheduledTasks {
       .sort((taskA, taskB) => (taskA.next_run < taskB.next_run ? -1 : 1));
   }
 
-  start(id) {
-    if (this.runningTask || !(id in this.tasks)) {
-      LOGGER.log(`Unable to run ${id.bold}. Another task is currently running.`);
+  start(id, resetNextRun = false) {
+    if (!(id in this.tasks)) {
+      LOGGER.log(
+        `${id.bold} is not in the list of tasks. Kindly verify the task ID.`
+      );
+      return;
+    }
+
+    if (this.runningTask) {
+      if (this.runningTask === id) {
+        LOGGER.log(`Task is still running.`.cyan);
+      } else {
+        LOGGER.log(
+          `Unable to run `.yellow +
+            id.bold.yellow +
+            `. Another task is currently running - `.yellow +
+            this.runningTask.bold.yellow
+        );
+      }
+
+      if (Queue.isTaskDueToRun(this.tasks[id])) {
+        this.tasks[id].computeNextRun();
+      }
+
       return;
     }
 
@@ -109,9 +139,11 @@ class ScheduledTasks {
     // Manually running a task allows
     // to reset the next_run at the current time
     // so that the computed next_run will base on the current time
-    task.update({
-      next_run: Date.now(),
-    });
+    if (resetNextRun) {
+      task.update({
+        next_run: Date.now(),
+      });
+    }
 
     // Start task
     task.start();
@@ -120,7 +152,13 @@ class ScheduledTasks {
     const newQueue = Queue.getList();
     LOGGER.log(`New queue:`.bold.green);
     newQueue.forEach(({ id, next_run }, index) => {
-      LOGGER.log(` ${index + 1} - ${id.bold} - ${moment(next_run).format('YYYY-MM-DD HH:mm:ss')}`);
+      LOGGER.log(
+        ` ${index + 1} - ${id.bold} - ${moment
+          .utc(next_run)
+          .format("YYYY-MM-DD HH:mm:ss")} ${
+          this.runningTask === id ? "- running".yellow : ""
+        }`
+      );
     });
   }
 
@@ -164,7 +202,6 @@ class ScheduledTasks {
   onProcessExit(id) {
     this.runningTask = null;
     LOGGER.log(`Process exitted: ${id.cyan.bold}`);
-    timer.runNextTask();
   }
 }
 

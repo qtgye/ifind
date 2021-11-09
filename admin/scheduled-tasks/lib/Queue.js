@@ -13,21 +13,25 @@ const Queue = {
     EVENTEMITTER.on(eventName, eventHandler);
   },
 
-  getList() {
+  getList( recomputePastTasks = false ) {
     // Current Time
     const currentTime = Date.now();
 
     // Get tasks
     let tasks = Task.getAll();
 
-    // Compute tasks' next run values
+    // Compute tasks' next run values if flagged
     const computedTasks = tasks.map((task) => {
+      if ( !recomputePastTasks ) {
+        return task;
+      }
+
       const oldNextRun = task.next_run;
       const isPastCurrentTime = oldNextRun < currentTime;
       const isDueToRun = this.isTaskDueToRun(task);
 
       if (task.next_run < currentTime && !this.isTaskDueToRun(task)) {
-        EVENTEMITTER.emit("info", `Recomputing next_run ${task.id}`);
+        EVENTEMITTER.emit("info", `Task ${task.id.bold} is past due. Recomputing...`);
       }
 
       // Ensure there is next_run
