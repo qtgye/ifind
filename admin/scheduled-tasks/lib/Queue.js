@@ -13,7 +13,7 @@ const Queue = {
     EVENTEMITTER.on(eventName, eventHandler);
   },
 
-  getList( recomputePastTasks = false ) {
+  getList(recomputePastTasks = false) {
     // Current Time
     const currentTime = Date.now();
 
@@ -22,7 +22,7 @@ const Queue = {
 
     // Compute tasks' next run values if flagged
     const computedTasks = tasks.map((task) => {
-      if ( !recomputePastTasks ) {
+      if (!recomputePastTasks) {
         return task;
       }
 
@@ -31,7 +31,10 @@ const Queue = {
       const isDueToRun = this.isTaskDueToRun(task);
 
       if (task.next_run < currentTime && !this.isTaskDueToRun(task)) {
-        EVENTEMITTER.emit("info", `Task ${task.id.bold} is past due. Recomputing...`);
+        EVENTEMITTER.emit(
+          "info",
+          `Task ${task.id.bold} is past due. Recomputing...`
+        );
       }
 
       // Ensure there is next_run
@@ -43,16 +46,12 @@ const Queue = {
         console.log(`${task.id.bold}: task not yet due to run, recomputing`);
         task.computeNextRun();
 
-        [
-          `Updated next_run for ${task.id.bold}:`,
-          `• Current Time: ${
-            moment.utc(currentTime).format("YYY-MM-DD HH:mm:ss").bold
-          }`,
-          `• [OLD] ${moment.utc(oldNextRun).format("YYY-MM-DD HH:mm:ss").bold}`,
-          `• [NEW] ${moment.utc(task.next_run).format("YYY-MM-DD HH:mm:ss").bold}`,
-          `• isPastCurrentTime: ${String(isPastCurrentTime).bold}`,
-          `• isDueToRun: ${String(isDueToRun).bold}`,
-        ].forEach((info) => EVENTEMITTER.emit("info", info));
+        EVENTEMITTER.emit(
+          "info",
+          `Updated next_run for ${task.id.bold}: ${
+            moment.utc(task.next_run).format("YYY-MM-DD HH:mm:ss").bold
+          }`
+        );
       }
 
       return task;
