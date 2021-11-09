@@ -52,7 +52,11 @@ class ScheduledTasks {
         });
       }
 
-      this.addTask(dbTask);
+      this.addTask({
+        ...dbTask,
+        name: configTask.name,
+        schedule: configTask.schedule,
+      });
     });
 
     // Initialize timer

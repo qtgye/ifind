@@ -14,16 +14,16 @@ module.exports = [
   {
     id: "amazon-lightning-offers",
     name: "Amazon Lightning Offers",
-    schedule: frequencies.minutes * 5,
+    schedule: frequencies.hourly,
   },
   {
     id: "ebay-wow-offers",
     name: "Ebay Wow Offers",
-    schedule: frequencies.minutes * 5,
+    schedule: frequencies.hourly,
   },
   {
     id: "aliexpress-value-deals",
     name: "AliExpress Super Value Deals",
-    schedule: frequencies.minutes * 5,
+    schedule: frequencies.hourly,
   },
 ];
