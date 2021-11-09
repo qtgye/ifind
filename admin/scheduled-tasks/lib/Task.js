@@ -45,13 +45,14 @@ class Task extends Model {
     // Event emitter
     this[EVENT_EMITTER_KEY] = new EventEmitter();
 
-    // Compute next_run if none
-    if (!this.next_run) {
-      this.computeNextRun();
-    }
-
     // Logger
     this.logger = new Logger({ baseDir: this.taskModulePath });
+    // Compute next_run if none
+
+    if (!this.next_run) {
+      console.log(`No next_run provided for ${config.id.bold}, recomputing...`);
+      this.computeNextRun();
+    }
   }
 
   get running() {
