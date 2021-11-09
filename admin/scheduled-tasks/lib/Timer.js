@@ -25,7 +25,7 @@ const Timer = {
     const availableTasks = Queue.getList();
 
     LOGGER.log(`Tasks queue:`.bold.cyan);
-    availableTasks.forEach(({ id, next_run }) => LOGGER.log(`${id.bold} - ${moment(next_run).format('YYYY-MM-DD HH:mm:ss').reset.cyan}`));
+    availableTasks.forEach(({ id, next_run }, index) => LOGGER.log(`${index + 1} ${id.bold} - ${moment(next_run).format('YYYY-MM-DD HH:mm:ss').reset.cyan}`));
 
     // Get the first available task and run it
     const [firstTask] = availableTasks;
@@ -38,12 +38,12 @@ const Timer = {
       return;
     }
 
-    LOGGER.log(`Found first task in the queue: ${firstTask.id.bold}.`);
+    console.log(`Found first task in the queue: ${firstTask.id.bold}.`);
 
     // If task is not yet due to run,
     // just reset the timer
     if (!Queue.isTaskDueToRun(firstTask)) {
-      LOGGER.log(`Task is not yet due to run, resettin timer.`);
+      console.log(`Task is not yet due to run, resetting timer.`);
 
       // Use the interval from now to firstTask for the reset
       resetTimeInterval = firstTask.next_run - timeNow;

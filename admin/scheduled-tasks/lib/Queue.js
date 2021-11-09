@@ -1,10 +1,17 @@
+const moment = require("moment");
+const EventEmitter = require("events");
 const Task = require("./Task");
-const moment = require('moment');
+
+const EVENTEMITTER = new EventEmitter();
 
 const Queue = {
   // When checking for a task's next_run, allow this allowance in milliseconds
   // To determine whether the task is due to run (plus/minus)
   TASK_NEXT_RUN_ALLOWANCE: 1000 * 1, // +/- 1 seconds allowance
+
+  on(eventName, eventHandler) {
+    EVENTEMITTER.on(eventName, eventHandler);
+  },
 
   getList() {
     // Current Time
@@ -15,13 +22,33 @@ const Queue = {
 
     // Compute tasks' next run values
     const computedTasks = tasks.map((task) => {
+      const oldNextRun = task.next_run;
+      const isPastCurrentTime = oldNextRun < currentTime;
+      const isDueToRun = this.isTaskDueToRun(task);
+
+      if (task.next_run < currentTime && !this.isTaskDueToRun(task)) {
+        EVENTEMITTER.emit("info", `Recomputing next_run ${task.id}`);
+      }
+
       // Ensure there is next_run
       // Or next_run is within the runnable allowance
       while (
         !task.next_run ||
         (task.next_run < currentTime && !this.isTaskDueToRun(task))
       ) {
+        console.log(`${task.id.bold}: task not yet due to run, recomputing`);
         task.computeNextRun();
+
+        [
+          `Updated next_run for ${task.id.bold}:`,
+          `• Current Time: ${
+            moment.utc(currentTime).format("YYY-MM-DD HH:mm:ss").bold
+          }`,
+          `• [OLD] ${moment.utc(oldNextRun).format("YYY-MM-DD HH:mm:ss").bold}`,
+          `• [NEW] ${moment.utc(task.next_run).format("YYY-MM-DD HH:mm:ss").bold}`,
+          `• isPastCurrentTime: ${String(isPastCurrentTime).bold}`,
+          `• isDueToRun: ${String(isDueToRun).bold}`,
+        ].forEach((info) => EVENTEMITTER.emit("info", info));
       }
 
       return task;
@@ -47,10 +74,10 @@ const Queue = {
     );
 
     // Place the currently running task at the beginning
-    const runningTaskIndex = computedTasks.findIndex(task => task.running);
-    if ( runningTaskIndex >= 0 ) {
-      computedTasks.unshift( computedTasks.splice(runningTaskIndex, 1)[0] )
-    };
+    const runningTaskIndex = computedTasks.findIndex((task) => task.running);
+    if (runningTaskIndex >= 0) {
+      computedTasks.unshift(computedTasks.splice(runningTaskIndex, 1)[0]);
+    }
 
     return computedTasks;
   },

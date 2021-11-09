@@ -1,4 +1,5 @@
 const path = require("path");
+const moment = require("moment");
 const { existsSync } = require("fs-extra");
 
 const baseDir = path.resolve(__dirname);
@@ -27,6 +28,9 @@ class ScheduledTasks {
     if (this.initialized) {
       return;
     }
+
+    // Info from queue
+    Queue.on('info', info => LOGGER.log(info));
 
     this.initialized = true;
 
@@ -111,6 +115,13 @@ class ScheduledTasks {
 
     // Start task
     task.start();
+
+    // Show updated queue for the next run
+    const newQueue = Queue.getList();
+    LOGGER.log(`New queue:`.bold.green);
+    newQueue.forEach(({ id, next_run }, index) => {
+      LOGGER.log(` ${index + 1} - ${id.bold} - ${moment(next_run).format('YYYY-MM-DD HH:mm:ss')}`);
+    });
   }
 
   stop(id) {
@@ -152,12 +163,9 @@ class ScheduledTasks {
 
   onProcessExit(id) {
     this.runningTask = null;
-    LOGGER.log(`Process exitted: ${id.bold}`);
+    LOGGER.log(`Process exitted: ${id.cyan.bold}`);
+    timer.runNextTask();
   }
 }
-
-// const scheduledTasks = new ScheduledTasks;
-// // TODO: Determine where to init, accounting for custom strapi instance
-// // scheduledTasks.init()
 
 module.exports = ScheduledTasks;
