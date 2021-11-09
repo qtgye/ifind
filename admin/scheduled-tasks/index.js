@@ -59,7 +59,7 @@ class ScheduledTasks {
     timer.on("taskstart", this.start.bind(this));
     timer.init();
 
-    LOGGER.log("Scheduled Tasks Runner initialized".green.bold);
+    LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
   }
 
   runCommand(command, id) {
@@ -133,7 +133,7 @@ class ScheduledTasks {
 
     this.runningTask = id;
 
-    LOGGER.log(`Starting task: ${id.bold}`.green);
+    LOGGER.log(` Starting task: `.bgGreen.bold.black +  `${id} `.bgGreen.black);
     const task = this.tasks[id];
 
     // Manually running a task allows
@@ -156,7 +156,7 @@ class ScheduledTasks {
         ` ${index + 1} - ${id.bold} - ${moment
           .utc(next_run)
           .format("YYYY-MM-DD HH:mm:ss")} ${
-          this.runningTask === id ? "- running".yellow : ""
+          this.runningTask === id ? "- running".bold.yellow : ""
         }`
       );
     });
@@ -201,7 +201,7 @@ class ScheduledTasks {
 
   onProcessExit(id) {
     this.runningTask = null;
-    LOGGER.log(`Process exitted: ${id.cyan.bold}`);
+    LOGGER.log(` Process exitted: `.black.bold.bgCyan + `${id} `.black.bgCyan);
   }
 }
 
