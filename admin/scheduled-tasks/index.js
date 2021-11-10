@@ -1,4 +1,5 @@
 const path = require("path");
+const moment = require("moment");
 const { existsSync } = require("fs-extra");
 
 const baseDir = path.resolve(__dirname);
@@ -8,6 +9,7 @@ const timer = require("./lib/Timer");
 const Task = require("./lib/Task");
 const Database = require("./lib/Database");
 const Logger = require("./lib/Logger");
+const Queue = require("./lib/Queue");
 const mapScheduleToFrequency = require("./utils/mapScheduleToFrequency");
 
 const LOGGER = new Logger({ baseDir });
@@ -26,6 +28,9 @@ class ScheduledTasks {
     if (this.initialized) {
       return;
     }
+
+    // Info from queue
+    Queue.on("info", (info) => LOGGER.log(info));
 
     this.initialized = true;
 
@@ -47,20 +52,33 @@ class ScheduledTasks {
         });
       }
 
-      this.addTask(dbTask);
+      this.addTask({
+        ...dbTask,
+        name: configTask.name,
+        schedule: configTask.schedule,
+      });
     });
 
     // Initialize timer
     timer.on("taskstart", this.start.bind(this));
     timer.init();
 
-    LOGGER.log("Scheduled Tasks Runner initialized".green);
+    LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
   }
 
   runCommand(command, id) {
     const validCommands = ["start", "stop"];
     if (validCommands.includes(command)) {
-      this[command].call(this, id);
+      const args = [id];
+
+      switch (command) {
+        case "start":
+          args.push(true);
+          break;
+        default:
+      }
+
+      this[command].apply(this, args);
     }
 
     return this.list();
@@ -71,13 +89,13 @@ class ScheduledTasks {
    */
   list() {
     // Get updated tasks list
-    const tasks = Task.getAll();
+    const tasks = Queue.getList();
 
     tasks.forEach((dbTask) => {
       const matchedCachedTask = this.tasks[dbTask.id];
 
       if (matchedCachedTask) {
-        matchedCachedTask.next_run = dbTask.next_run
+        matchedCachedTask.next_run = dbTask.next_run;
       }
     });
 
@@ -90,23 +108,68 @@ class ScheduledTasks {
       .sort((taskA, taskB) => (taskA.next_run < taskB.next_run ? -1 : 1));
   }
 
-  start(id) {
-    if (this.runningTask || !(id in this.tasks)) {
-      LOGGER.log(`Unable to run ${id}. Another task is currently running.`);
+  start(id, resetNextRun = false) {
+    if (!(id in this.tasks)) {
+      LOGGER.log(
+        `${id.bold} is not in the list of tasks. Kindly verify the task ID.`
+      );
+      return;
+    }
+
+    if (this.runningTask) {
+      if (this.runningTask === id) {
+        LOGGER.log(`Task is still running.`.cyan);
+      } else {
+        LOGGER.log(
+          `Unable to run `.yellow +
+            id.bold.yellow +
+            `. Another task is currently running - `.yellow +
+            this.runningTask.bold.yellow
+        );
+      }
+
+      if (Queue.isTaskDueToRun(this.tasks[id])) {
+        this.tasks[id].computeNextRun();
+      }
+
       return;
     }
 
     this.runningTask = id;
 
-    LOGGER.log(`Starting task: ${id}`);
+    LOGGER.log(` Starting task: `.bgGreen.bold.black +  `${id} `.bgGreen.black);
     const task = this.tasks[id];
+
+    // Manually running a task allows
+    // to reset the next_run at the current time
+    // so that the computed next_run will base on the current time
+    if (resetNextRun) {
+      task.update({
+        next_run: Date.now(),
+      });
+    }
+
+    // Start task
     task.start();
+
+    // Show updated queue for the next run
+    const newQueue = Queue.getList();
+    LOGGER.log(`New queue:`.bold.green);
+    newQueue.forEach(({ id, next_run }, index) => {
+      LOGGER.log(
+        ` ${index + 1} - ${id.bold} - ${moment
+          .utc(next_run)
+          .format("YYYY-MM-DD HH:mm:ss")} ${
+          this.runningTask === id ? "- running".bold.yellow : ""
+        }`
+      );
+    });
   }
 
   stop(id) {
     if (id in this.tasks) {
       const _process = this.tasks[id];
-      LOGGER.log("Killing task: ", id);
+      LOGGER.log(`Killing task: ${id.bold}`);
       _process.stop();
     }
   }
@@ -142,12 +205,8 @@ class ScheduledTasks {
 
   onProcessExit(id) {
     this.runningTask = null;
-    LOGGER.log(`Process exitted: ${id}`);
+    LOGGER.log(` Process exitted: `.black.bold.bgCyan + `${id} `.black.bgCyan);
   }
 }
-
-// const scheduledTasks = new ScheduledTasks;
-// // TODO: Determine where to init, accounting for custom strapi instance
-// // scheduledTasks.init()
 
 module.exports = ScheduledTasks;

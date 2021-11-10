@@ -45,13 +45,14 @@ class Task extends Model {
     // Event emitter
     this[EVENT_EMITTER_KEY] = new EventEmitter();
 
-    // Compute next_run if none
-    if (!this.next_run) {
-      this.computeNextRun();
-    }
-
     // Logger
     this.logger = new Logger({ baseDir: this.taskModulePath });
+    // Compute next_run if none
+
+    if (!this.next_run) {
+      console.log(`No next_run provided for ${config.id.bold}, recomputing...`);
+      this.computeNextRun();
+    }
   }
 
   get running() {
@@ -114,7 +115,9 @@ class Task extends Model {
     const now = Date.now();
     const { schedule } = this;
 
-    this.next_run = now + (schedule || frequencies["daily"]); // Default to daily
+    while (!this.next_run || this.next_run <= now) {
+      this.next_run = this.next_run + (schedule || frequencies["daily"]); // Default to daily
+    }
 
     // Save to DB
     Database.update(Task.model, this.id, { next_run: this.next_run });

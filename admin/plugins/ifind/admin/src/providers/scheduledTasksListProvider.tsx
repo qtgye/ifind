@@ -58,6 +58,7 @@ mutation TriggerTask (
 // Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const gqlFetch = useGQLFetch();
+  const isMountedRef = useRef(true);
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
@@ -79,8 +80,13 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
           setLogs(data.scheduledTasksList.logs);
         }
       })
-      .catch((err) => err);
-  }, [tasksListsQuery, gqlFetch]);
+      .catch((err) => err)
+      .finally(() => {
+        if ( isMountedRef.current ) {
+          window.setTimeout(() => fetchTasksList(), 1000);
+        }
+      });
+  }, [tasksListsQuery, gqlFetch, isMountedRef]);
 
   const triggerTask = useCallback(
     (taskID, action) => {
@@ -101,11 +107,11 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   }, []);
 
   useEffect(() => {
-    window.setTimeout(() => fetchTasksList(), 1000);
-  }, [tasks]);
-
-  useEffect(() => {
     fetchTasksList();
+
+    return () => {
+      isMountedRef.current = false;
+    }
   }, []);
 
   return (
