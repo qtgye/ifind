@@ -4,13 +4,10 @@ const fs = require("fs-extra");
 const moment = require("moment");
 const { JSDOM } = require("jsdom");
 
-const browserInstance = require("../browser");
+const browser = require("../browser");
 const { addURLParams } = require("../url");
 // const proxiedRequest = require('./proxied-request');
 const regularRequest = require("./regular-request");
-
-// Use a separate browser instance
-const browser = new browserInstance.class();
 
 const MONTHS = [
   "Jan",
@@ -168,22 +165,19 @@ const scrapeSaleDetails = async (productURL) => {
     originalPriceMatch,
     discountPercentMatch,
     quantityAvailablePercentMatch,
-    releaseDate,
-    // TEST VARS
-    percentContent,
-    availabilityContent;
+    releaseDate;
+
   let tries = 3;
   while (tries) {
     try {
       await browser.goto(englishPageURL);
+
       await browser.waitForSelector(PRICE_SELECTOR, { timeout: 10000 });
       [
         priceMatch,
         originalPriceMatch,
         discountPercentMatch,
         quantityAvailablePercentMatch,
-        percentContent,
-        availabilityContent,
       ] = await browser.$eval(
         PRICE_SELECTOR,
         (
@@ -206,28 +200,29 @@ const scrapeSaleDetails = async (productURL) => {
             QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR
           );
 
-          // TEST VARS
-          let availabilityContent;
-
           // Parse availability percent
-          let percent = null;
-          let percentContent = "";
+          let availabilityContent;
+          let availabilityPercentMatch = null;
           if (quantityAvailablePercentElement) {
-            percent =
+            availabilityPercentMatch =
               quantityAvailablePercentElement.textContent.match(/[0-9.,]+/);
           } else if (quantityAvailableDescriptorElement) {
             availabilityContent =
               quantityAvailableDescriptorElement.textContent.trim();
 
-            // Matches "In Stock"
-            if (availabilityContent.test(/^in stock/i)) {
-              percent = ["0"];
-            }
-            // Matches "Only {NUMBER} left in stock."
-            else if (availabilityContent.test(/\d+\s+in stock/i)) {
-              percent = availabilityContent.match(/\d+/i);
+            if (availabilityContent) {
+              // Matches "In Stock"
+              if (/^in stock/i.test(availabilityContent)) {
+                availabilityPercentMatch = ["0"];
+              }
+              // Matches "Only {NUMBER} left in stock."
+              else if (/\d+\s+in stock/i.test(availabilityContent)) {
+                availabilityPercentMatch = availabilityContent.match(/\d+/i);
+              } else {
+                availabilityPercentMatch = null;
+              }
             } else {
-              percent = null;
+              availabilityPercentMatch = null;
             }
           }
 
@@ -239,8 +234,7 @@ const scrapeSaleDetails = async (productURL) => {
             discountPercentElement
               ? discountPercentElement.textContent.match(/[0-9]+(?=\s*%)/)
               : null,
-            percent,
-            percentContent,
+            availabilityPercentMatch,
             availabilityContent,
           ];
         },
@@ -249,6 +243,7 @@ const scrapeSaleDetails = async (productURL) => {
         QUANTITY_AVAILABLE_PERCENT_SELECTOR,
         QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR
       );
+
       break;
     } catch (err) {
       console.error(err);
@@ -310,7 +305,9 @@ const scrapeSaleDetails = async (productURL) => {
     const isoDate = [year, MONTHS.indexOf(monthAbbrev.substr(0, 3)), day];
 
     const releaseDateMoment = moment.utc(isoDate);
-    releaseDate = releaseDateMoment ? releaseDateMoment.toISOString().replace(/\.\d+Z$/, '') : "";
+    releaseDate = releaseDateMoment
+      ? releaseDateMoment.toISOString().replace(/\.\d+Z$/, "")
+      : "";
   }
 
   // Apply prices and discount data

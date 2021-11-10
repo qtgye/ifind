@@ -5,7 +5,8 @@
   TODO:
   Create separate services for amazon and ebay
  */
-const { isAmazonLink } = require("./amazon");
+const browser = require('./browser');
+const { isAmazonLink, applyGermanLocation } = require("./amazon");
 const { scrapeAmazonProduct, amazonLink } = require("./amazon");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
@@ -22,12 +23,18 @@ const getProductDetails = async (
     return null;
   }
 
+  console.log('Getting product details...'.cyan);
+
   // Prepare to save product issues
   scrapedData.product_issues = productData.product_issues || {};
 
   await Promise.all([
     // Scrape amazon
     (async () => {
+      // Go to product page first to set german location for the page
+      await browser.goto(productURL);
+      await applyGermanLocation(browser);
+
       const scrapedDetails = await scrapeAmazonProduct(
         productURL,
         "de",
