@@ -124,6 +124,7 @@ declare global {
     serverTimeUnix?: string;
     serverTimeFormatted?: string;
     tasks?: Array<ScheduledTask | null>;
+    logs?: Array<TaskLogEntry | null>;
   }
   
   export interface PageData {
@@ -4024,6 +4025,7 @@ declare global {
     serverTimeUnix?: ScheduledTaskListPayloadToServerTimeUnixResolver<TParent>;
     serverTimeFormatted?: ScheduledTaskListPayloadToServerTimeFormattedResolver<TParent>;
     tasks?: ScheduledTaskListPayloadToTasksResolver<TParent>;
+    logs?: ScheduledTaskListPayloadToLogsResolver<TParent>;
   }
   
   export interface ScheduledTaskListPayloadToServerTimeUnixResolver<TParent = any, TResult = any> {
@@ -4035,6 +4037,10 @@ declare global {
   }
   
   export interface ScheduledTaskListPayloadToTasksResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskListPayloadToLogsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

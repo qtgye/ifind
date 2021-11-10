@@ -267,6 +267,8 @@ $item-layout: (
         height: 32px;
         padding: 5px 10px;
         color: color(white);
+        filter: contrast(1);
+        font-weight: 400;
         background-color: color(mustard);
 
         &::after {
