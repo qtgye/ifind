@@ -29,6 +29,7 @@ const MONTHS = [
 
 const PRICE_SELECTOR = [
   "#dealsAccordionRow .a-color-price",
+  "#apex_offerDisplay_desktop .a-text-price .a-offscreen",
   "#corePrice_desktop .a-price",
   "#corePrice_feature_div .a-text-price",
   "#price_inside_buybox",
@@ -42,6 +43,7 @@ const ORIGINAL_PRICE_SELECTOR =
   '#corePrice_desktop .a-text-price[data-a-color="secondary"] > :first-child';
 const DISCOUNT_SELECTOR = "#corePrice_feature_div";
 const QUANTITY_AVAILABLE_PERCENT_SELECTOR = '[id^="dealStatusPercentage_"]';
+const QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR = "#availability";
 
 const imageSelector = "#landingImage[data-a-dynamic-image]";
 const titleSelector = "#title";
@@ -91,78 +93,85 @@ const screenshotPageError = async (url) => {
   fs.outputFileSync(path.resolve(dirPath, "index.html"), pageHTML);
 };
 
-const scrapeAmazonProduct = async (
-  productURL,
-  language = "de",
-  scrapePriceOnly = false
-) => {
-  const scrapedData = {};
-
+/*
+  Scrapes for an amazon product's details:
+  title, details_html, image
+*/
+const scrapeProductDetails = async (productURL, language = "en") => {
   const urlWithLanguage = addURLParams(productURL, { language });
+  const scrapedDetails = {};
+
+  try {
+    console.log(" - Fetching all details for product...".cyan);
+    const responseBody = await requestHtml(urlWithLanguage, detailSelector);
+    const detailPageHTML = responseBody;
+
+    const dom = new JSDOM(detailPageHTML);
+    const titleElement = dom.window.document.querySelector(titleSelector);
+    const imageElement = dom.window.document.querySelector(imageSelector);
+    const detailElement = dom.window.document.querySelector(detailSelector);
+
+    // Select highres image from dynamic image data
+    const imageData = (scrapedDetails.image = imageElement
+      ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
+      : {});
+    const highResImage = Object.entries(imageData).reduce(
+      (selectedEntry, [url, dimensions]) =>
+        !selectedEntry
+          ? [url, dimensions]
+          : dimensions[0] > selectedEntry[1][0]
+          ? [url, dimensions]
+          : selectedEntry,
+      null
+    );
+
+    // Remove unnecessary elements from detail section
+    const allSelectorsToRemove = selectorsToRemove.join(",");
+    [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
+      (element) => {
+        try {
+          element.remove();
+        } catch (err) {
+          /**/
+        }
+      }
+    );
+
+    // Apply scraped details
+    scrapedDetails.title = titleElement
+      ? titleElement.textContent.trim().replace(/\n/, "")
+      : "";
+    scrapedDetails.image = highResImage ? highResImage[0] : "";
+
+    // Apply details_html
+    scrapedDetails.details_html = detailElement.outerHTML
+      .trim()
+      .replace(/\n+/g, "\n");
+  } catch (err) {
+    console.error(err.message.red, urlWithLanguage.bold);
+    await screenshotPageError(urlWithLanguage);
+  }
+
+  return scrapedDetails;
+};
+
+/*
+  Scrapes for an amazon product's sale details:
+  price, discount_percent, price_original, quantity_available_percent, and release_date
+*/
+const scrapeSaleDetails = async (productURL) => {
   // Use english page in order to parse price without having to account for other currencies
   const englishPageURL = addURLParams(productURL, { language: "en" });
 
-  // Scrape for all amazon details if applicable
-  if (!scrapePriceOnly) {
-    try {
-      console.log(" - Fetching all details for product...".cyan);
-      const responseBody = await requestHtml(urlWithLanguage, detailSelector);
-      const detailPageHTML = responseBody;
-
-      const dom = new JSDOM(detailPageHTML);
-      const titleElement = dom.window.document.querySelector(titleSelector);
-      const imageElement = dom.window.document.querySelector(imageSelector);
-      const detailElement = dom.window.document.querySelector(detailSelector);
-
-      // Select highres image from dynamic image data
-      const imageData = (scrapedData.image = imageElement
-        ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
-        : {});
-      const highResImage = Object.entries(imageData).reduce(
-        (selectedEntry, [url, dimensions]) =>
-          !selectedEntry
-            ? [url, dimensions]
-            : dimensions[0] > selectedEntry[1][0]
-            ? [url, dimensions]
-            : selectedEntry,
-        null
-      );
-
-      // Remove unnecessary elements from detail section
-      const allSelectorsToRemove = selectorsToRemove.join(",");
-      [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
-        (element) => {
-          try {
-            element.remove();
-          } catch (err) {
-            /**/
-          }
-        }
-      );
-
-      // Apply scraped details
-      scrapedData.title = titleElement
-        ? titleElement.textContent.trim().replace(/\n/, "")
-        : "";
-      scrapedData.image = highResImage ? highResImage[0] : "";
-
-      // Apply details_html
-      scrapedData.details_html = detailElement.outerHTML
-        .trim()
-        .replace(/\n+/g, "\n");
-    } catch (err) {
-      console.error(err.message.red, urlWithLanguage.bold);
-      await screenshotPageError(urlWithLanguage);
-    }
-  }
-
-  // Go to english site for
-  // price, price_original, quantity_available_percent, and release_date
   console.log(" - Fetching price for product...".cyan);
   let priceMatch,
     originalPriceMatch,
     discountPercentMatch,
-    quantityAvailablePercentMatch;
+    quantityAvailablePercentMatch,
+    releaseDate,
+    // TEST VARS
+    percentContent,
+    availabilityContent;
   let tries = 3;
   while (tries) {
     try {
@@ -173,19 +182,73 @@ const scrapeAmazonProduct = async (
         originalPriceMatch,
         discountPercentMatch,
         quantityAvailablePercentMatch,
-      ] = await browser.$eval(PRICE_SELECTOR, (priceElement, ORIGINAL_PRICE_SELECTOR, DISCOUNT_SELECTOR, QUANTITY_AVAILABLE_PERCENT_SELECTOR) =>{
-        const priceMatch = priceElement.textContent.match(/[0-9.,]+/);
-        originalPriceElement = document.querySelector(ORIGINAL_PRICE_SELECTOR);
-        discountPercentElement = document.querySelector(DISCOUNT_SELECTOR);
-        quantityAvailablePercentElement = document.querySelector(QUANTITY_AVAILABLE_PERCENT_SELECTOR);
+        percentContent,
+        availabilityContent,
+      ] = await browser.$eval(
+        PRICE_SELECTOR,
+        (
+          priceElement,
+          ORIGINAL_PRICE_SELECTOR,
+          DISCOUNT_SELECTOR,
+          QUANTITY_AVAILABLE_PERCENT_SELECTOR,
+          QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR
+        ) => {
+          const priceMatch = priceElement.textContent.match(/[0-9.,]+/);
+          const originalPriceElement = document.querySelector(
+            ORIGINAL_PRICE_SELECTOR
+          );
+          const discountPercentElement =
+            document.querySelector(DISCOUNT_SELECTOR);
+          const quantityAvailablePercentElement = document.querySelector(
+            QUANTITY_AVAILABLE_PERCENT_SELECTOR
+          );
+          const quantityAvailableDescriptorElement = document.querySelector(
+            QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR
+          );
 
-        return [
-          priceMatch,
-          originalPriceElement ? originalPriceElement.textContent.match(/[0-9.,]+/) : null,
-          discountPercentElement ? discountPercentElement.textContent.match(/[0-9]+(?=\s*%)/) : null,
-          quantityAvailablePercentElement ? quantityAvailablePercentElement.textContent.match(/[0-9.,]+/) : null,
-        ]
-      }, ORIGINAL_PRICE_SELECTOR, DISCOUNT_SELECTOR, QUANTITY_AVAILABLE_PERCENT_SELECTOR);
+          // TEST VARS
+          let availabilityContent;
+
+          // Parse availability percent
+          let percent = null;
+          let percentContent = "";
+          if (quantityAvailablePercentElement) {
+            percent =
+              quantityAvailablePercentElement.textContent.match(/[0-9.,]+/);
+          } else if (quantityAvailableDescriptorElement) {
+            availabilityContent =
+              quantityAvailableDescriptorElement.textContent.trim();
+
+            // Matches "In Stock"
+            if (availabilityContent.test(/^in stock/i)) {
+              percent = ["0"];
+            }
+            // Matches "Only {NUMBER} left in stock."
+            else if (availabilityContent.test(/\d+\s+in stock/i)) {
+              percent = availabilityContent.match(/\d+/i);
+            } else {
+              percent = null;
+            }
+          }
+
+          return [
+            priceMatch,
+            originalPriceElement
+              ? originalPriceElement.textContent.match(/[0-9.,]+/)
+              : null,
+            discountPercentElement
+              ? discountPercentElement.textContent.match(/[0-9]+(?=\s*%)/)
+              : null,
+            percent,
+            percentContent,
+            availabilityContent,
+          ];
+        },
+        ORIGINAL_PRICE_SELECTOR,
+        DISCOUNT_SELECTOR,
+        QUANTITY_AVAILABLE_PERCENT_SELECTOR,
+        QUANTITY_AVAILABLE_DESCRIPTOR_SELECTOR
+      );
       break;
     } catch (err) {
       console.error(err);
@@ -208,71 +271,89 @@ const scrapeAmazonProduct = async (
     );
   }
 
-  // Append prices and discount data
-  scrapedData.price = Number(
-    (priceMatch && priceMatch[0].replace(",", "")) || 0
-  );
-  scrapedData.price_original = Number(
-    (originalPriceMatch && originalPriceMatch[0]) || null
-  );
-  scrapedData.discount_percent = Number(
-    (discountPercentMatch && discountPercentMatch[0]) || null
-  );
-  scrapedData.quantity_available_percent = quantityAvailablePercentMatch
-    ? 100 - Number(quantityAvailablePercentMatch[0])
-    : null;
-
-  // Get the release date if applicable
-  if (!scrapePriceOnly) {
-    const parsedReleaseDates = await Promise.all([
-      // Some products have additional info table,
-      browser.evaluate((additionalInfoTableSelector) => {
-        const additionalInfoTable = document.querySelector(
-          additionalInfoTableSelector
-        );
-        if (!additionalInfoTable) return;
-        const releaseDateRow = Array.from(additionalInfoTable.rows).find(
-          (row) =>
-            row.cells[0] &&
-            /date first available/i.test(row.cells[0].textContent)
-        );
-        return releaseDateRow && releaseDateRow.cells[1]
-          ? releaseDateRow.cells[1].textContent.trim()
-          : "";
-      }, additionalInfoTableSelector),
-      // Some products have details list
-      browser.evaluate((detailsListSelector) => {
-        const detailsListContainer =
-          document.querySelector(detailsListSelector);
-        if (!detailsListContainer) return;
-        const releaseDateItemText = [
-          ...detailsListContainer.querySelectorAll(".a-list-item"),
-        ]
-          .map((listItem) => listItem.textContent)
-          .find((textContent) => /date first available/i.test(textContent));
-        const dateMatch = releaseDateItemText
-          ? releaseDateItemText.match(/[0-9]+[^0-9]+[0-9]{4}/i)
-          : null;
-        return dateMatch ? dateMatch[0] : null;
-      }, detailsListSelector),
-    ]);
-
-    const releaseDateString = parsedReleaseDates.find((date) => date);
-
-    if (releaseDateString) {
-      const [day, monthAbbrev, year] = releaseDateString.split(" ");
-      const isoDate = [year, MONTHS.indexOf(monthAbbrev.substr(0, 3)), day];
-
-      const releaseDateMoment = moment.utc(isoDate);
-      const releaseDate = releaseDateMoment
-        ? releaseDateMoment.toISOString()
+  // Get the release date
+  const parsedReleaseDates = await Promise.all([
+    // Some products have additional info table,
+    browser.evaluate((additionalInfoTableSelector) => {
+      const additionalInfoTable = document.querySelector(
+        additionalInfoTableSelector
+      );
+      if (!additionalInfoTable) return;
+      const releaseDateRow = Array.from(additionalInfoTable.rows).find(
+        (row) =>
+          row.cells[0] && /date first available/i.test(row.cells[0].textContent)
+      );
+      return releaseDateRow && releaseDateRow.cells[1]
+        ? releaseDateRow.cells[1].textContent.trim()
         : "";
+    }, additionalInfoTableSelector),
+    // Some products have details list
+    browser.evaluate((detailsListSelector) => {
+      const detailsListContainer = document.querySelector(detailsListSelector);
+      if (!detailsListContainer) return;
+      const releaseDateItemText = [
+        ...detailsListContainer.querySelectorAll(".a-list-item"),
+      ]
+        .map((listItem) => listItem.textContent)
+        .find((textContent) => /date first available/i.test(textContent));
+      const dateMatch = releaseDateItemText
+        ? releaseDateItemText.match(/[0-9]+[^0-9]+[0-9]{4}/i)
+        : null;
+      return dateMatch ? dateMatch[0] : null;
+    }, detailsListSelector),
+  ]);
 
-      if (releaseDate) {
-        scrapedData.releaseDate = releaseDate;
-      }
-    }
+  const releaseDateString = parsedReleaseDates.find((date) => date);
+
+  if (releaseDateString) {
+    const [day, monthAbbrev, year] = releaseDateString.split(" ");
+    const isoDate = [year, MONTHS.indexOf(monthAbbrev.substr(0, 3)), day];
+
+    const releaseDateMoment = moment.utc(isoDate);
+    releaseDate = releaseDateMoment ? releaseDateMoment.toISOString().replace(/\.\d+Z$/, '') : "";
   }
+
+  // Apply prices and discount data
+  return {
+    price: Number((priceMatch && priceMatch[0].replace(",", "")) || 0),
+    discount_percent: Number(
+      (discountPercentMatch && discountPercentMatch[0]) || null
+    ),
+    price_original: Number(
+      (originalPriceMatch && originalPriceMatch[0]) || null
+    ),
+    quantity_available_percent: quantityAvailablePercentMatch
+      ? 100 - Number(quantityAvailablePercentMatch[0])
+      : null,
+    release_date: releaseDate,
+  };
+};
+
+const scrapeAmazonProduct = async (
+  productURL,
+  language = "de",
+  scrapePriceOnly = false
+) => {
+  const scrapedData = {};
+
+  // Scrape for all amazon details if applicable
+  if (!scrapePriceOnly) {
+    const scrapedDetails = await scrapeProductDetails(productURL, language);
+
+    // Apply scraped details
+    Object.entries(scrapedDetails).forEach(([key, value]) => {
+      scrapedData[key] = value;
+    });
+  }
+
+  // Scrape sale details:
+  // price, price_original, discount_percent, quantity_available_percent, and release_date
+  const scrapedSaleDetails = await scrapeSaleDetails(productURL);
+
+  // Apply scraped sale details
+  Object.entries(scrapedSaleDetails).forEach(([key, value]) => {
+    scrapedData[key] = value;
+  });
 
   return scrapedData;
 };
