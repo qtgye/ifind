@@ -114,7 +114,7 @@ const Footer = () => {
                         <div className="row">
                             <div className="col-lg-6 col-12">
                                 <div className="left">
-                                    <p>Copyright © 2021 <a href="/" target="_blank" rel="noreferrer">iFINDilu</a> -
+                                    <p>Copyright © 2021 <a href="/" aria-label="ifindilu" target="_blank" rel="noreferrer">iFINDilu</a> -
                                         All Rights Reserved.
                                     </p>
                                 </div>

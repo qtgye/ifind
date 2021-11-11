@@ -1,3 +1,3 @@
 declare interface PercentCircleProps {
-  percent: number|null;
+  percent: number | null;
 }

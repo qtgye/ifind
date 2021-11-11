@@ -26,7 +26,7 @@
 		}
 
 		@include xs_tablet {
-			margin-left: 40%;
+			margin-left: 39%;
 		}
 
 		@include xl_mobile {
@@ -47,12 +47,12 @@
 		}
 
 		@include sm_mobile {
-			margin-left: 35%;
+			margin-left: 33%;
 			height: 100px;
 		}
 
 		@include small_mobile {
-			margin-left: 33%;
+			margin-left: 32%;
 			height: 95px;
 		}
     }
@@ -70,6 +70,47 @@
 	    to {
 	        transform: rotate(360deg);
 	    }
+    }
+
+	.progress {
+        position: relative;
+        top: 60%;
+        left: 41%;
+        height: 20px;
+        width: 200px;
+        background-color: $white;
+
+		@include small_laptop {
+			left: 39.5%;
+		}
+
+		@include tablet {
+			left: 38.5%;
+		}
+
+		@include xs_tablet {
+			left: 36%;
+		}
+
+		@include xl_mobile {
+			left: 34%;
+		}
+
+		@include xml_mobile {
+			left: 32%;
+		}
+		
+		@include mobile {
+			left: 29%;
+		}
+
+		@include sm_mobile {
+			left: 25%;
+		}
+
+		@include small_mobile {
+			left: 22%;
+		}
     }
 
 }

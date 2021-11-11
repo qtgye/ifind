@@ -324,6 +324,12 @@ $item-layout: (
         border-radius: 4px;
         cursor: default;
 
+        @include xl_desktop {
+            .label-2 {
+                display: none;
+            }
+        }
+
         @include laptop {
             .label {
                 //margin-left: -145pt;
@@ -508,6 +514,11 @@ $item-layout: (
         right: 4rem;
         color: $white;
 
+        @include xs_tablet {
+           display: none;
+        }
+
+
         @include xxl_mobile-up {
             font-size: 12px;
         }
@@ -690,6 +701,7 @@ $item-layout: (
         }
 
         @include xs_tablet {
+            //display: visible;
             margin-top: 3px;
             margin-left: -470pt;
         }

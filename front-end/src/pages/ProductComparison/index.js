@@ -6,7 +6,7 @@ import { useContext, useCallback, useRef } from 'react';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import NaturalList from '@components/NaturalList';
 import IfindIcon from '@components/IfindIcon';
-import { useWindowSize } from '../../utilities/WindowResize';
+//import { useWindowSize } from '../../utilities/WindowResize';
 
 import './product-comparison.scss';
 import { useCategoryTree } from '@contexts/categoriesContext';
@@ -24,7 +24,7 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
   const [currentCategory, setCurrentCategory] = useState();
   const [lshowButton, lsetShowButton] = useState(false);
   const [rshowButton, rsetShowButton] = useState(true);
-  const [width] = useWindowSize();
+  //const [width] = useWindowSize();
 
   useEffect(() => {
     setCurrentListCategory(currentCategory);
@@ -124,11 +124,11 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
         <div className="container">
           <div className="list">
             <nav className="nav">
-              {width < 995 ?
+              {
                 lshowButton && <>
                   <div className="larrow-area"></div>
                   <div className="larrow" onClick={(e) => { scrollToLeft(e); rsetShowButton(true); }}><i className="fa fa-chevron-left"></i></div>
-                </> : null
+                </>
               }
               <ul id="navlist" className="nav-list">
                 {
@@ -145,11 +145,11 @@ const ProductComparison = withComponentName('ProductComparisonPage')(() => {
                   ))
                 }
               </ul>
-              {width < 995 ?
+              {
                 rshowButton && <>
                   <div className="rarrow-area"></div>
                   <div className="rarrow" onClick={(e) => { scrollToRight(e); lsetShowButton(true); }}><i className="fa fa-chevron-right"></i></div>
-                </> : null
+                </>
               }
             </nav>
 

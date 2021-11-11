@@ -38,7 +38,7 @@ const Header = () => {
         // }
 
         // setClassNames(updatedClassNames.join(' '));
-        console.log(isSticky);
+        //console.log(isSticky);
     }, [isSticky]);
 
     return (
