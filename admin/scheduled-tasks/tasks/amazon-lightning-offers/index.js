@@ -4,6 +4,7 @@ const scrapeAmazonProduct = require("../../../helpers/amazon/scrapeAmazonProduct
 const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
+const DEAL_TYPE = "amazon_flash_offers";
 
 (async () => {
   try {
@@ -33,7 +34,7 @@ const RETRY_WAIT = 10000;
       // Remove old products
       console.log("Removing old products...".green);
       const deletedProducts = await strapi.services.product.delete({
-        deal_type: "aliexpress_value_deals",
+        deal_type: DEAL_TYPE,
       });
       console.log(`Deleted ${deletedProducts.length} product(s).`.cyan);
 
@@ -56,9 +57,8 @@ const RETRY_WAIT = 10000;
           }
 
           // Additional props
-          productData.release_date = productData.releaseDate;
           productData.amazon_url = amazonLink(productLink);
-          productData.deal_type = "amazon_flash_offers";
+          productData.deal_type = DEAL_TYPE;
           productData.website_tab = "home";
 
           // Preprocess data props

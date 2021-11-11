@@ -16,7 +16,7 @@ const LogEntry = ({ date_time, type, message }: LogEntryProps): JSX.Element => {
       ></div>
       <div
         className="logs__entry-type"
-        dangerouslySetInnerHTML={{ __html: ansiToHtml(type) }}
+        dangerouslySetInnerHTML={{ __html: ansiToHtml(type.replace(/\s/g, '&nbsp;')) }}
       ></div>
       <div
         className="logs__entry-message"

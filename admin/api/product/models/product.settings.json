@@ -115,6 +115,9 @@
     },
     "price_original": {
       "type": "decimal"
+    },
+    "scrape_batch_uid": {
+      "type": "string"
     }
   }
 }

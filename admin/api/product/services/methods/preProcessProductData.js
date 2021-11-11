@@ -78,7 +78,6 @@ module.exports = async (data, id) => {
     (async () => {
       // Using only image and title for checking
       // For some reason, details_html is not passed on update
-      // TODO: Add admin UI option to select either priceOnly, amazonDetails, both or neither
       const scapePriceOnly = data.title && data.image && true;
 
       const productDetails = await getProductDetails(
