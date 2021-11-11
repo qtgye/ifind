@@ -93,6 +93,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "build:server": "NODE_ENV=development webpack --config config/webpack.server.js --mode=development",
     "test": "node scripts/test.js",
     "serve": "node server.js",
     "storybook": "start-storybook -p 6006 -s ./public",
@@ -153,6 +154,9 @@
     "node-sass": "^5.0.0",
     "puppeteer": "^10.4.0",
     "react-snap": "^1.23.0",
-    "typescript": "^4.4.2"
+    "ts-loader": "^8.2.0",
+    "typescript": "^4.4.2",
+    "webpack-cli": "^4.9.1",
+    "webpack-node-externals": "^3.0.0"
   }
 }

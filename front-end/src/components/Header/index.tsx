@@ -18,7 +18,10 @@ const Header = () => {
     // const [classNames, setClassNames] = useState('header');
     const [classNames] = useState('header');
 
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const currentRouteConfig = find(routes, ({ path }) => (
+      pathname === path ||
+      pathname.replace(/\/$/, '') === path
+    ));
     const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
 
     /**
@@ -38,7 +41,7 @@ const Header = () => {
         // }
 
         // setClassNames(updatedClassNames.join(' '));
-        console.log(isSticky);
+        // console.log(isSticky);
     }, [isSticky]);
 
     return (

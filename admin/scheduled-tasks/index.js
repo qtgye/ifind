@@ -1,4 +1,5 @@
 const path = require("path");
+const fs = require("fs-extra");
 const moment = require("moment");
 const { existsSync } = require("fs-extra");
 
@@ -19,6 +20,10 @@ class ScheduledTasks {
   tasks = {};
   // ID of the currently running task
   runningTask = null;
+  // Valid hook names
+  hookNames = {
+    TASK_STOP: 'task-stop',
+  };
 
   constructor() {
     this.ID = Date.now();
@@ -206,6 +211,24 @@ class ScheduledTasks {
   onProcessExit(id) {
     this.runningTask = null;
     LOGGER.log(` Process exitted: `.black.bold.bgCyan + `${id} `.black.bgCyan);
+    this.fireHook(this.hookNames.TASK_STOP, id);
+  }
+
+  async fireHook(hookName, data) {
+    const isValidHookName = Object.values(this.hookNames).includes(hookName);
+    const hookPath = path.resolve(__dirname, 'hooks', `${hookName}.js`);
+    const hookPathExists = fs.existsSync(hookPath);
+
+    if ( isValidHookName && hookPathExists ) {
+      LOGGER.log([
+        `Running hook`.cyan,
+        hookName.cyan.bold,
+      ].join(' '));
+
+      // Require and run hook
+      await require(hookPath)(data);
+      LOGGER.log(' DONE'.green.bold);
+    }
   }
 }
 
