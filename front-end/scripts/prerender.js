@@ -5,7 +5,8 @@ const puppeteer = require("puppeteer");
 const express = require("express");
 
 const routes = [
-  // "/productcomparison"
+  // "/productcomparison",
+  // "/contact"
 ];
 
 const PORT = 5678;
@@ -24,6 +25,11 @@ const prerender = async () => {
 
   // Copy build to static folder
   copySync(BUILD_ROOT, STATIC_ROOT);
+  // Make a copy of original index.html
+  copySync(
+    path.resolve(STATIC_ROOT, "index.html"),
+    path.resolve(STATIC_ROOT, "react-index.html")
+  );
 
   // Always scrape the homepage last, since this will override index.html
   routes.push("/");
@@ -36,7 +42,7 @@ const prerender = async () => {
 
   await page.setViewport({
     width: 1920,
-    height: 1080
+    height: 1080,
   });
 
   for (const route of routes) {
