@@ -12,34 +12,44 @@ const ProgressBars = () => {
     const [value, setValue] = useState(0);
 
     useEffect(() => {
+        let unmounted = false;
 
         if (currentRouteConfig?.path === '/') {
             const interval = setInterval(() => {
-                setValue(oldValue => {
-                    const newValue = oldValue + 10;
+                if (!unmounted) {
+                    setValue(oldValue => {
+                        const newValue = oldValue + 10;
 
-                    if (newValue === 100) {
-                        clearInterval(interval);
-                    }
+                        if (newValue === 100) {
+                            clearInterval(interval);
+                        }
 
-                    return newValue;
-                });
+                        return newValue;
+                    });
+                }
             }, 600);
         } else {
             const interval = setInterval(() => {
-                setValue(oldValue => {
-                    const newValue = oldValue + 10;
+                if (!unmounted) {
+                    setValue(oldValue => {
+                        const newValue = oldValue + 10;
 
-                    if (newValue === 100) {
-                        clearInterval(interval);
-                    }
+                        if (newValue === 100) {
+                            clearInterval(interval);
+                        }
 
-                    return newValue;
-                });
+                        return newValue;
+                    });
+                }
             }, 1300);
+
         }
 
-    }, []);
+        return () => {
+            unmounted = true;
+        }
+
+    }, [currentRouteConfig]);
 
     return (
         <ProgressBar value={value} max={100} color="#dc3545" />

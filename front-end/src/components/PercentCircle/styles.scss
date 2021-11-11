@@ -10,11 +10,9 @@
   z-index: 55;
 
   .active {
-  
     opacity: 1;
     transform: scale(1);
     visibility: visible;
-
   }
 
   &__svg {
