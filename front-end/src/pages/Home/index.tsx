@@ -8,6 +8,7 @@ import GeneralTemplate from "@templates/GeneralTemplate";
 import ProductDealsGrid from "@components/ProductDealsGrid";
 import React from "react";
 import "./home.scss";
+import ProgressBars from "@components/ProgressBar";
 
 const Home: React.FunctionComponent = () => {
   const { loading = false, productsByDeals } = useProductsByDeals();
@@ -20,6 +21,11 @@ const Home: React.FunctionComponent = () => {
           {loading &&
             <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>
           }
+          {loading && (
+            <div className="progress">
+              <ProgressBars />
+            </div>
+          )}
           {!loading && (productsByDeals || []).map((productsByDeal => (
             <ProductDealsGrid key={productsByDeal.deal_type.name} {...productsByDeal} />
           )))}

@@ -5,7 +5,7 @@ import routes from '@config/routes';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import { useProductDetail } from '@contexts/productContext';
-import { useWindowSize } from '../../utilities/WindowResize';
+//import { useWindowSize } from '../../utilities/WindowResize';
 import Item from './item';
 import Modal from './modal';
 
@@ -23,7 +23,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     const itemRef = useRef<HTMLDivElement | null>();
     const [isOpen, SetIsOpen] = useState(false);
     const [priceCatOpen, setPriceCatOpen] = useState(false);
-    const [width] = useWindowSize();
+    //const [width] = useWindowSize();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
@@ -94,9 +94,9 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     }
 
     const activeModal = () => {
-        if (width < 545) {
-            SetIsOpen(true);
-        }
+        //if (width < 545) {
+        SetIsOpen(true);
+        //}
     }
 
     //console.log("Price Category State: ", priceCatOpen);
@@ -107,45 +107,39 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                 {currentRouteConfig?.path === '/' ? null :
                     <>
                         <div className="natural-list__separator" ref={itemRef as React.LegacyRef<HTMLDivElement>} data-category={id}>
-                            {
-                                width > 560 ? (<span className="label">{label?.toUpperCase()}</span>) :
-                                    (
-                                        <span className="label-2">
-                                            {label?.toUpperCase()}
-                                            <span className={["ellipsis", priceCatOpen === true ? "active" : ""].join(" ")}
-                                                onClick={() => setPriceCatOpen(!priceCatOpen)}
-                                            >
-                                                <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                            </span>
-                                            {
-                                                priceCatOpen ?
-                                                    <div className="price-option">
-                                                        <button>$</button>
-                                                        <button>$$</button>
-                                                        <button>$$$</button>
-                                                    </div> : null
-                                            }
-                                        </span>
-                                    )
-                            }
-                            {
-                                width > 560 ?
-                                    <div className="natural-list__mfd">
-                                        {getQuarter(date || '')}
-                                    </div> : null
-                            }
+
+                            <span className="label">{label?.toUpperCase()}</span>
+
+                            <span className="label-2">
+                                {label?.toUpperCase()}
+                                <span className={["ellipsis", priceCatOpen === true ? "active" : ""].join(" ")}
+                                    onClick={() => setPriceCatOpen(!priceCatOpen)}
+                                >
+                                    <i className="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                </span>
+                                {
+                                    priceCatOpen ?
+                                        <div className="price-option">
+                                            <button>$</button>
+                                            <button>$$</button>
+                                            <button>$$$</button>
+                                        </div> : null
+                                }
+                            </span>
+
+                            <div className="natural-list__mfd">
+                                {getQuarter(date || '')}
+                            </div>
+
                         </div>
                         <div className="left-arrow"><i className="fa fa-chevron-left"></i></div>
                         <div className="right-arrow"><i className="fa fa-chevron-right"></i></div>
                         <div className="natural-list__price-cat">
-                            {width > 560 ?
-                                <>
-                                    <button>$</button>
-                                    <button>$$</button>
-                                    <button>$$$</button>
-                                </>
-                                : null
-                            }
+                            <>
+                                <button>$</button>
+                                <button>$$</button>
+                                <button>$$$</button>
+                            </>
                         </div>
                     </>
                 }

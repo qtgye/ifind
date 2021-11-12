@@ -11,7 +11,7 @@ export const ProductsByDealsContextProvider = ({
   const { loading, error, data } = useQuery(productsByDealsQuery);
 
   useEffect(() => {
-    console.log({ data });
+    //console.log({ data });
     setProductsByDeals(data?.productsByDeals || []);
   }, [data]);
 

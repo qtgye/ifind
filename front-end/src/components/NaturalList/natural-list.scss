@@ -267,6 +267,8 @@ $item-layout: (
         height: 32px;
         padding: 5px 10px;
         color: color(white);
+        filter: contrast(1);
+        font-weight: 400;
         background-color: color(mustard);
 
         &::after {
@@ -321,6 +323,12 @@ $item-layout: (
         border: 1px solid $gray-900;
         border-radius: 4px;
         cursor: default;
+
+        @include xl_desktop {
+            .label-2 {
+                display: none;
+            }
+        }
 
         @include laptop {
             .label {
@@ -506,6 +514,11 @@ $item-layout: (
         right: 4rem;
         color: $white;
 
+        @include xs_tablet {
+           display: none;
+        }
+
+
         @include xxl_mobile-up {
             font-size: 12px;
         }
@@ -688,6 +701,7 @@ $item-layout: (
         }
 
         @include xs_tablet {
+            //display: visible;
             margin-top: 3px;
             margin-left: -470pt;
         }

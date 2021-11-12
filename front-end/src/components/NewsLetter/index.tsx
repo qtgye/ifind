@@ -6,7 +6,7 @@ const NewsLetter = () => (
                     <div className="col-lg-8 offset-lg-2 col-12">
                         <div className="inner">
                             <h4 className='title'>Newsletter</h4>
-                            <p className='ptext'> Subscribe to our newsletter</p>
+                            <p className='ptext'> Subscribe to our Newsletter</p>
                             <form action="mail/mail.php" method="get" target="_blank" className="newsletter-inner">
                                 <input name="EMAIL" placeholder="Your email address" type="email" />
                                 <button className="btn">Subscribe</button>

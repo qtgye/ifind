@@ -67,22 +67,22 @@ const FooterContent = ({
                 </div>
                 <ul>
                   <li>
-                    <a href="/">
+                    <a href="/" aria-label="facebook">
                       <i className="ti-facebook"></i>
                     </a>
                   </li>
                   <li>
-                    <a href="/">
+                    <a href="/" aria-label="twitter">
                       <i className="ti-twitter"></i>
                     </a>
                   </li>
                   <li>
-                    <a href="/">
+                    <a href="/" aria-label="flickr">
                       <i className="ti-flickr"></i>
                     </a>
                   </li>
                   <li>
-                    <a href="/">
+                    <a href="/" aria-label="instagram">
                       <i className="ti-instagram"></i>
                     </a>
                   </li>
