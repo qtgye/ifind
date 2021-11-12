@@ -31,7 +31,7 @@ const getLightningOffers = async () => {
     return productLinks;
   } catch (err) {
     console.error(err.message.red, err.stack);
-    await page.screenshot({
+    await browser.screenshot({
       path: path.resolve(__dirname, "test.png"),
     });
 
