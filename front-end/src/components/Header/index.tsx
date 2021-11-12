@@ -18,7 +18,10 @@ const Header = () => {
     // const [classNames, setClassNames] = useState('header');
     const [classNames] = useState('header');
 
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const currentRouteConfig = find(routes, ({ path }) => (
+      pathname === path ||
+      pathname.replace(/\/$/, '') === path
+    ));
     const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
 
     /**
