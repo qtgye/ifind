@@ -1,15 +1,17 @@
 require("colors");
-const { outputFileSync, ensureDirSync, copySync, rmdirSync } = require("fs-extra");
+const {
+  outputFileSync,
+  ensureDirSync,
+  copySync,
+  rmdirSync,
+} = require("fs-extra");
 const path = require("path");
 const puppeteer = require("puppeteer");
 const express = require("express");
-const fetch = require('node-fetch');
-const { REACT_APP_ADMIN_API_ROOT } = require('dotenv').config().parsed;
+const fetch = require("node-fetch");
+const { REACT_APP_ADMIN_API_ROOT } = require("dotenv").config().parsed;
 
-const routes = [
-  "/productcomparison",
-  "/contact"
-];
+const routes = ["/productcomparison", "/contact"];
 
 const PORT = 5678;
 const APP_ROOT = path.resolve(__dirname, "../");
@@ -25,11 +27,12 @@ app.get("*", (req, res) => {
 const prerender = async () => {
   // Get dynamic routes from API
   try {
-    console.log('Getting page routes from API...'.cyan);
-    const response = await fetch(REACT_APP_ADMIN_API_ROOT, {
-      method: 'post',
+    console.log("Getting page routes from API...".cyan);
+
+    const response = await fetch(REACT_APP_ADMIN_API_ROOT.replace('localhost', '127.0.0.1'), {
+      method: "post",
       headers: {
-        'content-type': 'application/json',
+        "content-type": "application/json",
       },
       body: JSON.stringify({
         query: `
@@ -38,11 +41,12 @@ const prerender = async () => {
               slug
             }
           }
-        `
-      })
+        `,
+      }),
     });
     const { data } = await response.json();
-    if ( data.pages && data.pages.length ) {
+
+    if (data.pages && data.pages.length) {
       data.pages.forEach(({ slug }) => routes.push(`/${slug}`));
     }
   } catch (err) {
@@ -63,7 +67,6 @@ const prerender = async () => {
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
-
 
   const page = await browser.newPage();
 

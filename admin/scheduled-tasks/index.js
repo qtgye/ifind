@@ -2,6 +2,7 @@ const path = require("path");
 const fs = require("fs-extra");
 const moment = require("moment");
 const { existsSync } = require("fs-extra");
+const childProcess = require("child_process");
 
 const baseDir = path.resolve(__dirname);
 const configPath = path.resolve(baseDir, "config");
@@ -22,7 +23,7 @@ class ScheduledTasks {
   runningTask = null;
   // Valid hook names
   hookNames = {
-    TASK_STOP: 'task-stop',
+    TASK_STOP: "task-stop",
   };
 
   constructor() {
@@ -69,6 +70,9 @@ class ScheduledTasks {
     timer.init();
 
     LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
+
+    // TEST
+    this.fireHook('task-stop', 'test-task-id');
   }
 
   runCommand(command, id) {
@@ -142,7 +146,7 @@ class ScheduledTasks {
 
     this.runningTask = id;
 
-    LOGGER.log(` Starting task: `.bgGreen.bold.black +  `${id} `.bgGreen.black);
+    LOGGER.log(` Starting task: `.bgGreen.bold.black + `${id} `.bgGreen.black);
     const task = this.tasks[id];
 
     // Manually running a task allows
@@ -216,18 +220,42 @@ class ScheduledTasks {
 
   async fireHook(hookName, data) {
     const isValidHookName = Object.values(this.hookNames).includes(hookName);
-    const hookPath = path.resolve(__dirname, 'hooks', `${hookName}.js`);
+    const hookPath = path.resolve(__dirname, "hooks", `${hookName}.js`);
     const hookPathExists = fs.existsSync(hookPath);
 
-    if ( isValidHookName && hookPathExists ) {
-      LOGGER.log([
-        `Running hook`.cyan,
-        hookName.cyan.bold,
-      ].join(' '));
+    if (isValidHookName && hookPathExists) {
+      LOGGER.log([`Running hook`.cyan, hookName.cyan.bold].join(" "));
 
       // Require and run hook
-      await require(hookPath)(data);
-      LOGGER.log(' DONE'.green.bold);
+      const hookProcess = childProcess.fork(hookPath, [], { stdio: "pipe" });
+
+      hookProcess.on("message", (jsonString) => {
+        const { event } = JSON.parse(jsonString);
+
+        if (event === "init") {
+          // Send a trigger to the process to start
+          hookProcess.send(
+            JSON.stringify({
+              command: "start",
+              data: data,
+            })
+          );
+        }
+      });
+
+      await new Promise((resolve, reject) => {
+        hookProcess.on("exit", resolve);
+        hookProcess.stdout.on("data", (data) => LOGGER.log(data.toString()));
+        hookProcess.stderr.on("data", (data) =>
+          LOGGER.log(data.toString(), "ERROR")
+        );
+        hookProcess.on("error", (error) => {
+          LOGGER.log(error.message, "ERROR");
+          reject();
+        });
+      });
+
+      LOGGER.log(" DONE".green.bold);
     }
   }
 }
