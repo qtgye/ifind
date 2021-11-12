@@ -14,7 +14,8 @@
     "strapi": "node ./scripts/strapi-custom.js",
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
-    "currencies:import": "node scripts/currencies-import.js"
+    "currencies:import": "node scripts/currencies-import.js",
+    "serve:amazon-page-errors": "browser-sync start --server helpers/amazon/page-errors --port 5000 --directory --no-open --no-ui"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
@@ -46,6 +47,7 @@
     "ansi-to-html": "^0.7.2",
     "apollo-link": "^1.2.14",
     "axios": "^0.24.0",
+    "browser-sync": "^2.27.7",
     "chokidar": "^3.5.2",
     "ebay-oauth-nodejs-client": "^1.2.1",
     "form-data": "^0.2.0",

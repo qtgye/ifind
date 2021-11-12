@@ -6,5 +6,11 @@ module.exports = {
       args: "run develop",
       watch: false,
     },
+    {
+      name: "amazon-page-errors",
+      script: "npm",
+      args: "run serve:amazon-page-errors",
+      watch: false,
+    },
   ],
 };
