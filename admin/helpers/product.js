@@ -10,6 +10,7 @@ const { isAmazonLink, applyGermanLocation } = require("./amazon");
 const { scrapeAmazonProduct, amazonLink } = require("./amazon");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
+const screenshotPageError = require('./amazon/screenshotPageError');
 
 const getProductDetails = async (
   productData,
@@ -32,8 +33,14 @@ const getProductDetails = async (
     // Scrape amazon
     (async () => {
       // Go to product page first to set german location for the page
-      await browser.goto(productURL);
-      await applyGermanLocation(browser);
+      try {
+        await browser.goto(productURL);
+        await applyGermanLocation(browser);
+      }
+      catch (err) {
+        console.error(err);
+        await screenshotPageError(productURL);
+      }
 
       const scrapedDetails = await scrapeAmazonProduct(
         productURL,

@@ -7,7 +7,8 @@ const { JSDOM } = require("jsdom");
 const browser = require("../browser");
 const { addURLParams } = require("../url");
 // const proxiedRequest = require('./proxied-request');
-const regularRequest = require("./regular-request");
+// const regularRequest = require("./regular-request");
+const screenshotPageError = require('./screenshotPageError');
 
 const MONTHS = [
   "Jan",
@@ -76,18 +77,6 @@ const requestHtml = async (url, waitForSelector = "body") => {
   await browser.goto(url);
   await browser.waitForSelector(waitForSelector);
   return await browser.$eval("body", (el) => el.innerHTML);
-};
-
-const screenshotPageError = async (url) => {
-  const pageHTML = await browser.evaluate(
-    () => document.documentElement.innerHTML
-  );
-  const [urlPath] = url.split("?");
-  const directoryTree = urlPath.replace(/^.+amazon[^/]+\//i, "").split("/");
-  const dirPath = path.resolve(__dirname, "page-errors", ...directoryTree);
-  fs.ensureDirSync(dirPath);
-  await browser.screenshot({ path: path.resolve(dirPath, "index.png") });
-  fs.outputFileSync(path.resolve(dirPath, "index.html"), pageHTML);
 };
 
 /*
