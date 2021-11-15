@@ -62,7 +62,7 @@ jobs:
           CI=true npm run test -- --coverage && \
           rm -rf /var/www/html/front-end/coverage && mv coverage /var/www/html/front-end && \
           echo "/==== BUILDING SITE ====/" && \
-          CI=true npm run build && npm run prerender
+          CI=true npm run build && npm run prerender && \
 
           echo "/==== BUILDING STORYBOOK ====/" && \
           CI=true npm run build-storybook && \
