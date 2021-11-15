@@ -15,7 +15,7 @@
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
     "currencies:import": "node scripts/currencies-import.js",
-    "serve:amazon-page-errors": "browser-sync start --server helpers/amazon/page-errors --port 5000 --directory --no-open --no-ui"
+    "serve:amazon-page-errors": "node amazon-scraper-errors/index.js"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
