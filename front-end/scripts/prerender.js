@@ -13,7 +13,7 @@ const { REACT_APP_ADMIN_API_ROOT } = require("dotenv").config().parsed;
 
 const routes = ["/productcomparison", "/contact"];
 
-const PORT = 5678;
+const PORT = 0;
 const APP_ROOT = path.resolve(__dirname, "../");
 const BUILD_ROOT = path.resolve(APP_ROOT, "build");
 const STATIC_ROOT = path.resolve(APP_ROOT, "static");
@@ -24,7 +24,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve(BUILD_ROOT, "index.html"));
 });
 
-const prerender = async () => {
+const prerender = async (usedPort) => {
   // Get dynamic routes from API
   try {
     console.log("Getting page routes from API...".cyan);
@@ -76,7 +76,7 @@ const prerender = async () => {
   });
 
   for (const route of routes) {
-    const url = `http://127.0.0.1:${PORT}${route}`;
+    const url = `http://127.0.0.1:${usedPort}${route}`;
     console.log(`Scraping route: ${route.bold} at ${url}`.green);
 
     await page.goto(url, {
@@ -144,4 +144,4 @@ const prerender = async () => {
   process.exit();
 };
 
-app.listen(PORT, prerender);
+const listener = app.listen(PORT, () => prerender(listener.address().port));
