@@ -112,6 +112,9 @@ class Browser {
   async screenshot(...args) {
     return this.callPageFunction("screenshot", ...args);
   }
+  url() {
+    return this.callPageFunction("url");
+  }
 }
 
 /**

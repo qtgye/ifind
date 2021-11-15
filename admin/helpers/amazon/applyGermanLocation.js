@@ -2,6 +2,8 @@
   Applies zip code to use German Location
   For an amazon page
 */
+const screenshotPageError = require('./screenshotPageError');
+
 const GERMAN_ZIP_CODE = 74074;
 const ZIP_CODE_VALUE_SELECTOR = "#GLUXZipConfirmationValue";
 const ZIP_CHANGE_POPOVER_BUTTON = "#nav-global-location-popover-link";
@@ -12,7 +14,8 @@ const ADDRESS_CHANGE_URL =
   "https://www.amazon.de/gp/delivery/ajax/address-change.html";
 
 module.exports = async (browser) => {
-  // Check if page is already using german location
+  try {
+    // Check if page is already using german location
   const usesGermanLocation = await browser.evaluate(
     (ZIP_CODE_VALUE_SELECTOR, GERMAN_ZIP_CODE) => {
       const zipCodeValueElement = document.querySelector(
@@ -68,4 +71,8 @@ module.exports = async (browser) => {
 
   console.log("Reloading page to apply new address");
   await browser.reload();
+  }
+  catch (err) {
+    screenshotPageError(browser.url());
+  }
 };

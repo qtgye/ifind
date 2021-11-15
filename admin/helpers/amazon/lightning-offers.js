@@ -11,7 +11,7 @@ const PRODUCT_CARD = '[class^="DealGridItem-module__dealItem_"]';
 const getLightningOffers = async () => {
   try {
     console.log("Getting to Lightning Offers Page...");
-    await browser.goTo(LIGHTNING_OFFERS_PAGE);
+    await browser.goto(LIGHTNING_OFFERS_PAGE);
 
     // Apply german location
     await applyGermanLocation(browser);
