@@ -25,6 +25,9 @@ app.get("*", (req, res) => {
 });
 
 const prerender = async (usedPort) => {
+  // https://stackoverflow.com/a/48960988
+  process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
   // Get dynamic routes from API
   try {
     console.log("Getting page routes from API...".cyan);
