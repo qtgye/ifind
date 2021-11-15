@@ -73,6 +73,7 @@ module.exports = async (browser) => {
   await browser.reload();
   }
   catch (err) {
-    screenshotPageError(browser.url());
+    await screenshotPageError(browser.url());
+    throw err;
   }
 };
