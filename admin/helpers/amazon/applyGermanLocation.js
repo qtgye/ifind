@@ -67,8 +67,9 @@ module.exports = async (browser) => {
     }
 
     let zipApplied = false;
+    let tries = 3;
 
-    while (!zipApplied) {
+    while (!zipApplied && --tries) {
       try {
         await Promise.all([
           browser.click(ZIP_INPUT_APPLY),
@@ -80,6 +81,11 @@ module.exports = async (browser) => {
         console.log(err.message.red);
         console.log(`Unable to apply zip change. Retrying...`.bold);
       }
+    }
+
+    if ( !zipApplied ) {
+      console.error('Unable to apply zip code');
+      return;
     }
 
     await new Promise((resolve) => setTimeout(resolve, 100));
