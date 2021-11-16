@@ -203,12 +203,12 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
                   </div>
                 )
               }
-              <div className="single-bar">
+              {/* <div className="single-bar">
                 <a href="/" className="single-icon">
                   <i aria-hidden="true" className="fa fa-user-circle-o"></i>
                   &nbsp;
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

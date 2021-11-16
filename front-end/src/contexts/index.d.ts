@@ -6,4 +6,5 @@ import "./pageContext.d";
 import "./productsByDealsContext.d";
 import "./productContext.d";
 import "./sourceRegionContext.d";
+import "./languagesContext.d";
 
