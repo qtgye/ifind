@@ -14,15 +14,15 @@ const ADDRESS_CHANGE_URL =
 const germanyLatLong = [51.1657, 10.4515];
 
 module.exports = async (browser) => {
-  const browserInstance = await browser.getBrowserInstance();
-  const browserContext = await browserInstance.defaultBrowserContext();
-
   console.log(`Applying German location...`.cyan);
-  await browserContext.overridePermissions("https://www.amazon.de", ["geolocation"]);
-  await browser.setGeolocation({
-    latitude: germanyLatLong[0],
-    longitude: germanyLatLong[1],
-  });
+
+  // const browserInstance = await browser.getBrowserInstance();
+  // const browserContext = await browserInstance.defaultBrowserContext();
+  // await browserContext.overridePermissions("https://www.amazon.de", ["geolocation"]);
+  // await browser.setGeolocation({
+  //   latitude: germanyLatLong[0],
+  //   longitude: germanyLatLong[1],
+  // });
 
   try {
     // Check if page is already using german location
