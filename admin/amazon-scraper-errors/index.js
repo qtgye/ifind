@@ -81,7 +81,7 @@ app.get("/amazon-page-errors", (req, res) => {
             <td><a href="${req.path}?image=${pagePath}" target="_blank">Screenshot</a></td>
           </tr>
         `
-        )}
+        ).join('')}
       </tbody>
     </table>
   `);
