@@ -44,22 +44,27 @@ module.exports = async (browser) => {
       return;
     }
 
-    console.log("Applying German Location...".cyan);
+    try {
+      await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
 
-    await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
+      console.log("Applying German zip code...");
 
-    console.log("Applying German zip code...");
+      // Click to show popover
+      await browser.click(ZIP_CHANGE_POPOVER_BUTTON);
 
-    // Click to show popover
-    await browser.click(ZIP_CHANGE_POPOVER_BUTTON);
-    await browser.waitForSelector(ZIP_INPUT_SECTION);
+      await browser.waitForSelector(ZIP_INPUT_SECTION);
 
-    // Apply zip update
-    await browser.$eval(
-      ZIP_INPUT_INPUT,
-      (el, zipCode) => (el.value = zipCode),
-      GERMAN_ZIP_CODE
-    );
+      // Apply zip update
+      await browser.$eval(
+        ZIP_INPUT_INPUT,
+        (el, zipCode) => (el.value = zipCode),
+        GERMAN_ZIP_CODE
+      );
+    } catch (err) {
+      console.error(err.message.red);
+      screenshotPageError(await browser.url());
+      return;
+    }
 
     let zipApplied = false;
 
