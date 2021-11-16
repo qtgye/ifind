@@ -1,7 +1,4 @@
-/*
-  Applies zip code to use German Location
-  For an amazon page
-*/
+require("colors");
 const screenshotPageError = require("./screenshotPageError");
 
 const GERMAN_ZIP_CODE = 74074;
@@ -13,7 +10,20 @@ const ZIP_INPUT_APPLY = `#GLUXZipUpdate input[type="submit"]`;
 const ADDRESS_CHANGE_URL =
   "https://www.amazon.de/gp/delivery/ajax/address-change.html";
 
+
+const germanyLatLong = [51.1657, 10.4515];
+
 module.exports = async (browser) => {
+  const browserInstance = await browser.getBrowserInstance();
+  const browserContext = await browserInstance.defaultBrowserContext();
+
+  console.log(`Applying German location...`.cyan);
+  await browserContext.overridePermissions("https://www.amazon.de", ["geolocation"]);
+  await browser.setGeolocation({
+    latitude: germanyLatLong[0],
+    longitude: germanyLatLong[1],
+  });
+
   try {
     // Check if page is already using german location
     const usesGermanLocation = await browser.evaluate(

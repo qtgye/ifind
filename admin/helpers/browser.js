@@ -112,6 +112,9 @@ class Browser {
   async screenshot(...args) {
     return this.callPageFunction("screenshot", ...args);
   }
+  async setGeolocation(...args) {
+    return this.callPageFunction("setGeolocation", ...args);
+  }
   async url() {
     return this.callPageFunction("url");
   }
