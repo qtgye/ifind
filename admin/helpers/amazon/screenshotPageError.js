@@ -6,7 +6,7 @@ const screenshotPageError = async (url) => {
   const pageHTML = await browser.evaluate(
     () => document.documentElement.innerHTML
   );
-  const [urlPath] = url.split("?");
+  const [urlPath] = decodeURIComponent(url).split("?");
   const directoryTree = urlPath.replace(/^.+amazon[^/]+\//i, "").split("/");
   const dirPath = path.resolve(__dirname, "page-errors", ...directoryTree);
   fs.ensureDirSync(dirPath);

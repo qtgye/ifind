@@ -1,7 +1,4 @@
-/*
-  Applies zip code to use German Location
-  For an amazon page
-*/
+require("colors");
 const screenshotPageError = require("./screenshotPageError");
 
 const GERMAN_ZIP_CODE = 74074;
@@ -13,7 +10,20 @@ const ZIP_INPUT_APPLY = `#GLUXZipUpdate input[type="submit"]`;
 const ADDRESS_CHANGE_URL =
   "https://www.amazon.de/gp/delivery/ajax/address-change.html";
 
+
+const germanyLatLong = [51.1657, 10.4515];
+
 module.exports = async (browser) => {
+  console.log(`Applying German location...`.cyan);
+
+  // const browserInstance = await browser.getBrowserInstance();
+  // const browserContext = await browserInstance.defaultBrowserContext();
+  // await browserContext.overridePermissions("https://www.amazon.de", ["geolocation"]);
+  // await browser.setGeolocation({
+  //   latitude: germanyLatLong[0],
+  //   longitude: germanyLatLong[1],
+  // });
+
   try {
     // Check if page is already using german location
     const usesGermanLocation = await browser.evaluate(
@@ -34,26 +44,32 @@ module.exports = async (browser) => {
       return;
     }
 
-    console.log("Applying German Location...".cyan);
+    try {
+      await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
 
-    await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
+      console.log("Applying German zip code...");
 
-    console.log("Applying German zip code...");
+      // Click to show popover
+      await browser.click(ZIP_CHANGE_POPOVER_BUTTON);
 
-    // Click to show popover
-    await browser.click(ZIP_CHANGE_POPOVER_BUTTON);
-    await browser.waitForSelector(ZIP_INPUT_SECTION);
+      await browser.waitForSelector(ZIP_INPUT_SECTION);
 
-    // Apply zip update
-    await browser.$eval(
-      ZIP_INPUT_INPUT,
-      (el, zipCode) => (el.value = zipCode),
-      GERMAN_ZIP_CODE
-    );
+      // Apply zip update
+      await browser.$eval(
+        ZIP_INPUT_INPUT,
+        (el, zipCode) => (el.value = zipCode),
+        GERMAN_ZIP_CODE
+      );
+    } catch (err) {
+      console.error(err.message.red);
+      screenshotPageError(await browser.url());
+      return;
+    }
 
     let zipApplied = false;
+    let tries = 3;
 
-    while (!zipApplied) {
+    while (!zipApplied && --tries) {
       try {
         await Promise.all([
           browser.click(ZIP_INPUT_APPLY),
@@ -65,6 +81,11 @@ module.exports = async (browser) => {
         console.log(err.message.red);
         console.log(`Unable to apply zip change. Retrying...`.bold);
       }
+    }
+
+    if ( !zipApplied ) {
+      console.error('Unable to apply zip code');
+      return;
     }
 
     await new Promise((resolve) => setTimeout(resolve, 100));
