@@ -1,29 +1,96 @@
-import React, { useState } from 'react';
-import ReactFlagsSelect from 'react-flags-select';
+import { useEffect, useState, useCallback } from "react";
+import { useLanguages } from "@contexts/languagesContext";
+import ReactFlagsSelect from "react-flags-select";
 
-import { country } from '@mocks/components/countries';
-import { labels } from '@mocks/components/countries';
+import countriesConfig from "@config/countries";
 
 const HeaderLanguageButton = () => {
+  const {
+    languages = [],
+    userLanguage = "en",
+    saveUserLanguage,
+  } = useLanguages();
+  const [countries, setCountries] = useState<string[]>([]);
+  const [labels, setLabels] = useState<{ [key: string]: string }>();
+  const [selected, setSelected] = useState<string>("");
 
-    const [selected, setSelected] = useState('US');
+  const applyUserLanguage = useCallback(
+    (countryCode) => {
+      const matchedCountryConfig:
+        | CountryConfig
+        | undefined = countriesConfig.find(
+        ({ code }: CountryConfig) => code === countryCode
+      );
 
-    return (
-        <div>
+      if (!matchedCountryConfig) {
+        return;
+      }
 
-            <ReactFlagsSelect
-                selected={selected}
-                onSelect={flag => setSelected(flag)}
-                countries={country}
-                placeholder="Select a Language"
-                showSelectedLabel={false}
-                className="menu-flags"
-                selectButtonClassName="menu-flags-button"
-                fullWidth={false}
-                alignOptionsToRight={true}
-                customLabels={labels}
-            />
-            {/* <button onClick={onClick}>
+      const countryNameSlug = matchedCountryConfig.name;
+      const matchedLanguage = languages.find(
+        ({ country_flag }) => countryNameSlug === country_flag
+      );
+
+      if (matchedLanguage && saveUserLanguage) {
+        saveUserLanguage(matchedLanguage.code);
+      }
+    },
+    [languages, saveUserLanguage]
+  );
+
+  useEffect(() => {
+    if (languages.length) {
+      setCountries(languages.map(({ flag }) => flag?.toUpperCase() || ""));
+      setLabels(
+        languages.reduce(
+          (
+            all: { [key: string]: string },
+            { flag, name }: LanguageWithFlag
+          ) => {
+            all[flag?.toUpperCase() || ""] = name || "";
+            return all;
+          },
+          {}
+        )
+      );
+    }
+  }, [languages]);
+
+  useEffect(() => {
+    if (countries?.length && userLanguage) {
+      const matchedLanguage = languages.find(
+        ({ code }) => code === userLanguage
+      );
+      const matchedCountryNameSlug = matchedLanguage
+        ? matchedLanguage.country_flag
+        : null;
+      const matchedCountry = countriesConfig.find(
+        ({ name }) => name === matchedCountryNameSlug
+      );
+
+      console.log({ matchedLanguage, matchedCountryNameSlug, matchedCountry, userLanguage });
+
+      if (matchedCountry) {
+        setSelected(matchedCountry?.code || "");
+      }
+    }
+  }, [languages, countries, userLanguage]);
+
+  return (
+    <div>
+      <ReactFlagsSelect
+        selected={selected}
+        onSelect={(flag) => applyUserLanguage(flag)}
+        countries={countries}
+        placeholder="Select a Language"
+        showSelectedLabel={false}
+        className="menu-flags"
+        selectButtonClassName="menu-flags-button"
+        fullWidth={false}
+        alignOptionsToRight={true}
+        customLabels={labels}
+      />
+      {/* <button onClick={onClick}>
                 <CountryFlag countryCode="us" svg />
                 <span><AiFillCaretDown /></span>
             </button>
@@ -34,9 +101,8 @@ const HeaderLanguageButton = () => {
                     )
                 })}
             </ul> */}
-        </div>
-
-    )
-}
+    </div>
+  );
+};
 
 export default HeaderLanguageButton;
