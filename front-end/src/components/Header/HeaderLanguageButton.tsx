@@ -1,20 +1,53 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useLanguages } from "@contexts/languagesContext";
 import ReactFlagsSelect from "react-flags-select";
 
+import countriesConfig from "@config/countries";
+
 const HeaderLanguageButton = () => {
-  const { languages = [], userLanguage = 'US', saveUserLanguage } = useLanguages();
+  const {
+    languages = [],
+    userLanguage = "en",
+    saveUserLanguage,
+  } = useLanguages();
   const [countries, setCountries] = useState<string[]>([]);
   const [labels, setLabels] = useState<{ [key: string]: string }>();
-  const [selected] = useState(userLanguage);
+  const [selected, setSelected] = useState<string>("");
+
+  const applyUserLanguage = useCallback(
+    (countryCode) => {
+      const matchedCountryConfig:
+        | CountryConfig
+        | undefined = countriesConfig.find(
+        ({ code }: CountryConfig) => code === countryCode
+      );
+
+      if (!matchedCountryConfig) {
+        return;
+      }
+
+      const countryNameSlug = matchedCountryConfig.name;
+      const matchedLanguage = languages.find(
+        ({ country_flag }) => countryNameSlug === country_flag
+      );
+
+      if (matchedLanguage && saveUserLanguage) {
+        saveUserLanguage(matchedLanguage.code);
+      }
+    },
+    [languages, saveUserLanguage]
+  );
 
   useEffect(() => {
     if (languages.length) {
-      setCountries(languages.map(({ code }) => code.toUpperCase()));
+      setCountries(languages.map(({ flag }) => flag?.toUpperCase() || ""));
       setLabels(
         languages.reduce(
-          (all: { [key: string]: string }, { code, name }: Language) => {
-            all[code.toUpperCase()] = name || "";
+          (
+            all: { [key: string]: string },
+            { flag, name }: LanguageWithFlag
+          ) => {
+            all[flag?.toUpperCase() || ""] = name || "";
             return all;
           },
           {}
@@ -23,11 +56,31 @@ const HeaderLanguageButton = () => {
     }
   }, [languages]);
 
+  useEffect(() => {
+    if (countries?.length && userLanguage) {
+      const matchedLanguage = languages.find(
+        ({ code }) => code === userLanguage
+      );
+      const matchedCountryNameSlug = matchedLanguage
+        ? matchedLanguage.country_flag
+        : null;
+      const matchedCountry = countriesConfig.find(
+        ({ name }) => name === matchedCountryNameSlug
+      );
+
+      console.log({ matchedLanguage, matchedCountryNameSlug, matchedCountry, userLanguage });
+
+      if (matchedCountry) {
+        setSelected(matchedCountry?.code || "");
+      }
+    }
+  }, [languages, countries, userLanguage]);
+
   return (
     <div>
       <ReactFlagsSelect
         selected={selected}
-        onSelect={(flag) => saveUserLanguage(flag)}
+        onSelect={(flag) => applyUserLanguage(flag)}
         countries={countries}
         placeholder="Select a Language"
         showSelectedLabel={false}

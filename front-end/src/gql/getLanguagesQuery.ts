@@ -5,6 +5,7 @@ query Languages {
   languages {
     code
     name
+    country_flag
   }
 }
 `

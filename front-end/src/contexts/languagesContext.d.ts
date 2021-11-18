@@ -1,5 +1,9 @@
+declare interface LanguageWithFlag extends Language {
+  flag?: string;
+}
+
 declare interface LanguagesContextValue {
-  languages?: Language[];
+  languages?: LanguageWithFlag[];
   userLanguage?: string;
-  saveUserLanguage: (countryCode: string) => any;
+  saveUserLanguage?: (countryCode: string) => any;
 }
