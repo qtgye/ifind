@@ -68,8 +68,6 @@ const HeaderLanguageButton = () => {
         ({ name }) => name === matchedCountryNameSlug
       );
 
-      console.log({ matchedLanguage, matchedCountryNameSlug, matchedCountry, userLanguage });
-
       if (matchedCountry) {
         setSelected(matchedCountry?.code || "");
       }
