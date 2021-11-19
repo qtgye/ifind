@@ -64,6 +64,10 @@
         }
     }
 
+    .active {
+        background-color: $red;
+    }
+
     &__list {
         position: absolute;
         top: 100%;
@@ -218,7 +222,7 @@
     .listing {
         padding-left: 15px;
     }
-
+    
     .list {
 
         &.active {
@@ -239,6 +243,25 @@
             }
         }
     }
+
+   .active-listing {
+        &.active {
+            button {  
+                color: $red;
+                //text-decoration: underline;
+                background-color: #eaeaea;         
+            }
+            
+        }
+
+        &.focus {
+            button {  
+                color: $red;
+                //text-decoration: underline;
+                background-color: #eaeaea;         
+            }
+        }
+   }
 
 
     &__sub-list {

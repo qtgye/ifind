@@ -47,7 +47,7 @@ const Footer = () => {
                         <div className="col-lg-5 col-md-6 col-12">
                             <div className="single-footer about">
                                 <div className="logo">
-                                    <a href="index.html"><img src={logo} alt="/" /></a>
+                                    <a href="index.html"><img height={200} width={400} src={logo} alt="/" /></a>
                                 </div>
                                 <p className="text">
                                     {

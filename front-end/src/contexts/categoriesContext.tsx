@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useContext, useState} from 'react';
+import React, { createContext, useEffect, useContext, useState } from 'react';
 import { useQuery } from '@apollo/react-hooks';
 import { apiSourceHandle } from '@config/adminApi';
 import getCategoryTree from '@gql/getCategoryTreeQuery';
@@ -7,8 +7,8 @@ import { locale as language } from '@config/locale';
 export const CategoriesContext = createContext<CategoriesContextData>({});
 
 export const CategoriesContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
-    const [categoryTree, setCategoryTree] = useState<(CategoryWithChild|null)[]>([]);
-    const [subCategories, setSubCategories] = useState<(CategoryWithChild|null)[]>([]);
+    const [categoryTree, setCategoryTree] = useState<(CategoryWithChild | null)[]>([]);
+    const [subCategories, setSubCategories] = useState<(CategoryWithChild | null)[]>([]);
 
     const {
         data,
@@ -46,8 +46,8 @@ export const useCategoryTree = () => {
 }
 
 export const useSubCategories = () => {
-    const { subCategories, setSubCategories } = useContext(CategoriesContext);
-    return { subCategories, setSubCategories };
+    const { categoryTree, subCategories, setSubCategories } = useContext(CategoriesContext);
+    return { categoryTree, subCategories, setSubCategories };
 }
 
 // Export as default to be used in testing
