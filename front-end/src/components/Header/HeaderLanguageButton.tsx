@@ -8,7 +8,7 @@ const HeaderLanguageButton = () => {
   const {
     languages = [],
     userLanguage = "en",
-    saveUserLanguage,
+    replaceLanguage,
   } = useLanguages();
   const [countries, setCountries] = useState<string[]>([]);
   const [labels, setLabels] = useState<{ [key: string]: string }>();
@@ -31,11 +31,11 @@ const HeaderLanguageButton = () => {
         ({ country_flag }) => countryNameSlug === country_flag
       );
 
-      if (matchedLanguage && saveUserLanguage) {
-        saveUserLanguage(matchedLanguage.code);
+      if (matchedLanguage && replaceLanguage) {
+        replaceLanguage(matchedLanguage.code);
       }
     },
-    [languages, saveUserLanguage]
+    [languages, replaceLanguage]
   );
 
   useEffect(() => {

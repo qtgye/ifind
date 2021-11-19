@@ -2,9 +2,9 @@
 cd front-end && \
 
 echo "=============================" && \
-echo "=      Auditing Files       =" && \
+echo "=       Linting Files       =" && \
 echo "=============================" && \
-echo "node ./scripts/audit-files.js" && \
+npm run lint && \
 
 
 echo "=============================" && \
