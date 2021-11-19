@@ -16,7 +16,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
 
   const { pathname } = useLocation();
   const currentRouteConfig = find(routes, ({ path }) => pathname === path);
-  const { subCategories, categoryTree } = useSubCategories();
+  const { subCategories } = useSubCategories();
   const { on } = eventBus;
   const listRef = useRef<HTMLDivElement | null>();
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);

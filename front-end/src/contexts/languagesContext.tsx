@@ -5,9 +5,9 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
+import { useParams, useLocation, useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import getLanguagesQuery from "@gql/getLanguagesQuery";
-import { USER_LANGUAGE_KEY, locale } from "@config/locale";
 import countriesConfig from "@config/countries";
 
 export const LanguagesContext = createContext<LanguagesContextValue>({});
@@ -15,42 +15,57 @@ export const LanguagesContext = createContext<LanguagesContextValue>({});
 export const LanguagesProvider = ({
   children,
 }: React.PropsWithChildren<React.ReactNode>) => {
+  const { pathname } = useLocation();
+  const history = useHistory();
+  const { language } = useParams<{ language?: string }>();
   const [languages, setLanguages] = useState<LanguageWithFlag[]>([]);
-  const [userLanguage] = useState<string>(locale);
+  const [userLanguage, setUserLanguage] = useState(language || "");
   const {
     data,
     // loading,
     // error
   } = useQuery(getLanguagesQuery);
 
-  const saveUserLanguage = useCallback((languageCode) => {
-    window.localStorage.setItem(USER_LANGUAGE_KEY, languageCode);
-    // Need to reload window in order to restart requests using the selected language
-    window.location.reload();
-  }, []);
+  const replaceLanguage = useCallback((languageCode) => {
+    const urlSegments = pathname.replace(/\/$/, '').split('/');
+
+    // Replace language code
+    urlSegments[1] = languageCode;
+
+    // Redirect
+    history.push(urlSegments.join('/'));
+  }, [ pathname, history ]);
 
   useEffect(() => {
     if (data?.languages) {
-      const languagesWithFlags: LanguageWithFlag[] = data.languages.map((language: LanguageWithFlag) => {
-        const { country_flag } = language;
-        const matchedCountry = countriesConfig.find(({ name }) => name === country_flag);
+      const languagesWithFlags: LanguageWithFlag[] = data.languages.map(
+        (language: LanguageWithFlag) => {
+          const { country_flag } = language;
+          const matchedCountry = countriesConfig.find(
+            ({ name }) => name === country_flag
+          );
 
-        if ( matchedCountry ) {
-          language.flag = matchedCountry.code;
+          if (matchedCountry) {
+            language.flag = matchedCountry.code;
+          }
+
+          return language;
         }
-
-        return language;
-      })
+      );
       setLanguages(languagesWithFlags);
     }
   }, [data]);
+
+  useEffect(() => {
+    setUserLanguage(language || "");
+  }, [language]);
 
   return (
     <LanguagesContext.Provider
       value={{
         languages,
         userLanguage,
-        saveUserLanguage,
+        replaceLanguage,
       }}
     >
       {children}
