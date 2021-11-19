@@ -4,7 +4,7 @@ import IfindIcon from '@components/IfindIcon';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
 import { getGrandchildrenCategories } from '../../utilities/category';
 
-const HeaderSideNavMenuItem = ({ category }: HeaderSideNavMenuItemProps) => {
+const HeaderSideNavMenuItem = ({ category, checked }: HeaderSideNavMenuItemProps) => {
 
     const [subCategories, setSubCategories] = useState(false);
     const showSubCategories = () => setSubCategories(!subCategories);
@@ -19,7 +19,7 @@ const HeaderSideNavMenuItem = ({ category }: HeaderSideNavMenuItemProps) => {
         if (onCategoryClick) {
             onCategoryClick(id);
         }
-        //console.log(id);
+        console.log(id);
     }, [onCategoryClick]);
 
     const onActiveCategory = useCallback((activeCategory) => {
@@ -49,9 +49,9 @@ const HeaderSideNavMenuItem = ({ category }: HeaderSideNavMenuItemProps) => {
                 <IfindIcon icon={category?.icon || ''} className="header-side-nav__icon" />
                 <span className={["category-label", withSpace > 0 ? "change-width" : ""].join(" ")}>{category?.label?.label}</span>
                 {len === 0 ? "" : <div className="num-of-elements">{len}</div>}
-            </button>}
+            </button>
+            }
             {
-                // checked ?
                 subCategories && category?.children &&
                 <div className="listing" key={category?.id}>
                     {/* <HeaderSideNavSubMenu categories={category?.children} key={category?.id} checked={checked} /> */}

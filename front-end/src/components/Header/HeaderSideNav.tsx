@@ -9,19 +9,21 @@ import { GlobalStateContext } from '@contexts/globalStateContext';
 
 import './header-side-nav.scss';
 import HeaderSideNavSubMenu from './HeaderSideNavSubMenu';
+import HeaderSideNavSubMenu2 from './HeaderSideNavSubMenu2';
 import HeaderSideNavButton from './HeaderSideNavButton';
+
 
 const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
 
     const { pathname } = useLocation();
     const currentRouteConfig = find(routes, ({ path }) => pathname === path);
-    const { subCategories } = useSubCategories();
+    const { subCategories, categoryTree } = useSubCategories();
     const { on } = eventBus;
     const listRef = useRef<HTMLDivElement | null>();
     const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
 
-    const [isVisible, setIsVisible] = useState(false);
-    const [checked, setChecked] = useState(true);
+    const [isVisible, setIsVisible] = useState(true);
+    const [checked, setChecked] = useState(false);
     const checkChange = () => setChecked(!checked);
 
     const ecommerceClick = useCallback((catName) => {
@@ -45,13 +47,13 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
         handleScroll();
     });
 
+    //console.log(categoryTree);
+
     return withSideNav ?
         (
-            <div className="header-side-nav"
-                onMouseEnter={() => setIsVisible(true)}
-            >
-                <h3 className="header-side-nav__heading"
-                    onMouseLeave={() => setIsVisible(false)}
+            <div className="header-side-nav">
+                <h3 className={["header-side-nav__heading", isVisible === true ? "active" : ""].join(" ")}
+                    onClick={() => setIsVisible(!isVisible)}
                 >
                     {/*
                     TODO: Instead of dynamically rendering depending on width,
@@ -60,10 +62,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
                     <i aria-hidden="true" className="fa fa-bars"></i><span>CATEGORIES</span>
                 </h3>
                 {isVisible ? <div ref={listRef as LegacyRef<HTMLDivElement>}
-                    className="header-side-nav__list"
-                    onMouseEnter={() => setIsVisible(true)}
-                    onMouseLeave={() => setIsVisible(false)}
-                >
+                    className="header-side-nav__list">
 
                     {
                         currentRouteConfig?.path === '/' ?
@@ -85,7 +84,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
 
                                 <div className="header-side-nav__label">
 
-                                    <label className="label">Display SideNav Bar</label>
+                                    <label className="label">Deep Navigation</label>
                                     <label className="switch">
                                         <input id="check" type="checkbox"
                                             onChange={checkChange}
@@ -104,9 +103,14 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
                                                 checked={checked}
                                                 //checkChange={checkChange}
                                                 triggerScroll={triggerScroll}
-                                            /> : null
-                                    }
+                                            />
+                                            :
 
+                                            <HeaderSideNavSubMenu2
+                                                categories={subCategories}
+                                                triggerScroll={triggerScroll}
+                                            />
+                                    }
                                 </div>
 
 
@@ -118,10 +122,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
                 </div> : null
 
                 }
-                {isVisible && checked ? <div className="header-side-nav__arrow-container"
-                    onMouseEnter={() => setIsVisible(true)}
-                    onMouseLeave={() => setIsVisible(false)}
-                >
+                {isVisible ? <div className="header-side-nav__arrow-container">
                     {
                         currentRouteConfig?.path === '/productcomparison' ?
                             <HeaderSideNavButton /> : null

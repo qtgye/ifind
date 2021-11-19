@@ -67,7 +67,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
           <div className="header-middle__left">
             <div className="logo">
               <a href="/">
-                <img src={logo} alt="logo" />
+                <img height={200} width={400} src={logo} alt="logo" />
               </a>
             </div>
             <div className="search-top">
