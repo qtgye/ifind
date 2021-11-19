@@ -4,14 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
-import {
-  ADMIN_API_ROOT,
-} from "@config/adminApi";
+import { ADMIN_API_ROOT } from "@config/adminApi";
 
 import { ApolloClient, HttpLink, InMemoryCache } from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 
 import { spriteContents } from "ifind-icons";
+import VendorScripts from '@components/VendorScripts';
 
 // Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__APOLLO_STORE__;
@@ -35,7 +34,8 @@ const client = new ApolloClient({
 window.apolloClient = client;
 
 const rootElement = document.getElementById("root");
-const renderMethod = rootElement.hasChildNodes() ? hydrate : render;
+const hasChildNodes = rootElement.hasChildNodes();
+const renderMethod = hasChildNodes ? hydrate : render;
 
 renderMethod(
   <React.StrictMode>
@@ -43,6 +43,7 @@ renderMethod(
       <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
       <App />
     </ApolloProvider>
+    <VendorScripts />
   </React.StrictMode>,
   document.getElementById("root")
 );

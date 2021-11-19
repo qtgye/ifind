@@ -2,9 +2,12 @@ const { getTranslatedLabel } = appRequire("helpers/category");
 
 const sortCategoryProducts = (categoryID, products) => {
   // Filter only published products
-  const filteredProducts = products.filter(
-    ({ status }) => status === "published"
-  );
+  // const filteredProducts = products.filter(
+  //   ({ status }) => status === "published"
+  // );
+
+  // TODO: Revert back filtered products when amazon scraper issues are resolved
+  const filteredProducts = products;
 
   // Sort by position, ascending
   filteredProducts.sort((prodA, prodB) =>

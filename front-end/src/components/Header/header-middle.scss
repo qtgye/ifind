@@ -59,25 +59,24 @@
     }
 
     &__right {
-        display: none;
         @include bootstrap(col-lg-2 col-md-3 col-12);
-        //flex-shrink: 0;
+        flex-shrink: 0;
 
-        @include laptop {
-            display: none;
-        }
+        // @include laptop {
+        //     display: none;
+        // }
 
-        @include small_laptop {
-            display: none;
-        }
+        // @include small_laptop {
+        //     display: none;
+        // }
 
-        @include tablet {
-            display: none;
-        }
+        // @include tablet {
+        //     display: none;
+        // }
 
-        @include mobile {
-            display: none;
-        }
+        // @include mobile {
+        //     display: none;
+        // }
     }
 
     .logo {
@@ -137,7 +136,7 @@
         @include mobile {
             left: -2.3rem;
         }
-   
+
         @include sl_mobile {
             left: -2.8rem;
         }
@@ -265,7 +264,7 @@
                 bottom: 3px;
                 font-size: 12px;
             }
-        
+
             @include small_mobile {
                 width: 180px;
             }
@@ -319,7 +318,7 @@
         margin-left: 0;
         margin-right: 0px;
     }
-      
+
     .menu-flags {
         position: relative;
 
@@ -339,7 +338,7 @@
             display: none;
         }
     }
-      
+
     .menu-flags-button {
         border: none;
 

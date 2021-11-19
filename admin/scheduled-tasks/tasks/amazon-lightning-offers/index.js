@@ -9,9 +9,10 @@ const DEAL_TYPE = "amazon_flash_offers";
 (async () => {
   try {
     let offerProducts = [];
+    let tries = 0;
 
     await new Promise(async (resolve) => {
-      while (!offerProducts.length) {
+      while (!offerProducts.length || ++tries <= 3) {
         try {
           console.log("Fetching from Lightning Offers Page...".cyan);
           offerProducts = await getLightningOffers();
@@ -86,6 +87,9 @@ const DEAL_TYPE = "amazon_flash_offers";
           continue;
         }
       }
+    }
+    else {
+      console.log('No products were fetched.'.red.bold);
     }
 
     console.log(" DONE ".bgGreen.white.bold);

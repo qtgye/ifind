@@ -1,33 +1,37 @@
-const addURLParams = (url = '', paramsObject) => {
-  const [ baseURL, searchParams = '' ] = url.split('?');
-  const searchParamsObject = searchParams.split('&').reduce((all, keyValue) => {
-    const [ key, value ] = keyValue.split('=');
-    all[key] = value;
+const addURLParams = (url = "", paramsObject) => {
+  const [baseURL, searchParams = ""] = url.split("?");
+  const searchParamsObject = searchParams.split("&").reduce((all, keyValue) => {
+    const [key, value] = keyValue.split("=");
+    if ( key ) {
+      all[key] = value;
+    }
     return all;
   }, {});
   const newParams = {
     ...searchParamsObject,
     ...paramsObject,
   };
-  const newParamsString = Object.entries(newParams).map(([ key, value ]) => `${key}=${value}`).join('&');
+  const newParamsString = Object.entries(newParams)
+    .map(([key, value]) => `${key}=${value}`)
+    .join("&");
 
-  return baseURL + '?' + newParamsString;
-}
+  return baseURL + "?" + newParamsString;
+};
 
-const removeURLParams = (url = '') => {
-  const segments = url.split('/');
+const removeURLParams = (url = "") => {
+  const segments = url.split("/");
   const lastSegment = segments.pop();
-  const [ nonSearchSegment ] = lastSegment.split('?');
+  const [nonSearchSegment] = lastSegment.split("?");
 
   segments.push(nonSearchSegment);
-  return segments.join('/');
-}
+  return segments.join("/");
+};
 
-const paramsToObject = (paramsString = '') => {
-  const searchParamsObj = paramsString.split('&').reduce((obj, param) => {
-    const [ key, value ] = param.split('=');
+const paramsToObject = (paramsString = "") => {
+  const searchParamsObj = paramsString.split("&").reduce((obj, param) => {
+    const [key, value] = param.split("=");
 
-    if ( key && value ) {
+    if (key && value) {
       obj[key] = value;
     }
 
@@ -35,19 +39,21 @@ const paramsToObject = (paramsString = '') => {
   }, {});
 
   return searchParamsObj;
-}
+};
 
 const toSearchParams = (paramsObject = {}) => {
   const entries = Object.entries({
     ...paramsObject,
   });
 
-  return (
-    entries.length ?
-    '?' + entries.map(entry => entry.join('=')).join('&') :
-    ''
-  )
-}
+  return entries.length
+    ? "?" +
+        entries
+          .filter(([key]) => key)
+          .map((entry) => entry.join("="))
+          .join("&")
+    : "";
+};
 
 module.exports = {
   addURLParams,

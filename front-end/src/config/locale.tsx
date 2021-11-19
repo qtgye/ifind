@@ -1,8 +1,12 @@
-/**
- * TO DO:
- * Dynamic implementation through user location (geolocation) or site domain checking
- */
+export const USER_LANGUAGE_KEY = 'user_language';
 
 export const locale_full = navigator.language;
 
-export const locale = locale_full.split('-')[0];
+let userLanguage = window.localStorage.getItem(USER_LANGUAGE_KEY);
+
+if ( !userLanguage ) {
+  userLanguage = locale_full.split('-')[1] || 'en';
+  window.localStorage.setItem(USER_LANGUAGE_KEY, userLanguage);
+}
+
+export const locale = userLanguage;

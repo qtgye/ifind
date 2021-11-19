@@ -10,7 +10,7 @@ const PAGE_IDLE_TIMEOUT = 1000 * 60 * 2;
 
 class Browser {
   constructor() {
-    Browser.on("close", () => {
+    Browser.on("disconnected", () => {
       this.page = null;
     });
 
@@ -111,6 +111,12 @@ class Browser {
   }
   async screenshot(...args) {
     return this.callPageFunction("screenshot", ...args);
+  }
+  async setGeolocation(...args) {
+    return this.callPageFunction("setGeolocation", ...args);
+  }
+  async url() {
+    return this.callPageFunction("url");
   }
 }
 

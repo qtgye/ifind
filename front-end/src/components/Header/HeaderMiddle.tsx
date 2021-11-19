@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
-import { useLocation } from "react-router-dom";
-import routes from "@config/routes";
+// import { useLocation } from "react-router-dom";
+// import routes from "@config/routes";
 
 import HeaderLanguageButton from "./HeaderLanguageButton";
 //import { languages } from '@mocks/components/languages';
@@ -10,7 +10,7 @@ import "./header-middle.scss";
 const logo = "/images/logowith1warp.jpg";
 
 const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
-  const { pathname } = useLocation();
+  // const { pathname } = useLocation();
 
   const headerMiddleRef = useRef(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -58,7 +58,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
   );
 
   // Get current route from config
-  const currentRoute = routes.find(({ path }) => path === pathname);
+  // const currentRoute = routes.find(({ path }) => path === pathname);
 
   return (
     <div className="header-middle" ref={headerMiddleRef}>
@@ -195,20 +195,20 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
               </div>
               {
                 /* Show user-heart only if noUserHeart is false from routes config */
-                !currentRoute?.noUserHeart && (
-                  <div className="single-bar">
-                    <a href="/" className="single-icon">
-                      <i aria-hidden="true" className="fa fa-heart-o"></i>&nbsp;
-                    </a>
-                  </div>
-                )
+                // !currentRoute?.noUserHeart && (
+                //   <div className="single-bar">
+                //     <a href="/" className="single-icon">
+                //       <i aria-hidden="true" className="fa fa-heart-o"></i>&nbsp;
+                //     </a>
+                //   </div>
+                // )
               }
-              <div className="single-bar">
+              {/* <div className="single-bar">
                 <a href="/" className="single-icon">
                   <i aria-hidden="true" className="fa fa-user-circle-o"></i>
                   &nbsp;
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
