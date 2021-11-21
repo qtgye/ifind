@@ -13,20 +13,12 @@ const ADDRESS_CHANGE_URL =
 
 const germanyLatLong = [51.1657, 10.4515];
 
-module.exports = async (browser) => {
+module.exports = async (page) => {
   console.log(`Applying German location...`.cyan);
-
-  // const browserInstance = await browser.getBrowserInstance();
-  // const browserContext = await browserInstance.defaultBrowserContext();
-  // await browserContext.overridePermissions("https://www.amazon.de", ["geolocation"]);
-  // await browser.setGeolocation({
-  //   latitude: germanyLatLong[0],
-  //   longitude: germanyLatLong[1],
-  // });
 
   try {
     // Check if page is already using german location
-    const usesGermanLocation = await browser.evaluate(
+    const usesGermanLocation = await page.evaluate(
       (ZIP_CODE_VALUE_SELECTOR, GERMAN_ZIP_CODE) => {
         const zipCodeValueElement = document.querySelector(
           ZIP_CODE_VALUE_SELECTOR
@@ -45,24 +37,24 @@ module.exports = async (browser) => {
     }
 
     try {
-      await browser.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
+      await page.waitForSelector(ZIP_CHANGE_POPOVER_BUTTON);
 
       console.log("Applying German zip code...");
 
       // Click to show popover
-      await browser.click(ZIP_CHANGE_POPOVER_BUTTON);
+      await page.click(ZIP_CHANGE_POPOVER_BUTTON);
 
-      await browser.waitForSelector(ZIP_INPUT_SECTION);
+      await page.waitForSelector(ZIP_INPUT_SECTION);
 
       // Apply zip update
-      await browser.$eval(
+      await page.$eval(
         ZIP_INPUT_INPUT,
         (el, zipCode) => (el.value = zipCode),
         GERMAN_ZIP_CODE
       );
     } catch (err) {
       console.error(err.message.red);
-      screenshotPageError(await browser.url());
+      screenshotPageError(await page.url());
       return;
     }
 
@@ -72,9 +64,9 @@ module.exports = async (browser) => {
     while (!zipApplied && --tries) {
       try {
         await Promise.all([
-          browser.click(ZIP_INPUT_APPLY),
+          page.click(ZIP_INPUT_APPLY),
           // Wait for address change response
-          browser.waitForResponse(ADDRESS_CHANGE_URL, { timeout: 10000 }),
+          page.waitForResponse(ADDRESS_CHANGE_URL, { timeout: 10000 }),
         ]);
         zipApplied = true;
       } catch (err) {
@@ -91,9 +83,10 @@ module.exports = async (browser) => {
     await new Promise((resolve) => setTimeout(resolve, 100));
 
     console.log("Reloading page to apply new address");
-    await browser.reload();
+    await page.reload();
+    return page;
   } catch (err) {
-    await screenshotPageError(await browser.url());
+    await screenshotPageError(await page.url());
     throw err;
   }
 };
