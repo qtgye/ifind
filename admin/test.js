@@ -14,6 +14,7 @@ const { TORRC_PATH } = require("dotenv").config().parsed;
 const path = require("path");
 const puppeteer = require("puppeteer");
 const { addURLParams } = require("./helpers/url");
+const applyGermanLocation = require('./helpers/amazon/applyGermanLocation');
 
 if (!TORRC_PATH || !existsSync(TORRC_PATH)) {
   throw new Error(
@@ -48,7 +49,7 @@ const PRICE_SELECTOR = [
   "#olp_feature_div .a-color-price",
 ].join(",");
 
-const getBrowserPage = async (proxy) => {
+const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) => {
   const browser = await puppeteer.launch({
     args: [proxy, '--no-sandbox'].filter(Boolean),
   });
@@ -56,8 +57,8 @@ const getBrowserPage = async (proxy) => {
   const page = await browser.newPage();
 
   await page.setViewport({
-    width: 1280,
-    height: 900,
+    width: 1920,
+    height: 3000,
   });
 
   return page;
@@ -75,10 +76,14 @@ const getBrowserPage = async (proxy) => {
     console.error(err);
   }
 
+  ensureDirSync(SCREENSHOTS_ROOT);
+
   // Get products list
   console.log("Getting products list...");
   const page = await getBrowserPage();
-  await page.goto(LIGHTNING_OFFERS_PAGE);
+  await page.goto(LIGHTNING_OFFERS_PAGE, {
+    timeout: 60000 * 3,
+  });
   await page.waitForSelector(PRODUCT_CARD);
   const urls = await page.evaluate((PRODUCT_CARD) => {
     const productCards = Array.from(document.querySelectorAll(PRODUCT_CARD));
@@ -89,6 +94,12 @@ const getBrowserPage = async (proxy) => {
       })
       .filter((url) => /amazon\.[a-z]+\/[^\/]{10,}\//.test(url));
   }, PRODUCT_CARD);
+
+  await page.screenshot({
+    path: path.resolve(SCREENSHOTS_ROOT, 'test.png'),
+  });
+
+  console.log(`Got a list of ${urls.length} products.`);
 
   while (usedPorts.length < 30 && usedPorts.length < urls.length) {
     let port;
@@ -111,15 +122,18 @@ const getBrowserPage = async (proxy) => {
     console.log("Going to product page...");
     const url = urls[usedPorts.length - 1];
     const urlEnglish = addURLParams(url, { language: "en" });
-    console.log(urlEnglish.cyan.bold);
+    console.log(urlEnglish.cyan);
     await page.goto(urlEnglish, {
       timeout: 60000 * 3,
     });
 
+    // Apply german zip code
+    await applyGermanLocation(page);
+
     const hasPriceElement = await page.evaluate((PRICE_SELECTOR) => document.querySelector(PRICE_SELECTOR) ? true : false, PRICE_SELECTOR);
 
     if ( !hasPriceElement ) {
-      console.log('Page might have error'.magenta.bold);
+      console.log('Page might have error'.magenta);
     }
 
     console.log("Saving Screenshot");
