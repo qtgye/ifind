@@ -127,16 +127,7 @@ const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) 
       timeout: 60000 * 3,
     });
 
-    // Apply german zip code
-<<<<<<< HEAD
-    const _page = await applyGermanLocation(page);
-
-    const hasPriceElement = await _page.evaluate((PRICE_SELECTOR) => document.querySelector(PRICE_SELECTOR) ? true : false, PRICE_SELECTOR);
-=======
-    await applyGermanLocation(page);
-
     const hasPriceElement = await page.evaluate((PRICE_SELECTOR) => document.querySelector(PRICE_SELECTOR) ? true : false, PRICE_SELECTOR);
->>>>>>> ed36d265a4b96d2bac568c9d04cf97c0ddd70f32
 
     if ( !hasPriceElement ) {
       console.log('Page might have error'.magenta);
@@ -150,7 +141,7 @@ const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) 
     ensureDirSync(screenShortDir);
 
     // Remove cookie banner
-    await _page.evaluate(() => {
+    await page.evaluate(() => {
       const cookieBanner = document.querySelector('#sp-cc');
       if ( cookieBanner ) {
         cookieBanner.remove();
@@ -158,11 +149,11 @@ const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) 
     });
 
     // Save screenshot
-    await _page.screenshot({
+    await page.screenshot({
       path: path.resolve(screenShortDir, "index.png"),
     });
 
-    (await _page.browser()).close();
+    (await page.browser()).close();
   }
 
   console.log("DONE".bold.green);
