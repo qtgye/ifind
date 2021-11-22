@@ -96,7 +96,7 @@ const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) 
   }, PRODUCT_CARD);
 
   await page.screenshot({
-    path: path.resolve(SCREENSHOTS_ROOT, 'test.png'),
+    path: path.resolve(SCREENSHOTS_ROOT, 'index.png'),
   });
 
   console.log(`Got a list of ${urls.length} products.`);
