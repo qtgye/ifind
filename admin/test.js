@@ -128,9 +128,15 @@ const getBrowserPage = async (proxy = `--proxy-server=socks5://127.0.0.1:9050`) 
     });
 
     // Apply german zip code
+<<<<<<< HEAD
     const _page = await applyGermanLocation(page);
 
     const hasPriceElement = await _page.evaluate((PRICE_SELECTOR) => document.querySelector(PRICE_SELECTOR) ? true : false, PRICE_SELECTOR);
+=======
+    await applyGermanLocation(page);
+
+    const hasPriceElement = await page.evaluate((PRICE_SELECTOR) => document.querySelector(PRICE_SELECTOR) ? true : false, PRICE_SELECTOR);
+>>>>>>> ed36d265a4b96d2bac568c9d04cf97c0ddd70f32
 
     if ( !hasPriceElement ) {
       console.log('Page might have error'.magenta);
