@@ -172,6 +172,7 @@ class AmazonProductScraper {
           if ( --tries === 0 ) {
             throw new Error('Unable to fetch product detail page. Kindly ensure that page exists');
           } else {
+            await TOR_PROXY.launchNewBrowser();
             this.page = await TOR_PROXY.newPage();
           }
         }
@@ -281,6 +282,7 @@ class AmazonProductScraper {
         if ( --tries === 0 ) {
           throw new Error('Unable to fetch product price page. Kindly ensure that product is available.');
         } else {
+          await TOR_PROXY.launchNewBrowser();
           this.page = await TOR_PROXY.newPage();
         }
       }
