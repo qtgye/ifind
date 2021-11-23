@@ -1,8 +1,10 @@
 const path = require('path');
 const fs = require('fs-extra');
+const puppeteer = require('puppeteer');
 const browser = require('../browser');
 
-const screenshotPageError = async (url, page = browser) => {
+const screenshotPageError = async (url, pageInstance) => {
+  const page = pageInstance && pageInstance instanceof puppeteer.Page ? pageInstance : await browser.getPageInstance();
   const pageHTML = await page.evaluate(
     () => document.documentElement.innerHTML
   );
