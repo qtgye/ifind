@@ -41,7 +41,7 @@ const DEAL_TYPE = "amazon_flash_offers";
       let scrapedProducts = [];
       for (const productLink of offerProducts) {
         try {
-          console.log(`\nScraping: ${productLink.bold}`);
+          console.log(`Scraping: ${productLink.bold}`);
           const productData = await productScraper.scrapeProduct(
             productLink,
             "de",
