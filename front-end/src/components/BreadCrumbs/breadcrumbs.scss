@@ -12,15 +12,16 @@
 
 .bread-list {
     display: flex;
-    margin-left: 100px;
+    position: absolute;
+    left: 16%;
     font-size: 12px;
 
     @include small_laptop {
-        margin-left: 50px;
+        left: 12%;
     }
 
     @include xs_tablet {
-        margin-left: 30px;
+        left: 8%;
     }
 
 }

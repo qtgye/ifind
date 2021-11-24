@@ -1,9 +1,9 @@
-import { page } from '@sb';
-import HomeComponent from '../';
+// import { page } from '@sb';
+// import HomeComponent from '../';
 
-export default page({
-    title: 'Home',
-    component: HomeComponent,
-});
+// export default page({
+//     title: 'Home',
+//     component: HomeComponent,
+// });
 
-export const Home = () => <HomeComponent />;
+// export const Home = () => <HomeComponent />;

@@ -7,110 +7,201 @@
 		@include bootstrap(container);
 	}
 
-    .loading {
-	    text-align: center;
-    }
+	.top {
+		display: flex;
+		margin-top: 3rem;
 
-    .loading-icon {
-        margin-top: 8%;
-        margin-left: 41%;
-	    height: 150px;
-	    pointer-events: none;
+		.top-container {
+			display: block;
+			//border: 2px solid black;
+			width: 500px;
 
-		@include small_laptop {
-			height: 130px;
+			h1 {
+				font-weight: 600;
+			}
+
+			.top-content {
+				display: block;
+				margin-top: 5rem;
+				margin-bottom: auto;
+
+				button {
+					margin-top: 1rem;
+					padding: 8px 15px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
+
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
 		}
 
-		@include tablet {
-			height: 120px;
-		}
+		.top-carousel {
+			display: flex;
+			margin-left: auto;
 
-		@include xs_tablet {
-			margin-left: 39%;
+			.top-carousel-content {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				// border: 2px solid black;
+				// padding: 200px 250px;
+			}
 		}
+	}
 
-		@include xl_mobile {
-			margin-left: 37%;
-			height: 115px;
-		}
-
-		@include xml_mobile {
-			height: 110px;
-		}
+	.video {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 3rem;
 		
-		@include mobile {
-			margin-left: 36%;
+		.video-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 400px;
+			width: 700px;
+			border: 2px solid black;
+		}
+	}
+
+	.offers {
+		display: flex;
+		margin-top: 3rem;
+
+		.offers-banner {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+
+			img {
+				height: 350px;
+			}
 		}
 
-		@include sl_mobile {
-			height: 105px;
+		.offers-container {
+			display: flex;
+			margin-left: auto;
+
+			.offers-content {
+				display: block;
+				margin: auto;
+				//border: 2px solid black;
+	
+				.offers-text {
+					display: flex;
+					margin-left: auto;
+					width: 450px;
+				}
+	
+				button {
+					display: flex;
+					margin-left: auto;
+					margin-top: 1rem;
+					padding: 5px 12px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
+
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
+		}
+	}
+
+	.prodcomp {
+		display: flex;
+		margin-right: auto;
+		margin-top: 3rem;
+
+		.prodcomp-container {
+			display: block;
+			margin-top: auto;
+			margin-bottom: auto;
+
+			
+			.prodcomp-text {
+				width: 450px;
+			}
+
+			button {
+				margin-top: 1rem;
+				padding: 5px 12px;
+				border-radius: 5px;
+				background-color: $gray-900;
+				color: $white;
+			}
+
+			button:hover {
+				background-color: #bc0031
+			}
 		}
 
-		@include sm_mobile {
-			margin-left: 33%;
-			height: 100px;
+		.prodcomp-banner {
+			display: flex;
+			margin-left: auto;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+			//padding: 150px 250px;
+			img {
+				height: 350px;
+			}
+		}
+	}
+
+	.gifts {
+		display: flex;
+		margin-top: 3rem;
+
+		.gifts-banner {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+			//padding: 150px 250px;
+			img {
+				height: 350px;
+			}
 		}
 
-		@include small_mobile {
-			margin-left: 32%;
-			height: 95px;
-		}
-    }
-  
-    @media (prefers-reduced-motion: no-preference) {
-	    .loading-icon {
-	        animation: loading-icon-spin infinite 1.5s linear;
-	    }
-    }
-  
-    @keyframes loading-icon-spin {
-	    from {
-	        transform: rotate(0deg);
-	    }
-	    to {
-	        transform: rotate(360deg);
-	    }
-    }
+		.gifts-container {
+			display: flex;
+			margin-left: auto;
 
-	.progress {
-        position: relative;
-        top: 60%;
-        left: 41%;
-        height: 20px;
-        width: 200px;
-        background-color: $white;
+			.gifts-content {
+				display: block;
+				margin: auto;
+				//border: 2px solid black;
+	
+				.gifts-text {
+					display: flex;
+					margin-left: auto;
+					width: 450px;
+				}
+	
+				button {
+					display: flex;
+					margin-left: auto;
+					margin-top: 1rem;
+					padding: 5px 12px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
 
-		@include small_laptop {
-			left: 39.5%;
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
 		}
-
-		@include tablet {
-			left: 38.5%;
-		}
-
-		@include xs_tablet {
-			left: 36%;
-		}
-
-		@include xl_mobile {
-			left: 34%;
-		}
-
-		@include xml_mobile {
-			left: 32%;
-		}
-		
-		@include mobile {
-			left: 29%;
-		}
-
-		@include sm_mobile {
-			left: 25%;
-		}
-
-		@include small_mobile {
-			left: 22%;
-		}
-    }
+	}
 
 }

@@ -13,7 +13,7 @@ import IfindIcon from "@components/IfindIcon";
 import "./product-comparison.scss";
 import { useCategoryTree } from "@contexts/categoriesContext";
 import { useSubCategories } from "../../contexts/categoriesContext";
-import Carousel from "../../components/Carousel";
+//import Carousel from "../../components/Carousel";
 import ProgressBars from "../../components/ProgressBar";
 
 type ScrollableElement = HTMLElement & { scrollBehavior: string };
@@ -104,7 +104,7 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
 
   return (
     <GeneralTemplate>
-      <div ref={prodcompRef as  React.LegacyRef<HTMLDivElement>} className="product-comparison">
+      <div ref={prodcompRef as React.LegacyRef<HTMLDivElement>} className="product-comparison">
         <div className="container">
           <div className="list">
             <nav className="nav">
@@ -135,8 +135,8 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
                             ? "button-active"
                             : ""
                           : index === 0
-                          ? "button-active"
-                          : "",
+                            ? "button-active"
+                            : "",
                       ].join(" ")}
                       onClick={(e) => {
                         onCategoryLoadClick(e, category?.id);
@@ -190,14 +190,14 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
           </div>
         </div>
       </div>
-      <div className="carousel-container">
+      {/* <div className="carousel-container">
         <Carousel
           categories={categoryTree ? categoryTree : []}
           currentCategory={currentCategory}
           onCategoryLoadClick={onCategoryLoadClick}
           onCategoryNavClick={onCategoryNavClick}
         />
-      </div>
+      </div> */}
     </GeneralTemplate>
   );
 };

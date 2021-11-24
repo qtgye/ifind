@@ -1,5 +1,5 @@
 declare interface CarouselProps {
-  categories: (CategoryWithChild|null)[];
+  categories: (CategoryWithChild | null)[];
   currentCategory?: string | number;
   onCategoryLoadClick?: (
     event: React.SyntheticEvent<MouseEvent>,

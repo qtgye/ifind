@@ -1,6 +1,8 @@
 import Home from "@pages/Home";
+import Offers from "@pages/Offers"
 import ProductComparison from "@pages/ProductComparison";
 import Findtube from "@pages/Findtube";
+import Gifts from "@pages/Gifts";
 import Blog from "@pages/Blog";
 import Contact from "@pages/Contact";
 import AGB from "@pages/AGB";
@@ -20,7 +22,9 @@ import routes, { dynamicRoutes } from "./routes";
 
 export const pages = [
   Home,
+  Offers,
   ProductComparison,
+  Gifts,
   Findtube,
   Blog,
   Contact,
