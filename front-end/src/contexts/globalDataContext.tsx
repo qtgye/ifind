@@ -1,10 +1,10 @@
 import { createContext, useContext, useCallback } from "react";
 import { useQuery } from "@apollo/react-hooks";
 
-import { locale } from "@config/locale";
 import { tags as amazonTags, amazonURLPattern } from "@config/amazon";
 import globalDataQuery from "@gql/globalDataQuery";
 import { addURLParams } from "@utilities/url";
+import { useLanguages } from './languagesContext';
 
 /**
  * This context should contain global data:
@@ -15,12 +15,13 @@ import { addURLParams } from "@utilities/url";
 const GlobalContext = createContext<GlobalContextData>({});
 
 export const GlobalContextProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
+  const { userLanguage } = useLanguages();
   const {
     // loading,
     // error,
     data: globalData,
   } = useQuery(globalDataQuery, {
-    variables: { language: locale },
+    variables: { language: userLanguage },
   });
 
   const withAmazonTags = useCallback(

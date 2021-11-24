@@ -1,20 +1,22 @@
 const createStrapiInstance = require("../../../scripts/strapi-custom");
 const getLightningOffers = require("../../../helpers/amazon/lightning-offers");
-const scrapeAmazonProduct = require("../../../helpers/amazon/scrapeAmazonProduct");
+const createAmazonProductScraper = require("../../../helpers/amazon/amazonProductScraper");
 const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
 const DEAL_TYPE = "amazon_flash_offers";
 
 (async () => {
+  const productScraper = await createAmazonProductScraper();
+
   try {
     let offerProducts = [];
     let tries = 0;
 
     await new Promise(async (resolve) => {
-      while (!offerProducts.length || ++tries <= 3) {
+      while (!offerProducts.length && ++tries <= 3) {
         try {
-          console.log("Fetching from Lightning Offers Page...".cyan);
+          console.log("\nFetching from Lightning Offers Page...".cyan);
           offerProducts = await getLightningOffers();
         } catch (err) {
           console.error(err);
@@ -32,22 +34,15 @@ const DEAL_TYPE = "amazon_flash_offers";
     if (offerProducts.length) {
       const strapi = await createStrapiInstance();
 
-      // Remove old products
-      console.log("Removing old products...".green);
-      const deletedProducts = await strapi.services.product.delete({
-        deal_type: DEAL_TYPE,
-      });
-      console.log(`Deleted ${deletedProducts.length} product(s).`.cyan);
-
       console.log(
         `Scraping details for ${offerProducts.length} products...`.green
       );
 
-      let scrapedProducts = 0;
+      let scrapedProducts = [];
       for (const productLink of offerProducts) {
         try {
-          console.log(`Scraping: ${productLink}`);
-          const productData = await scrapeAmazonProduct(
+          console.log(`Scraping: ${productLink.bold}`);
+          const productData = await productScraper.scrapeProduct(
             productLink,
             "de",
             false
@@ -71,20 +66,44 @@ const DEAL_TYPE = "amazon_flash_offers";
           // Remove unnecessary props
           delete productData.releaseDate;
 
-          // Save product
-          const newProduct = await strapi.query("product").create(productData);
-          console.log(
-            `[ ${++scrapedProducts} of 20 ] Saved new product: ${
-              newProduct.title.bold
-            }`.green
-          );
+          // Add product data
+          scrapedProducts.push(productData);
 
-          if (scrapedProducts === 20) {
+          // Current scraped products info
+          console.info(`Scraped ${scrapedProducts.length} of 20`.green.bold);
+
+          if (scrapedProducts.length === 20) {
             break;
           }
         } catch (err) {
           console.error(err);
           continue;
+        }
+      }
+
+      // Remove old products
+      console.log("Removing old products...".green);
+      const deletedProducts = await strapi.services.product.delete({
+        deal_type: DEAL_TYPE,
+      });
+      console.log(`Deleted ${deletedProducts.length} product(s).`.cyan);
+
+      console.info(`Saving scraped products...`.bold);
+
+      // Counter
+      let savedProducts = 0;
+
+      for ( const productData of scrapedProducts ) {
+        // Save product
+        try {
+          const newProduct = await strapi.query("product").create(productData);
+          console.log(
+            `[ ${++savedProducts} of ${scrapedProducts.length} ] Saved new product: ${
+              newProduct.title.bold
+            }`.green
+          );
+        } catch (err) {
+          console.error(err.message);
         }
       }
     }
@@ -94,8 +113,10 @@ const DEAL_TYPE = "amazon_flash_offers";
 
     console.log(" DONE ".bgGreen.white.bold);
   } catch (err) {
-    console.error(err, err.data);
+    console.error(err.message);
   }
+
+  productScraper.close()
 
   process.exit();
 })();

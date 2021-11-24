@@ -75,3 +75,4 @@ const Home = () => {
 };
 
 export default withComponentName('HomePage')(Home);;
+

@@ -23,15 +23,18 @@ app.get("/amazon-page-errors", (req, res) => {
     return pagePath;
   });
 
-  if (html && pagePaths.includes(html)) {
+  const encodedHtml = encodeURI(html || '');
+  const encodedImage = encodeURI(image || '');
+
+  if (encodedHtml && pagePaths.includes(encodedHtml)) {
     res.send(
       readFileSync(
-        path.resolve(PAGE_ERRORS_ROOT, html.replace(/^\//, ""), "index.html")
+        path.resolve(PAGE_ERRORS_ROOT, encodedHtml.replace(/^\//, ""), "index.html")
       ).toString()
     );
-  } else if (image && pagePaths.includes(image)) {
+  } else if (encodedImage && pagePaths.includes(encodedImage)) {
     res.sendFile(
-      path.resolve(PAGE_ERRORS_ROOT, image.replace(/^\//, ""), "index.png")
+      path.resolve(PAGE_ERRORS_ROOT, encodedImage.replace(/^\//, ""), "index.png")
     );
   } else {
     res.send(`
@@ -73,7 +76,7 @@ app.get("/amazon-page-errors", (req, res) => {
           (pagePath) => `
           <tr>
             <td>
-              <a href="//amazon.de${pagePath}" target="_blank">
+              <a href="//amazon.de${pagePath.replace(/\/_test/, '')}" target="_blank">
                 ${pagePath}
               </a>
             </td>

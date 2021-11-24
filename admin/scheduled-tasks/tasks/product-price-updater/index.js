@@ -5,8 +5,11 @@ const { isAmazonLink, scrapeAmazonProduct } = require("../../../helpers/amazon")
 const { getDetailsFromURL: getDetailsFromEbayURL } = require("../../../helpers/ebay");
 const { getDetailsFromURL: getDetailsFromAliExppressURL } =
   require("../../../helpers/aliexpress");
+  const createAmazonProductScraper = require('../../../helpers/amazon/amazonProductScraper');
 
 (async () => {
+  const scraper = await createAmazonProductScraper();
+
   try {
     const strapi = await adminStrapi();
 
@@ -43,7 +46,7 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
         );
       } else {
         try {
-          const scrapedDetails = await scrapeAmazonProduct(
+          const scrapedDetails = await scraper.scrapeProduct(
             product.amazon_url,
             "en",
             true
@@ -114,5 +117,6 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
     console.error(err);
   }
 
+  scraper.close();
   process.exit();
 })();

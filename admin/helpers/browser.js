@@ -29,7 +29,7 @@ class Browser {
       this.page = await browser.newPage();
       await this.page.setViewport({
         width: 1920,
-        height: 1280,
+        height: 3000,
       });
     }
 

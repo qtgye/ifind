@@ -6,8 +6,11 @@ const { isAmazonLink, scrapeAmazonProduct } = appRequire("helpers/amazon");
 const { getDetailsFromURL: getDetailsFromEbayURL } = appRequire("helpers/ebay");
 const { getDetailsFromURL: getDetailsFromAliExppressURL } =
   appRequire("helpers/aliexpress");
+const createAmazonProductScraper = appRequire('helpers/amazon/amazonProductScraper');
 
 (async () => {
+  const scraper = await createAmazonProductScraper();
+
   try {
     const strapi = await adminStrapi();
 
@@ -47,11 +50,10 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
         productIssues.push("amazon_link_invalid");
       } else {
         try {
-          const scrapedDetails = await scrapeAmazonProduct(
+          const scrapedDetails = await scraper.scrapeProduct(
             product.amazon_url,
             "en",
             true,
-            true
           );
 
           if (!scrapedDetails) {
@@ -127,5 +129,6 @@ const { getDetailsFromURL: getDetailsFromAliExppressURL } =
     console.error(err);
   }
 
+  scraper.close();
   process.exit();
 })();

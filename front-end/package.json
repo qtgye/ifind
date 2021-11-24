@@ -101,7 +101,8 @@
     "build-storybook": "build-storybook -s ./public --quiet",
     "proxy": "node ./proxy.js",
     "tsc": "tsc",
-    "prerender": "node ./scripts/prerender.js"
+    "prerender": "node ./scripts/prerender.js",
+    "lint": "eslint ./src --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [

@@ -1,8 +1,8 @@
 import { createContext, PropsWithChildren, ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { locale } from "@config/locale";
 import { apiSourceHandle } from "@config/adminApi";
 import getProductComparisonListQuery from "@gql/getProductComparisonListQuery";
+import { useLanguages } from './languagesContext';
 
 declare interface ProductComparisonContextData {
   productComparisonList?: NaturalList[];
@@ -13,6 +13,7 @@ declare interface ProductComparisonContextData {
 export const ProductComparisonContext = createContext<ProductComparisonContextData>({});
 
 export const ProductComparisonContextProvider = ({ children }: PropsWithChildren<ReactNode>) => {
+  const { userLanguage } = useLanguages();
   const [category, setCategory] = useState(null);
   const [productComparisonList, setProductComparisonList] = useState([]);
   const {
@@ -22,7 +23,7 @@ export const ProductComparisonContextProvider = ({ children }: PropsWithChildren
     refetch
   } = useQuery(getProductComparisonListQuery, {
     variables: {
-      language: locale,
+      language: userLanguage,
       root: category || null,
     },
     context: {

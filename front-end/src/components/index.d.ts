@@ -7,6 +7,7 @@ import  "./Footer/index.d";
 import  "./Header/index.d";
 import  "./HeroSlider/index.d";
 import  "./IfindIcon/index.d";
+import  "./Link/index.d";
 import  "./NaturalList/index.d";
 import  "./NewsLetter/index.d";
 import  "./PercentCircle/index.d";
