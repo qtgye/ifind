@@ -1,6 +1,5 @@
 import React, { createContext, useEffect, useContext, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { apiSourceHandle } from "@config/adminApi";
 import getCategoryTree from "@gql/getCategoryTreeQuery";
 import { useLanguages } from "./languagesContext";
 
@@ -19,26 +18,28 @@ export const CategoriesContextProvider = ({
 
   const {
     data,
-    // loading,
+    // refetch,
     // error
   } = useQuery(getCategoryTree, {
     variables: { language: userLanguage },
-    context: {
-      apiSource: apiSourceHandle,
-    },
   });
 
   useEffect(() => {
     if (data?.categoryTree) {
-      setCategoryTree(data.categoryTree);
+      setCategoryTree([...data.categoryTree]);
     }
   }, [data]);
 
   useEffect(() => {
-    if (categoryTree?.length) {
+    if (Array.isArray(categoryTree)) {
       setSubCategories(categoryTree[0]?.children || []);
     }
   }, [categoryTree]);
+
+  // useEffect(() => {
+  //   setCategoryTree([]);
+  //   refetch();
+  // }, [ userLanguage, refetch ]);
 
   return (
     <CategoriesContext.Provider

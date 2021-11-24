@@ -34,6 +34,9 @@ query GetCategoryTree($language: String) {
     categoryTree (language: $language) {
         ${generateChildCategory(5)}
     }
+    languages (where: {code: $language}) {
+      code
+    }
 }
 `;
 

@@ -33,6 +33,10 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
   const [currentCategory, setCurrentCategory] = useState();
 
   useEffect(() => {
+    console.log({ categoryTree });
+  }, [ categoryTree ]);
+
+  useEffect(() => {
     if (setCurrentListCategory) {
       setCurrentListCategory(currentCategory);
     }

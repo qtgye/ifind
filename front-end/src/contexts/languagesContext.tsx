@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useCallback,
 } from "react";
-import { useParams, useLocation, useHistory } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { useQuery } from "@apollo/react-hooks";
 import getLanguagesQuery from "@gql/getLanguagesQuery";
 import countriesConfig from "@config/countries";
@@ -16,7 +16,6 @@ export const LanguagesProvider = ({
   children,
 }: React.PropsWithChildren<React.ReactNode>) => {
   const { pathname } = useLocation();
-  const history = useHistory();
   const { language } = useParams<{ language?: string }>();
   const [languages, setLanguages] = useState<LanguageWithFlag[]>([]);
   const [userLanguage, setUserLanguage] = useState(language || "");
@@ -33,8 +32,8 @@ export const LanguagesProvider = ({
     urlSegments[1] = languageCode;
 
     // Redirect
-    history.push(urlSegments.join('/'));
-  }, [ pathname, history ]);
+    window.location.href = urlSegments.join('/');
+  }, [ pathname ]);
 
   useEffect(() => {
     if (data?.languages) {
