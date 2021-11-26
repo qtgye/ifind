@@ -18,7 +18,6 @@ const HeaderSideNavMenuItem2 = ({ category }: HeaderSideNavMenuItem2Props) => {
         if (onCategoryClick) {
             onCategoryClick(id);
         }
-        console.log(id);
     }, [onCategoryClick]);
 
     const onActiveCategory = useCallback((activeCategory) => {
@@ -32,7 +31,6 @@ const HeaderSideNavMenuItem2 = ({ category }: HeaderSideNavMenuItem2Props) => {
 
     useEffect(() => {
         onActiveCategory(activeCategory);
-        console.log(category, activeCategory);
     }, [activeCategory]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const categoryClick = () => {

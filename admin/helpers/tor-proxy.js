@@ -71,6 +71,12 @@ class TorProxy {
     /* Get proxy */
     const proxy = this.generateProxy();
 
+    /* Close existing browser if there is any */
+    console.log(`Closing existing browser...`);
+    if ( this.browser && this.browser.disconnect ) {
+      await this.browser.disconnect();
+    }
+
     /* Log */
     console.info(`Launching new browser using proxy: ${proxy.bold}`);
 
