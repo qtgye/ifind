@@ -9,12 +9,26 @@ const routes: RouteConfig[] = [
         label: 'Home',
         withSideNav: true,
         exact: true,
-        noUserHeart: true, // TODO: Verify Implementation
+        // noUserHeart: true, // TODO: Verify Implementation
+    },
+    {
+        path: '/offers',
+        componentName: 'OffersPage',
+        label: 'Offers',
+        withSideNav: true,
+        exact: true,
     },
     {
         path: '/productcomparison',
         componentName: 'ProductComparisonPage',
         label: 'Product Comparison',
+        withSideNav: true,
+        exact: true,
+    },
+    {
+        path: '/gifts',
+        componentName: 'GiftsPage',
+        label: 'Gifts',
         withSideNav: true,
         exact: true,
     },
@@ -32,6 +46,8 @@ const routes: RouteConfig[] = [
         path: '/contact',
         componentName: 'ContactPage',
         label: 'Contact',
+        withSideNav: true,
+        exact: true,
     },
 
     /**
@@ -71,7 +87,7 @@ export const dynamicRoutes: RouteConfig[] = [
 ];
 
 
-export const navigationRoutes: string[] = ['/', '/productcomparison', '/contact'];
+export const navigationRoutes: string[] = ['/', '/offers', '/productcomparison', '/gifts', '/contact'];
 export const footerRoutes: string[] = [
     // '/about-us',
     // '/agb',

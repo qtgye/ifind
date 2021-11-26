@@ -1,7 +1,7 @@
 //import React from 'react';
 //import * as FaIcons from 'react-icons/fa';
 
-export const homedata = [
+export const offersdata = [
     {
         categoryLabel: 'Amazon',
         categoryName: 'amazon_flash_offers',

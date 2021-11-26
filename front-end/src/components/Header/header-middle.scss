@@ -62,21 +62,9 @@
         @include bootstrap(col-lg-2 col-md-3 col-12);
         flex-shrink: 0;
 
-        // @include laptop {
-        //     display: none;
-        // }
-
-        // @include small_laptop {
-        //     display: none;
-        // }
-
-        // @include tablet {
-        //     display: none;
-        // }
-
-        // @include mobile {
-        //     display: none;
-        // }
+        @include laptop {
+            margin-left: 0;
+        }
     }
 
     .logo {
@@ -327,6 +315,11 @@
             width: 160px;
             overflow-y: scroll;
             height: fit-content;
+
+            @include laptop{
+                position: absolute;
+                left: 0;
+            }
 
             li {
                 padding-left: 20px;

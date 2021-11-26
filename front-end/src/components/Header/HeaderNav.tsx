@@ -15,16 +15,6 @@ const HeaderNav = ({ withSideNav }: HeaderNavProps) => {
     const { pathname } = useLocation();
     const noLanguagePathName = '/' + pathname.split('/').slice(2).join('/');
 
-    // let time = new Date().toLocaleTimeString();
-    // const [currentTime, setCurrentTime] = useState(time);
-
-    // const runningTime = () => {
-    //     currentTime = new Date().toLocaleTimeString();
-    //     setCurrentTime(currentTime);
-    // }
-
-    // setInterval(runningTime, 1000);
-
     return (
         <div className="header-nav">
             <div className="header-nav__container">

@@ -110,11 +110,11 @@
             margin-left: 1.3rem;
         }
 
-        .home-sidenav {
+        .offers-sidenav {
             height: fit-content;
             width: 220px;
 
-            .home-icon {
+            .offers-icon {
                 display: flex;
                 align-items: left;
                 margin-left: 20px;
@@ -124,7 +124,7 @@
                 }
             }
 
-            .home-label {
+            .offers-label {
                 display: flex;
                 align-items: right;
                 justify-content: right;
@@ -430,4 +430,8 @@
         width: 787pt;
         background-color: chartreuse;
     }
+}
+
+.header-side-nav-2 {
+    visibility: hidden;
 }
