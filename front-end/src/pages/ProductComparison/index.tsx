@@ -34,7 +34,7 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
 
   useEffect(() => {
     console.log({ categoryTree });
-  }, [ categoryTree ]);
+  }, [categoryTree]);
 
   useEffect(() => {
     if (setCurrentListCategory) {
