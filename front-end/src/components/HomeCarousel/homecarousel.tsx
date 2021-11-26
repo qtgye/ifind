@@ -13,10 +13,10 @@ const homecarousel = () => {
             <div className="home-carousel">
                 <CarouselProvider
                     visibleSlides={1}
-                    totalSlides={3}
+                    totalSlides={5}
                     step={1}
-                    naturalSlideWidth={500}
-                    naturalSlideHeight={300}
+                    naturalSlideWidth={600}
+                    naturalSlideHeight={400}
                     hasMasterSpinner
                     infinite
                     isPlaying
@@ -29,17 +29,23 @@ const homecarousel = () => {
                     <div className="hcarousel-container">
                         <Slider className="slider">
                             <Slide index={0}>
-                                <ImageWithZoom src="/banner1.jpg" />
+                                <ImageWithZoom src="/offers-banner.jpg" />
                             </Slide>
                             <Slide index={1}>
-                                <ImageWithZoom src="/banner2.jpg" />
+                                <ImageWithZoom src="/gifts-banner.jpg" />
                             </Slide>
                             <Slide index={2}>
+                                <ImageWithZoom src="/banner1.jpg" />
+                            </Slide>
+                            <Slide index={3}>
+                                <ImageWithZoom src="/banner2.jpg" />
+                            </Slide>
+                            <Slide index={4}>
                                 <ImageWithZoom src="/banner3.jpg" />
                             </Slide>
                         </Slider>
-                        <ButtonBack className="buttonBack"><i className="fa fa-caret-left"></i></ButtonBack>
-                        <ButtonNext className="buttonNext"><i className="fa fa-caret-right"></i></ButtonNext>
+                        <ButtonBack className="buttonBack"><i className="fa fa-angle-left"></i></ButtonBack>
+                        <ButtonNext className="buttonNext"><i className="fa fa-angle-right"></i></ButtonNext>
                     </div>
                 </CarouselProvider>
             </div>

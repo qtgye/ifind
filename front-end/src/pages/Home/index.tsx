@@ -1,4 +1,5 @@
 //import { useEffect, useRef } from "react";
+import VideoPlayer from "@components/VideoPlayer";
 import GeneralTemplate from "@templates/GeneralTemplate";
 import { withComponentName } from '@utilities/component';
 import Carousel from '../../components/HomeCarousel';
@@ -28,12 +29,12 @@ const Home = () => {
           </div>
           <div className="video">
             <div className="video-content">
-              Promotional Video Area
+              <VideoPlayer />
             </div>
           </div>
           <div className="offers">
             <div className="offers-banner">
-              <img src="/banner1.jpg" height={350} width={600} alt="banner_offers" />
+              <img src="/offers-banner.jpg" height={350} width={600} alt="banner_offers" />
             </div>
             <div className="offers-container">
               <div className="offers-content">
@@ -57,7 +58,7 @@ const Home = () => {
           </div>
           <div className="gifts">
             <div className="gifts-banner">
-              <img src="/banner3.jpg" height={350} width={600} alt="banner_gifts" />
+              <img src="/gifts-banner.jpg" height={350} width={600} alt="banner_gifts" />
             </div>
             <div className="gifts-container">
               <div className="gifts-content">

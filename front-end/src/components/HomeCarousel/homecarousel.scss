@@ -2,37 +2,51 @@
 @import 'base/global';
 
 .home-carousel {
-    //border: 1px solid black;
+    margin-right: 0;
 
     .hcarousel-container {
-        height: 300px;
-        width: 500px;
+        height: 400px;
+        width: 600px;
     }
     
     .buttonBack {
         position: absolute;
         top: 50%;
-        left: -25px;
+        left: 0;
         transform: translateY(-50%);
         border: none;
         font-size: 14px;
-        background-color: white;
+        background-color: transparent;
+        padding: 1px 5px;
     
         i {
-            font-size: 44px;
+            font-weight: bolder;
+            font-size: 50px;
+            color: #fff;
+        }
+
+        i:hover {
+            color: $red;
         }
     }
       
     .buttonNext {
         position: absolute;
         top: 50%;
-        right: -25px;
+        right: 0;
         transform: translateY(-50%);
         border: none;
-        background-color: white;
+        background-color: transparent;
+        padding: 1px 5px;
     
         i {
-            font-size: 44px;
+            font-weight: bolder;
+            font-size: 50px;
+            color: #fff;
+        }
+
+        i:hover {
+            color: $red;
         }
     }
     

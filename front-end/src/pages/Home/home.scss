@@ -10,6 +10,7 @@
 	.top {
 		display: flex;
 		margin-top: 3rem;
+		padding: 20px 10px;
 
 		.top-container {
 			display: block;
@@ -47,8 +48,6 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				// border: 2px solid black;
-				// padding: 200px 250px;
 			}
 		}
 	}
@@ -58,6 +57,8 @@
 		align-items: center;
 		justify-content: center;
 		margin-top: 3rem;
+		background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
 		
 		.video-content {
 			display: flex;
@@ -72,12 +73,15 @@
 	.offers {
 		display: flex;
 		margin-top: 3rem;
+		//background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
 
 		.offers-banner {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border: 2px solid black;
+			margin-right: auto;
 
 			img {
 				height: 350px;
@@ -86,17 +90,17 @@
 
 		.offers-container {
 			display: flex;
-			margin-left: auto;
+			width: 500px;
 
 			.offers-content {
 				display: block;
-				margin: auto;
-				//border: 2px solid black;
+				margin-top: auto;
+				margin-bottom: auto;
 	
 				.offers-text {
 					display: flex;
 					margin-left: auto;
-					width: 450px;
+					text-align: right;
 				}
 	
 				button {
@@ -120,18 +124,24 @@
 		display: flex;
 		margin-right: auto;
 		margin-top: 3rem;
+		background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
+		
 
 		.prodcomp-container {
 			display: block;
+			width: 500px;
 			margin-top: auto;
 			margin-bottom: auto;
 
 			
 			.prodcomp-text {
-				width: 450px;
+				display: flex;
+				text-align: left;
 			}
 
 			button {
+				display: flex;
 				margin-top: 1rem;
 				padding: 5px 12px;
 				border-radius: 5px;
@@ -160,13 +170,16 @@
 	.gifts {
 		display: flex;
 		margin-top: 3rem;
+		//background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
 
 		.gifts-banner {
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			border: 2px solid black;
-			//padding: 150px 250px;
+			margin-right: auto;
+			
 			img {
 				height: 350px;
 			}
@@ -174,17 +187,17 @@
 
 		.gifts-container {
 			display: flex;
-			margin-left: auto;
+			width: 500px;
 
 			.gifts-content {
 				display: block;
-				margin: auto;
-				//border: 2px solid black;
+				margin-top: auto;
+				margin-bottom: auto;
 	
 				.gifts-text {
 					display: flex;
 					margin-left: auto;
-					width: 450px;
+					text-align: right;
 				}
 	
 				button {
