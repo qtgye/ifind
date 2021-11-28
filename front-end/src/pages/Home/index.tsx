@@ -13,9 +13,9 @@ const Home = () => {
         <div className="container">
           <div className="top">
             <div className="top-container">
-              <h1>WELCOME TO IFINDILU</h1>
+              <h1>WILLKOMMEN BEI IFINDILU</h1>
               <div className="top-content">
-                <p>"iFINDilu ist eine Shopping- und Vergleichsplattform, die die Vision verfolgt, für dich den Suchprozess so angenehm wie möglich zu gestalten. Weitere Informationen findest du hier."</p>          
+                <p>iFINDilu ist eine Shopping- und Vergleichsplattform, die die Vision verfolgt, für dich den Suchprozess so angenehm wie möglich zu gestalten. Weitere Informationen findest du hier.</p>          
                 <button>KLICKE HIER</button>
               </div>
             </div>
@@ -37,7 +37,7 @@ const Home = () => {
             <div className="offers-container">
               <div className="offers-content">
                 <div className="offers-text">
-                  <p>"Finde die neusten Angebote von Amazon, Ebay, Aliexpress und Co, auch für dich ist hier etwas dabei."</p>   
+                  <p>Finde die neusten Angebote von Amazon, Ebay, Aliexpress und Co, auch für dich ist hier etwas dabei.</p>   
                 </div>
                 <button>KLICKE HIER</button>
               </div>
@@ -46,7 +46,7 @@ const Home = () => {
           <div className="prodcomp">
             <div className="prodcomp-container">
               <div className="prodcomp-text">
-                <p>"Wir machen uns für dich die Mühe, nach Produkten zu suchen, wie es ein Experte tun würde, dafür nutzen wir unseren speziellen Suchprozess. Interresse? "</p>
+                <p>Wir machen uns für dich die Mühe, nach Produkten zu suchen, wie es ein Experte tun würde, dafür nutzen wir unseren speziellen Suchprozess. Interresse?</p>
               </div>
               <button>KLICKE HIER</button>
             </div>
@@ -61,7 +61,7 @@ const Home = () => {
             <div className="gifts-container">
               <div className="gifts-content">
                 <div className="gifts-text">
-                  <p>"Brauchst du Geschenke für einen Geburtstag, Weihnachten oder möchtest du deinen Partner eine Freude machen, Ideen hierzu findest du hier."</p>
+                  <p>Brauchst du Geschenke für einen Geburtstag, Weihnachten oder möchtest du deinen Partner eine Freude machen, Ideen hierzu findest du hier.</p>
                 </div>
                 <button>KLICKE HIER</button>
               </div>
