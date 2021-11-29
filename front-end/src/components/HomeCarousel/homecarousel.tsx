@@ -35,13 +35,10 @@ const homecarousel = () => {
                                 <ImageWithZoom src="/gifts-banner.jpg" />
                             </Slide>
                             <Slide index={2}>
-                                <ImageWithZoom src="/banner1.jpg" />
+                                <ImageWithZoom src="/product_comparison.jpg" />
                             </Slide>
                             <Slide index={3}>
-                                <ImageWithZoom src="/banner2.jpg" />
-                            </Slide>
-                            <Slide index={4}>
-                                <ImageWithZoom src="/banner3.jpg" />
+                                <ImageWithZoom src="/gift_banner_ger.jpg" />
                             </Slide>
                         </Slider>
                         <ButtonBack className="buttonBack"><i className="fa fa-angle-left"></i></ButtonBack>

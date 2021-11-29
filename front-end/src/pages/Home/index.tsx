@@ -51,12 +51,12 @@ const Home = () => {
               <button>KLICKE HIER</button>
             </div>
             <div className="prodcomp-banner">
-              <img src="/banner2.jpg" height={350} width={600} alt="banner_product_comparison" />
+              <img src="/product_comparison.jpg" height={350} width={600} alt="banner_product_comparison" />
             </div>
           </div>
           <div className="gifts">
             <div className="gifts-banner">
-              <img src="/gifts-banner.jpg" height={350} width={600} alt="banner_gifts" />
+              <img src="/gift_banner_ger.jpg" height={350} width={600} alt="banner_gifts" />
             </div>
             <div className="gifts-container">
               <div className="gifts-content">
