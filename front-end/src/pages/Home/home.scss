@@ -7,110 +7,214 @@
 		@include bootstrap(container);
 	}
 
-    .loading {
-	    text-align: center;
-    }
+	.top {
+		display: flex;
+		margin-top: 3rem;
+		padding: 20px 10px;
 
-    .loading-icon {
-        margin-top: 8%;
-        margin-left: 41%;
-	    height: 150px;
-	    pointer-events: none;
+		.top-container {
+			display: block;
+			//border: 2px solid black;
+			width: 500px;
 
-		@include small_laptop {
-			height: 130px;
+			h1 {
+				font-weight: 600;
+			}
+
+			.top-content {
+				display: block;
+				margin-top: 5rem;
+				margin-bottom: auto;
+
+				button {
+					margin-top: 1rem;
+					padding: 8px 15px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
+
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
 		}
 
-		@include tablet {
-			height: 120px;
-		}
+		.top-carousel {
+			display: flex;
+			margin-left: auto;
 
-		@include xs_tablet {
-			margin-left: 39%;
+			.top-carousel-content {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 		}
+	}
 
-		@include xl_mobile {
-			margin-left: 37%;
-			height: 115px;
-		}
-
-		@include xml_mobile {
-			height: 110px;
-		}
+	.video {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 3rem;
+		background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
 		
-		@include mobile {
-			margin-left: 36%;
+		.video-content {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 400px;
+			width: 700px;
+			border: 2px solid black;
+		}
+	}
+
+	.offers {
+		display: flex;
+		margin-top: 3rem;
+		//background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
+
+		.offers-banner {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+			margin-right: auto;
+
+			img {
+				height: 350px;
+			}
 		}
 
-		@include sl_mobile {
-			height: 105px;
-		}
+		.offers-container {
+			display: flex;
+			width: 500px;
 
-		@include sm_mobile {
-			margin-left: 33%;
-			height: 100px;
-		}
+			.offers-content {
+				display: block;
+				margin-top: auto;
+				margin-bottom: auto;
+	
+				.offers-text {
+					display: flex;
+					margin-left: auto;
+					text-align: right;
+				}
+	
+				button {
+					display: flex;
+					margin-left: auto;
+					margin-top: 1rem;
+					padding: 5px 12px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
 
-		@include small_mobile {
-			margin-left: 32%;
-			height: 95px;
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
 		}
-    }
-  
-    @media (prefers-reduced-motion: no-preference) {
-	    .loading-icon {
-	        animation: loading-icon-spin infinite 1.5s linear;
-	    }
-    }
-  
-    @keyframes loading-icon-spin {
-	    from {
-	        transform: rotate(0deg);
-	    }
-	    to {
-	        transform: rotate(360deg);
-	    }
-    }
+	}
 
-	.progress {
-        position: relative;
-        top: 60%;
-        left: 41%;
-        height: 20px;
-        width: 200px;
-        background-color: $white;
-
-		@include small_laptop {
-			left: 39.5%;
-		}
-
-		@include tablet {
-			left: 38.5%;
-		}
-
-		@include xs_tablet {
-			left: 36%;
-		}
-
-		@include xl_mobile {
-			left: 34%;
-		}
-
-		@include xml_mobile {
-			left: 32%;
-		}
+	.prodcomp {
+		display: flex;
+		margin-right: auto;
+		margin-top: 3rem;
+		background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
 		
-		@include mobile {
-			left: 29%;
+
+		.prodcomp-container {
+			display: block;
+			width: 500px;
+			margin-top: auto;
+			margin-bottom: auto;
+
+			
+			.prodcomp-text {
+				display: flex;
+				text-align: left;
+			}
+
+			button {
+				display: flex;
+				margin-top: 1rem;
+				padding: 5px 12px;
+				border-radius: 5px;
+				background-color: $gray-900;
+				color: $white;
+			}
+
+			button:hover {
+				background-color: #bc0031
+			}
 		}
 
-		@include sm_mobile {
-			left: 25%;
+		.prodcomp-banner {
+			display: flex;
+			margin-left: auto;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+			//padding: 150px 250px;
+			img {
+				height: 350px;
+			}
+		}
+	}
+
+	.gifts {
+		display: flex;
+		margin-top: 3rem;
+		//background-color: rgb(247, 247, 247);
+		padding: 20px 10px;
+
+		.gifts-banner {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			border: 2px solid black;
+			margin-right: auto;
+			
+			img {
+				height: 350px;
+			}
 		}
 
-		@include small_mobile {
-			left: 22%;
+		.gifts-container {
+			display: flex;
+			width: 500px;
+
+			.gifts-content {
+				display: block;
+				margin-top: auto;
+				margin-bottom: auto;
+	
+				.gifts-text {
+					display: flex;
+					margin-left: auto;
+					text-align: right;
+				}
+	
+				button {
+					display: flex;
+					margin-left: auto;
+					margin-top: 1rem;
+					padding: 5px 12px;
+					border-radius: 5px;
+					background-color: $gray-900;
+					color: $white;
+				}
+
+				button:hover {
+					background-color: #bc0031;
+				}
+			}
 		}
-    }
+	}
 
 }

@@ -45,8 +45,8 @@ const HeaderNav = ({ withSideNav }: HeaderNavProps) => {
               ))}
             </ul>
             {/* <div className="clock">
-                            <span>{time}</span>
-                        </div> */}
+              <span>{time}</span>
+            </div> */}
           </div>
         </div>
       </div>

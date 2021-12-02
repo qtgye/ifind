@@ -6,7 +6,7 @@ export * as navigation from './navigation';
 export const useTranslation = () => {
   const { userLanguage } = useLanguages();
 
-  return (translationMap: TranslationMap) => {
+  return (translationMap: TranslationMap = {}) => {
     // Return matched translation
     if (userLanguage && userLanguage in translationMap) {
       return translationMap[userLanguage];
