@@ -24,19 +24,19 @@ const homecarousel = () => {
                 centerSlidePercentage={90}
             >
                 <div>
-                    <img src="/offers-banner.jpg" height="250px" width="300px" />
+                    <img src="/offers-banner.jpg" height="250px" width="300px" alt="carousel-image1" />
                 </div>
                 <div>
-                    <img src="/prodcomp-banner.jpg" height="250px" width="300px" />
+                    <img src="/prodcomp-banner.jpg" height="250px" width="300px" alt="carousel-image2" />
                 </div>
                 <div>
-                    <img src="/gifts-banner-2.jpg" height="250px" width="300px" />
+                    <img src="/gifts-banner-2.jpg" height="250px" width="300px" alt="carousel-image3" />
                 </div>
                 <div>
-                    <img src="/banner2.jpg" height="250px" width="300px" />
+                    <img src="/banner2.jpg" height="250px" width="300px" alt="carousel-image4" />
                 </div>
                 <div>
-                    <img src="/banner3.jpg" height="250px" width="=300px" />
+                    <img src="/banner3.jpg" height="250px" width="=300px" alt="carousel-image5" />
                 </div>
 
             </Carousel>

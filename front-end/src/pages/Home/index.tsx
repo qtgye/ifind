@@ -24,7 +24,7 @@ const Home = () => {
                 <p>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
                 <p>"Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."</p>
 
-                <button><a href="">SEE MORE...</a></button>
+                <button>SEE MORE...</button>
               </div>
             </div>
             <div className="top-carousel">
@@ -47,7 +47,7 @@ const Home = () => {
                 <div className="offers-text">
                   <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."</p>
                 </div>
-                <button><a href="">SHOP NOW</a></button>
+                <button>SHOP NOW</button>
               </div>
             </div>
           </div>
