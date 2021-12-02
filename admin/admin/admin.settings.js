@@ -16,6 +16,12 @@ export const leftCollectionMenu = [
     },
   },
   {
+    pattern: /tag/,
+    override: {
+      icon: "tag",
+    },
+  },
+  {
     pattern: /attribute/,
     override: {
       icon: "star",

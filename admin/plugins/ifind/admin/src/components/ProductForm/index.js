@@ -5,6 +5,7 @@ import Panel from "../Panel";
 import InputBlock from "../InputBlock";
 import ImagePreview from "../ImagePreview";
 import CategorySelect from "../CategorySelect";
+import TagSelect from "../TagSelect";
 import ProductURLInput from "../ProductURLInput";
 import RegionSelect from "../RegionSelect";
 import DealTypeSelect from "../DealTypeSelect";
@@ -365,6 +366,11 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
             {formErrors.category?.join("<br />")}
           </Text>
         </RenderIf>
+
+        {/* Tags */}
+        <TagSelect
+          renderIf={websiteTab === 'gifts'}
+        />
       </Panel>
 
       <Panel
