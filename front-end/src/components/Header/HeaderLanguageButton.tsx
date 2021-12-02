@@ -19,8 +19,8 @@ const HeaderLanguageButton = () => {
       const matchedCountryConfig:
         | CountryConfig
         | undefined = countriesConfig.find(
-        ({ code }: CountryConfig) => code === countryCode
-      );
+          ({ code }: CountryConfig) => code === countryCode
+        );
 
       if (!matchedCountryConfig) {
         return;
@@ -74,6 +74,8 @@ const HeaderLanguageButton = () => {
     }
   }, [languages, countries, userLanguage]);
 
+  console.log(languages, userLanguage);
+
   return (
     <div>
       <ReactFlagsSelect
@@ -88,17 +90,6 @@ const HeaderLanguageButton = () => {
         alignOptionsToRight={true}
         customLabels={labels}
       />
-      {/* <button onClick={onClick}>
-                <CountryFlag countryCode="us" svg />
-                <span><AiFillCaretDown /></span>
-            </button>
-            <ul className="single-bar">
-                {dropdown && language.map((item, index) => {
-                    return (
-                        <HeaderLanguages item={item} key={index} />
-                    )
-                })}
-            </ul> */}
     </div>
   );
 };

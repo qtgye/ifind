@@ -1,22 +1,52 @@
-import React from 'react';
-import {
-    CarouselProvider, Slider, Slide,
-    ButtonBack, ButtonNext,
-    ImageWithZoom
-} from 'pure-react-carousel';
-import 'pure-react-carousel/dist/react-carousel.es.css';
-import './homecarousel.scss';
+//import React from 'react';
+// import {
+//     CarouselProvider, Slider, Slide,
+//     ButtonBack, ButtonNext,
+//     ImageWithZoom
+// } from 'pure-react-carousel';
+// import 'pure-react-carousel/dist/react-carousel.es.css';
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+import './reactcarousel.scss'
 
 const homecarousel = () => {
     return (
         <>
-            <div className="home-carousel">
-                <CarouselProvider
+            {/* <div className="title-container">
+                <h4 className="title">TRENDING AND POPULAR PRODUCTS</h4>
+            </div> */}
+            <Carousel className="Scontainer"
+                infiniteLoop
+                autoPlay
+                showThumbs={false}
+                showStatus={false}
+                centerMode
+                centerSlidePercentage={90}
+            >
+                <div>
+                    <img src="/offers-banner.jpg" height="250px" width="300px" />
+                </div>
+                <div>
+                    <img src="/prodcomp-banner.jpg" height="250px" width="300px" />
+                </div>
+                <div>
+                    <img src="/gifts-banner-2.jpg" height="250px" width="300px" />
+                </div>
+                <div>
+                    <img src="/banner2.jpg" height="250px" width="300px" />
+                </div>
+                <div>
+                    <img src="/banner3.jpg" height="250px" width="=300px" />
+                </div>
+
+            </Carousel>
+            {/* <div className="home-carousel"> */}
+            {/* <CarouselProvider
                     visibleSlides={1}
                     totalSlides={5}
                     step={1}
-                    naturalSlideWidth={600}
-                    naturalSlideHeight={400}
+                    naturalSlideWidth={400}
+                    naturalSlideHeight={250}
                     hasMasterSpinner
                     infinite
                     isPlaying
@@ -47,8 +77,8 @@ const homecarousel = () => {
                         <ButtonBack className="buttonBack"><i className="fa fa-angle-left"></i></ButtonBack>
                         <ButtonNext className="buttonNext"><i className="fa fa-angle-right"></i></ButtonNext>
                     </div>
-                </CarouselProvider>
-            </div>
+                </CarouselProvider> */}
+            {/* </div> */}
         </>
     )
 }

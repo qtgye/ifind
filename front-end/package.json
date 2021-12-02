@@ -72,6 +72,7 @@
     "react-icons": "^4.2.0",
     "react-player": "^2.9.0",
     "react-refresh": "^0.8.3",
+    "react-responsive-carousel": "^3.2.22",
     "react-router-dom": "^5.2.0",
     "react-shadow-root": "^5.0.4",
     "react-slick": "^0.28.1",
