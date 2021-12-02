@@ -13,10 +13,11 @@ import NumberInput from "../NumberInput";
 import ProductAttributesRating from "../ProductAttributesRating";
 import ProductChangeHistoryTable from "../ProductChangeHistoryTable";
 import ProductIssuesWarning from "../ProductIssuesWarning";
+import RenderIf from "../RenderIf";
 
 import "./styles.scss";
 
-const _websiteTabOptions = ["home", "product_comparison", "find_tube"];
+const _websiteTabOptions = ["home", "product_comparison", "find_tube", "gifts"];
 
 const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [websiteTabOptions] = useState(_websiteTabOptions);
@@ -354,15 +355,16 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Category */}
         <CategorySelect
+          renderIf={websiteTab !== 'gifts'}
           category={category}
           onChange={onCategorySelect}
           hasError={formErrors.category?.length}
         />
-        {formErrors.category && (
+        <RenderIf condition={websiteTab !== 'gifts' && formErrors.category}>
           <Text className="col-sm-12" size="sm" color="red">
-            {formErrors.category.join("<br />")}
+            {formErrors.category?.join("<br />")}
           </Text>
-        )}
+        </RenderIf>
       </Panel>
 
       <Panel

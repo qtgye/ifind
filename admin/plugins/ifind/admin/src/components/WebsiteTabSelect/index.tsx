@@ -3,7 +3,7 @@ import { Select } from "@buffetjs/core";
 
 import './styles.scss';
 
-export type T_WebsiteTabValue = "home" | "product_comparison" | "findtube";
+export type T_WebsiteTabValue = "home" | "product_comparison" | "findtube" | "gifts";
 
 export interface I_WebsiteTabSelectProps {
   className?: string;
@@ -43,7 +43,7 @@ const WebsiteTabSelect = ({
         id={id}
         value={value}
         onChange={onSelect}
-        options={["home", "product_comparison", "findtube"]}
+        options={["home", "product_comparison", "findtube", "gifts"]}
       />
     </div>
   );
