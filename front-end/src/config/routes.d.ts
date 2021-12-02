@@ -4,5 +4,6 @@ declare interface RouteConfig {
   label?: string
   withSideNav?: boolean
   exact?: boolean
-  noUserHeart?: boolean
+  noUserHeart?: boolean,
+  translationKey?: string,
 }

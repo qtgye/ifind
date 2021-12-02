@@ -9,6 +9,7 @@ const routes: RouteConfig[] = [
         label: 'Home',
         withSideNav: true,
         exact: true,
+        translationKey: 'home',
         noUserHeart: true, // TODO: Verify Implementation
     },
     {
@@ -17,6 +18,7 @@ const routes: RouteConfig[] = [
         label: 'Product Comparison',
         withSideNav: true,
         exact: true,
+        translationKey: 'productComparison',
     },
     // {
     //     path: '/findtube',
@@ -32,6 +34,7 @@ const routes: RouteConfig[] = [
         path: '/contact',
         componentName: 'ContactPage',
         label: 'Contact',
+        translationKey: 'contact',
     },
 
     /**

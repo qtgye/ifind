@@ -80,6 +80,7 @@ module.exports = {
     '@utilities': resolveApp('src/utilities'),
     '@sb': resolveApp('src/sb'),
     '@gql': resolveApp('src/gql'),
+    '@translations': resolveApp('src/translations'),
     '@bootstrap': resolveApp('node_modules/bootstrap/scss/bootstrap'),
   },
   coverage: resolveApp('coverage/lcov-report'),

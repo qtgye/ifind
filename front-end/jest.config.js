@@ -60,14 +60,14 @@ module.exports = {
     moduleNameMapper: {
         "^react-native$": "react-native-web",
         "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy",
-        
+
         /**
         * should match webpack aliases from paths.js
         */
         ...pathAliases,
-        
+
         '^@bootstrap(/.*)?$': '<rootDir>/node_modules/bootstrap/scss/bootstrap',
-        
+
         /**
         * Mocks css imports
         */

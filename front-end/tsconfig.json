@@ -46,6 +46,8 @@
       "@sb/*": ["src/sb/*"],
       "@sb": ["src/sb"],
       "@gql/*": ["src/gql/*"],
+      "@translations": ["src/translations"],
+      "@translations/*": ["src/translations/*"],
       "@bootstrap/*": ["node_modules/bootstrap/scss/bootstrap/*"],
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */

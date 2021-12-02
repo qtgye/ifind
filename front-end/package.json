@@ -101,7 +101,7 @@
     "proxy": "node ./proxy.js",
     "tsc": "tsc",
     "prerender": "node ./scripts/prerender.js",
-    "lint": "eslint ./src --max-warnings=0"
+    "lint": "eslint './src/**/*.{js,jsx,ts,jsx}' --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
