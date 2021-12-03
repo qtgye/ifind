@@ -56,22 +56,22 @@ const routes: RouteConfig[] = [
    * Temporary Static Pages
    */
   // {
-  //     path: '/about-us',
+  //     path: '/de/about-us',
   //     componentName: 'AboutUsPage',
   //     label: 'About Us',
   // },
   // {
-  //     path: '/agb',
+  //     path: '/de/agb',
   //     componentName: 'AGBPage',
   //     label: 'AGB',
   // },
   // {
-  //     path: '/impressum',
+  //     path: '/de/impressum',
   //     componentName: 'ImpressumPage',
   //     label: 'Impressum',
   // },
   // {
-  //     path: '/data-protection',
+  //     path: '/de/data-protection',
   //     componentName: 'DataProtectionPage',
   //     label: 'Data Protection',
   // },

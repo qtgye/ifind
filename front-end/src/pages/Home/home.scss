@@ -12,10 +12,18 @@
 		margin-top: 3rem;
 		padding: 20px 10px;
 
+		@include tablet {
+			display: block;
+		}
+
 		.top-container {
 			display: block;
 			//border: 2px solid black;
 			width: 500px;
+
+			@include small_laptop {
+				width: 400px;
+			}
 
 			h1 {
 				font-weight: 600;
@@ -25,6 +33,10 @@
 				display: block;
 				margin-top: 5rem;
 				margin-bottom: auto;
+
+				@include tablet {
+					//
+				}
 
 				button {
 					margin-top: 1rem;
@@ -44,10 +56,23 @@
 			display: flex;
 			margin-left: auto;
 
+			@include tablet {
+				align-items: center;
+				justify-content: center;
+			}
+
 			.top-carousel-content {
 				display: flex;
 				align-items: center;
 				justify-content: center;
+
+				@include tablet {
+					margin-top: 6rem;
+					width: 500px;
+					height: 300px;
+					align-items: center;
+					justify-content: center;
+				}
 			}
 		}
 	}
@@ -76,6 +101,10 @@
 		//background-color: rgb(247, 247, 247);
 		padding: 20px 10px;
 
+		@include tablet {
+			display: block;
+		}
+
 		.offers-banner {
 			display: flex;
 			align-items: center;
@@ -86,17 +115,32 @@
 			img {
 				height: 350px;
 			}
+
+			@include small_laptop {
+				img {
+					height: 300px;
+				}
+			}
 		}
 
 		.offers-container {
 			display: flex;
 			width: 500px;
 
+			@include small_laptop {
+				width: 300px;
+			}
+
+			@include tablet {
+				margin-top: 20px;
+				margin-left: auto;
+			}
+
 			.offers-content {
-				display: block;
+				display: block;;
 				margin-top: auto;
 				margin-bottom: auto;
-	
+
 				.offers-text {
 					display: flex;
 					margin-left: auto;
@@ -126,15 +170,21 @@
 		margin-top: 3rem;
 		background-color: rgb(247, 247, 247);
 		padding: 20px 10px;
-		
 
+		@include tablet {
+			display: block;
+		}
+		
 		.prodcomp-container {
 			display: block;
 			width: 500px;
 			margin-top: auto;
 			margin-bottom: auto;
 
-			
+			@include small_laptop {
+				width: 300px;
+			}
+
 			.prodcomp-text {
 				display: flex;
 				text-align: left;
@@ -164,6 +214,16 @@
 			img {
 				height: 350px;
 			}
+
+			@include small_laptop {
+				img {
+					height: 300px;
+				}
+			}
+
+			@include tablet {
+				margin-top: 20px;
+			}
 		}
 	}
 
@@ -172,6 +232,10 @@
 		margin-top: 3rem;
 		//background-color: rgb(247, 247, 247);
 		padding: 20px 10px;
+
+		@include tablet {
+			display: block;
+		}
 
 		.gifts-banner {
 			display: flex;
@@ -183,11 +247,26 @@
 			img {
 				height: 350px;
 			}
+
+			@include small_laptop {
+				img {
+					height: 300px;
+				}
+			}
 		}
 
 		.gifts-container {
 			display: flex;
 			width: 500px;
+
+			@include small_laptop {
+				width: 300px;
+			}
+
+			@include tablet {
+				margin-top: 20px;
+				margin-left: auto;
+			}
 
 			.gifts-content {
 				display: block;

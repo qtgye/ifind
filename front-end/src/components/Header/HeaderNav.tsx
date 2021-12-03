@@ -37,7 +37,7 @@ const HeaderNav = ({ withSideNav }: HeaderNavProps) => {
                   >
                     {translate(
                       (navigation as GenericObject)[
-                        navItem?.translationKey || ""
+                      navItem?.translationKey || ""
                       ]
                     ) || navItem?.label}
                   </CustomLink>

@@ -305,6 +305,35 @@
         margin-top: 7px;
         margin-left: 0;
         margin-right: 0px;
+
+        @include tablet {
+            margin-left: -4.2rem;
+        }
+
+        @include medium_tablet {
+            margin-left: -4.6rem;
+        }
+
+        @include small_tablet {
+            margin-left: -3.5rem;
+        }
+
+        @include ms_tablet {
+            margin-left: -2.8rem;
+        }
+
+        @include mxs_tablet {
+            margin-left: -1.5rem;
+        }
+
+        @include xs_tablet {
+            margin-left: -0.5rem;
+        }
+
+        @include xl_mobile {
+            margin-left: -0.7rem;
+        }
+
     }
 
     .menu-flags {

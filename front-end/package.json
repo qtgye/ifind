@@ -14,6 +14,7 @@
     "@types/react-slick": "^0.23.6",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
+    "aos": "^2.3.4",
     "apollo-boost": "^0.4.9",
     "apollo-cache-inmemory": "^1.6.6",
     "apollo-client": "^2.6.10",
@@ -72,6 +73,7 @@
     "react-icons": "^4.2.0",
     "react-player": "^2.9.0",
     "react-refresh": "^0.8.3",
+    "react-responsive-carousel": "^3.2.22",
     "react-router-dom": "^5.2.0",
     "react-shadow-root": "^5.0.4",
     "react-slick": "^0.28.1",
@@ -103,7 +105,7 @@
     "proxy": "node ./proxy.js",
     "tsc": "tsc",
     "prerender": "node ./scripts/prerender.js",
-    "lint": "eslint './src/**/*.{js,jsx,ts,jsx}' --max-warnings=0"
+    "lint": "eslint ./src/**/*.{js,jsx,ts,jsx} --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
@@ -139,6 +141,7 @@
     "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.9",
     "@storybook/react": "^6.2.9",
+    "@types/aos": "^3.0.4",
     "@types/jest": "^27.0.1",
     "@types/lodash": "^4.14.175",
     "@types/node": "^16.7.10",

@@ -16,7 +16,7 @@ import { useSubCategories } from "../../contexts/categoriesContext";
 //import Carousel from "../../components/Carousel";
 import ProgressBars from "../../components/ProgressBar";
 
-type ScrollableElement = HTMLElement & { scrollBehavior: string };
+//type ScrollableElement = HTMLElement & { scrollBehavior: string };
 
 const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNode>> = () => {
   const {
@@ -26,11 +26,13 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
   } = useProductComparison();
   const icon = "/images/loading.png";
   const prodcompRef = useRef<HTMLDivElement>();
-  const navListRef = useRef<ScrollableElement>(document.getElementById("navlist") as ScrollableElement)
+  //const navListRef = useRef<ScrollableElement>(document.getElementById("navlist") as ScrollableElement)
   const { setSubCategories } = useSubCategories();
 
   const categoryTree = useCategoryTree();
   const [currentCategory, setCurrentCategory] = useState();
+  const [lshowButton, lsetShowButton] = useState(false);
+  const [rshowButton, rsetShowButton] = useState(true);
 
   useEffect(() => {
     console.log({ categoryTree });
@@ -92,19 +94,55 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
     [setCurrentCategory]
   );
 
-  const scrollToRight = () => {
-    navListRef.current.scrollBehavior = "smooth";
-    navListRef.current.scrollLeft += 50;
+  const scrollToRight = (e: any) => {
+    e.preventDefault();
+    const content: any = document.getElementById("navlist");
+    const scrollable = content.scrollWidth - window.innerWidth;
+    content.scrollBehavior = "smooth";
 
-    return navListRef.current.scrollLeft;
-  };
+    if (content.scrollLeft != null) {
+      if (scrollable < 0) {
+        content.scrollLeft += 255;
+      }
+      else {
+        content.scrollLeft += 150;
+      }
+    }
 
-  const scrollToLeft = () => {
-    navListRef.current.scrollBehavior = "smooth";
-    navListRef.current.scrollLeft -= 50;
+    if (content.scrollLeft > scrollable) {
+      rsetShowButton(false);
+    }
 
-    return navListRef.current.scrollLeft;
-  };
+    return content.scrollLeft;
+  }
+
+  const scrollToLeft = (e: any) => {
+    e.preventDefault();
+    const content: any = document.getElementById("navlist");
+    const scrollable = content.scrollWidth - window.innerWidth;
+    content.scrollBehavior = "smooth";
+
+    if (content.scrollLeft != null) {
+      if (scrollable < 0) {
+        content.scrollLeft -= 255;
+      }
+      else {
+        content.scrollLeft -= 150;
+      }
+    }
+
+    if (content.scrollLeft < 50) {
+      lsetShowButton(false);
+    }
+    //console.log(content.scrollLeft);
+  }
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      rsetShowButton(true);
+    }
+    //console.log(window.innerWidth);
+  }, [window.innerWidth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <GeneralTemplate>
@@ -112,22 +150,17 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
         <div className="container">
           <div className="list">
             <nav className="nav">
-              {navListRef.current?.scrollLeft === 0 ? (
-                <div></div>
-              ) : (
-                <>
-                  <div className="rarrow-area"></div>
-                  <div
-                    className="rarrow"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      scrollToLeft();
-                    }}
-                  >
+              {
+                lshowButton && <>
+                  <div className="larrow-area"></div>
+                  <div className="larrow" onClick={(e) => {
+                    scrollToLeft(e);
+                    rsetShowButton(true);
+                  }}>
                     <i className="fa fa-chevron-left"></i>
                   </div>
                 </>
-              )}
+              }
               <ul id="navlist" className="nav-list">
                 {categoryTree?.map((category, index) => (
                   <li key={category?.id}>
@@ -156,16 +189,12 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
                   </li>
                 ))}
               </ul>
-              <div className="larrow-area"></div>
-              <div
-                className="larrow"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToRight();
-                }}
-              >
-                <i className="fa fa-chevron-right"></i>
-              </div>
+              {
+                rshowButton && <>
+                  <div className="rarrow-area"></div>
+                  <div className="rarrow" onClick={(e) => { scrollToRight(e); lsetShowButton(true); }}><i className="fa fa-chevron-right"></i></div>
+                </>
+              }
             </nav>
 
             {loading && (
