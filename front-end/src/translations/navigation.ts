@@ -1,14 +1,17 @@
 export const home = {
-  en: 'Home',
-  de: 'Home',
+  en: "Home",
+  de: "Home",
+  ru: "Главная страница",
 };
 
 export const productComparison = {
-  en: 'Product Comparison',
-  de: 'Product Comparison German',
+  en: "Product Comparison",
+  de: "Produktvergleich",
+  ru: "сравнение продуктов",
 };
 
 export const contact = {
-  en: 'Contact',
-  de: 'Contact German',
+  en: "Contact",
+  de: "Kontakt",
+  ru: "Контакт",
 };
