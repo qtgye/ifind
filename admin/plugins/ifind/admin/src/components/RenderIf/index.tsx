@@ -5,7 +5,8 @@ interface RenderIfProps {
   children?: React.ReactNode;
 }
 
-const RenderIf = ({ condition, children }: RenderIfProps) =>
-  condition ? children : null;
+const RenderIf = ({ condition, children }: RenderIfProps) => (
+  <>{condition ? children : null}</>
+);
 
 export default RenderIf;

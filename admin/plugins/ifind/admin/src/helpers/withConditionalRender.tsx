@@ -5,7 +5,7 @@ interface WithConditionalRenderProps {
 }
 
 const withConditionalRender =
-  (Component?: React.FunctionComponent | null) =>
+  (Component?: React.FunctionComponent | React.ReactNode | JSX.Element | null) =>
   ({ renderIf, ...props }: WithConditionalRenderProps) =>
   Component && renderIf ? <Component {...props} /> : null;
 

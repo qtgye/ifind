@@ -50,6 +50,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
   const [productURLs, setProductURLs] = useState([]); // Initial data for ProductURLInput
   const [attrsRating, setAttrsRating] = useState([]);
   const [finalRating, setFinalRating] = useState(0); // Don't pass into ProductAttributesRating
+  const [productTags, setProductTags] = useState([]); // Don't pass into ProductAttributesRating
 
   // Meta states
   const [lastModified, setLastModified] = useState("");
@@ -71,6 +72,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       region,
       attrsRating,
       finalRating,
+      productTags,
     };
   }, [
     id,
@@ -88,6 +90,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     region,
     attrsRating,
     finalRating,
+    productTags,
   ]);
 
   const processFormData = useCallback((formData) => {
@@ -97,6 +100,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     formData.amazon_url = formData.amazonURL;
     formData.website_tab = formData.websiteTab;
     formData.deal_type = formData.dealType;
+    formData.tags = formData.productTags;
 
     // Process urlList
     formData.url_list = formData.urlList.length
@@ -141,6 +145,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     delete formData.attrsRating;
     delete formData.finalRating;
     delete formData.dealType;
+    delete formData.productTags;
 
     return formData;
   }, []);
@@ -170,6 +175,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     setFinalRating(newFinalRating);
   }, []);
 
+  const onTagSelect = useCallback((tagIDs) => {
+    setProductTags(tagIDs);
+  }, []);
+
   useEffect(() => {
     if (product) {
       setId(product.id);
@@ -184,6 +193,9 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setPrice(product.price);
       setDetailsHTML(product.details_html);
       setRegion(product.region?.id);
+
+      // Format tags list to match TagSelect tags prop
+      setProductTags((product.tags || []).map((tag) => tag.id));
 
       // Format product url list to match ProductURLInput
       setProductURLs(
@@ -230,6 +242,7 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
       setAttrsRating([]);
       setFinalRating(0);
       setProductIssues([]);
+      setProductTags([]);
       // Meta
       setLastModified(null);
     }
@@ -257,11 +270,8 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
     region,
     attrsRating,
     finalRating,
+    productTags,
   ]);
-
-  useEffect(() => {
-    console.log({ dealType });
-  }, [dealType]);
 
   return (
     <form className="product-form row">
@@ -356,12 +366,12 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Category */}
         <CategorySelect
-          renderIf={websiteTab !== 'gifts'}
+          renderIf={websiteTab !== "gifts"}
           category={category}
           onChange={onCategorySelect}
           hasError={formErrors.category?.length}
         />
-        <RenderIf condition={websiteTab !== 'gifts' && formErrors.category}>
+        <RenderIf condition={websiteTab !== "gifts" && formErrors.category}>
           <Text className="col-sm-12" size="sm" color="red">
             {formErrors.category?.join("<br />")}
           </Text>
@@ -369,7 +379,10 @@ const ProductForm = ({ product, setProductFormData, formErrors }) => {
 
         {/* Tags */}
         <TagSelect
-          renderIf={websiteTab === 'gifts'}
+          label="Tags"
+          renderIf={websiteTab === "gifts"}
+          tags={productTags}
+          onChange={onTagSelect}
         />
       </Panel>
 
