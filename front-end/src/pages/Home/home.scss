@@ -34,6 +34,10 @@
 				margin-top: 5rem;
 				margin-bottom: auto;
 
+				@include tablet {
+					//
+				}
+
 				button {
 					margin-top: 1rem;
 					padding: 8px 15px;
@@ -66,6 +70,8 @@
 					margin-top: 6rem;
 					width: 500px;
 					height: 300px;
+					align-items: center;
+					justify-content: center;
 				}
 			}
 		}
@@ -125,11 +131,16 @@
 				width: 300px;
 			}
 
+			@include tablet {
+				margin-top: 20px;
+				margin-left: auto;
+			}
+
 			.offers-content {
-				display: block;
+				display: block;;
 				margin-top: auto;
 				margin-bottom: auto;
-	
+
 				.offers-text {
 					display: flex;
 					margin-left: auto;
@@ -174,7 +185,6 @@
 				width: 300px;
 			}
 
-			
 			.prodcomp-text {
 				display: flex;
 				text-align: left;
@@ -209,6 +219,10 @@
 				img {
 					height: 300px;
 				}
+			}
+
+			@include tablet {
+				margin-top: 20px;
 			}
 		}
 	}
@@ -247,6 +261,11 @@
 
 			@include small_laptop {
 				width: 300px;
+			}
+
+			@include tablet {
+				margin-top: 20px;
+				margin-left: auto;
 			}
 
 			.gifts-content {

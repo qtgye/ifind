@@ -74,7 +74,7 @@ const HeaderLanguageButton = () => {
     }
   }, [languages, countries, userLanguage]);
 
-  console.log(languages, userLanguage);
+  console.log(userLanguage);
 
   return (
     <div>

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useGlobalData } from '@contexts/globalDataContext';
 
 import routes, { footerRoutes } from '@config/routes';
+import { useLanguages } from "@contexts/languagesContext";
 
 const mockInfoLinks = routes.filter(route => footerRoutes.includes(route.path));
 const logo = '/images/NewLogowith1Warp_White.png';
@@ -14,6 +15,7 @@ const Footer = () => {
     const [footerText, setFooterText] = useState('');
     const [footerFootnote, setFooterFootnote] = useState('');
     const [socialLinks, setSocialLinks] = useState<SocialNetworkLink[]>([]);
+    const { userLanguage = "en" } = useLanguages();
 
     useEffect(() => {
         if (footerSetting?.footer_links?.length) {
@@ -37,7 +39,6 @@ const Footer = () => {
             setSocialLinks(socialNetwork.social_network.map(({ type, url }) => ({ type, url })));
         }
     }, [socialNetwork]);
-
 
     return (
         <footer className="footer" id="footer">
@@ -79,7 +80,7 @@ const Footer = () => {
                                 <ul>
                                     {informationLinks.map(infoRoute => (
                                         infoRoute && <li key={infoRoute.path}>
-                                            <Link to={infoRoute?.path || '/'}>{infoRoute.label}</Link>
+                                            <Link to={userLanguage + infoRoute?.path || '/'}>{infoRoute.label}</Link>
                                         </li>
                                     ))}
                                 </ul>
