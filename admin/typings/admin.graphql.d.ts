@@ -1532,6 +1532,7 @@ declare global {
     price_original?: number;
     scrape_batch_uid?: string;
     product_changes?: Array<ProductChange | null>;
+    tags?: Array<Tag | null>;
   }
   
   export interface ProductConnection {
@@ -1772,6 +1773,7 @@ declare global {
     discount_percent?: number;
     price_original?: number;
     scrape_batch_uid?: string;
+    tags?: Array<string | null>;
     created_by?: string;
     updated_by?: string;
   }
@@ -1802,6 +1804,7 @@ declare global {
     discount_percent?: number;
     price_original?: number;
     scrape_batch_uid?: string;
+    tags?: Array<string | null>;
     created_by?: string;
     updated_by?: string;
   }
@@ -6453,6 +6456,7 @@ declare global {
     price_original?: ProductToPrice_originalResolver<TParent>;
     scrape_batch_uid?: ProductToScrape_batch_uidResolver<TParent>;
     product_changes?: ProductToProduct_changesResolver<TParent>;
+    tags?: ProductToTagsResolver<TParent>;
   }
   
   export interface ProductToIdResolver<TParent = any, TResult = any> {
@@ -6571,6 +6575,16 @@ declare global {
   }
   export interface ProductToProduct_changesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: ProductToProduct_changesArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductToTagsArgs {
+    sort?: string;
+    limit?: number;
+    start?: number;
+    where?: JSON;
+  }
+  export interface ProductToTagsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: ProductToTagsArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface ProductConnectionTypeResolver<TParent = any> {

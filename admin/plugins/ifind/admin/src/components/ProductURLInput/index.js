@@ -34,7 +34,6 @@ const ProductURLInput = ({
   }, [ urlList ]);
 
   const onURLDataChange = useCallback(({ source, region, url, is_base, price, softId }) => {
-    console.log({ url });
     const updatedList = urlList.map(urlData => (
       urlData.softId === softId ?
       { source, region, url, is_base, softId, price } :

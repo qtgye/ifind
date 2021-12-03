@@ -85,6 +85,15 @@ fragment ProductDataFragment on Product {
       lastname
     }
   }
+  tags {
+    id
+    label {
+      label
+      language {
+        code
+      }
+    }
+  }
 }
 `;
 
@@ -110,6 +119,7 @@ $price: Float
 $final_rating: Float
 $release_date: DateTime
 $status: ENUM_PRODUCT_STATUS
+$tags: [ID]
 `;
 
 export const productMutationCommonInput = `
@@ -127,6 +137,7 @@ final_rating: $final_rating
 release_date: $release_date
 admin_user: $user
 status: $status
+tags: $tags
 `;
 
 export const updateProductMutation = `

@@ -78,10 +78,6 @@ const getValueDeals = async () => {
       resolve(cardsData);
     }
     catch (err) {
-      await page.screenshot({
-        path: path.resolve(__dirname, 'aliexpress-value-deals.png'),
-        fullPage: true,
-      });
       console.error(err);
       reject(err);
     }

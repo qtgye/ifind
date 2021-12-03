@@ -118,6 +118,9 @@
     },
     "scrape_batch_uid": {
       "type": "string"
+    },
+    "tags": {
+      "collection": "tag"
     }
   }
 }

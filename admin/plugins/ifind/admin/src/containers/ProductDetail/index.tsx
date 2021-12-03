@@ -10,6 +10,10 @@ import { validationRules, validateData } from '../../helpers/form';
 import { compareProductChanges } from '../../helpers/product';
 import ProductForm from '../../components/ProductForm';
 
+interface ProductDetailParams {
+  productId?: string;
+}
+
 const productValidationRules = {
   // title: validationRules.required('Please provide a title'),
   website_tab: [
@@ -34,8 +38,8 @@ const ProductDetail = () => {
     error,
     loading,
   ] = useProduct();
-  const { productId } = useParams();
-  const { isLoading, setIsLoading } = useGlobal();
+  const { productId } = useParams<ProductDetailParams>();
+  const { setIsLoading } = useGlobal();
   const history = useHistory();
   const [ title, setTitle ] = useState('');
   const [ formErrors, setFormErrors ] = useState({});
@@ -44,7 +48,6 @@ const ProductDetail = () => {
   const [ hasChanges, setHasChanges ] = useState(false);
   const [ isSaving, setIsSaving ] = useState(false);
   const [ isPublishing, setIsPublishing ] = useState(false);
-  // const [ productChanges, setProductChanges ] = useState(null);
 
   const saveProduct = useCallback(() => {
     // Prepare data for graphql request
