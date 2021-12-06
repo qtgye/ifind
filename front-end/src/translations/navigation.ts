@@ -15,3 +15,9 @@ export const contact = {
   de: "Kontakt",
   ru: "Контакт",
 };
+
+export const gifts = {
+  en: "Gifts ideas ",
+  de: "Geschenkideen",
+  ru: "Подарки",
+};
