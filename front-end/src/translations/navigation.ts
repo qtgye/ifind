@@ -7,7 +7,7 @@ export const home = {
 export const productComparison = {
   en: "Product Comparison",
   de: "Produktvergleich",
-  ru: "сравнение продуктов",
+  ru: "Cравнение продуктов",
 };
 
 export const contact = {
