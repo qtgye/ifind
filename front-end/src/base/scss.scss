@@ -3,6 +3,7 @@
 
 // Config
 @import 'scss/config/colors';
+@import 'scss/config/breakpoints';
 @import 'scss/config/z-indices';
 
 // Functions
@@ -11,4 +12,5 @@
 
 // Mixins
 @import "scss/mixins/bootstrap";
+@import "scss/mixins/breakpoints";
 @import "scss/mixins/media-queries";

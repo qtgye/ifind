@@ -15,7 +15,7 @@ export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
           <SourceRegionProvider>
             <RegionContextProvider>
               <CategoriesContextProvider>
-                <ProductContextProvider>{children}</ProductContextProvider>
+                  <ProductContextProvider>{children}</ProductContextProvider>
               </CategoriesContextProvider>
             </RegionContextProvider>
           </SourceRegionProvider>

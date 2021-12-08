@@ -1,0 +1,127 @@
+// TODO:
+// Drop _media-queries in favor of _breakpoints
+
+// Breakpoint mixin
+// @params breakpoint-name - breakpoint key in $breakpoints
+// @params $constraint - min | max | only
+@mixin breakpoint($breakpoint-name: default, $constraint: min) {
+  $bp-setting: if(map-has-key($breakpoints, $breakpoint-name), map-get($breakpoints, $breakpoint-name), null);
+
+  @if (type-of($bp-setting) == list) {
+    $min: if( length($bp-setting) >= 1, nth($bp-setting, 1), null);
+    $max: if( length($bp-setting) >= 2, nth($bp-setting, 2), null);
+    $media-query: null;
+
+    @if ( $constraint == min ) {
+      @if not ($min == null) {
+        $media-query: "min-width: #{$min}px";
+      }
+    }
+    @else if ($constraint == max) {
+      @if not ($max == null) {
+        $media-query: "max-width: #{$max}px";
+      }
+    }
+    @else if ($constraint == only) {
+      @if ($min != null) and ($max != null) {
+        $media-query: "min-width: #{$min}px and max-width: #{$max}px";
+      }
+    }
+
+    @if ( $media-query != null ) {
+      @media screen and (unquote($media-query)) {
+        @content;
+      }
+    }
+  }
+  @else {
+    @content;
+  }
+}
+
+// Create a mixin for each breakpoint
+
+@mixin sm-max {
+  @include breakpoint(default, max) {
+    @content;
+  }
+}
+
+@mixin sm-only {
+  @include breakpoint(default, only) {
+    @content;
+  }
+}
+
+@mixin md {
+  @include breakpoint(md, min) {
+    @content;
+  }
+}
+
+@mixin md-max {
+  @include breakpoint(md, max) {
+    @content;
+  }
+}
+
+@mixin md-only {
+  @include breakpoint(md, only) {
+    @content;
+  }
+}
+
+@mixin lg {
+  @include breakpoint(lg, min) {
+    @content;
+  }
+}
+
+@mixin lg-max {
+  @include breakpoint(lg, max) {
+    @content;
+  }
+}
+
+@mixin lg-only {
+  @include breakpoint(lg, only) {
+    @content;
+  }
+}
+
+@mixin xl {
+  @include breakpoint(xl, min) {
+    @content;
+  }
+}
+
+@mixin xl-max {
+  @include breakpoint(xl, max) {
+    @content;
+  }
+}
+
+@mixin xl-only {
+  @include breakpoint(xl, only) {
+    @content;
+  }
+}
+
+@mixin xxl {
+  @include breakpoint(xxl, min) {
+    @content;
+  }
+}
+
+@mixin xxl-max {
+  @include breakpoint(xxl, max) {
+    @content;
+  }
+}
+
+@mixin xxl-only {
+  @include breakpoint(xxl, only) {
+    @content;
+  }
+}
+

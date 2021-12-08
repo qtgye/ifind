@@ -5,7 +5,7 @@
     display: flex;
     align-items: stretch;
     height: 62px;
-    background-color: $gray-900;
+    background-color: color(black);
     transition: all 0.3s;
 
     @include tablet {
@@ -174,5 +174,5 @@
             }
         }
     }
-    
+
 }

@@ -1,6 +1,6 @@
-import ProductDealItem from "./item";
 import { useContext, useEffect, useRef } from "react";
 import { GlobalStateContext } from '@contexts/globalStateContext';
+import ProductDealItem from "@components/ProductDealCard";
 
 import "./styles.scss";
 
