@@ -27,7 +27,7 @@ const productValidationRules = {
   //   validationRules.required('Please provide an image'),
   //   validationRules.url('Image must be a valid URL'),
   // ], 'Please provide an image in a valid URL format'),
-  category: validationRules.required('Please select a category'),
+  // category: validationRules.required('Please select a category'),
 };
 
 const ProductDetail = () => {

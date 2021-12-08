@@ -112,7 +112,7 @@ $image: String!
 $title: String!
 $website_tab: String!
 $deal_type: ENUM_PRODUCT_DEAL_TYPE
-$category: ID!
+$category: ID
 $position: Int
 $amazon_url: String!
 $price: Float
