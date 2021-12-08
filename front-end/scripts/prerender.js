@@ -11,7 +11,7 @@ const express = require("express");
 const fetch = require("node-fetch");
 const { REACT_APP_ADMIN_API_ROOT } = require("dotenv").config().parsed;
 
-const routes = ["/", "/productcomparison", "/contact"];
+const routes = ["/", "/productcomparison", "/offers", "/gifts", "/contact"];
 const languages = [];
 const routesWithLanguages = [];
 
