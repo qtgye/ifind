@@ -14,7 +14,7 @@ import IfindLoading from "@components/IfindLoading";
 import "./styles.scss";
 
 const Gifts = () => {
-  const { tags: selectedTags = [] } = useSearchParams();
+  const { tags = '' } = useSearchParams();
   const { loading: isTagsLoading } = useTags();
   const { pathname, search } = useLocation();
   const history = useHistory();
@@ -23,6 +23,7 @@ const Gifts = () => {
     total = 0,
     loading: isGiftsLoading,
   }: GiftIdeasContextData = useGiftIdeas();
+  const selectedTags = tags.split(',').filter(Boolean);
 
   const onTagsUpdate = useCallback(
     (tags: (string | number)[]) => {
@@ -35,8 +36,6 @@ const Gifts = () => {
     "gifts container",
     isGiftsLoading || isTagsLoading ? "gifts--loading" : "",
   ].filter(Boolean).join(' ');
-
-  console.log(isGiftsLoading, isTagsLoading);
 
   return (
     <GeneralTemplate>
