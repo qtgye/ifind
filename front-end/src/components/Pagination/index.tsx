@@ -27,7 +27,7 @@ const Pagination = ({ totalPages = 1 }: PaginationProps) => {
         <ReactPaginate
           previousLabel={translate(previous)}
           nextLabel={translate(next)}
-          className="pagination"
+          className="pagination__list"
           pageCount={totalPages}
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

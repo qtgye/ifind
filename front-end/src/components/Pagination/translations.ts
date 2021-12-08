@@ -1,7 +1,7 @@
 export const previous = {
-  en: "Previous",
+  en: "<",
 };
 
 export const next = {
-  en: "Next",
+  en: ">",
 };
