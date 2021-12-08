@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "tags",
   "info": {
-    "name": "Tag"
+    "name": "Tag",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -21,6 +22,9 @@
     "products": {
       "via": "tags",
       "collection": "product"
+    },
+    "language": {
+      "model": "language"
     }
   }
 }

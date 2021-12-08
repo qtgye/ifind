@@ -120,8 +120,8 @@
       "type": "string"
     },
     "tags": {
-      "collection": "tag",
       "via": "products",
+      "collection": "tag",
       "dominant": true
     }
   }
