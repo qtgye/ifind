@@ -33,6 +33,10 @@ module.exports = {
       deal_type: DealType
       products: [Product]
     }
+    type GiftIdeasPayload {
+      products: [Product]
+      total: Int
+    }
   `,
   query: `
     productDetails (id: ID!, language: String): Product
@@ -40,6 +44,7 @@ module.exports = {
     categoryProducts (language: String, categories: [ID], includeDescendants: Boolean): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
     productsByDeals: [ProductsByDeal]
+    giftIdeas ( page: Int, tags: [ID] ): GiftIdeasPayload
   `,
   mutation: `
     addProductClick (id: ID!): ProductClicksDetails
@@ -62,6 +67,9 @@ module.exports = {
       },
       async productsByDeals() {
         return await strapi.services.product.productsByDeals();
+      },
+      async giftIdeas(_, args) {
+        return await strapi.services.product.giftIdeas(args);
       }
     },
     Mutation: {
