@@ -4,7 +4,7 @@
 .header-nav {
     display: flex;
     align-items: stretch;
-    height: 62px;
+    height: var(--header-nav-height-mobile);
     background-color: color(black);
     transition: all 0.3s;
 

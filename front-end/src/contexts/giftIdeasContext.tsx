@@ -19,7 +19,7 @@ export const GiftIdeasProvider = ({
     page = 1,
     tags = '',
   } = useSearchParams();
-  const { data } = useQuery(sourceRegionQuery, {
+  const { data, loading } = useQuery(sourceRegionQuery, {
     variables: {
       page: Number(page),
       tags: tags.split(',').filter(Boolean)
@@ -34,7 +34,7 @@ export const GiftIdeasProvider = ({
   }, [data]);
 
   return (
-    <GiftIdeasContext.Provider value={{ products, total }}>
+    <GiftIdeasContext.Provider value={{ products, total, loading }}>
       {children}
     </GiftIdeasContext.Provider>
   );

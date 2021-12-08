@@ -12,7 +12,7 @@ export const TagsContext = createContext<TagsContextData>({});
 export const TagsProvider = ({
   children,
 }: React.PropsWithChildren<any>) => {
-  const { data } = useQuery(tagsQuery);
+  const { data, loading } = useQuery(tagsQuery);
   const [tags, setTags] = useState<Tag[]>([]);
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export const TagsProvider = ({
   }, [data]);
 
   return (
-    <TagsContext.Provider value={{ tags }}>
+    <TagsContext.Provider value={{ tags, loading }}>
       {children}
     </TagsContext.Provider>
   );
