@@ -9,8 +9,8 @@
   overflow: hidden;
   position: sticky;
   top: calc(var(--header-nav-height-mobile) - 1px);
-  z-index: $z-index-tags-filter;
   border-bottom: 1px solid color(gray-light);
+  z-index: $z-index-tags-filter;
 
   @include md-max {
     background-color: color(white);
@@ -57,6 +57,7 @@
       flex-wrap: wrap;
       position: fixed;
       align-items: center;
+      align-content: center;
       top: 0;
       right: 0;
       width: 100%;
@@ -127,5 +128,12 @@
         transform: translateX(0);
       }
     }
+  }
+
+  // Overlap state,
+  // When on mobile/tablet, this allows filter nav
+  // to overlap the header
+  &--overlap {
+    z-index: $z-index-tags-filter--expanded;
   }
 }

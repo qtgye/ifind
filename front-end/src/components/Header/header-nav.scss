@@ -7,6 +7,7 @@
     height: var(--header-nav-height-mobile);
     background-color: color(black);
     transition: all 0.3s;
+    z-index: $z-index-nav;
 
     @include tablet {
         width: 103%;

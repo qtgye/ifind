@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, MouseEventHandler } from "react";
 import { useTags } from "@contexts/tagsContext";
+import { useGlobalState } from "@contexts/globalStateContext";
 
 import TagsFiterItem from "./item";
 
@@ -7,10 +8,16 @@ import "./styles.scss";
 
 const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   const { tags } = useTags();
+  const { toggleBodyScroll } = useGlobalState();
   const [tagOptions, setTagOptions] = useState<SelectableTag[]>([]);
   const [expanded, setExpanded] = useState<boolean>(false);
+  const [overlap, setOverlap] = useState<boolean>(false);
 
-  const classNames = ["tags-filter", expanded ? "tags-filter--expanded" : ""]
+  const classNames = [
+    "tags-filter",
+    expanded ? "tags-filter--expanded" : "",
+    overlap ? "tags-filter--overlap" : "",
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -52,6 +59,11 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   const onToggleClick = useCallback<MouseEventHandler>(
     (e) => {
       e.preventDefault();
+
+      if ( !expanded ) {
+        setOverlap(true);
+      }
+
       setExpanded(!expanded);
     },
     [expanded]
@@ -61,6 +73,23 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
     e.preventDefault();
     setExpanded(false);
   }, []);
+
+  const onTransitionEnd = useCallback(
+    (e) => {
+      if (e.target === e.currentTarget) {
+        if (!expanded) {
+          setOverlap(false);
+        }
+      }
+    },
+    [expanded]
+  );
+
+  useEffect(() => {
+    if (toggleBodyScroll) {
+      toggleBodyScroll(!expanded);
+    }
+  }, [expanded, toggleBodyScroll]);
 
   useEffect(() => {
     checkTagOptions();
@@ -76,7 +105,7 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
           +
         </button>
       </div>
-      <div className="tags-filter__list">
+      <div className="tags-filter__list" onTransitionEnd={onTransitionEnd}>
         {tagOptions.map((tag) => (
           <TagsFiterItem key={tag.id} tag={tag} onClick={onTagClick} />
         ))}
