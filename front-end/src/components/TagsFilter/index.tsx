@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, MouseEventHandler } from "react";
 import { useTags } from "@contexts/tagsContext";
 import { useGlobalState } from "@contexts/globalStateContext";
+import { useBreakpoints } from '@utilities/breakpoints';
 
 import TagsFiterItem from "./item";
 
@@ -12,6 +13,7 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   const [tagOptions, setTagOptions] = useState<SelectableTag[]>([]);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [overlap, setOverlap] = useState<boolean>(false);
+  const currentBreakpoint = useBreakpoints();
 
   const classNames = [
     "tags-filter",
@@ -84,6 +86,12 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
     },
     [expanded]
   );
+
+  useEffect(() => {
+    if ( !/sm|md/i.test(currentBreakpoint) ) {
+      setExpanded(false);
+    }
+  } ,[ currentBreakpoint ]);
 
   useEffect(() => {
     if (toggleBodyScroll) {

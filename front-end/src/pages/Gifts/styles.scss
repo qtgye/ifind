@@ -16,12 +16,20 @@
 
   &__columns {
     min-height: 50vh;
+    display: flex;
+    flex-direction: column;
 
     @include lg {
       display: grid;
       grid-template-columns: 1fr 3fr;
       column-gap: 10px;
       align-items: start;
+    }
+  }
+
+  &__products {
+    @include md-max {
+      padding-bottom: 30px;
     }
   }
 
