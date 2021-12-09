@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import GeneralTemplate from "@templates/GeneralTemplate";
 import { withComponentName } from "@utilities/component";
@@ -10,6 +10,7 @@ import TagsFilter from "@components/TagsFilter";
 import ProductDealCard from "@components/ProductDealCard";
 import Pagination from "@components/Pagination";
 import IfindLoading from "@components/IfindLoading";
+import ProductModal from "@components/ProductModal";
 
 import "./styles.scss";
 
@@ -23,6 +24,7 @@ const Gifts = () => {
     total = 0,
     loading: isGiftsLoading,
   }: GiftIdeasContextData = useGiftIdeas();
+  const [ modalVisible, setModalVisible ] = useState(false);
   const selectedTags = tags.split(',').filter(Boolean);
 
   const onTagsUpdate = useCallback(
@@ -31,6 +33,15 @@ const Gifts = () => {
     },
     [history, pathname, search]
   );
+
+  const onCardClick = useCallback((product: Partial<Product>) => {
+    console.log({ product });
+    setModalVisible(true);
+  }, []);
+
+  const onModalClose = useCallback(() => {
+    setModalVisible(false);
+  }, []);
 
   const classNames = [
     "gifts container",
@@ -45,7 +56,7 @@ const Gifts = () => {
           <div className="gifts__products">
             <div className="gifts__products-grid">
               {products?.map((product) => (
-                <ProductDealCard key={product.id} {...product} />
+                <ProductDealCard key={product.id} {...product} onClick={onCardClick} />
               ))}
             </div>
             <div className="gifts__products-pagination">
@@ -55,6 +66,11 @@ const Gifts = () => {
         </div>
         <IfindLoading />
       </div>
+      <ProductModal product={{}} visible={modalVisible} onClose={onModalClose}>
+        <div>
+          Product Modal
+        </div>
+      </ProductModal>
     </GeneralTemplate>
   );
 };

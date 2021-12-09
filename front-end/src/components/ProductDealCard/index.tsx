@@ -3,7 +3,7 @@ import dealTypes from "@config/deal-types";
 
 import PercentCircle from "@components/PercentCircle";
 
-import './styles.scss';
+import "./styles.scss";
 
 const ProductDealCard: ProductDealCardComponent = ({
   title,
@@ -15,6 +15,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   price_original,
   discount_percent,
   quantity_available_percent,
+  onClick,
 }) => {
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
@@ -24,7 +25,7 @@ const ProductDealCard: ProductDealCardComponent = ({
 
   const getProductDetails = useCallback(() => {
     // Use default product details if deal_type is amazon or none
-    if ( !deal_type || /amazon/.test(deal_type as string)) {
+    if (!deal_type || /amazon/.test(deal_type as string)) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -63,12 +64,35 @@ const ProductDealCard: ProductDealCardComponent = ({
     quantity_available_percent,
   ]);
 
+  const onCardClick = useCallback(
+    (e) => {
+      if (typeof onClick === "function") {
+        e.preventDefault();
+
+        onClick({
+          title,
+          image,
+          amazon_url,
+          url_list,
+          price,
+        });
+      }
+    },
+    [onClick, title, image, amazon_url, url_list, price]
+  );
+
   useEffect(() => {
     getProductDetails();
   }, [deal_type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <a className="product-deal-card" href={productURL} target="_blank" rel="noreferrer">
+    <a
+      className="product-deal-card"
+      href={productURL}
+      target="_blank"
+      rel="noreferrer"
+      onClick={onCardClick}
+    >
       <div className="product-deal-card__content">
         {discountPercent ? (
           <div className="product-deal-card__discount">{`-${discountPercent}%`}</div>
@@ -94,7 +118,9 @@ const ProductDealCard: ProductDealCardComponent = ({
                 €{productPrice}
               </strong>
             </div>
-            <PercentCircle percent={stockPercent === null ? null : stockPercent || null} />
+            <PercentCircle
+              percent={stockPercent === null ? null : stockPercent || null}
+            />
           </div>
         </div>
       </div>
