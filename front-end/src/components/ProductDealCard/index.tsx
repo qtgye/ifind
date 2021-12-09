@@ -25,7 +25,7 @@ const ProductDealCard: ProductDealCardComponent = ({
 
   const getProductDetails = useCallback(() => {
     // Use default product details if deal_type is amazon or none
-    if (!deal_type || /amazon/.test(deal_type as string)) {
+    if (!deal_type || /amazon|none/.test(deal_type as string)) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -83,7 +83,7 @@ const ProductDealCard: ProductDealCardComponent = ({
 
   useEffect(() => {
     getProductDetails();
-  }, [deal_type]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [deal_type, getProductDetails]);
 
   return (
     <a
