@@ -20,7 +20,6 @@ const PORT = 0;
 const APP_ROOT = path.resolve(__dirname, "../");
 const BUILD_ROOT = path.resolve(APP_ROOT, "build");
 const PRERENDER_TEMP = path.resolve(APP_ROOT, "prerender");
-const STATIC_ROOT = path.resolve(APP_ROOT, "static");
 
 const app = express();
 app.use(express.static("build"));
@@ -154,14 +153,6 @@ const prerender = async (usedPort) => {
     outputFileSync(routeFile, html);
     console.info("DONE");
   }
-
-  // Remove old static files
-  console.info('Removing old static files'.cyan);
-  rmdirSync(STATIC_ROOT, { recursive: true });
-
-  // Move prerendered files into static folder
-  console.info('Moving prerendered files to static'.green);
-  moveSync(PRERENDER_TEMP, STATIC_ROOT);
 
   process.exit();
 };
