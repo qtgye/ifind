@@ -7,4 +7,6 @@ import "./productsByDealsContext.d";
 import "./productContext.d";
 import "./sourceRegionContext.d";
 import "./languagesContext.d";
+import "./giftIdeasContext.d";
+import "./tagsContext.d";
 

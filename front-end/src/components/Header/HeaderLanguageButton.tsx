@@ -74,8 +74,6 @@ const HeaderLanguageButton = () => {
     }
   }, [languages, countries, userLanguage]);
 
-  console.log(userLanguage);
-
   return (
     <div>
       <ReactFlagsSelect

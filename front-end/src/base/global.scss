@@ -1,5 +1,10 @@
 @import "./scss";
 
+// Global variables
+:root {
+  --header-nav-height-mobile: 62px;
+}
+
 * {
     box-sizing: border-box;
 }

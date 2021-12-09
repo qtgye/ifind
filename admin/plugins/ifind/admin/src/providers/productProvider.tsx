@@ -85,6 +85,15 @@ fragment ProductDataFragment on Product {
       lastname
     }
   }
+  tags {
+    id
+    label {
+      label
+      language {
+        code
+      }
+    }
+  }
 }
 `;
 
@@ -103,13 +112,14 @@ $image: String!
 $title: String!
 $website_tab: String!
 $deal_type: ENUM_PRODUCT_DEAL_TYPE
-$category: ID!
+$category: ID
 $position: Int
 $amazon_url: String!
 $price: Float
 $final_rating: Float
 $release_date: DateTime
 $status: ENUM_PRODUCT_STATUS
+$tags: [ID]
 `;
 
 export const productMutationCommonInput = `
@@ -127,6 +137,7 @@ final_rating: $final_rating
 release_date: $release_date
 admin_user: $user
 status: $status
+tags: $tags
 `;
 
 export const updateProductMutation = `

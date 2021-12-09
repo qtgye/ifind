@@ -3,7 +3,9 @@ import dealTypes from "@config/deal-types";
 
 import PercentCircle from "@components/PercentCircle";
 
-const ProductDealItem: ProductDealItemComponent = ({
+import './styles.scss';
+
+const ProductDealCard: ProductDealCardComponent = ({
   title,
   image,
   deal_type,
@@ -21,8 +23,8 @@ const ProductDealItem: ProductDealItemComponent = ({
   const [stockPercent, setStockPercent] = useState<number>();
 
   const getProductDetails = useCallback(() => {
-    // Use default product details if amazon
-    if (/amazon/.test(deal_type as string)) {
+    // Use default product details if deal_type is amazon or none
+    if ( !deal_type || /amazon/.test(deal_type as string)) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -66,29 +68,29 @@ const ProductDealItem: ProductDealItemComponent = ({
   }, [deal_type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <a className="product-deal-item" href={productURL} target="_blank" rel="noreferrer">
-      <div className="product-deal-item__content">
+    <a className="product-deal-card" href={productURL} target="_blank" rel="noreferrer">
+      <div className="product-deal-card__content">
         {discountPercent ? (
-          <div className="product-deal-item__discount">{`-${discountPercent}%`}</div>
+          <div className="product-deal-card__discount">{`-${discountPercent}%`}</div>
         ) : (
           ""
         )}
-        <div className="product-deal-item__image">
+        <div className="product-deal-card__image">
           <img src={image} alt="" />
         </div>
-        <div className="product-deal-item__details">
-          <div className="product-deal-item__title">{title}</div>
-          <div className="product-deal-item__deal-info">
-            <div className="product-deal-item__price">
+        <div className="product-deal-card__details">
+          <div className="product-deal-card__title">{title}</div>
+          <div className="product-deal-card__deal-info">
+            <div className="product-deal-card__price">
               {originalPrice ? (
-                <small className="product-deal-item__price-original">
+                <small className="product-deal-card__price-original">
                   {" "}
                   €{originalPrice}{" "}
                 </small>
               ) : (
                 ""
               )}
-              <strong className="product-deal-item__price-discounted">
+              <strong className="product-deal-card__price-discounted">
                 €{productPrice}
               </strong>
             </div>
@@ -100,4 +102,4 @@ const ProductDealItem: ProductDealItemComponent = ({
   );
 };
 
-export default ProductDealItem;
+export default ProductDealCard;

@@ -7,11 +7,17 @@ export const home = {
 export const productComparison = {
   en: "Product Comparison",
   de: "Produktvergleich",
-  ru: "сравнение продуктов",
+  ru: "Cравнение продуктов",
 };
 
 export const contact = {
   en: "Contact",
   de: "Kontakt",
   ru: "Контакт",
+};
+
+export const gifts = {
+  en: "Gifts ideas ",
+  de: "Geschenkideen",
+  ru: "Подарки",
 };

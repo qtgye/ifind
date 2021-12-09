@@ -25,9 +25,13 @@ const Home = () => {
             <div className="top-container">
               <h1>WILLKOMMEN BEI IFINDILU</h1>
               <div className="top-content">
-                <p>iFINDilu ist eine Shopping- und Vergleichsplattform, die die Vision verfolgt, für dich den Suchprozess so angenehm wie möglich zu gestalten. Weitere Informationen findest du hier.</p>
-                <button>KLICKE HIER</button>
-              </div>
+                <div className="top-text">
+                  <p>iFINDilu ist eine Shopping- und Vergleichsplattform, die die Vision verfolgt, für dich den Suchprozess so angenehm wie möglich zu gestalten. Weitere Informationen findest du hier.</p>
+                  </div>
+                </div>
+                <a href={"/" + userLanguage + "/about-us"}>
+                  <button>KLICKE HIER</button>
+                </a>
             </div>
             <div className="top-carousel">
               <div className="top-carousel-content">

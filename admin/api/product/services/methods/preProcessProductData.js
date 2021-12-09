@@ -91,8 +91,6 @@ module.exports = async (data, id) => {
         Object.entries(productDetails).forEach(([key, value]) => {
           data[key] = value;
         });
-        // Temporary data
-        data.releaseDate = productDetails.releaseDate;
       }
     })(),
   ]);
@@ -116,9 +114,9 @@ module.exports = async (data, id) => {
 
       if (matchedProductAttribute) {
         // Autofill release date if applicable
-        if (/release/i.test(matchedProductAttribute.name) && data.releaseDate) {
+        if (/release/i.test(matchedProductAttribute.name) && data.release_date) {
           attrRating.use_custom_formula = true;
-          attrRating.min = data.releaseDate;
+          attrRating.min = data.release_date;
           attrRating.max = moment.utc().subtract(3, "years").toISOString();
         }
 
@@ -137,7 +135,6 @@ module.exports = async (data, id) => {
 
   // Remove temporary data
   delete data.updateScope;
-  delete data.releaseDate;
 
   // Extract only changed data
   const changedData = compareProductChanges(matchedProduct, data);
@@ -145,5 +142,5 @@ module.exports = async (data, id) => {
   // Save temporary data for afterSave use
   setProductChangeParams({ state: changedData });
 
-  return changedData;
+  return data;
 };

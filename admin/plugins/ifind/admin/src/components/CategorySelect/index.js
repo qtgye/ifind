@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { useCategoriesListing, mapCategoriesTree, buildCategoryPath as _buildCategoryPath } from '../../providers/categoriesListingProvider';
 
 import NestedCategoryOption from '../NestedCategoryOption';
+import withConditionalRender from '../../helpers/withConditionalRender';
 
 import './styles.scss';
 
@@ -105,4 +106,4 @@ CategorySelect.defaultProps = {
   emptyMessage: 'No category options available',
 };
 
-export default CategorySelect;
+export default withConditionalRender(CategorySelect);
