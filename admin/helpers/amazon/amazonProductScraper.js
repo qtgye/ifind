@@ -147,7 +147,7 @@ class AmazonProductScraper {
     }
 
     try {
-      console.log(" - Fetching all details for product...".cyan);
+      console.info(" - Fetching all details for product...".cyan);
 
       /*
         Go to page and wait for selector.
@@ -255,7 +255,7 @@ class AmazonProductScraper {
     // Use english page in order to parse price without having to account for other currencies
     const englishPageURL = addURLParams(productURL, { language: "en" });
 
-    console.log(" - Fetching price for product...".cyan);
+    console.info(" - Fetching price for product...".cyan);
     let priceMatch,
       originalPriceMatch,
       discountPercentMatch,
@@ -417,7 +417,7 @@ class AmazonProductScraper {
     }
 
     // Apply prices and discount data
-    return {
+    const scrapedSaleData = {
       price: Number((priceMatch && priceMatch[0].replace(",", "")) || 0),
       discount_percent: Number(
         (discountPercentMatch && discountPercentMatch[0]) || null
@@ -427,9 +427,14 @@ class AmazonProductScraper {
       ),
       quantity_available_percent: quantityAvailablePercentMatch
         ? 100 - Number(quantityAvailablePercentMatch[0])
-        : null,
-      release_date: releaseDate,
+        : null
     };
+
+    if ( releaseDate ) {
+      scrapedSaleData.release_date = releaseDate;
+    }
+
+    return scrapedSaleData;
   }
 
   /* Cleanup browser instance. Ideally, this should be called when done with the scraper */

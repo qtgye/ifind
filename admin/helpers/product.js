@@ -1,22 +1,15 @@
-/**
-  Use puppeteer to get the HTML contents of a page
-  Use JSDOM to scrape the HTML for needed data
-
-  TODO:
-  Create separate services for amazon and ebay
- */
-const browser = require('./browser');
-const { isAmazonLink, applyGermanLocation } = require("./amazon");
-const { scrapeAmazonProduct, amazonLink } = require("./amazon");
+const { isAmazonLink } = require("./amazon");
+const { amazonLink } = require("./amazon");
+const createAmazonScraper = require("./amazon/amazonProductScraper");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
-const screenshotPageError = require('./amazon/screenshotPageError');
 
 const getProductDetails = async (
   productData,
   language,
   scrapePriceOnly = false
 ) => {
+  const amazonProductScraper = await createAmazonScraper();
   const productURL = productData.amazon_url;
   const scrapedData = {};
 
@@ -24,7 +17,7 @@ const getProductDetails = async (
     return null;
   }
 
-  console.log('Getting product details...'.cyan);
+  console.log("Getting product details...".cyan);
 
   // Prepare to save product issues
   scrapedData.product_issues = productData.product_issues || {};
@@ -33,16 +26,16 @@ const getProductDetails = async (
     // Scrape amazon
     (async () => {
       // Go to product page first to set german location for the page
-      try {
-        await browser.goto(productURL);
-        await applyGermanLocation(browser);
-      }
-      catch (err) {
-        console.error(err);
-        await screenshotPageError(productURL);
-      }
+      // try {
+      //   await browser.goto(productURL);
+      //   await applyGermanLocation(browser);
+      // }
+      // catch (err) {
+      //   console.error(err);
+      //   await screenshotPageError(productURL);
+      // }
 
-      const scrapedDetails = await scrapeAmazonProduct(
+      const scrapedDetails = await amazonProductScraper.scrapeProduct(
         productURL,
         "de",
         scrapePriceOnly
@@ -168,26 +161,24 @@ const filterProductsWithProblems = (products) => {
 
     // Check attrs_rating
     // Each product should have attrs_rating as it's being supplied by default
-    if ( hasInvalidRating(product) ) {
+    if (hasInvalidRating(product)) {
       return true;
     }
 
     // Check title and details_html for unnecessary newlines
-    if ( product.title.match(/\n/) || product.details_html.match(/\n+/g) ) {
+    if (product.title.match(/\n/) || product.details_html.match(/\n+/g)) {
       return true;
     }
   });
 };
 
 // Checks if a given product has invalid Product Attribute Rating
-const hasInvalidRating = (product) => (
+const hasInvalidRating = (product) =>
   !product.attrs_rating ||
   !product.attrs_rating.length ||
-  product.attrs_rating.some(attr_rating => (
-    !attr_rating ||
-    !attr_rating.product_attribute
-  ))
-);
+  product.attrs_rating.some(
+    (attr_rating) => !attr_rating || !attr_rating.product_attribute
+  );
 
 module.exports = {
   fetchProductDetails,
