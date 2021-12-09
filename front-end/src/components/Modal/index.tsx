@@ -1,5 +1,9 @@
 import Portal from "@components/Portal";
-import { MouseEventHandler, useCallback, useEffect } from "react";
+import {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+} from "react";
 import { FaTimes } from "react-icons/fa";
 import { useGlobalState } from "@contexts/globalStateContext";
 
@@ -32,11 +36,26 @@ const Modal = ({
     [onClose, toggleBodyScroll]
   );
 
+  const onKeyPress = useCallback(
+    (e) => {
+      if (/esc/i.test(e.key) && typeof onClose === "function") {
+        onClose();
+      }
+    },
+    [onClose]
+  );
+
   useEffect(() => {
     if (toggleBodyScroll) {
       toggleBodyScroll(!visible);
     }
   }, [visible, toggleBodyScroll]);
+
+  useEffect(() => {
+    document.addEventListener("keydown", onKeyPress);
+
+    return document.removeEventListener("keydown", onKeyPress);
+  }, [onKeyPress]);
 
   return (
     <Portal id="modal-portal">
