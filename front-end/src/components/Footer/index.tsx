@@ -40,6 +40,8 @@ const Footer = () => {
         }
     }, [socialNetwork]);
 
+    console.log(informationLinks);
+
     return (
         <footer className="footer" id="footer">
             <div className="footer-top section">
