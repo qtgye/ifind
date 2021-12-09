@@ -124,9 +124,11 @@ const prerender = async (usedPort) => {
     height: 1080,
   });
 
+  let routeIndex = 0;
+
   for (const route of routesWithLanguages) {
     const url = `http://127.0.0.1:${usedPort}${route}`;
-    console.info(`Scraping route: ${route.bold} at ${url}`.green);
+    console.info(`[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${route.bold} at ${url}`.green);
 
     await page.goto(url, {
       waitUntil: "networkidle0",

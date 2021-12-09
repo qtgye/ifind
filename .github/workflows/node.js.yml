@@ -63,7 +63,7 @@ jobs:
           rm -rf /var/www/html/coverage && mv coverage /var/www/html/coverage && \
           echo "/==== BUILDING SITE ====/" && \
           CI=true npm run build && npm run prerender && \
-          rm -rf /var/www/html/front-end && mv prerender/* /var/www/html/front-end && \
+          rm -rf /var/www/html/front-end/* && mv prerender/* /var/www/html/front-end && \
 
           echo "/==== BUILDING STORYBOOK ====/" && \
           CI=true npm run build-storybook && \
