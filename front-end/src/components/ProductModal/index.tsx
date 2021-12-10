@@ -1,5 +1,5 @@
 import Modal from "@components/Modal";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useProductDetail } from "@contexts/productContext";
 import IfindLoading from "@components/IfindLoading";
 import ProductLinks from "@components/ProductLinks";

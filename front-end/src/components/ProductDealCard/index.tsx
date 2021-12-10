@@ -80,7 +80,7 @@ const ProductDealCard: ProductDealCardComponent = ({
           amazon_url,
           url_list,
           price,
-        });
+        } as Product);
       }
     },
     [onClick, id, title, image, amazon_url, url_list, price]
