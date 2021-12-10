@@ -1,4 +1,5 @@
 import IfindIcon from "@components/IfindIcon";
+import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
 import "./styles.scss";
 
@@ -32,4 +33,4 @@ const RatingWarps = ({ rating }: RatingWarpsProps) => {
   );
 };
 
-export default RatingWarps;
+export default withConditionalRender<RatingWarpsProps>(RatingWarps);

@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import dealTypes from "@config/deal-types";
 
 import PercentCircle from "@components/PercentCircle";
+import RatingWarps from "@components/RatingWarps";
 
 import "./styles.scss";
 
@@ -15,7 +16,9 @@ const ProductDealCard: ProductDealCardComponent = ({
   price_original,
   discount_percent,
   quantity_available_percent,
+  final_rating,
   onClick,
+  additional_info = 'stocks_available',
 }) => {
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
@@ -119,8 +122,12 @@ const ProductDealCard: ProductDealCardComponent = ({
               </strong>
             </div>
             <PercentCircle
+              renderIf={additional_info === 'stocks_available'}
               percent={stockPercent === null ? null : stockPercent || null}
             />
+            <RatingWarps
+              renderIf={additional_info === 'rating'}
+              rating={final_rating || 0} />
           </div>
         </div>
       </div>

@@ -35,6 +35,13 @@ const giftIdeasQuery = gql`
             }
           }
         }
+        final_rating
+        attrs_rating {
+          rating
+          product_attribute {
+            name
+          }
+        }
       }
       total
     }
