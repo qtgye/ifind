@@ -7,6 +7,7 @@ import RatingWarps from "@components/RatingWarps";
 import "./styles.scss";
 
 const ProductDealCard: ProductDealCardComponent = ({
+  id,
   title,
   image,
   deal_type,
@@ -73,6 +74,7 @@ const ProductDealCard: ProductDealCardComponent = ({
         e.preventDefault();
 
         onClick({
+          id,
           title,
           image,
           amazon_url,
@@ -81,7 +83,7 @@ const ProductDealCard: ProductDealCardComponent = ({
         });
       }
     },
-    [onClick, title, image, amazon_url, url_list, price]
+    [onClick, id, title, image, amazon_url, url_list, price]
   );
 
   useEffect(() => {

@@ -18,6 +18,7 @@ import  "./PriceChangeGraph/index.d";
 import  "./ProductDealCard/index.d";
 import  "./ProductDealsGrid/index.d";
 import  "./ProductDetails/index.d";
+import  "./ProductLinks/index.d";
 import  "./ProductModal/index.d";
 import  "./ProductRating/index.d";
 import  "./ProgressBar/index.d";

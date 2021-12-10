@@ -14,7 +14,7 @@ export const GlobalStateContextProvider = ({
   const [activeCategory, setActiveCategory] = useState(null);
   const [focusedCategory, setFocusedCategory] = useState(0);
   const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
-  const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(false);
+  const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(true);
 
   const onCategoryClick = useCallback((id) => {
     setFocusedCategory(id);

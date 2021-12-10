@@ -1,9 +1,5 @@
 import Portal from "@components/Portal";
-import {
-  MouseEventHandler,
-  useCallback,
-  useEffect,
-} from "react";
+import { MouseEventHandler, useCallback, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { useGlobalState } from "@contexts/globalStateContext";
 
@@ -52,16 +48,16 @@ const Modal = ({
   }, [visible, toggleBodyScroll]);
 
   useEffect(() => {
-    document.addEventListener("keydown", onKeyPress);
+    window.addEventListener("keydown", onKeyPress);
 
-    return document.removeEventListener("keydown", onKeyPress);
+    return () => window.removeEventListener("keydown", onKeyPress);
   }, [onKeyPress]);
 
   return (
     <Portal id="modal-portal">
       <div className={classNames}>
-        <div className="ifind-modal__underlay" onClick={onCloseClick}></div>
         <div className="ifind-modal__scrollarea">
+          <div className="ifind-modal__underlay" onClick={onCloseClick}></div>
           <div className="ifind-modal__dialog">
             <button className="ifind-modal__close" onClick={onCloseClick}>
               <FaTimes />

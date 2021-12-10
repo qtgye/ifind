@@ -1,0 +1,63 @@
+@import "base/scss";
+
+.product-modal {
+  &--loading {
+    .ifind-loading {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  &__heading {
+    margin-bottom: 50px;
+  }
+
+  &__links {
+    margin-top: 50px;
+  }
+
+  &__details {
+    margin-top: 50px;
+  }
+
+  &__rating {
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-rating {
+    --font-size: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: auto;
+    position: relative;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    .rating-warps {
+      --warp-size: 30px;
+    }
+
+    &__tooltip {
+      display: block;
+      position: static;
+      margin-top: 10px;
+    }
+
+    .attributes-table {
+      --font-size: 14px;
+    }
+  }
+
+  &__price-graph {
+    margin-top: 30px;
+  }
+
+  .price-change-graph {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    position: static;
+  }
+}

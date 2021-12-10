@@ -25,6 +25,7 @@ const Gifts = () => {
     loading: isGiftsLoading,
   }: GiftIdeasContextData = useGiftIdeas();
   const [modalVisible, setModalVisible] = useState(false);
+  const [activeProduct, setActiveProduct] = useState<Product>();
   const selectedTags = tags.split(",").filter(Boolean);
 
   const onTagsUpdate = useCallback(
@@ -34,8 +35,8 @@ const Gifts = () => {
     [history, pathname, search]
   );
 
-  const onCardClick = useCallback((product: Partial<Product>) => {
-    console.log({ product });
+  const onCardClick = useCallback((product?: Product) => {
+    setActiveProduct(product);
     setModalVisible(true);
   }, []);
 
@@ -73,9 +74,11 @@ const Gifts = () => {
         </div>
         <IfindLoading />
       </div>
-      <ProductModal product={{}} visible={modalVisible} onClose={onModalClose}>
-        <div>Product Modal</div>
-      </ProductModal>
+      <ProductModal
+        product={activeProduct}
+        visible={modalVisible}
+        onClose={onModalClose}
+      />
     </GeneralTemplate>
   );
 };

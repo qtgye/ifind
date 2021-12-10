@@ -21,6 +21,9 @@
   background-color: rgba(color(white), 0.9);
   backdrop-filter: blur(5px);
   z-index: $z-index-ifind-loading;
+  transition: all .3s ease;
+  opacity: 0;
+  visibility: hidden;
 
   img {
     width: 50px;
@@ -31,7 +34,8 @@
     animation-fill-mode: forwards;
     animation-iteration-count: infinite;
     position: sticky;
-    top:  calc(50vh - 25px);
-    bottom:  calc(50vh - 25px);
+    top: Min(calc(50vh - 25px), calc(50% - 25px));
+    bottom: Min(calc(50vh - 25px), calc(50% - 25px));
+    will-change: transform;
   }
 }
