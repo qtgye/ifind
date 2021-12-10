@@ -4,6 +4,7 @@ const {
   ensureDirSync,
   copySync,
   rmdirSync,
+  moveSync,
 } = require("fs-extra");
 const path = require("path");
 const puppeteer = require("puppeteer");
@@ -18,7 +19,7 @@ const routesWithLanguages = [];
 const PORT = 0;
 const APP_ROOT = path.resolve(__dirname, "../");
 const BUILD_ROOT = path.resolve(APP_ROOT, "build");
-const STATIC_ROOT = path.resolve(APP_ROOT, "static");
+const PRERENDER_TEMP = path.resolve(APP_ROOT, "prerender");
 
 const app = express();
 app.use(express.static("build"));
@@ -32,7 +33,7 @@ const prerender = async (usedPort) => {
 
   // Get dynamic routes from API
   try {
-    console.log("Getting languages and page routes from API...".cyan);
+    console.info("Getting languages and page routes from API...".cyan);
 
     const [
       languageCodes,
@@ -93,7 +94,7 @@ const prerender = async (usedPort) => {
     languages.push(...languageCodes);
     routes.push(...pageSlugs);
   } catch (err) {
-    console.log(err.message.red);
+    console.info(err.message.red);
   }
 
   // Generate routes with languages
@@ -106,13 +107,11 @@ const prerender = async (usedPort) => {
   // Always scrape the homepage last, since this will override index.html
   routesWithLanguages.push("/");
 
-  // Remove old static files
-  rmdirSync(STATIC_ROOT, { recursive: true });
+  // Copy build to prerender folder
+  ensureDirSync(PRERENDER_TEMP);
+  copySync(BUILD_ROOT, PRERENDER_TEMP);
 
-  // Copy build to static folder
-  copySync(BUILD_ROOT, STATIC_ROOT);
-
-  console.log(`Prerendering ${routesWithLanguages.length} route(s)...`.cyan);
+  console.info(`Prerendering ${routesWithLanguages.length} route(s)...`.cyan);
 
   const browser = await puppeteer.launch({
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
@@ -125,9 +124,11 @@ const prerender = async (usedPort) => {
     height: 1080,
   });
 
+  let routeIndex = 0;
+
   for (const route of routesWithLanguages) {
     const url = `http://127.0.0.1:${usedPort}${route}`;
-    console.log(`Scraping route: ${route.bold} at ${url}`.green);
+    console.info(`[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${route.bold} at ${url}`.green);
 
     await page.goto(url, {
       waitUntil: "networkidle0",
@@ -145,14 +146,14 @@ const prerender = async (usedPort) => {
       return document.documentElement.outerHTML;
     });
 
-    console.log("Writing to file...");
+    console.info("Writing to file...");
     const routePath = route.replace(/\/$/, "");
-    const routeDir = path.resolve(STATIC_ROOT, routePath.replace(/^\//, ""));
+    const routeDir = path.resolve(PRERENDER_TEMP, routePath.replace(/^\//, ""));
     const routeFile = path.resolve(routeDir, "index.html");
 
     ensureDirSync(routeDir);
     outputFileSync(routeFile, html);
-    console.log("DONE");
+    console.info("DONE");
   }
 
   process.exit();

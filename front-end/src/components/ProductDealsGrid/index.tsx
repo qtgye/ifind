@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import { GlobalStateContext } from '@contexts/globalStateContext';
-import ProductDealItem from "@components/ProductDealCard";
+import ProductDealCard from "@components/ProductDealCard";
 
 import "./styles.scss";
 
@@ -32,7 +32,7 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
       {products.length ? (
         <div className="product-deals-grid__items">
           {products.map((product) => (
-            <ProductDealItem key={product.id} {...product} />
+            <ProductDealCard key={product.id} {...product} />
           ))}
         </div>
       ) : (

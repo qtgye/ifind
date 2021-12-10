@@ -59,6 +59,7 @@ Thumbs.db
 # production
 /build
 /static
+/prerender
 
 # misc
 .DS_Store

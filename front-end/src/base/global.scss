@@ -6,26 +6,35 @@
 }
 
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    ol, ul, dl {
-        padding-left: 0;
-    }
+  ol,
+  ul,
+  dl {
+    padding-left: 0;
+  }
+
+  &.body--fixed {
+    position: fixed;
+    top: calc(-1 * var(--body-fixed-scroll));
+    width: 100%;
+  }
 }
 
-a, a[href] {
-    text-decoration: none;
+a,
+a[href] {
+  text-decoration: none;
 }
 
 // Colors utility classes
 @each $color-name, $color-value in $colors {
-    #{"." + $color-name} {
-        color: $color-name;
-    }
+  #{"." + $color-name} {
+    color: $color-name;
+  }
 
-    #{".bg-" + $color-name} {
-        background-color: $color-value
-    }
+  #{".bg-" + $color-name} {
+    background-color: $color-value;
+  }
 }
