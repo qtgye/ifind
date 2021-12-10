@@ -82,7 +82,11 @@ const Footer = () => {
                                 <ul>
                                     {informationLinks.map(infoRoute => (
                                         infoRoute && <li key={infoRoute.path}>
-                                            <Link to={userLanguage + infoRoute?.path || '/'}>{infoRoute.label}</Link>
+                                            {console.log(userLanguage, routes)}
+                                            <Link to={userLanguage + infoRoute?.path || '/'}>
+                                                {infoRoute.label}
+                                            </Link>
+                                            {console.log(userLanguage + infoRoute?.path)}
                                         </li>
                                     ))}
                                 </ul>

@@ -27,11 +27,13 @@ const Home = () => {
               <div className="top-content">
                 <div className="top-text">
                   <p>iFINDilu ist eine Shopping- und Vergleichsplattform, die die Vision verfolgt, für dich den Suchprozess so angenehm wie möglich zu gestalten. Weitere Informationen findest du hier.</p>
-                  </div>
                 </div>
-                <a href={"/" + userLanguage + "/about-us"}>
-                  <button>KLICKE HIER</button>
-                </a>
+              </div>
+              <a href={"/" + userLanguage + "/about-us"}>
+                <button className="home-btn">
+                  KLICKE HIER
+                </button>
+              </a>
             </div>
             <div className="top-carousel">
               <div className="top-carousel-content">
@@ -39,7 +41,7 @@ const Home = () => {
               </div>
             </div>
           </div>
-          <div data-aos="slide-up" className="video">
+          <div data-aos="zoom-in" className="video">
             <div className="video-content">
               <VideoPlayer />
             </div>
@@ -76,7 +78,7 @@ const Home = () => {
               </a>
             </div>
           </div>
-          <div data-aos="zoom-in" className="gifts">
+          <div data-aos="fade-right" className="gifts">
             <div className="gifts-banner">
               <a href={"/" + userLanguage + "/gifts"}>
                 <img src="/gifts-banner-3.jpg" height={350} width={600} alt="banner_gifts" />

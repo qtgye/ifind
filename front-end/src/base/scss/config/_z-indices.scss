@@ -2,6 +2,6 @@ $z-index-nav: 100;
 $z-index-sidenav-list: $z-index-nav + 1;
 $z-index-sidenav-heading: $z-index-sidenav-list + 1;
 
-$z-index-tags-filter: $z-index-nav + 5;
+$z-index-tags-filter: $z-index-nav - 115;
 
 $z-index-ifind-loading: $z-index-nav + 100;
