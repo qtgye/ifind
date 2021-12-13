@@ -14,6 +14,7 @@ import  "./NewsLetter/index.d";
 import  "./Pagination/index.d";
 import  "./PercentCircle/index.d";
 import  "./Portal/index.d";
+import  "./PreloadedImage/index.d";
 import  "./PriceChangeGraph/index.d";
 import  "./ProductDealCard/index.d";
 import  "./ProductDealsGrid/index.d";

@@ -13,10 +13,7 @@ import IfindIcon from "@components/IfindIcon";
 import "./product-comparison.scss";
 import { useCategoryTree } from "@contexts/categoriesContext";
 import { useSubCategories } from "../../contexts/categoriesContext";
-//import Carousel from "../../components/Carousel";
 import ProgressBars from "../../components/ProgressBar";
-
-//type ScrollableElement = HTMLElement & { scrollBehavior: string };
 
 const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNode>> = () => {
   const {
@@ -33,10 +30,6 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
   const [currentCategory, setCurrentCategory] = useState();
   const [lshowButton, lsetShowButton] = useState(false);
   const [rshowButton, rsetShowButton] = useState(true);
-
-  useEffect(() => {
-    console.log({ categoryTree });
-  }, [categoryTree]);
 
   useEffect(() => {
     if (setCurrentListCategory) {
@@ -63,7 +56,6 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
     [setActiveCategory]
   );
 
-  // const observerRef = useRef(new IntersectionObserver(onIntersect, options));
   const observerRef = useRef(new IntersectionObserver(onIntersect, options));
 
   const observeItem = useCallback(
@@ -134,14 +126,12 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
     if (content.scrollLeft < 50) {
       lsetShowButton(false);
     }
-    //console.log(content.scrollLeft);
   }
 
   useEffect(() => {
     if (window.innerWidth < 768) {
       rsetShowButton(true);
     }
-    //console.log(window.innerWidth);
   }, [window.innerWidth]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
