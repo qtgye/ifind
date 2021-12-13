@@ -3,9 +3,11 @@
 
 .product-rating {
     --font-size: 14px;
+    position: relative;
     display: flex;
     align-items: center;
-    position: relative;
+    justify-content: center;
+    flex-direction: column;
 
     @include small_laptop {
         position: absolute;
@@ -51,6 +53,11 @@
 
     @include small_mobile {
         right: 2.8rem;
+    }
+
+    &__content {
+      display: flex;
+      align-items: center;
     }
 
     &:hover &__tooltip {

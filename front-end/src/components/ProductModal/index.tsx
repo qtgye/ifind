@@ -1,10 +1,10 @@
-import Modal from "@components/Modal";
-import { useEffect } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useProductDetail } from "@contexts/productContext";
 import IfindLoading from "@components/IfindLoading";
 import ProductLinks from "@components/ProductLinks";
 import PriceChangeGraph from "@components/PriceChangeGraph";
 import ProductRating from "@components/ProductRating";
+import Modal from "@components/Modal";
 
 import "./styles.scss";
 
@@ -14,6 +14,8 @@ const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
     getProductDetails,
     loading = true,
   } = useProductDetail();
+  const modalRef = useRef<HTMLElement>();
+  const [isScrolled, setIsScrolled] = useState(false);
   const productChanges =
     productDetail?.product_changes?.map((productChange) => {
       return {
@@ -22,9 +24,17 @@ const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
       } as ProductChangeWithStateObject;
     }) || [];
 
-  const classNames = ["product-modal", loading ? "product-modal--loading" : ""]
+  const classNames = [
+    "product-modal",
+    loading ? "product-modal--loading" : "",
+    isScrolled ? 'product-modal--scrolled' : ''
+  ]
     .filter(Boolean)
-    .join();
+    .join(' ');
+
+  const onScroll = useCallback((e) => {
+    setIsScrolled(e.currentTarget?.scrollTop > 5);
+  }, []);
 
   useEffect(() => {
     if (product?.id && getProductDetails) {
@@ -32,24 +42,48 @@ const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
     }
   }, [product, getProductDetails]);
 
+  // Listen to intersection to determine if modal has scrolled
+  useEffect(() => {
+    if (modalRef.current) {
+      const modalScrollArea = modalRef.current.querySelector(
+        ".ifind-modal__scrollarea"
+      );
+      console.log({ modalScrollArea });
+      modalScrollArea?.addEventListener("scroll", onScroll);
+    }
+  }, [modalRef, onScroll]);
+
   return (
-    <Modal className={classNames} {...modalProps}>
+    <Modal
+      className={classNames}
+      {...modalProps}
+      ref={modalRef as React.Ref<HTMLElement>}
+    >
       <IfindLoading />
       <div className="product-modal__details">
+        <div className="product-modal__image">
+          <img
+            src={product?.image}
+            alt=""
+            className="product-modal__image-blur"
+          />
+          <img
+            src={product?.image}
+            alt=""
+            className="product-modal__image-preview"
+          />
+        </div>
         <div className="product-modal__content">
-          <h2 className="product-modal__heading">{product?.title}</h2>
           <div className="product-modal__info">
-            <div className="product-modal__image">
-              <img src={product?.image} alt="" className="" />
-            </div>
+            <h2 className="product-modal__heading">{product?.title}</h2>
             <div className="product-modal__links">
               <ProductLinks product={productDetail} />
             </div>
           </div>
-          <div className="product-modal__details">
+          <div className="product-modal__meta">
             <div className="product-modal__rating">
               <ProductRating
-                renderIf={typeof productDetail?.final_rating === 'number'}
+                renderIf={typeof productDetail?.final_rating === "number"}
                 finalRating={productDetail?.final_rating || 0}
                 attributes={productDetail?.attrs_rating || []}
               />

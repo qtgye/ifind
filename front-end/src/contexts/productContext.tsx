@@ -45,7 +45,6 @@ export const ProductContextProvider = ({ children }: PropsWithChildren<ReactNode
     }, [ mutationFunction ]);
 
     useEffect(() => {
-      console.log({ data });
         setProductDetail(data?.productDetails);
     }, [ data ]);
 
