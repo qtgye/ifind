@@ -8,19 +8,18 @@
   padding: 10px;
   overflow: hidden;
   z-index: $z-index-tags-filter;
+  background-color: color(black);
 
   @include md-max {
     position: sticky;
     top: calc(var(--header-nav-height-mobile) - 1px);
     bottom: 0;
-    background-color: color(white);
     border-top: 1px solid color(gray-light);
     border-bottom: 1px solid color(gray-light);
   }
 
   @include lg {
     padding: 30px 10px;
-    background-color: color(black);
     border-radius: 10px;
     height: auto;
   }
@@ -36,6 +35,30 @@
     }
   }
 
+  &__selected-list {
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    column-gap: 10px;
+    row-gap: 10px;
+    height: 32px;
+    overflow: hidden;
+  }
+
+  &__selected {
+    display: block;
+    padding: 0 15px;
+    background-color: color(white);
+    border-radius: 100px;
+    height: 32px;
+    line-height: 32px;
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
   &__toggle {
     display: flex;
     align-items: center;
@@ -46,7 +69,7 @@
     font-weight: lighter;
     border: 0;
     background-color: transparent;
-    color: color(black);
+    color: color(white);
   }
 
   &__list {
