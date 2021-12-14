@@ -1,11 +1,8 @@
-import { useState, useEffect } from "react";
 import ReactShadowRoot from "react-shadow-root";
-import { v4 as uuid } from "uuid";
 
-import { useSourceRegion } from "@contexts/sourceRegionContext";
+import ProductLinks from "@components/ProductLinks";
 import PriceChangeGraph from "@components/PriceChangeGraph";
 import ProductRating from "@components/ProductRating";
-import ProductURLLink from "./product-url-link";
 
 import inlineStyles from "./detail-styles";
 import "./product-details.scss";
@@ -13,9 +10,6 @@ import "./product-details.scss";
 const icon = "/images/loading.png";
 
 const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
-  const { sources } = useSourceRegion();
-  const amazonSource = sources?.find((source) => /amazon/i.test(source.name));
-  const [urlItems, setURLItems] = useState<URLListItemWithKey[]>([]);
   const productChanges =
     product?.product_changes?.map((productChange) => {
       return {
@@ -23,17 +17,6 @@ const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
         state: JSON.parse(productChange?.state || "{}"),
       } as ProductChangeWithStateObject;
     }) || [];
-
-  useEffect(() => {
-    // Add keys to urlList
-    if (product?.url_list) {
-      const urlItems = product.url_list?.map((urlData) => ({
-        ...urlData,
-        key: uuid(),
-      }));
-      setURLItems(urlItems as URLListItemWithKey[]);
-    }
-  }, [product]);
 
   return (
     <div className="product-details">
@@ -54,45 +37,22 @@ const ProductDetails = ({ product, isLoading }: ProductDetailsProps) => {
             </ReactShadowRoot>
           </div>
           <div className="product-details__additional">
-            <div className="product-details__links">
-              <ProductURLLink
-                key={product.amazon_url}
-                url={product.amazon_url}
-                logo={amazonSource?.button_logo?.url}
-                price={product.price || 0}
-                isBase={true}
-                basePrice={product.price || 1}
-                currency={product.region?.currency?.symbol}
-              />
-              {urlItems.map(({ key, url, source, price, region, is_base }) => (
-                <ProductURLLink
-                  key={key}
-                  url={url}
-                  source={source?.name}
-                  logo={source?.button_logo?.url}
-                  price={price || 0}
-                  basePrice={product.price || 1}
-                  currency={product.region?.currency?.symbol}
-                />
-              ))}
-            </div>
-            {product?.product_changes?.length ? (
-              <PriceChangeGraph
-                priceChanges={productChanges.map(
-                  (productChange) =>
-                    productChange && {
-                      price: productChange?.state?.price || 0,
-                      date_time: productChange.date_time,
-                    }
-                )}
-              />
-            ) : null}
-            {product.final_rating ? (
-              <ProductRating
-                finalRating={product.final_rating}
-                attributes={product.attrs_rating || []}
-              />
-            ) : null}
+            <ProductLinks product={product} />
+            <PriceChangeGraph
+              renderIf={productChanges.length > 0}
+              priceChanges={productChanges.map(
+                (productChange) =>
+                  productChange && {
+                    price: productChange?.state?.price || 0,
+                    date_time: productChange.date_time,
+                  }
+              )}
+            />
+            <ProductRating
+              renderIf={"final_rating" in product}
+              finalRating={product.final_rating || 0}
+              attributes={product.attrs_rating || []}
+            />
           </div>
         </div>
       )}

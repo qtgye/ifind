@@ -15,7 +15,7 @@ import ProductModal from "@components/ProductModal";
 import "./styles.scss";
 
 const Gifts = () => {
-  const { tags = '' } = useSearchParams();
+  const { tags = "" } = useSearchParams();
   const { loading: isTagsLoading } = useTags();
   const { pathname, search } = useLocation();
   const history = useHistory();
@@ -24,8 +24,9 @@ const Gifts = () => {
     total = 0,
     loading: isGiftsLoading,
   }: GiftIdeasContextData = useGiftIdeas();
-  const [ modalVisible, setModalVisible ] = useState(false);
-  const selectedTags = tags.split(',').filter(Boolean);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [activeProduct, setActiveProduct] = useState<Product>();
+  const selectedTags = tags.split(",").filter(Boolean);
 
   const onTagsUpdate = useCallback(
     (tags: (string | number)[]) => {
@@ -34,8 +35,8 @@ const Gifts = () => {
     [history, pathname, search]
   );
 
-  const onCardClick = useCallback((product: Partial<Product>) => {
-    console.log({ product });
+  const onCardClick = useCallback((product?: Product) => {
+    setActiveProduct(product);
     setModalVisible(true);
   }, []);
 
@@ -46,7 +47,9 @@ const Gifts = () => {
   const classNames = [
     "gifts container",
     isGiftsLoading || isTagsLoading ? "gifts--loading" : "",
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <GeneralTemplate>
@@ -56,7 +59,12 @@ const Gifts = () => {
           <div className="gifts__products">
             <div className="gifts__products-grid">
               {products?.map((product) => (
-                <ProductDealCard key={product.id} {...product} onClick={onCardClick} />
+                <ProductDealCard
+                  key={product.id}
+                  {...product}
+                  onClick={onCardClick}
+                  additional_info="rating"
+                />
               ))}
             </div>
             <div className="gifts__products-pagination">
@@ -66,11 +74,11 @@ const Gifts = () => {
         </div>
         <IfindLoading />
       </div>
-      <ProductModal product={{}} visible={modalVisible} onClose={onModalClose}>
-        <div>
-          Product Modal
-        </div>
-      </ProductModal>
+      <ProductModal
+        product={activeProduct}
+        visible={modalVisible}
+        onClose={onModalClose}
+      />
     </GeneralTemplate>
   );
 };

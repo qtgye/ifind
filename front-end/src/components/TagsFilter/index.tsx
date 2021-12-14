@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, MouseEventHandler } from "react";
 import { useTags } from "@contexts/tagsContext";
 import { useGlobalState } from "@contexts/globalStateContext";
+import { useLanguages } from "@contexts/languagesContext";
 import { useBreakpoints } from "@utilities/breakpoints";
 
 import TagsFiterItem from "./item";
@@ -10,6 +11,7 @@ import "./styles.scss";
 const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   const { tags } = useTags();
   const { toggleBodyScroll } = useGlobalState();
+  const { userLanguage } = useLanguages();
   const [tagOptions, setTagOptions] = useState<SelectableTag[]>([]);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [overlap, setOverlap] = useState<boolean>(false);
@@ -22,6 +24,8 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   ]
     .filter(Boolean)
     .join(" ");
+
+  const selected = tagOptions.filter((tag: SelectableTag) => tag.selected);
 
   const onTagClick = useCallback(
     (tag) => {
@@ -87,6 +91,26 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
     [expanded]
   );
 
+  const extractTagLabel = useCallback((tag: Tag) => {
+    if ( userLanguage ) {
+      const matchedLabel = tag.label?.find(label => label?.language?.code === userLanguage);
+
+      if ( matchedLabel ) {
+        return matchedLabel.label;
+      }
+    }
+
+    const englishLabel = tag.label?.find(label => label?.language?.code === 'en');
+
+    if ( englishLabel ) {
+      return englishLabel.label;
+    }
+
+    const firstLabel = tag && tag.label ? tag && tag.label[0] : null;
+    return firstLabel?.label || '';
+
+  }, [ userLanguage ]);
+
   useEffect(() => {
     if (!/sm|md/i.test(currentBreakpoint)) {
       setExpanded(false);
@@ -106,9 +130,11 @@ const TagsFilter = ({ selectedTags, onUpdate }: TagsFilterProps) => {
   return (
     <div className={classNames}>
       <div className="tags-filter__heading">
-        <span className="tags-filter__label">
-          Tags ({selectedTags.length} selected)
-        </span>
+        <div className="tags-filter__selected-list">
+        {selected.map((tag) => (
+          <span className="tags-filter__selected" key={tag.id}>{extractTagLabel(tag)}</span>
+        ))}
+        </div>
         <button className="tags-filter__toggle" onClick={onToggleClick}>
           +
         </button>

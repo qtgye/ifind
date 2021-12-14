@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import dayjs from "dayjs";
+import withConditionalRender  from "@utilities/hocs/withConditionalRender";
 
 import "./styles.scss";
 
@@ -92,4 +93,4 @@ const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
   ) : null;
 };
 
-export default PriceChangeGraph;
+export default withConditionalRender<PriceChangeGraphProps>(PriceChangeGraph);

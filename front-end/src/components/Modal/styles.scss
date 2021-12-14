@@ -20,7 +20,7 @@
   }
 
   &__underlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -74,6 +74,7 @@
     border: 0;
     transition: all .15s;
     border-radius: 10px;
+    z-index: $z-index-modal + 10;
 
     &:hover {
       background-color: color(dark-red);

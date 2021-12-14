@@ -13,7 +13,7 @@ export const ProductContextProvider = ({ children }: PropsWithChildren<ReactNode
     const [
         fetchProductDetails,
         {
-            // loading,
+            loading,
             error,
             data,
         }
@@ -56,6 +56,7 @@ export const ProductContextProvider = ({ children }: PropsWithChildren<ReactNode
 
     return (
         <ProductContext.Provider value={{
+            loading,
             productDetail,
             getProductDetails,
             incrementProductClick,

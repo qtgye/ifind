@@ -1,6 +1,6 @@
 declare interface ModalProps {
   className?: string;
-  children: JSX.Element;
+  children?: React.ReactNode;
   visible?: boolean;
   onClose?: () => void;
 }

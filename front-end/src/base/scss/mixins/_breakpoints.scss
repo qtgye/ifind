@@ -23,8 +23,8 @@
       }
     }
     @else if ($constraint == only) {
-      @if ($min != null) and ($max != null) {
-        $media-query: "min-width: #{$min}px and max-width: #{$max}px";
+      @if (($min != null) and ($max != null)) {
+        $media-query: "min-width: #{$min}px) and (max-width: #{$max}px";
       }
     }
 

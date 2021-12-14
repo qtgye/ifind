@@ -1,11 +1,12 @@
 @import 'base/scss';
 
 .attributes-table {
+    --font-size: 12px;
     margin-bottom: 0;
-    font-size: 12px;
+    font-size: var(--font-size);
 
     @include tablet {
-        font-size: 10px;
+      --font-size: 10px;
     }
 
     th {

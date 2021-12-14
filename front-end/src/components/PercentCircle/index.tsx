@@ -1,5 +1,6 @@
 import './styles.scss';
 import { useState } from "react";
+import withConditionalRender from '@utilities/hocs/withConditionalRender';
 
 const PercentCircle = ({ percent }: PercentCircleProps) => {
   // 0% = -289px, 100% = 0
@@ -27,4 +28,4 @@ const PercentCircle = ({ percent }: PercentCircleProps) => {
   );
 };
 
-export default PercentCircle;
+export default withConditionalRender<PercentCircleProps>(PercentCircle);
