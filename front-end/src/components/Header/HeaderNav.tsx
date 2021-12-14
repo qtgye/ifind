@@ -1,16 +1,13 @@
+import {Suspense, lazy} from 'react';
 import { useLocation } from "react-router-dom";
 import { navigationRoutes } from "@config/routes";
-import routes from "@config/routes";
 import { useTranslation, navigation } from "@translations/index";
 
-import HeaderSideNav from "./HeaderSideNav";
 import CustomLink from "@components/Link";
 
 import "./header-nav.scss";
 
-const navigationItems = navigationRoutes.map((path) =>
-  routes.find((route) => route.path === path)
-);
+const HeaderSideNav = lazy(() => import("./HeaderSideNav") as Promise<any>);
 
 const HeaderNav = ({ withSideNav }: HeaderNavProps) => {
   const { pathname } = useLocation();
@@ -21,10 +18,12 @@ const HeaderNav = ({ withSideNav }: HeaderNavProps) => {
     <div className="header-nav">
       <div className="header-nav__container">
         <div className="header-nav__row">
-          <HeaderSideNav withSideNav={withSideNav} />
+          <Suspense fallback='Loading...'>
+            <HeaderSideNav withSideNav={withSideNav} />
+          </Suspense>
           <div className="menu-area">
             <ul className="main-menu">
-              {navigationItems.map((navItem) => (
+              {navigationRoutes.map((navItem) => (
                 <li key={navItem?.path}>
                   <CustomLink
                     to={navItem?.path || ""}

@@ -1,12 +1,17 @@
+import { Suspense } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 
 import { Providers } from "@contexts";
-import routesPages, { dynamicRoutePages } from "@config/routesPages";
+// import routesPages, { dynamicRoutePages } from "@config/routesPages";
+import Routes from '@config/routes';
 import { locale } from "@config/locale";
 
 import Header from "@components/Header";
 import Footer from "@components/Footer";
 import NewsLetter from "@components/NewsLetter";
+import IfindLoading from "@components/IfindLoading";
+
+// const routes: any[] = routesPages.concat(dynamicRoutePages);
 
 const Layout = () => (
   <Switch>
@@ -15,21 +20,9 @@ const Layout = () => (
       <Providers>
         <Header />
         <main className="main">
-          <Switch>
-            {routesPages
-              .concat(dynamicRoutePages)
-              .filter(({ component }) => component || null)
-              .map(({ path, component, exact = false }) => {
-                return (
-                  <Route
-                    key={path}
-                    path={`/:language${path}`}
-                    component={component as React.ComponentType<any>}
-                    exact={exact}
-                  />
-                );
-              })}
-          </Switch>
+          <Suspense fallback={<IfindLoading />}>
+            <Routes />
+          </Suspense>
         </main>
         <NewsLetter />
         <Footer />

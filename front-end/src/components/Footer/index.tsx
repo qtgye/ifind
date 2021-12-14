@@ -1,140 +1,152 @@
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useGlobalData } from '@contexts/globalDataContext';
+import { useState, useEffect } from "react";
+import { useGlobalData } from "@contexts/globalDataContext";
+import CustomLink from "@components/Link";
 
-import routes, { footerRoutes } from '@config/routes';
-import { useLanguages } from "@contexts/languagesContext";
-
-const mockInfoLinks = routes.filter(route => footerRoutes.includes(route.path));
-const logo = '/images/NewLogowith1Warp_White.png';
-
+const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
-    const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
-    const [informationLinks, setInformationLinks] = useState<FooterLink[]>(mockInfoLinks);
-    const [footerText, setFooterText] = useState('');
-    const [footerFootnote, setFooterFootnote] = useState('');
-    const [socialLinks, setSocialLinks] = useState<SocialNetworkLink[]>([]);
-    const { userLanguage = "en" } = useLanguages();
+  const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
+  const [informationLinks, setInformationLinks] = useState<FooterLink[]>([]);
+  const [footerText, setFooterText] = useState("");
+  const [footerFootnote, setFooterFootnote] = useState("");
+  const [socialLinks, setSocialLinks] = useState<SocialNetworkLink[]>([]);
 
-    useEffect(() => {
-        if (footerSetting?.footer_links?.length) {
+  useEffect(() => {
+    if (footerSetting?.footer_links?.length) {
+      setInformationLinks(
+        footerSetting.footer_links.map(({ label, page }) => ({
+          label,
+          path: `/${page.slug}`,
+        }))
+      );
+    }
 
-            setInformationLinks(footerSetting.footer_links.map(({ label, page }) => ({
-                label,
-                path: `/${page.slug}`
-            })));
-        }
+    if (footerSetting?.footer_text) {
+      setFooterText(footerSetting.footer_text);
+    }
+    if (footerSetting?.footer_footnote) {
+      setFooterFootnote(footerSetting.footer_footnote);
+    }
+  }, [footerSetting]);
 
-        if (footerSetting?.footer_text) {
-            setFooterText(footerSetting.footer_text);
-        }
-        if (footerSetting?.footer_footnote) {
-            setFooterFootnote(footerSetting.footer_footnote);
-        }
-    }, [footerSetting]);
+  useEffect(() => {
+    if (socialNetwork?.social_network?.length) {
+      setSocialLinks(
+        socialNetwork.social_network.map(({ type, url }) => ({ type, url }))
+      );
+    }
+  }, [socialNetwork]);
 
-    useEffect(() => {
-        if (socialNetwork?.social_network?.length) {
-            setSocialLinks(socialNetwork.social_network.map(({ type, url }) => ({ type, url })));
-        }
-    }, [socialNetwork]);
-
-    return (
-        <footer className="footer" id="footer">
-            <div className="footer-top section">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-lg-5 col-md-6 col-12">
-                            <div className="single-footer about">
-                                <div className="logo">
-                                    <a href="index.html"><img height={200} width={400} src={logo} alt="/" /></a>
-                                </div>
-                                <p className="text">
-                                    {
-
-
-                                        footerText || `
+  return (
+    <footer className="footer" id="footer">
+      <div className="footer-top section">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-5 col-md-6 col-12">
+              <div className="single-footer about">
+                <div className="logo">
+                  <a href="index.html">
+                    <img height={200} width={400} src={logo} alt="/" />
+                  </a>
+                </div>
+                <p className="text">
+                  {footerText ||
+                    `
 
                                         Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
                                         magna eros eu erat.
                                         Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
                                         metus.
-                                    `
+                                    `}
+                </p>
 
-                                    }</p>
-
-                                {
-                                    contactInfo?.phone_number && (
-                                        <p className="call">
-                                            Got Question? Call us 24/7
-                                            <span><a href={`tel:${contactInfo.phone_number}`}>{contactInfo.phone_number}</a></span>
-                                        </p>
-                                    )
-                                }
-                            </div>
-                        </div>
-                        <div className="col-lg-2 col-md-6 col-12">
-                            <div className="single-footer links">
-                                <h4>Information</h4>
-                                <ul>
-                                    {informationLinks.map(infoRoute => (
-                                        infoRoute && <li key={infoRoute.path}>
-                                            <Link to={userLanguage + infoRoute?.path || '/'}>{infoRoute.label}</Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-lg-2 col-md-6 col-12">
-                            <div className="single-footer links">
-                                <h4>Customer Service</h4>
-                                <ul>
-
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="col-lg-3 col-md-6 col-12">
-                            <div className="single-footer social">
-                                <h4>Get In Touch</h4>
-                                <div className="contact"></div>
-                                <ul>
-                                    {socialLinks.map(({ url, type }) => (
-                                        <li key={url}><a href={url}><i className={`ti-${type}`}></i></a></li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {contactInfo?.phone_number && (
+                  <p className="call">
+                    Got Question? Call us 24/7
+                    <span>
+                      <a href={`tel:${contactInfo.phone_number}`}>
+                        {contactInfo.phone_number}
+                      </a>
+                    </span>
+                  </p>
+                )}
+              </div>
             </div>
-
-            <div className="copyright">
-                <div className="container">
-                    <div className="inner">
-                        <div className="row">
-                            <div className="col-lg-6 col-12">
-                                <div className="left">
-                                    <p>Copyright © 2021 <a href="/" aria-label="ifindilu" target="_blank" rel="noreferrer">iFINDilu</a> -
-                                        All Rights Reserved.
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="col-lg-6 col-12">
-                                <div className="right">
-                                    <p>
-                                        {
-                                            footerFootnote || ``
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="col-lg-2 col-md-6 col-12">
+              <div className="single-footer links">
+                <h4>Information</h4>
+                <ul>
+                  {informationLinks.map(
+                    (infoRoute) =>
+                      infoRoute && (
+                        <li key={infoRoute.path}>
+                          <CustomLink
+                            to={infoRoute?.path || "/"}
+                          >
+                            {infoRoute.label}
+                          </CustomLink>
+                        </li>
+                      )
+                  )}
+                </ul>
+              </div>
             </div>
-        </footer>
-    )
+            <div className="col-lg-2 col-md-6 col-12">
+              <div className="single-footer links">
+                <h4>Customer Service</h4>
+                <ul></ul>
+              </div>
+            </div>
+            <div className="col-lg-3 col-md-6 col-12">
+              <div className="single-footer social">
+                <h4>Get In Touch</h4>
+                <div className="contact"></div>
+                <ul>
+                  {socialLinks.map(({ url, type }) => (
+                    <li key={url}>
+                      <a href={url}>
+                        <i className={`ti-${type}`}></i>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="copyright">
+        <div className="container">
+          <div className="inner">
+            <div className="row">
+              <div className="col-lg-6 col-12">
+                <div className="left">
+                  <p>
+                    Copyright © 2021{" "}
+                    <a
+                      href="/"
+                      aria-label="ifindilu"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      iFINDilu
+                    </a>{" "}
+                    - All Rights Reserved.
+                  </p>
+                </div>
+              </div>
+              <div className="col-lg-6 col-12">
+                <div className="right">
+                  <p>{footerFootnote || ``}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 };
 
 export default Footer;

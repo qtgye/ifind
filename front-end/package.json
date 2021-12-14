@@ -150,7 +150,7 @@
     "@types/react": "^17.0.29",
     "@types/react-dom": "^17.0.9",
     "@types/react-router": "^5.1.17",
-    "@types/react-router-dom": "^5.3.1",
+    "@types/react-router-dom": "^5.3.2",
     "@types/styled-components": "^5.1.15",
     "@types/uuid": "^8.3.1",
     "axios": "^0.24.0",
@@ -165,6 +165,7 @@
     "react-snap": "^1.23.0",
     "ts-loader": "^8.2.0",
     "typescript": "^4.4.2",
+    "webpack-bundle-analyzer": "^4.5.0",
     "webpack-cli": "^4.9.1",
     "webpack-node-externals": "^3.0.0"
   }

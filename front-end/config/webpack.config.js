@@ -24,6 +24,7 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Copy admin type definition files
 require('../scripts/copy-admin-types')();
@@ -209,7 +210,7 @@ module.exports = function (webpackEnv) {
       // There are also additional JS chunk files if you use code splitting.
       chunkFilename: isEnvProduction
         ? 'static/js/[name].[contenthash:8].chunk.js'
-        : isEnvDevelopment && 'static/js/[name].chunk.js',
+        : isEnvDevelopment && 'static/js/[id].chunk.js',
       // webpack uses `publicPath` to determine where the app is being served from.
       // It requires a trailing slash, or the file assets will get an incorrect path.
       // We inferred the "public path" (such as / or /my-project) from homepage.
@@ -743,6 +744,10 @@ module.exports = function (webpackEnv) {
               }),
             },
           },
+        }),
+        new BundleAnalyzerPlugin({
+          analyzerMode: 'static',
+          openAnalyzer: false
         }),
       ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
