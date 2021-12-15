@@ -21,7 +21,7 @@ const Home = () => {
     <GeneralTemplate>
       <div className="home">
         <div className="container">
-          <div className="top">
+          <div data-aos='fade-in' className="top">
             <div className="top-container">
               <h1>WILLKOMMEN BEI IFINDILU</h1>
               <div className="top-content">
@@ -74,7 +74,7 @@ const Home = () => {
             </div>
             <div className="prodcomp-banner">
               <a href={"/" + userLanguage + "/productcomparison"}>
-                <img src="/prodcomp-banner.jpg" height={350} width={600} alt="banner_product_comparison" />
+                <img src="/prodcomp-banner.jpg" height={350} width={500} alt="banner_product_comparison" />
               </a>
             </div>
           </div>
