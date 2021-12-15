@@ -12,7 +12,6 @@ const Header = () => {
   const { contactInfo } = useGlobalData();
   const [isSticky, setIsSticky] = useState(false);
   const [classNames] = useState("header");
-  const withSideNav = true;
 
   /**
    * Handles intersection
@@ -36,7 +35,7 @@ const Header = () => {
     <header className={classNames}>
       <HeaderTop {...contactInfo} />
       <HeaderMiddle onInterSect={handleHeaderIntersection} />
-      <HeaderNav withSideNav={withSideNav} />
+      <HeaderNav />
     </header>
   );
 };

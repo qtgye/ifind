@@ -22,7 +22,7 @@ import HeaderSideNavSubMenu2 from "./HeaderSideNavSubMenu2";
 import HeaderSideNavButton from "./HeaderSideNavButton";
 import RenderIf from "@components/RenderIf";
 
-const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
+const HeaderSideNav = () => {
   const match = useCurrentRouteMatch();
   const currentRouteConfig = useCurrentRouteConfig();
   const { subCategories } = useSubCategories();
@@ -58,7 +58,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
     handleScroll();
   });
 
-  return withSideNav ? (
+  return (
     <div className="header-side-nav">
       <RenderIf condition={currentRouteConfig?.withSideNav || false}>
         <h3
@@ -141,7 +141,7 @@ const HeaderSideNav = ({ withSideNav }: HeaderNavProps) => {
         </div>
       ) : null}
     </div>
-  ) : null;
+  );
 };
 
 export default HeaderSideNav;
