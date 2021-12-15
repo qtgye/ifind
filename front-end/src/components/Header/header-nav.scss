@@ -5,7 +5,7 @@
     display: flex;
     align-items: stretch;
     height: var(--header-nav-height-mobile);
-    background-color: color(black);
+    background-color: $gray-900;
     transition: all 0.3s;
     z-index: $z-index-nav;
 
@@ -120,15 +120,15 @@
         }
 
         @include xs_tablet {
-            margin-left: 3.9rem;
+            margin-left: 3rem;
         }
 
         @include xxl_mobile {
-            margin-left: 2.9rem;
+            margin-left: 2rem;
         }
 
         @include xl_mobile {
-            margin-left: 2.7rem;
+            margin-left: 1rem;
 
             a {
                 font-size: 14px;
@@ -136,7 +136,7 @@
         }
 
         @include xml_mobile {
-            margin-left: 1.5rem;
+            margin-left: 0.5rem;
 
             a {
                 font-size: 13px;
@@ -144,7 +144,7 @@
         }
 
         @include large_mobile {
-            //margin-left: 1.5rem;
+            margin-left: 0.7rem;
 
             a {
                 font-size: 12px;
