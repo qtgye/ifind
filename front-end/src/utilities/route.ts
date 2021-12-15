@@ -14,5 +14,6 @@ export const useCurrentRouteMatch = () => {
 export const useCurrentRouteConfig = () => {
   const match = useCurrentRouteMatch();
   const matchedRouteConfig = routesExtraConfig.find(({ path }: RouteConfig) => path === match?.path);
+  console.log({ match, matchedRouteConfig });
   return matchedRouteConfig || null;
 }
