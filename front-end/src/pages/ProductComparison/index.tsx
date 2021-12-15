@@ -60,10 +60,12 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
 
   const observeItem = useCallback(
     (e) => {
-      observerRef.current.observe(e);
-      return () => {
-        observerRef.current.unobserve(e);
-      };
+      if ( e instanceof HTMLElement ) {
+        observerRef.current.observe(e);
+        return () => {
+          observerRef.current.unobserve(e);
+        };
+      }
     },
     [observerRef]
   );

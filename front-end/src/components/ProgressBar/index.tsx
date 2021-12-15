@@ -1,20 +1,17 @@
 import { useState, useEffect } from "react";
-import { find } from 'lodash';
-import { useLocation } from 'react-router-dom';
-import routes from '@config/routes';
+import { pathWithLanguage, useCurrentRouteConfig } from "@utilities/route";
 
 import ProgressBar from './Progress';
 
-const ProgressBars = () => {
 
-    const { pathname } = useLocation();
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+const ProgressBars = () => {
+    const currentRouteConfig = useCurrentRouteConfig();
     const [value, setValue] = useState(0);
 
     useEffect(() => {
         let unmounted = false;
 
-        if (currentRouteConfig?.path === '/') {
+        if (currentRouteConfig?.path === pathWithLanguage('/')) {
             const interval = setInterval(() => {
                 if (!unmounted) {
                     setValue(oldValue => {

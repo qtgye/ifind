@@ -1,11 +1,9 @@
 import { useContext, useState, useCallback, useEffect, useRef } from 'react';
-import { find } from 'lodash';
-import { useLocation } from 'react-router-dom';
-import routes from '@config/routes';
+
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import { useProductDetail } from '@contexts/productContext';
-//import { useWindowSize } from '../../utilities/WindowResize';
+import { pathWithLanguage, useCurrentRouteConfig } from '@utilities/route';
 import Item from './item';
 import Modal from './modal';
 
@@ -17,13 +15,11 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     const icon = '/images/loading.png';
     const [activeProduct, setActiveProduct] = useState<Product>();
     const [isDetailsLoading, setIsDetailsLoading] = useState(false);
-    const { pathname } = useLocation();
-    const currentRouteConfig = find(routes, ({ path }) => pathname === path);
+    const currentRouteConfig = useCurrentRouteConfig();
     const { focusedCategory } = useContext(GlobalStateContext);
     const itemRef = useRef<HTMLDivElement | null>();
     const [isOpen, SetIsOpen] = useState(false);
     const [priceCatOpen, setPriceCatOpen] = useState(false);
-    //const [width] = useWindowSize();
 
     const onProductClick = useCallback((product) => {
         setActiveProduct(product);
@@ -99,12 +95,10 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
         //}
     }
 
-    //console.log("Price Category State: ", priceCatOpen);
-
     return (
         <>
             <div className="natural-list">
-                {currentRouteConfig?.path === '/' ? null :
+                {currentRouteConfig?.path === pathWithLanguage('/') ? null :
                     <>
                         <div className="natural-list__separator" ref={itemRef as React.LegacyRef<HTMLDivElement>} data-category={id}>
 
@@ -143,7 +137,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                         </div>
                     </>
                 }
-                {currentRouteConfig?.path === '/findtube' ? null : (
+                {currentRouteConfig?.path === pathWithLanguage('/findtube') ? null : (
                     <>
                         <Modal open={isOpen} close={() => SetIsOpen(false)}>
                             {

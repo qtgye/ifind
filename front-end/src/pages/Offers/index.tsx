@@ -6,7 +6,7 @@ import {
 } from "@contexts/productsByDealsContext";
 import GeneralTemplate from "@templates/GeneralTemplate";
 import ProductDealsGrid from "@components/ProductDealsGrid";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 import "./offers.scss";
 import ProgressBars from "@components/ProgressBar";
 
@@ -35,12 +35,10 @@ const Offers: React.FunctionComponent = () => {
   );
 };
 
-const OffersPageWrapped: NamedComponent = ({ children }) => (
+const OffersPageWrapped = ({ children }: PropsWithChildren<React.ReactNode>) => (
   <ProductsByDealsContextProvider>
     <Offers>{children}</Offers>
   </ProductsByDealsContextProvider>
 );
-
-OffersPageWrapped.componentName = 'OffersPage';
 
 export default OffersPageWrapped;

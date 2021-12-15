@@ -1,29 +1,18 @@
 import { useCallback, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { find } from "lodash";
 
 import HeaderTop from "./HeaderTop";
 import HeaderMiddle from "./HeaderMiddle";
 import HeaderNav from "./HeaderNav";
 
 import { useGlobalData } from "@contexts/globalDataContext";
-import routes from "@config/routes";
 
 import "./header.scss";
 
 const Header = () => {
-  const { pathname } = useLocation();
   const { contactInfo } = useGlobalData();
   const [isSticky, setIsSticky] = useState(false);
   const [classNames] = useState("header");
-
-  const pathNameWithouthLanguage = pathname.replace(/(^\/[^/]+|\/$)/g, "");
-
-  const currentRouteConfig = find(
-    routes,
-    ({ path }) => pathNameWithouthLanguage === path
-  );
-  const withSideNav = currentRouteConfig && currentRouteConfig.withSideNav;
+  const withSideNav = true;
 
   /**
    * Handles intersection

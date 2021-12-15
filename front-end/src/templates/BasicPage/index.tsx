@@ -6,7 +6,6 @@ interface BasicPageProps {
 }
 
 const BasicPage = ({ title, children }: BasicPageProps) => {
-
     // Scroll to top of page on mount
     useEffect(() => {
         window.scrollTo(0, 0);

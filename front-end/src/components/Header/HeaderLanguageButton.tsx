@@ -1,8 +1,9 @@
-import { useEffect, useState, useCallback } from "react";
+import { Suspense, lazy, useEffect, useState, useCallback } from "react";
 import { useLanguages } from "@contexts/languagesContext";
-import ReactFlagsSelect from "react-flags-select";
 
 import countriesConfig from "@config/countries";
+
+const ReactFlagsSelect = lazy(() => import("react-flags-select") as Promise<any>);
 
 const HeaderLanguageButton = () => {
   const {
@@ -76,18 +77,20 @@ const HeaderLanguageButton = () => {
 
   return (
     <div>
-      <ReactFlagsSelect
-        selected={selected}
-        onSelect={(flag) => applyUserLanguage(flag)}
-        countries={countries}
-        placeholder="Select a Language"
-        showSelectedLabel={false}
-        className="menu-flags"
-        selectButtonClassName="menu-flags-button"
-        fullWidth={false}
-        alignOptionsToRight={true}
-        customLabels={labels}
-      />
+      <Suspense fallback=''>
+        <ReactFlagsSelect
+          selected={selected}
+          onSelect={(flag: string) => applyUserLanguage(flag)}
+          countries={countries}
+          placeholder="Select a Language"
+          showSelectedLabel={false}
+          className="menu-flags"
+          selectButtonClassName="menu-flags-button"
+          fullWidth={false}
+          alignOptionsToRight={true}
+          customLabels={labels}
+        />
+      </Suspense>
     </div>
   );
 };

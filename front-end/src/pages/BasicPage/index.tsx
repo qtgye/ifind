@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import { PageContextProvider } from '@contexts/pageContext';
 import BasicPageTemplate from '@templates/BasicPage';
 import { usePageData } from '@contexts/pageContext';
-import { withComponentName, withProvider } from '@utilities/component';
+import { withComponentName } from '@utilities/component';
 
 const BasicPage = () => {
     const { data, loading } = usePageData();
@@ -21,4 +22,10 @@ const BasicPage = () => {
     )
 };
 
-export default withProvider('PageContextProvider')(withComponentName('BasicPage')(BasicPage) || undefined);
+const WrappedBasicPage = (props: any) => (
+  <PageContextProvider>
+    <BasicPage {...props} />
+  </PageContextProvider>
+)
+
+export default withComponentName('BasicPage')(WrappedBasicPage);
