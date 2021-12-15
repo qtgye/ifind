@@ -20,15 +20,16 @@
 
   @include lg {
     padding: 30px 10px;
+    background-color: $gray-900;
     border-radius: 10px;
     height: auto;
   }
-
+  
   &__heading {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 50%;
 
     @include lg {
       display: none;

@@ -1,5 +1,9 @@
 $breakpoints: (
   default: (),
+  sm: (
+    540,
+    767,
+  ),
   md: (
     768,
     1023,

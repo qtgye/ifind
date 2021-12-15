@@ -12,17 +12,29 @@
 		margin-top: 3rem;
 		padding: 20px 10px;
 
+		@include small_desktop {
+			padding: 0;
+		}
+
 		@include tablet {
 			display: block;
 		}
 
 		.top-container {
 			display: block;
-			//border: 2px solid black;
+			padding-right: 10px;
 			width: 500px;
 
 			@include small_laptop {
 				width: 400px;
+			}
+			
+			@include tablet {
+				padding-bottom: 25px;
+			}
+
+			@include xs_tablet {
+				width: auto;
 			}
 
 			h1 {
@@ -34,31 +46,33 @@
 				margin-top: 5rem;
 				margin-bottom: auto;
 
-				@include tablet {
-					//
-				}
+				// @include tablet {
+				// 	//
+				// }
+			}
 
-				button {
-					margin-top: 1rem;
-					padding: 8px 15px;
-					border-radius: 5px;
-					background-color: $gray-900;
-					color: $white;
-				}
+			.home-btn {
+				margin-top: 1rem;
+				padding: 8px 15px;
+				border-radius: 5px;
+				background-color: $gray-900;
+				color: $white;
+			}
 
-				button:hover {
-					background-color: #bc0031;
-				}
+			button:hover {
+				background-color: #bc0031;
 			}
 		}
 
 		.top-carousel {
 			display: flex;
 			margin-left: auto;
+			background-color: rgb(247, 247, 247);
 
 			@include tablet {
 				align-items: center;
 				justify-content: center;
+				padding: 25px 0;
 			}
 
 			.top-carousel-content {
@@ -66,10 +80,15 @@
 				align-items: center;
 				justify-content: center;
 
-				@include tablet {
-					margin-top: 6rem;
+				@include small_laptop {
+					height: auto;
 					width: 500px;
-					height: 300px;
+				}
+
+				@include tablet {
+					//margin-top: 6rem
+					height: auto;
+					width: 470px;
 					align-items: center;
 					justify-content: center;
 				}
@@ -83,7 +102,7 @@
 		justify-content: center;
 		margin-top: 3rem;
 		background-color: rgb(247, 247, 247);
-		padding: 20px 10px;
+		padding: 20px 0px;
 		
 		.video-content {
 			display: flex;
@@ -145,6 +164,7 @@
 					display: flex;
 					margin-left: auto;
 					text-align: right;
+					padding-left: 5px;
 				}
 	
 				button {
@@ -166,7 +186,6 @@
 
 	.prodcomp {
 		display: flex;
-		margin-right: auto;
 		margin-top: 3rem;
 		background-color: rgb(247, 247, 247);
 		padding: 20px 10px;
@@ -185,9 +204,14 @@
 				width: 300px;
 			}
 
+			@include tablet {
+				margin-left: 0;
+			}
+
 			.prodcomp-text {
 				display: flex;
 				text-align: left;
+				padding-right: 2px;
 			}
 
 			button {
@@ -210,6 +234,7 @@
 			align-items: center;
 			justify-content: center;
 			border: 2px solid black;
+			background-color: blue;
 			//padding: 150px 250px;
 			img {
 				height: 350px;
@@ -243,10 +268,6 @@
 			justify-content: center;
 			border: 2px solid black;
 			margin-right: auto;
-			
-			img {
-				height: 350px;
-			}
 
 			@include small_laptop {
 				img {
@@ -277,6 +298,7 @@
 					display: flex;
 					margin-left: auto;
 					text-align: right;
+					padding-left: 5px;
 				}
 	
 				button {
