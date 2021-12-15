@@ -18,11 +18,13 @@ export const routesExtraConfig: RouteConfig[] = [
   {
     path: pathWithLanguage("/"),
     label: "Home",
+    translationKey: "home",
   },
   {
     path: pathWithLanguage("/offers"),
     label: "Offers",
     withSideNav: true,
+    translationKey: "offers",
   },
   {
     path: pathWithLanguage("/productcomparison"),
@@ -33,6 +35,7 @@ export const routesExtraConfig: RouteConfig[] = [
   {
     path: pathWithLanguage("/gifts"),
     label: "Gifts",
+    translationKey: "gifts",
   },
   // {
   //     path: '/findtube',

@@ -4,6 +4,12 @@ export const home = {
   ru: "Главная страница",
 };
 
+export const offers = {
+  en: "Offers ",
+  de: "Angebote",
+  ru: "Распродажа",
+};
+
 export const productComparison = {
   en: "Product Comparison",
   de: "Produktvergleich",
