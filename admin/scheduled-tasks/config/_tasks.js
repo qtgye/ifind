@@ -1,16 +1,16 @@
 const frequencies = require("./_frequencies");
 
 module.exports = [
-  {
-    id: "product-validator",
-    name: "Product Validator",
-    schedule: frequencies.daily,
-  },
-  {
-    id: "product-price-updater",
-    name: "Product Price Updater",
-    schedule: frequencies.daily,
-  },
+  // {
+  //   id: "product-validator",
+  //   name: "Product Validator",
+  //   schedule: frequencies.daily,
+  // },
+  // {
+  //   id: "product-price-updater",
+  //   name: "Product Price Updater",
+  //   schedule: frequencies.daily,
+  // },
   {
     id: "amazon-lightning-offers",
     name: "Amazon Lightning Offers",
