@@ -5,7 +5,13 @@ const productsByDealsQuery = gql`
     productsByDeals {
       deal_type {
         name
-        label
+        source {
+          name
+        }
+        label {
+          language
+          label
+        }
       }
       products {
         id

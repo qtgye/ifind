@@ -1,5 +1,6 @@
 import React from 'react';
 import HeaderSideNavMenuItem2 from './HeaderSideNavMenuItem2';
+import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
 const HeaderSideNavSubMenu2 = ({ categories }: HeaderSideNavSubMenu2Props) => {
     return (
@@ -12,4 +13,4 @@ const HeaderSideNavSubMenu2 = ({ categories }: HeaderSideNavSubMenu2Props) => {
     )
 }
 
-export default HeaderSideNavSubMenu2;
+export default withConditionalRender<HeaderSideNavSubMenu2Props>(HeaderSideNavSubMenu2);

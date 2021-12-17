@@ -3,7 +3,7 @@ import { useContext, useState, useCallback, useEffect, useRef } from 'react';
 import ProductDetails from '@components/ProductDetails';
 import { GlobalStateContext } from '@contexts/globalStateContext';
 import { useProductDetail } from '@contexts/productContext';
-import { pathWithLanguage, useCurrentRouteConfig } from '@utilities/route';
+import { routeWithLanguage, useCurrentRouteConfig } from '@utilities/route';
 import Item from './item';
 import Modal from './modal';
 
@@ -98,7 +98,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
     return (
         <>
             <div className="natural-list">
-                {currentRouteConfig?.path === pathWithLanguage('/') ? null :
+                {currentRouteConfig?.path === routeWithLanguage('/') ? null :
                     <>
                         <div className="natural-list__separator" ref={itemRef as React.LegacyRef<HTMLDivElement>} data-category={id}>
 
@@ -137,7 +137,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                         </div>
                     </>
                 }
-                {currentRouteConfig?.path === pathWithLanguage('/findtube') ? null : (
+                {currentRouteConfig?.path === routeWithLanguage('/findtube') ? null : (
                     <>
                         <Modal open={isOpen} close={() => SetIsOpen(false)}>
                             {

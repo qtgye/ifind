@@ -46,9 +46,14 @@ module.exports = {
     stop
   }
 
+  type DealTypeLabelTranslation {
+    language: String!
+    label: String
+  }
+
   type DealType {
       name: String
-      label: String
+      label: [DealTypeLabelTranslation]
       source: Source
   }
 

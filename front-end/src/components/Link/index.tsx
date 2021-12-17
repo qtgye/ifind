@@ -1,9 +1,11 @@
 import { Link, LinkProps, useRouteMatch } from "react-router-dom";
 
-const CustomLink = ({ to, ...props }: LinkProps) => {
+const CustomLink = ({ children, ...props}: Partial<LinkProps>) => {
   const { url } = useRouteMatch();
 
-  return <Link to={`${url.replace(/\/$/, "")}${to}`} {...props} />;
+  props.to = props.to ? `${url.replace(/\/$/, "")}${props.to}` : '';
+
+  return props.to ? <Link {...props as LinkProps}>{children}</Link> : <a {...props}>{children}</a>;
 };
 
 export default CustomLink;

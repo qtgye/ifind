@@ -1,6 +1,6 @@
 import { lazy } from "react";
 import { Switch, Route } from "react-router-dom";
-import { pathWithLanguage } from "@utilities/route";
+import { routeWithLanguage } from "@utilities/route";
 
 const HomePage = lazy(() => import("@pages/Home") as Promise<any>);
 const Offers = lazy(() => import("@pages/Offers") as Promise<any>);
@@ -16,24 +16,24 @@ export const routesExtraConfig: RouteConfig[] = [
    * Routes visible in Header Navigation
    */
   {
-    path: pathWithLanguage("/"),
+    path: routeWithLanguage("/"),
     label: "Home",
     translationKey: "home",
   },
   {
-    path: pathWithLanguage("/offers"),
+    path: routeWithLanguage("/offers"),
     label: "Offers",
     withSideNav: true,
     translationKey: "offers",
   },
   {
-    path: pathWithLanguage("/productcomparison"),
+    path: routeWithLanguage("/productcomparison"),
     label: "Product Comparison",
     withSideNav: true,
     translationKey: "productComparison",
   },
   {
-    path: pathWithLanguage("/gifts"),
+    path: routeWithLanguage("/gifts"),
     label: "Gifts",
     translationKey: "gifts",
   },
@@ -46,7 +46,7 @@ export const routesExtraConfig: RouteConfig[] = [
   //     label: 'Blog',
   // },
   {
-    path: pathWithLanguage("/contact"),
+    path: routeWithLanguage("/contact"),
     label: "Contact",
     translationKey: "contact",
   },
@@ -87,15 +87,15 @@ export const dynamicRoutes: RouteConfig[] = [
 
 const Routes = () => (
   <Switch>
-    <Route path={pathWithLanguage("/")} component={HomePage} exact />
-    <Route path={pathWithLanguage("/offers")} component={Offers} />
+    <Route path={routeWithLanguage("/")} component={HomePage} exact />
+    <Route path={routeWithLanguage("/offers")} component={Offers} />
     <Route
-      path={pathWithLanguage("/productcomparison")}
+      path={routeWithLanguage("/productcomparison")}
       component={ProductComparison}
     />
-    <Route path={pathWithLanguage("/gifts")} component={Gifts} />
-    <Route path={pathWithLanguage("/contact")} component={Contact} />
-    <Route path={pathWithLanguage("/:slug")} component={BasicPage} />
+    <Route path={routeWithLanguage("/gifts")} component={Gifts} />
+    <Route path={routeWithLanguage("/contact")} component={Contact} />
+    <Route path={routeWithLanguage("/:slug")} component={BasicPage} />
   </Switch>
 );
 

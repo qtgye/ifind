@@ -44,7 +44,7 @@ const ProductDealCard: ProductDealCardComponent = ({
 
       if (dealKey) {
         const matchedOtherSiteDetails = url_list?.find((otherSiteDetails) =>
-          new RegExp(dealData?.site || "no-match-name", "i").test(
+          new RegExp(dealData?.source?.name || "no-match-name", "i").test(
             otherSiteDetails?.source?.name || ""
           )
         );

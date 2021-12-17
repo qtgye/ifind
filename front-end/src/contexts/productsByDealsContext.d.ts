@@ -13,11 +13,6 @@ declare interface ProductsByDealsValues {
   productsByDeals?: ProductsByDeal[];
 }
 
-declare interface DealTypeConfig {
-  site: string;
-  label: string;
-}
-
 declare interface DealTypeMap {
-  [dealKey: string]: DealTypeConfig;
+  [dealKey: string]: DealType;
 }

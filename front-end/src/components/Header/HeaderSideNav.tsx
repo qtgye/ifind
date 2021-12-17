@@ -9,11 +9,7 @@ import {
 import { useSubCategories } from "@contexts/categoriesContext";
 import { offersdata } from "@mocks/components/offerssidenav";
 import eventBus from "@utilities/EventBus";
-import {
-  useCurrentRouteMatch,
-  useCurrentRouteConfig,
-  pathWithLanguage,
-} from "@utilities/route";
+import { useCurrentRouteConfig, useIsRouteMatch } from "@utilities/route";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 
 import "./header-side-nav.scss";
@@ -23,8 +19,8 @@ import HeaderSideNavButton from "./HeaderSideNavButton";
 import RenderIf from "@components/RenderIf";
 
 const HeaderSideNav = () => {
-  const match = useCurrentRouteMatch();
   const currentRouteConfig = useCurrentRouteConfig();
+  const isRouteMath = useIsRouteMatch();
   const { subCategories } = useSubCategories();
   const { on } = eventBus;
   const listRef = useRef<HTMLDivElement | null>();
@@ -39,7 +35,6 @@ const HeaderSideNav = () => {
       if (onOffersClick) {
         onOffersClick(catName);
       }
-      //console.log(catName);
     },
     [onOffersClick]
   );
@@ -56,7 +51,9 @@ const HeaderSideNav = () => {
 
   useEffect(() => {
     handleScroll();
-  });
+  }, [ handleScroll ]);
+
+  console.log(isRouteMath("/productcomparison"));
 
   return (
     <div className="header-side-nav">
@@ -68,20 +65,16 @@ const HeaderSideNav = () => {
           ].join(" ")}
           onClick={() => setIsVisible(!isVisible)}
         >
-          {/*
-                    TODO: Instead of dynamically rendering depending on width,
-                    display/hide the "CATEGORIES" text instead through CSS
-                  */}
           <i aria-hidden="true" className="fa fa-bars"></i>
           <span>CATEGORIES</span>
         </h3>
       </RenderIf>
-      {isVisible ? (
+      <RenderIf condition={isVisible}>
         <div
           ref={listRef as LegacyRef<HTMLDivElement>}
           className="header-side-nav__list"
         >
-          {match?.path === pathWithLanguage("/offers") ? (
+          <RenderIf condition={isRouteMath("/offers")}>
             <div className="offers-sidenav">
               {offersdata.map((item, index) => {
                 return (
@@ -100,7 +93,8 @@ const HeaderSideNav = () => {
                 );
               })}
             </div>
-          ) : match?.path === pathWithLanguage("/productcomparison") ? (
+          </RenderIf>
+          <RenderIf condition={isRouteMath("/productcomparison")}>
             <div className="prodcomp-sidenav">
               <div className="header-side-nav__label">
                 <label className="label">Deep Navigation</label>
@@ -115,31 +109,28 @@ const HeaderSideNav = () => {
                 </label>
               </div>
               <div>
-                {checked ? (
-                  <HeaderSideNavSubMenu
-                    categories={subCategories}
-                    checked={checked}
-                    //checkChange={checkChange}
-                    triggerScroll={triggerScroll}
-                  />
-                ) : (
-                  <HeaderSideNavSubMenu2
-                    categories={subCategories}
-                    triggerScroll={triggerScroll}
-                  />
-                )}
+                <HeaderSideNavSubMenu
+                  renderIf={checked}
+                  categories={subCategories}
+                  checked={checked}
+                  //checkChange={checkChange}
+                  triggerScroll={triggerScroll}
+                />
+                <HeaderSideNavSubMenu2
+                  renderIf={!checked}
+                  categories={subCategories}
+                  triggerScroll={triggerScroll}
+                />
               </div>
             </div>
-          ) : null}
+          </RenderIf>
         </div>
-      ) : null}
-      {isVisible ? (
         <div className="header-side-nav__arrow-container">
-          {match?.path === pathWithLanguage("/productcomparison") ? (
+          <RenderIf condition={isRouteMath("/productcomparison")}>
             <HeaderSideNavButton />
-          ) : null}
+          </RenderIf>
         </div>
-      ) : null}
+      </RenderIf>
     </div>
   );
 };

@@ -53,7 +53,7 @@ const HeaderSideNavMenuItem2 = ({ category }: HeaderSideNavMenuItem2Props) => {
                 {/* } */}
                 {
                     subCategories && category?.children?.map((cat => (
-                        <div className="listing">
+                        <div className="listing" key={cat?.id}>
                             <div ref={categoryRef as LegacyRef<HTMLDivElement>}
                                 className={["active-listing", activeCategory?.toString() === cat?.id ? "active" : ""].join(" ")}
                                 key={cat?.id}
