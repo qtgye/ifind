@@ -17,7 +17,7 @@ export const useCurrentRouteConfig = () => {
   const matchedRouteConfig = routesExtraConfig.find(
     ({ path }: RouteConfig) => path === match?.path?.replace(/\/$/, "")
   );
-  console.log({ match, matchedRouteConfig, routesExtraConfig });
+  console.log({ match, matchedRouteConfig });
   return matchedRouteConfig || null;
 };
 
@@ -30,6 +30,6 @@ export const useIsRouteMatch = () => {
   const currentRouteMatch = useCurrentRouteMatch();
 
   return (route: string = "/", omitLanguage: boolean = false): boolean =>
-    currentRouteMatch?.path ===
-    (omitLanguage ? route : routeWithLanguage(route));
+    currentRouteMatch?.path.replace(/\/$/, '') ===
+    (omitLanguage ? route.replace(/\/$/, '') : routeWithLanguage(route).replace(/\/$/, ''));
 };
