@@ -1,4 +1,5 @@
 import PreloadedImage from '@components/PreloadedImage';
+import RenderIf from '@components/RenderIf';
 
 const Item = ({ active, image, title, price, withBadge, onClick }: NaturalListItemProps) => {
     const itemClassnames = [
@@ -9,14 +10,13 @@ const Item = ({ active, image, title, price, withBadge, onClick }: NaturalListIt
     return (
         <li className={itemClassnames.join(' ')} onClick={onClick}>
             <figure className="natural-list__figure">
-                {/* <div className="natural-list__price"> */}
+                <PreloadedImage className="img natural-list__image" src={image} alt="" />
                 <div className="price-per-product">
                     <span>{price} €</span>
                 </div>
-                <PreloadedImage className="img natural-list__image" src={image} alt="" />
-                {withBadge && (
-                    <span className="natural-list__badge">Best Seller</span>
-                )}
+                <RenderIf condition={withBadge || false}>
+                  <span className="natural-list__badge">Best Seller</span>
+                </RenderIf>
             </figure>
         </li>
     );

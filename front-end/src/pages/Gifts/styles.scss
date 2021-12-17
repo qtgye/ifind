@@ -3,33 +3,29 @@
 .gifts {
   position: relative;
 
-  &.container {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-
-    @include lg {
-      padding: 15px 0;
-    }
+  &__container {
+    @include container;
   }
 
   &__columns {
-    min-height: 50vh;
-    display: flex;
-    flex-direction: column;
+    padding-top: 20px;
 
-    @include lg {
-      display: grid;
-      grid-template-columns: 1fr 5fr;
-      column-gap: 10px;
-      align-items: start;
+    @include xl {
+      @include grid(xl);
+    }
+  }
+
+  .tags-filter {
+    @include xl {
+      @include col-span(3);
+      width: 100%;
     }
   }
 
   &__products {
-    @include md-max {
-      padding-bottom: 30px;
+    @include xl {
+      @include col-span(9);
+      @include col-start(4);
     }
   }
 

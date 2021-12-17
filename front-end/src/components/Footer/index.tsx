@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useGlobalData } from "@contexts/globalDataContext";
 import CustomLink from "@components/Link";
 
+import "./styles.scss";
+
 const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
@@ -80,9 +82,7 @@ const Footer = () => {
                     (infoRoute) =>
                       infoRoute && (
                         <li key={infoRoute.path}>
-                          <CustomLink
-                            to={infoRoute?.path || "/"}
-                          >
+                          <CustomLink to={infoRoute?.path || "/"}>
                             {infoRoute.label}
                           </CustomLink>
                         </li>

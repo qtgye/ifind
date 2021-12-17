@@ -4,8 +4,8 @@
   margin-bottom: 10px;
 
   &__heading {
-    background-color: $gray-900;
-    border: 1px solid $white;
+    background-color: color(gray-darker);
+    border-block: 1px solid color(white);
     padding: 9px;
     color: color(white);
     text-align: center;
@@ -15,47 +15,29 @@
     position: sticky;
     top: 61px;
     z-index: 1;
+
+    @include md-max {
+      width: auto;
+      margin: 0 -12px;
+    }
   }
 
- &__items {
-      display: grid;
-      grid-template-columns: 1fr;
-      margin-top: 10px;
-      overflow: visible;
+  &__items {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 10px;
+    overflow: visible;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
 
-      @include mobile-up {
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 0 10px;
-      }
-
-      @include xxl_mobile-up {
-        grid-template-columns: repeat(2, 1fr);
-        grid-gap: 0 12px;
-      }
-
-      @include tablet-up {
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 0 12px;
-      }
-
-      @include small-laptop-up {
-        grid-template-columns: repeat(3, 1fr);
-        grid-gap: 0 14px;
-      }
-
-      @include laptop-up {
-        grid-template-columns: repeat(4, 1fr);
-        grid-gap: 0 15px;
-      }
-
-      @include small-desktop-up {
-        grid-template-columns: repeat(4, 1fr);
-        grid-gap: 0 25px;
-      }
-
-      @include desktop-up {
-        grid-template-columns: repeat(5, 1fr);
-        grid-gap: 0 20px;
-      }
+    @include md {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 12px;
     }
+
+    @include xl {
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 20px;
+    }
+  }
 }

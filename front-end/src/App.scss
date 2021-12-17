@@ -246,7 +246,7 @@
 // }
 // /* Hero Area 4 */
 // .hero-area4 .big-content{
-	
+
 // 	background-size: cover;
 // 	background-position: center;
 // 	background-repeat: no-repeat;
@@ -1354,7 +1354,7 @@
 // 	margin-bottom:15px;
 // 	font-weight:500;
 // 	font-size:22px;
-	
+
 // }
 // .shop.single .single-des ul li {
 // 	color: #555;
@@ -1867,7 +1867,7 @@
 // }
 // .shopping-cart .total-amount .right ul li span{
 // 	display:inline-block;
-	
+
 // }
 // .shopping-cart .total-amount .right .button5 .btn {
 // 	text-align: center;
@@ -2409,7 +2409,7 @@
 // 	margin-top:40px;
 // 	width: 80px;
 // 	display:inline-block;
-	
+
 // }
 // .cown-down .content .cdown {
 // 	text-align: center;
@@ -2747,7 +2747,7 @@
 .about-us .about-img img{
 	height:100%;
 	width:100%;
-	
+
 }
 /*=============================
 	End About US CSS
@@ -3626,113 +3626,7 @@
 /*=============================
 	20. Start Footer CSS
 ===============================*/
-.footer{
-	background:#222;
 
-	@include ms_tablet {
-		width: 102%;
-	}
-
-	@include large_mobile {
-		width: 102.1%;
-	}
-}
-.footer .about {
-	padding-right: 50px;
-}
-.footer .single-footer h4 {
-	font-size: 17px;
-	font-weight: 600;
-	color: #fff;
-	text-transform: capitalize;
-	margin-bottom: 30px;
-}
-.footer .about .logo{
-	margin-bottom:20px;
-}
-.footer .about .text{
-	color:#fff;
-	font-weight: 400;
-}
-.footer .about .call {
-	color: #fff;
-	margin-top: 15px;
-	font-weight: 400;
-}
-.footer .about .call span{
-	display: block;
-}
-.footer .about .call a {
-	color: #ba0130;
-	font-size: 20px;
-	font-weight: 600;
-	text-decoration: none;
-
-	&:hover {
-		color: #fff;
-	}
-}
-.footer .links ul li {
-	display: block;
-	margin-bottom: 8px;
-}
-.footer .links ul li:last-child{
-	margin-bottom:0;
-}
-.footer .links ul li a{
-	color:#fff;
-	font-weight: 400;
-}
-.footer .links ul li a:hover{
-	color:#ba0130;
-	padding-left:10px;
-}
-.footer .social .contact ul li {
-	color: #fff;
-	display: block;
-	margin-bottom: 4px;
-	font-weight: 400;
-}
-.footer .contact ul li:last-child{
-	margin-bottom:0;
-}
-.footer .social ul {
-	margin-top: 20px;
-}
-.footer .social ul li{
-	display:inline-block;
-	margin-right:25px;
-}
-.footer .social ul li:last-child{
-	margin-right:0;
-}
-.footer .social ul li a{
-	color:#fff;
-	display:block;
-	font-size:16px;
-}
-.footer .social ul li a:hover{
-	color:#ba0130;
-}
-/* Copyright */
-.footer .copyright .inner{
-	border-top:1px solid #eeeeee3d;
-	padding:20px 0;
-}
-.footer .copyright .right{
-	float:right;
-}
-.footer .copyright p{
-	color:#fff;
-}
-.footer .copyright p a{
-	color:#fff;
-	text-decoration:underline;
-
-	&:hover {
-		color: #bc0031;
-	}
-}
 /*=============================
 	End Footer CSS
 ===============================*/
@@ -3778,13 +3672,13 @@
 	    height: 150px;
 	    pointer-events: none;
     }
-  
+
     @media (prefers-reduced-motion: no-preference) {
 	    .loading-icon {
 	        animation: loading-icon-spin infinite 1.5s linear;
 	    }
     }
-  
+
     @keyframes loading-icon-spin {
 	    from {
 	        transform: rotate(0deg);

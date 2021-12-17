@@ -23,9 +23,9 @@ const HeaderSideNav = () => {
   const isRouteMath = useIsRouteMatch();
   const { subCategories } = useSubCategories();
   const { on } = eventBus;
-  const listRef = useRef<HTMLDivElement | null>();
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
 
+  const listRef = useRef<HTMLDivElement | null>();
   const [isVisible, setIsVisible] = useState(true);
   const [checked, setChecked] = useState(false);
   const checkChange = () => setChecked(!checked);

@@ -45,7 +45,7 @@ const Gifts = () => {
   }, []);
 
   const classNames = [
-    "gifts container",
+    "gifts",
     isGiftsLoading || isTagsLoading ? "gifts--loading" : "",
   ]
     .filter(Boolean)
@@ -54,25 +54,27 @@ const Gifts = () => {
   return (
     <GeneralTemplate>
       <div className={classNames}>
-        <div className="gifts__columns">
-          <TagsFilter selectedTags={selectedTags} onUpdate={onTagsUpdate} />
-          <div className="gifts__products">
-            <div className="gifts__products-grid">
-              {products?.map((product) => (
-                <ProductDealCard
-                  key={product.id}
-                  {...product}
-                  onClick={onCardClick}
-                  additional_info="rating"
-                />
-              ))}
-            </div>
-            <div className="gifts__products-pagination">
-              <Pagination totalPages={Math.ceil(total / 20)} />
+        <div className="gifts__container">
+          <div className="gifts__columns">
+            <TagsFilter selectedTags={selectedTags} onUpdate={onTagsUpdate} />
+            <div className="gifts__products">
+              <div className="gifts__products-grid">
+                {products?.map((product) => (
+                  <ProductDealCard
+                    key={product.id}
+                    {...product}
+                    onClick={onCardClick}
+                    additional_info="rating"
+                  />
+                ))}
+              </div>
+              <div className="gifts__products-pagination">
+                <Pagination totalPages={Math.ceil(total / 20)} />
+              </div>
             </div>
           </div>
+          <IfindLoading />
         </div>
-        <IfindLoading />
       </div>
       <ProductModal
         product={activeProduct}

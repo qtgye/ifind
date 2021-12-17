@@ -1,0 +1,101 @@
+@import "base/scss";
+
+.footer {
+  background: color(gray-darker);
+}
+.footer .about {
+  padding-right: 50px;
+}
+.footer .single-footer h4 {
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  text-transform: capitalize;
+  margin-bottom: 30px;
+}
+.footer .about .logo {
+  margin-bottom: 20px;
+}
+.footer .about .text {
+  color: #fff;
+  font-weight: 400;
+}
+.footer .about .call {
+  color: #fff;
+  margin-top: 15px;
+  font-weight: 400;
+}
+.footer .about .call span {
+  display: block;
+}
+.footer .about .call a {
+  color: #ba0130;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover {
+    color: #fff;
+  }
+}
+.footer .links ul li {
+  display: block;
+  margin-bottom: 8px;
+}
+.footer .links ul li:last-child {
+  margin-bottom: 0;
+}
+.footer .links ul li a {
+  color: #fff;
+  font-weight: 400;
+}
+.footer .links ul li a:hover {
+  color: #ba0130;
+  padding-left: 10px;
+}
+.footer .social .contact ul li {
+  color: #fff;
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+.footer .contact ul li:last-child {
+  margin-bottom: 0;
+}
+.footer .social ul {
+  margin-top: 20px;
+}
+.footer .social ul li {
+  display: inline-block;
+  margin-right: 25px;
+}
+.footer .social ul li:last-child {
+  margin-right: 0;
+}
+.footer .social ul li a {
+  color: #fff;
+  display: block;
+  font-size: 16px;
+}
+.footer .social ul li a:hover {
+  color: #ba0130;
+}
+/* Copyright */
+.footer .copyright .inner {
+  border-top: 1px solid #eeeeee3d;
+  padding: 20px 0;
+}
+.footer .copyright .right {
+  float: right;
+}
+.footer .copyright p {
+  color: #fff;
+}
+.footer .copyright p a {
+  color: #fff;
+  text-decoration: underline;
+
+  &:hover {
+    color: #bc0031;
+  }
+}

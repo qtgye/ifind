@@ -5,13 +5,20 @@ import HeaderMiddle from "./HeaderMiddle";
 import HeaderNav from "./HeaderNav";
 
 import { useGlobalData } from "@contexts/globalDataContext";
+import { useCurrentRouteConfig } from "@utilities/route";
 
 import "./header.scss";
 
 const Header = () => {
   const { contactInfo } = useGlobalData();
+  const currentRouteConfig = useCurrentRouteConfig();
   const [isSticky, setIsSticky] = useState(false);
-  const [classNames] = useState("header");
+  const classNames = [
+    "header",
+    currentRouteConfig?.withSideNav ? "header--with-side-nav" : false,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   /**
    * Handles intersection

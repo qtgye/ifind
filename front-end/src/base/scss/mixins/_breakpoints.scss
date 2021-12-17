@@ -4,37 +4,35 @@
 // Breakpoint mixin
 // @params breakpoint-name - breakpoint key in $breakpoints
 // @params $constraint - min | max | only
-@mixin breakpoint($breakpoint-name: default, $constraint: min) {
+@mixin breakpoint($breakpoint-name: sm, $constraint: min) {
   $bp-setting: if(map-has-key($breakpoints, $breakpoint-name), map-get($breakpoints, $breakpoint-name), null);
+  $media-query: null;
 
   @if (type-of($bp-setting) == list) {
-    $min: if( length($bp-setting) >= 1, nth($bp-setting, 1), null);
-    $max: if( length($bp-setting) >= 2, nth($bp-setting, 2), null);
+    $min: if(length($bp-setting) >= 1, nth($bp-setting, 1), null);
+    $max: if(length($bp-setting) >= 2, nth($bp-setting, 2), null);
     $media-query: null;
 
-    @if ( $constraint == min ) {
-      @if not ($min == null) {
+    @if ($constraint == min) {
+      @if not($min == null) {
         $media-query: "min-width: #{$min}px";
       }
-    }
-    @else if ($constraint == max) {
-      @if not ($max == null) {
+    } @else if ($constraint == max) {
+      @if not($max == null) {
         $media-query: "max-width: #{$max}px";
       }
-    }
-    @else if ($constraint == only) {
+    } @else if ($constraint == only) {
       @if (($min != null) and ($max != null)) {
         $media-query: "min-width: #{$min}px) and (max-width: #{$max}px";
       }
     }
-
-    @if ( $media-query != null ) {
-      @media screen and (unquote($media-query)) {
-        @content;
-      }
-    }
   }
-  @else {
+
+  @if ($media-query != null) {
+    @media screen and (unquote($media-query)) {
+      @content;
+    }
+  } @else {
     @content;
   }
 }
@@ -42,13 +40,13 @@
 // Create a mixin for each breakpoint
 
 @mixin sm-max {
-  @include breakpoint(default, max) {
+  @include breakpoint(sm, max) {
     @content;
   }
 }
 
 @mixin sm-only {
-  @include breakpoint(default, only) {
+  @include breakpoint(sm, only) {
     @content;
   }
 }
@@ -124,4 +122,3 @@
     @content;
   }
 }
-

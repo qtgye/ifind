@@ -2,6 +2,7 @@
 @import 'base/global';
 
 .header {
+    --heaader-nav-height--mobile: 62px;
     position: sticky;
     top: -91px;
     z-index: $z-index-nav;

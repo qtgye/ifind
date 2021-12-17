@@ -4,13 +4,18 @@
 // Config
 @import 'scss/config/colors';
 @import 'scss/config/breakpoints';
+@import 'scss/config/grid';
+@import 'scss/config/container';
 @import 'scss/config/z-indices';
 
 // Functions
 @import 'scss/functions/color';
 @import 'scss/functions/fibonacci';
+@import 'scss/functions/container';
 
 // Mixins
 @import "scss/mixins/bootstrap";
 @import "scss/mixins/breakpoints";
 @import "scss/mixins/media-queries";
+@import "scss/mixins/grid";
+@import "scss/mixins/container";

@@ -17,7 +17,7 @@ const Offers: React.FunctionComponent = () => {
   return (
     <GeneralTemplate>
       <div className="offers">
-        <div className="container">
+        <div className="offers__container">
           {loading &&
             <span className="loading"><img src={icon} className="loading-icon" alt="icon" /></span>
           }

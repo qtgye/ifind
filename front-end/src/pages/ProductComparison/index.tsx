@@ -139,7 +139,7 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
   return (
     <GeneralTemplate>
       <div ref={prodcompRef as React.LegacyRef<HTMLDivElement>} className="product-comparison">
-        <div className="container">
+        <div className="product-comparison__container">
           <div className="list">
             <nav className="nav">
               {
