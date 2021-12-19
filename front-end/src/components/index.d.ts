@@ -3,6 +3,7 @@ import  "./BreadCrumbs/index.d";
 import  "./Carousel/index.d";
 import  "./ContactForm/index.d";
 import  "./ContactSidebar/index.d";
+import  "./FlagsSelect/index.d";
 import  "./Footer/index.d";
 import  "./GridGuide/index.d";
 import  "./Header/index.d";

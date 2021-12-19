@@ -53,8 +53,6 @@ export const GlobalStateContextProvider = ({
     }
   }, [bodyScrollEnabled]);
 
-  useEffect(() => {}, []);
-
   return (
     <GlobalStateContext.Provider
       value={{

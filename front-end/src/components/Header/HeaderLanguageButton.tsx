@@ -3,7 +3,9 @@ import { useLanguages } from "@contexts/languagesContext";
 
 import countriesConfig from "@config/countries";
 
-const ReactFlagsSelect = lazy(() => import("react-flags-select") as Promise<any>);
+const FlagSelect = lazy(
+  () => import("@components/FlagsSelect") as Promise<any>
+);
 
 const HeaderLanguageButton = () => {
   const {
@@ -20,8 +22,8 @@ const HeaderLanguageButton = () => {
       const matchedCountryConfig:
         | CountryConfig
         | undefined = countriesConfig.find(
-          ({ code }: CountryConfig) => code === countryCode
-        );
+        ({ code }: CountryConfig) => code.toLocaleLowerCase() === countryCode
+      );
 
       if (!matchedCountryConfig) {
         return;
@@ -41,14 +43,16 @@ const HeaderLanguageButton = () => {
 
   useEffect(() => {
     if (languages.length) {
-      setCountries(languages.map(({ flag }) => flag?.toUpperCase() || ""));
+      setCountries(
+        languages.map(({ flag }) => flag?.toLocaleLowerCase() || "")
+      );
       setLabels(
         languages.reduce(
           (
             all: { [key: string]: string },
             { flag, name }: LanguageWithFlag
           ) => {
-            all[flag?.toUpperCase() || ""] = name || "";
+            all[flag?.toLocaleLowerCase() || ""] = name || "";
             return all;
           },
           {}
@@ -70,24 +74,19 @@ const HeaderLanguageButton = () => {
       );
 
       if (matchedCountry) {
-        setSelected(matchedCountry?.code || "");
+        setSelected(matchedCountry?.code?.toLocaleLowerCase() || "");
       }
     }
+
   }, [languages, countries, userLanguage]);
 
   return (
     <div>
-      <Suspense fallback=''>
-        <ReactFlagsSelect
+      <Suspense fallback="">
+        <FlagSelect
+          placeholder='Please Select'
           selected={selected}
           onSelect={(flag: string) => applyUserLanguage(flag)}
-          countries={countries}
-          placeholder="Select a Language"
-          showSelectedLabel={false}
-          className="menu-flags"
-          selectButtonClassName="menu-flags-button"
-          fullWidth={false}
-          alignOptionsToRight={true}
           customLabels={labels}
         />
       </Suspense>
