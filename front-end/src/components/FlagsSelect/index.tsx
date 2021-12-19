@@ -1,4 +1,4 @@
-import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import PreloadedImage from "@components/PreloadedImage";
 import useBodyClick from "@utilities/useBodyClick";
