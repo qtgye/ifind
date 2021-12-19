@@ -1,321 +1,319 @@
-@import 'base/scss';
-@import 'base/global';
+@import "base/scss";
+@import "base/global";
 
 .home {
+  &__container {
+    @include container;
+  }
 
-	.container {
-		@include bootstrap(container);
-	}
+  .top {
+    display: flex;
+    margin-top: 3rem;
+    padding: 20px 10px;
 
-	.top {
-		display: flex;
-		margin-top: 3rem;
-		padding: 20px 10px;
+    @include small_desktop {
+      padding: 0;
+    }
 
-		@include small_desktop {
-			padding: 0;
-		}
+    @include tablet {
+      display: block;
+    }
 
-		@include tablet {
-			display: block;
-		}
+    .top-container {
+      display: block;
+      padding-right: 10px;
+      width: 500px;
 
-		.top-container {
-			display: block;
-			padding-right: 10px;
-			width: 500px;
+      @include small_laptop {
+        width: 400px;
+      }
 
-			@include small_laptop {
-				width: 400px;
-			}
-			
-			@include tablet {
-				padding-bottom: 25px;
-			}
+      @include tablet {
+        padding-bottom: 25px;
+      }
 
-			@include xs_tablet {
-				width: auto;
-			}
+      @include xs_tablet {
+        width: auto;
+      }
 
-			h1 {
-				font-weight: 600;
-			}
+      h1 {
+        font-weight: 600;
+      }
 
-			.top-content {
-				display: block;
-				margin-top: 5rem;
-				margin-bottom: auto;
+      .top-content {
+        display: block;
+        margin-top: 5rem;
+        margin-bottom: auto;
 
-				// @include tablet {
-				// 	//
-				// }
-			}
+        // @include tablet {
+        // 	//
+        // }
+      }
 
-			.home-btn {
-				margin-top: 1rem;
-				padding: 8px 15px;
-				border-radius: 5px;
-				background-color: $gray-900;
-				color: $white;
-			}
+      .home-btn {
+        margin-top: 1rem;
+        padding: 8px 15px;
+        border-radius: 5px;
+        background-color: color(gray-darker);
+        color: color(white);
+      }
 
-			button:hover {
-				background-color: #bc0031;
-			}
-		}
+      button:hover {
+        background-color: #bc0031;
+      }
+    }
 
-		.top-carousel {
-			display: flex;
-			margin-left: auto;
-			background-color: rgb(247, 247, 247);
+    .top-carousel {
+      display: flex;
+      margin-left: auto;
+      background-color: rgb(247, 247, 247);
 
-			@include tablet {
-				align-items: center;
-				justify-content: center;
-				padding: 25px 0;
-			}
+      @include tablet {
+        align-items: center;
+        justify-content: center;
+        padding: 25px 0;
+      }
 
-			.top-carousel-content {
-				display: flex;
-				align-items: center;
-				justify-content: center;
+      .top-carousel-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
-				@include small_laptop {
-					height: auto;
-					width: 500px;
-				}
+        @include small_laptop {
+          height: auto;
+          width: 500px;
+        }
 
-				@include tablet {
-					//margin-top: 6rem
-					height: auto;
-					width: 470px;
-					align-items: center;
-					justify-content: center;
-				}
-			}
-		}
-	}
+        @include tablet {
+          //margin-top: 6rem
+          height: auto;
+          width: 470px;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
 
-	.video {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		margin-top: 3rem;
-		background-color: rgb(247, 247, 247);
-		padding: 20px 0px;
-		
-		.video-content {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			height: 400px;
-			width: 700px;
-			border: 2px solid black;
-		}
-	}
+  .video {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3rem;
+    background-color: rgb(247, 247, 247);
+    padding: 20px 0px;
 
-	.offers {
-		display: flex;
-		margin-top: 3rem;
-		//background-color: rgb(247, 247, 247);
-		padding: 20px 10px;
+    .video-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 400px;
+      width: 700px;
+      border: 2px solid black;
+    }
+  }
 
-		@include tablet {
-			display: block;
-		}
+  .offers {
+    display: flex;
+    margin-top: 3rem;
+    //background-color: rgb(247, 247, 247);
+    padding: 20px 10px;
 
-		.offers-banner {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			border: 2px solid black;
-			margin-right: auto;
+    @include tablet {
+      display: block;
+    }
 
-			img {
-				height: 350px;
-			}
+    .offers-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid black;
+      margin-right: auto;
 
-			@include small_laptop {
-				img {
-					height: 300px;
-				}
-			}
-		}
+      img {
+        height: 350px;
+      }
 
-		.offers-container {
-			display: flex;
-			width: 500px;
+      @include small_laptop {
+        img {
+          height: 300px;
+        }
+      }
+    }
 
-			@include small_laptop {
-				width: 300px;
-			}
+    .offers-container {
+      display: flex;
+      width: 500px;
 
-			@include tablet {
-				margin-top: 20px;
-				margin-left: auto;
-			}
+      @include small_laptop {
+        width: 300px;
+      }
 
-			.offers-content {
-				display: block;;
-				margin-top: auto;
-				margin-bottom: auto;
+      @include tablet {
+        margin-top: 20px;
+        margin-left: auto;
+      }
 
-				.offers-text {
-					display: flex;
-					margin-left: auto;
-					text-align: right;
-					padding-left: 5px;
-				}
-	
-				button {
-					display: flex;
-					margin-left: auto;
-					margin-top: 1rem;
-					padding: 5px 12px;
-					border-radius: 5px;
-					background-color: $gray-900;
-					color: $white;
-				}
+      .offers-content {
+        display: block;
+        margin-top: auto;
+        margin-bottom: auto;
 
-				button:hover {
-					background-color: #bc0031;
-				}
-			}
-		}
-	}
+        .offers-text {
+          display: flex;
+          margin-left: auto;
+          text-align: right;
+          padding-left: 5px;
+        }
 
-	.prodcomp {
-		display: flex;
-		margin-top: 3rem;
-		background-color: rgb(247, 247, 247);
-		padding: 20px 10px;
+        button {
+          display: flex;
+          margin-left: auto;
+          margin-top: 1rem;
+          padding: 5px 12px;
+          border-radius: 5px;
+          background-color: color(gray-darker);
+          color: color(white);
+        }
 
-		@include tablet {
-			display: block;
-		}
-		
-		.prodcomp-container {
-			display: block;
-			width: 500px;
-			margin-top: auto;
-			margin-bottom: auto;
+        button:hover {
+          background-color: #bc0031;
+        }
+      }
+    }
+  }
 
-			@include small_laptop {
-				width: 300px;
-			}
+  .prodcomp {
+    display: flex;
+    margin-top: 3rem;
+    background-color: rgb(247, 247, 247);
+    padding: 20px 10px;
 
-			@include tablet {
-				margin-left: 0;
-			}
+    @include tablet {
+      display: block;
+    }
 
-			.prodcomp-text {
-				display: flex;
-				text-align: left;
-				padding-right: 2px;
-			}
+    .prodcomp-container {
+      display: block;
+      width: 500px;
+      margin-top: auto;
+      margin-bottom: auto;
 
-			button {
-				display: flex;
-				margin-top: 1rem;
-				padding: 5px 12px;
-				border-radius: 5px;
-				background-color: $gray-900;
-				color: $white;
-			}
+      @include small_laptop {
+        width: 300px;
+      }
 
-			button:hover {
-				background-color: #bc0031
-			}
-		}
+      @include tablet {
+        margin-left: 0;
+      }
 
-		.prodcomp-banner {
-			display: flex;
-			margin-left: auto;
-			align-items: center;
-			justify-content: center;
-			border: 2px solid black;
-			background-color: blue;
-			//padding: 150px 250px;
-			img {
-				height: 350px;
-			}
+      .prodcomp-text {
+        display: flex;
+        text-align: left;
+        padding-right: 2px;
+      }
 
-			@include small_laptop {
-				img {
-					height: 300px;
-				}
-			}
+      button {
+        display: flex;
+        margin-top: 1rem;
+        padding: 5px 12px;
+        border-radius: 5px;
+        background-color: color(gray-darker);
+        color: color(white);
+      }
 
-			@include tablet {
-				margin-top: 20px;
-			}
-		}
-	}
+      button:hover {
+        background-color: #bc0031;
+      }
+    }
 
-	.gifts {
-		display: flex;
-		margin-top: 3rem;
-		//background-color: rgb(247, 247, 247);
-		padding: 20px 10px;
+    .prodcomp-banner {
+      display: flex;
+      margin-left: auto;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid black;
+      background-color: blue;
+      //padding: 150px 250px;
+      img {
+        height: 350px;
+      }
 
-		@include tablet {
-			display: block;
-		}
+      @include small_laptop {
+        img {
+          height: 300px;
+        }
+      }
 
-		.gifts-banner {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			border: 2px solid black;
-			margin-right: auto;
+      @include tablet {
+        margin-top: 20px;
+      }
+    }
+  }
 
-			@include small_laptop {
-				img {
-					height: 300px;
-				}
-			}
-		}
+  .gifts {
+    display: flex;
+    margin-top: 3rem;
+    //background-color: rgb(247, 247, 247);
+    padding: 20px 10px;
 
-		.gifts-container {
-			display: flex;
-			width: 500px;
+    @include tablet {
+      display: block;
+    }
 
-			@include small_laptop {
-				width: 300px;
-			}
+    .gifts-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid black;
+      margin-right: auto;
 
-			@include tablet {
-				margin-top: 20px;
-				margin-left: auto;
-			}
+      @include small_laptop {
+        img {
+          height: 300px;
+        }
+      }
+    }
 
-			.gifts-content {
-				display: block;
-				margin-top: auto;
-				margin-bottom: auto;
-	
-				.gifts-text {
-					display: flex;
-					margin-left: auto;
-					text-align: right;
-					padding-left: 5px;
-				}
-	
-				button {
-					display: flex;
-					margin-left: auto;
-					margin-top: 1rem;
-					padding: 5px 12px;
-					border-radius: 5px;
-					background-color: $gray-900;
-					color: $white;
-				}
+    .gifts-container {
+      display: flex;
+      width: 500px;
 
-				button:hover {
-					background-color: #bc0031;
-				}
-			}
-		}
-	}
+      @include small_laptop {
+        width: 300px;
+      }
 
+      @include tablet {
+        margin-top: 20px;
+        margin-left: auto;
+      }
+
+      .gifts-content {
+        display: block;
+        margin-top: auto;
+        margin-bottom: auto;
+
+        .gifts-text {
+          display: flex;
+          margin-left: auto;
+          text-align: right;
+          padding-left: 5px;
+        }
+
+        button {
+          display: flex;
+          margin-left: auto;
+          margin-top: 1rem;
+          padding: 5px 12px;
+          border-radius: 5px;
+          background-color: color(gray-darker);
+          color: color(white);
+        }
+
+        button:hover {
+          background-color: #bc0031;
+        }
+      }
+    }
+  }
 }

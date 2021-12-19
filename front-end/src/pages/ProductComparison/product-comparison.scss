@@ -94,7 +94,7 @@
     }
 
     &:hover {
-      border: 1px solid $gray-300;
+      border: 1px solid color(gray);
       border-radius: 12px;
       transform: scale(1.1);
     }
@@ -142,7 +142,7 @@
     }
 
     &:hover {
-      border: 1px solid $gray-300;
+      border: 1px solid color(gray);
       border-radius: 12px;
       transform: scale(1.1);
     }
@@ -187,9 +187,9 @@
     }
 
     &:hover {
-      background-color: $red;
+      background-color: color(red);
       color: white;
-      border: 1px solid $red;
+      border: 1px solid color(red);
     }
   }
 
@@ -207,9 +207,9 @@
   }
 
   .button-active {
-    background-color: $red;
+    background-color: color(red);
     color: white;
-    border: 1px solid $red;
+    border: 1px solid color(red);
   }
 
   .carousel-container {

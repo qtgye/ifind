@@ -69,13 +69,13 @@
       white-space: nowrap;
 
       .header--sticked & {
-        color: $black;
+        color: color(black);
       }
 
       &:hover,
       &:focus,
       &.current {
-        background-color: $red;
+        background-color: color(red);
 
         .header--sticked & {
           color: color(white);

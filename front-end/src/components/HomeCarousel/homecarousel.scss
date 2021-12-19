@@ -7,7 +7,7 @@
     //     height: 400px;
     //     width: 600px;
     // }
-    
+
     .buttonBack {
         position: absolute;
         top: 50%;
@@ -17,7 +17,7 @@
         font-size: 14px;
         background-color: transparent;
         padding: 1px 5px;
-    
+
         i {
             font-weight: bolder;
             font-size: 50px;
@@ -25,10 +25,10 @@
         }
 
         i:hover {
-            color: $red;
+            color: color(red);
         }
     }
-      
+
     .buttonNext {
         position: absolute;
         top: 50%;
@@ -37,7 +37,7 @@
         border: none;
         background-color: transparent;
         padding: 1px 5px;
-    
+
         i {
             font-weight: bolder;
             font-size: 50px;
@@ -45,26 +45,26 @@
         }
 
         i:hover {
-            color: $red;
+            color: color(red);
         }
     }
-    
+
     .title-container {
-        border: 1px solid $gray-900;
-        background-color: $gray-900;
+        border: 1px solid color(gray-darker);
+        background-color: color(gray-darker);
         border-radius: 3px;
         margin-bottom: 2px;
-        
+
         .title {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-top: 7px;
-            color: $white;
+            color: color(white);
         }
     }
-      
+
     .dotGroup {
         margin-top: 20px;
         color: blue;

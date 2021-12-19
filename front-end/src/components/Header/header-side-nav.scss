@@ -55,7 +55,7 @@
   }
 
   .active {
-    background-color: $red;
+    background-color: color(red);
   }
 
   &__list {
@@ -160,10 +160,10 @@
       color: black;
       border: none;
       background-color: white;
-      border-bottom: 1px solid $gray-300;
+      border-bottom: 1px solid color(gray);
 
       &:hover {
-        color: $red;
+        color: color(red);
         background-color: #eaeaea;
       }
 
@@ -191,8 +191,8 @@
       line-height: 16px;
       width: 20px;
       color: color(white);
-      background-color: $gray-500;
-      border: 2px solid $gray-500;
+      background-color: color(gray-dark);
+      border: 2px solid color(gray-dark);
       border-radius: 10px;
     }
   }
@@ -204,7 +204,7 @@
   .list {
     &.active {
       button {
-        color: $red;
+        color: color(red);
         //text-decoration: underline;
         background-color: #eaeaea;
       }
@@ -212,7 +212,7 @@
 
     &.focus {
       button {
-        color: $red;
+        color: color(red);
         //text-decoration: underline;
         background-color: #eaeaea;
       }
@@ -222,7 +222,7 @@
   .active-listing {
     &.active {
       button {
-        color: $red;
+        color: color(red);
         //text-decoration: underline;
         background-color: #eaeaea;
       }
@@ -230,7 +230,7 @@
 
     &.focus {
       button {
-        color: $red;
+        color: color(red);
         //text-decoration: underline;
         background-color: #eaeaea;
       }
@@ -249,7 +249,7 @@
     text-align: center;
     line-height: 21px;
     height: 25px;
-    border-bottom: 1px solid $gray-300;
+    border-bottom: 1px solid color(gray);
 
     .label {
       font-size: 10px;
@@ -299,11 +299,11 @@
     }
 
     input:checked + .slider {
-      background-color: $red;
+      background-color: color(red);
     }
 
     input:focus + .slider {
-      box-shadow: 0 0 0 $red;
+      box-shadow: 0 0 0 color(red);
     }
 
     input:checked + .slider:before {
@@ -341,7 +341,7 @@
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: $red;
+      color: color(red);
       padding: 6px;
       cursor: pointer;
       animation: arrow-button 0.5s infinite alternate ease-in-out;

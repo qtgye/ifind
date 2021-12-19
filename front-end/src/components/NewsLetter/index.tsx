@@ -1,6 +1,8 @@
+import './styles.scss';
+
 const NewsLetter = () => (
-    <section className="shop-newsletter section">
-        <div className="container">
+    <section className="newsletter section">
+        <div className="newsletter__container">
             <div className="inner-top">
                 <div className="row">
                     <div className="col-lg-8 offset-lg-2 col-12">

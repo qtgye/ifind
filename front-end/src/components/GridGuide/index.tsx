@@ -20,6 +20,19 @@ const GridGuide = () => {
   );
 
   useEffect(() => {
+    if (isVisible) {
+      window.localStorage.setItem("grid-guide-visible", "true");
+    } else {
+      window.localStorage.removeItem("grid-guide-visible");
+    }
+  }, [isVisible]);
+
+  useEffect(() => {
+    const isVisible = Boolean(
+      window.localStorage.getItem("grid-guide-visible")
+    );
+
+    setIsVisible(isVisible);
     document.addEventListener("keyup", (e) => onKeyPress(e));
 
     return () => document.removeEventListener("keyup", (e) => onKeyPress(e));

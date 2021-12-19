@@ -8,7 +8,16 @@
   }
 
   &__columns {
-    padding-top: 20px;
+    @include container-bleed(default);
+
+    @include md {
+      @include container-bleed(md);
+    }
+
+    @include lg {
+      padding-top: 20px;
+      margin-inline: 0;
+    }
 
     @include xl {
       @include grid(xl);

@@ -188,7 +188,7 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
               </div>
             </div>
           </div>
-          <div className="header-middle__right">
+          <div className="header-middle__controls">
             <div className="right-bar">
               <div className="flag-container">
                 <HeaderLanguageButton />

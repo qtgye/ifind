@@ -20,7 +20,7 @@ const Home = () => {
   return (
     <GeneralTemplate>
       <div className="home">
-        <div className="container">
+        <div className="home__container">
           <div data-aos='fade-in' className="top">
             <div className="top-container">
               <h1>WILLKOMMEN BEI IFINDILU</h1>

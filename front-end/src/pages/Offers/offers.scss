@@ -10,12 +10,17 @@
   }
 
   .loading {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+
+    @include lg {
+      @include col-span(9);
+      @include col-start(4);
+    }
   }
 
   .loading-icon {
     margin-top: 8%;
-    margin-left: 41%;
     height: 150px;
     pointer-events: none;
     height: 100px;
@@ -37,43 +42,17 @@
   }
 
   .progress {
+    display: flex;
+    justify-content: center;
     position: relative;
     top: 60%;
-    left: 41%;
-    height: 20px;
-    width: 200px;
-    background-color: $white;
+    width: 100%;
+    height: 50px;
+    background-color: color(white);
 
-    @include small_laptop {
-      left: 39.5%;
-    }
-
-    @include tablet {
-      left: 38.5%;
-    }
-
-    @include xs_tablet {
-      left: 36%;
-    }
-
-    @include xl_mobile {
-      left: 34%;
-    }
-
-    @include xml_mobile {
-      left: 32%;
-    }
-
-    @include mobile {
-      left: 29%;
-    }
-
-    @include sm_mobile {
-      left: 25%;
-    }
-
-    @include small_mobile {
-      left: 22%;
+    @include lg {
+      @include col-span(9);
+      @include col-start(4);
     }
   }
 
