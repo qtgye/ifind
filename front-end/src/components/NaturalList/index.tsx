@@ -170,6 +170,7 @@ const NaturalList = ({ items = [], loading = false, category, observeItem, id, l
                                             withBadge={index === 0}
                                             onClick={() => { onProductClick(item); activeModal(); }}
                                             key={item?.id}
+                                            index={index}
                                         />
                                     ))}
                                 </ul>

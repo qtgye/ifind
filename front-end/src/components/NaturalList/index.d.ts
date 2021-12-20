@@ -15,6 +15,7 @@ declare interface NaturalListItemProps {
   price?: number;
   withBadge?: boolean;
   onClick?: (args: any) => any;
+  index: number;
 }
 
 declare interface NaturalListModalProps {

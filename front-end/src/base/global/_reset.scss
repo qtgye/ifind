@@ -29,6 +29,7 @@ body {
 }
 img{
 	max-width:100%;
+  height: auto;
 }
 article,
 aside,
@@ -84,9 +85,6 @@ img {
 }
 svg:not(:root) {
 	overflow: hidden;
-}
-figure {
-	margin: 1em 40px;
 }
 hr {
 	box-sizing: content-box;

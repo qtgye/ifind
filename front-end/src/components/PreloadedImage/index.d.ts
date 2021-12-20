@@ -4,4 +4,6 @@ declare interface PreloadedImageProps {
   alt?: string;
   loaded?: boolean;
   manualLoading?: boolean;
+  width?: number;
+  height?: number;
 }

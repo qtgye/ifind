@@ -167,12 +167,6 @@
         background-color: #eaeaea;
       }
 
-      .category-label {
-        position: absolute;
-        margin-left: 45px;
-        width: 60%;
-      }
-
       .change-width {
         position: absolute;
         margin-left: 45px;
@@ -202,6 +196,13 @@
   }
 
   .list {
+    button {
+      justify-content: flex-start;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     &.active {
       button {
         color: color(red);

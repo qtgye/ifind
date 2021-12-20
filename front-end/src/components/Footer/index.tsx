@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useGlobalData } from "@contexts/globalDataContext";
 import CustomLink from "@components/Link";
+import PreloadedImage from "@components/PreloadedImage";
 
 import "./styles.scss";
 
@@ -47,18 +48,17 @@ const Footer = () => {
             <div className="footer__about">
               <div className="logo">
                 <a href="index.html">
-                  <img height={200} width={400} src={logo} alt="/" />
+                  <PreloadedImage src={logo} alt="/" />
                 </a>
               </div>
               <p className="text">
                 {footerText ||
                   `
-
-                                        Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
-                                        magna eros eu erat.
-                                        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
-                                        metus.
-                                    `}
+                    Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
+                    magna eros eu erat.
+                    Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
+                    metus.
+                `}
               </p>
 
               {contactInfo?.phone_number && (
