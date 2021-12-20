@@ -1,5 +1,5 @@
 const SideBar = ({ phone, supportPhone, supportEmail }: ContactSidebarProps) => (
-    <div className="col-lg-4 col-12">
+    <div className="col-lg-4 col-12 contact-sidebar">
         <div className="single-head">
             <div className="single-info">
                 <i className="fa fa-phone"></i>

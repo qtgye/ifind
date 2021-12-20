@@ -7,7 +7,7 @@ const BreadCrumbs = () => (
                 <div className="col-12">
                     <div className="bread-inner">
                         <ul className="bread-list">
-                            <li><a href="/">Home<i className="ti-arrow-right"></i></a></li>
+                            <li><a href="/">Home<i className="fa fa-arrow-right"></i></a></li>
                             <li className="active"><a href="/">Contact</a></li>
                         </ul>
                     </div>

@@ -19,7 +19,7 @@ const ContactForm = () => {
     }
 
     return (
-        <div className="col-lg-8 col-12">
+        <div className="col-lg-8 col-12 contact-form">
             <div className="form-main">
                 <div className="title">
                     <h4>Get in touch</h4>
