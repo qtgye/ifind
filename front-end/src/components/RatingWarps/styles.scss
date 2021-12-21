@@ -10,27 +10,27 @@
   @include tablet {
     --warp-size: 15px;
   }
-  
+
   &__warps {
     display: flex;
     flex-wrap: nowrap;
     height: var(--warp-size);
     overflow: hidden;
-    
+
     &--fg {
       position: absolute;
       top: 0;
       left: 0;
     }
-    
+
     &--bg {
       opacity: .2;
     }
-    
-    svg {
+
+    .ifind-icon {
       width: var(--warp-size);
       height: var(--warp-size);
-      fill: red;
+      color: color(red);
       flex-shrink: 0;
     }
   }
