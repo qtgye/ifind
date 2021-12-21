@@ -1,26 +1,35 @@
-import './ifind-icon.scss';
-import PropTypes from 'prop-types';
+import "./ifind-icon.scss";
+import PropTypes from "prop-types";
+import { iconsList } from "ifind-icons";
 
 const IfindIcon = ({ icon, dark, className, ...props }: IfindIconProps) => {
-    const processedClassName = [
-        className,
-        'ifind-icon',
-        dark ? 'ifind-icon--dark' : ''
-    ].filter(Boolean).join(' ');
+  const iconName = icon.replace(/_/g, "-");
+  const processedClassName = [
+    className,
+    "ifind-icon",
+    dark ? "ifind-icon--dark" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-    return (
-        <svg className={processedClassName} {...props}>
-            <use xlinkHref={`#${icon.replace(/_/g, '-')}`} ></use>
-        </svg>
-    )
+  return iconsList.includes(iconName) ? (
+    <div className={processedClassName}>
+      <div
+        className="ifind-icon__image"
+        style={{
+          ["--icon-path" as string]: `url(/icons/${iconName}.svg)`,
+        }}
+      />
+    </div>
+  ) : null;
 };
 
 IfindIcon.propTypes = {
-    dark: PropTypes.bool,
+  dark: PropTypes.bool,
 };
 
 IfindIcon.defaultProps = {
-    dark: false,
-}
+  dark: false,
+};
 
 export default IfindIcon;

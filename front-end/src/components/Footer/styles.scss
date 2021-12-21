@@ -2,6 +2,7 @@
 
 .footer {
   background: color(gray-darker);
+  padding-block: 50px;
 
   &__container {
     @include container;

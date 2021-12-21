@@ -1,37 +1,31 @@
-import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
-import { styleguide } from '@sb';
-import IfindIcon from '@components/IfindIcon';
-import './ifind-icons.scss';
+import { Meta, Story, Canvas } from "@storybook/addon-docs/blocks";
+import { styleguide } from "@sb";
+import IfindIcon from "@components/IfindIcon";
+import "./ifind-icons.scss";
 
 # IFIND Icons
 
 ## Usage
 
-### Declare Sprite
+### Copy Icons
 
-The sprite needs to be rendered in the page or in the root component in order to be used in components.
+The SVG assets needs to be copied into the public directory of the project.
+This can usually be done by adding a copier script when the server starts.
+
 ```js
-// index.js
+// load-icons.js
 
-import { sprite } from 'ifind-icons';
+const path = require("path");
+const ifindIconsPath = require.resolve("ifind-icons");
+const copyIconsTo = require(path.resolve(ifindIconsPath, "../copy-icons-to"));
 
-ReactDOM.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-
-      // Renders the sprite into the page, but stays hidden
-      <div hidden dangerouslySetInnerHTML={{ __html: spriteContents }}></div>
-
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+copyIconsTo(path.resolve("./public"));
 ```
 
 ### Component Usage
 
 Sample:
+
 ```js
 import IfindIcon from '@componens/IfindIcon';
 
@@ -45,16 +39,20 @@ const SomeComponent = () ={
 ```
 
 ### Dark Variant
+
 ```js
-<IfindIcon icon="play" dark={true} />
+<IfindIcon icon="play" dark />
 ```
 
 ### Styling
+
 Supply a className prop to the IfindIcon in order to override styles in scss.
+
 ```js
 // SomeComponent.js
-<IfindIcon icon="play" dark={true} className="my-icon" />
+<IfindIcon icon="play" dark className="my-icon" />
 ```
+
 ```css
 /* .scss */
 .my-icon {

@@ -200,7 +200,7 @@ class AmazonProductScraper {
           (selectedEntry, [url, dimensions]) =>
             !selectedEntry
               ? [url, dimensions]
-              : dimensions[0] > selectedEntry[1][0]
+              : dimensions[0] < selectedEntry[1][0]
               ? [url, dimensions]
               : selectedEntry,
           null

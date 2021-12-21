@@ -2,6 +2,7 @@
 
 .newsletter {
 	background:#fff;
+  padding-block: 50px;
 
   &__container {
     @include container;
