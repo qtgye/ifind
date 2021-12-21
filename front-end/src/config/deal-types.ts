@@ -1,7 +1,7 @@
 /**
  * Refer to admin/api/ifind/deal-types.js
  */
-const dealTypes = {
+const dealTypes: DealTypeSiteMap = {
   amazon_flash_offers: {
     site: "amazon",
   },

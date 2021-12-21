@@ -53,8 +53,6 @@ const HeaderSideNav = () => {
     handleScroll();
   }, [ handleScroll ]);
 
-  console.log(isRouteMath("/productcomparison"));
-
   return (
     <div className="header-side-nav">
       <RenderIf condition={currentRouteConfig?.withSideNav || false}>
