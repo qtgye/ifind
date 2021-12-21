@@ -59,7 +59,7 @@ jobs:
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== RUNNING TESTS ====/" && \
-          CI=true npm run test -- --coverage && \
+          CI=true npm run test && \
           rm -rf /var/www/html/coverage && mv coverage /var/www/html/coverage && \
           echo "/==== BUILDING SITE ====/" && \
           CI=true npm run build && npm run prerender && \
