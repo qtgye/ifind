@@ -1,12 +1,14 @@
 import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
+
+import { useVendor } from "@contexts/vendorContext";
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
 import "./styles.scss";
 
 const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
+  const highChartsLoaded = useVendor('highcharts');
   const graphRef = useRef<HTMLDivElement>(null);
-  const [highChartsLoaded, setHighChartsLoaded] = useState(false);
   const thirtyDaysBefore = dayjs().subtract(30, "days").valueOf;
   const defaultChartOptions: { [key: string]: any } = {
     title: {
@@ -93,15 +95,6 @@ const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
       window.Highcharts.chart(graphRef.current, highChartsOptions);
     }
   }, [highChartsLoaded, graphRef, highChartsOptions]);
-
-  useEffect(() => {
-    const interval = window.setInterval(() => {
-      if (window.Highcharts) {
-        window.clearInterval(interval);
-        setHighChartsLoaded(true);
-      }
-    }, 100);
-  }, []);
 
   return priceChanges?.length && highChartsLoaded ? (
     <div className="price-change-graph">
