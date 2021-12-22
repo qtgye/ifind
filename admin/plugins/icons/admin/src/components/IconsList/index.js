@@ -6,7 +6,7 @@ import { iconsList } from "ifind-icons";
 // Dynamically import each icon in order for webpack
 // to include them in the build
 const iconPathsPromise = Promise.all(
-  iconsList.map((icon) => import(`../../icons/${icon}.svg`))
+  iconsList.map((icon) => import(`../../../../../../public/icons/${icon}.svg`))
 );
 
 import "./styles.scss";

@@ -34,6 +34,7 @@
     padding: 0px 25px;
     cursor: pointer;
     z-index: $z-index-sidenav-heading;
+    text-transform: uppercase;
 
     @include xl {
       width: 100%;

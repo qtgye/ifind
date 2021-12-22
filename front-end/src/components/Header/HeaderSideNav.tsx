@@ -10,6 +10,7 @@ import { useSubCategories } from "@contexts/categoriesContext";
 import { offersdata } from "@mocks/components/offerssidenav";
 import eventBus from "@utilities/EventBus";
 import { useCurrentRouteConfig, useIsRouteMatch } from "@utilities/route";
+import { useTranslation } from "@translations/index";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 
 import "./header-side-nav.scss";
@@ -18,7 +19,10 @@ import HeaderSideNavSubMenu2 from "./HeaderSideNavSubMenu2";
 import HeaderSideNavButton from "./HeaderSideNavButton";
 import RenderIf from "@components/RenderIf";
 
+import { categories as categoriesLabel } from "./translations";
+
 const HeaderSideNav = () => {
+  const translate = useTranslation();
   const currentRouteConfig = useCurrentRouteConfig();
   const isRouteMath = useIsRouteMatch();
   const { subCategories } = useSubCategories();
@@ -64,7 +68,7 @@ const HeaderSideNav = () => {
           onClick={() => setIsVisible(!isVisible)}
         >
           <i aria-hidden="true" className="fa fa-bars"></i>
-          <span>CATEGORIES</span>
+          <span>{translate(categoriesLabel)}</span>
         </h3>
       </RenderIf>
       <RenderIf condition={isVisible}>
