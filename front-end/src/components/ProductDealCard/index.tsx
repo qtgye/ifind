@@ -19,7 +19,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   quantity_available_percent,
   final_rating,
   onClick,
-  additional_info = 'stocks_available',
+  additional_info = "stocks_available",
 }) => {
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
@@ -38,13 +38,13 @@ const ProductDealCard: ProductDealCardComponent = ({
     } else {
       // Determine url and price according to product.deal_type
       const [dealKey, dealData] =
-        Object.entries(dealTypes as DealTypeMap).find(
+        Object.entries(dealTypes as DealTypeSiteMap).find(
           ([key]) => key === deal_type
         ) || [];
 
       if (dealKey) {
         const matchedOtherSiteDetails = url_list?.find((otherSiteDetails) =>
-          new RegExp(dealData?.source?.name || "no-match-name", "i").test(
+          new RegExp(dealData?.site || "no-match-name", "i").test(
             otherSiteDetails?.source?.name || ""
           )
         );
@@ -124,12 +124,13 @@ const ProductDealCard: ProductDealCardComponent = ({
               </strong>
             </div>
             <PercentCircle
-              renderIf={additional_info === 'stocks_available'}
+              renderIf={additional_info === "stocks_available"}
               percent={stockPercent === null ? null : stockPercent || null}
             />
             <RatingWarps
-              renderIf={additional_info === 'rating'}
-              rating={final_rating || 0} />
+              renderIf={additional_info === "rating"}
+              rating={final_rating || 0}
+            />
           </div>
         </div>
       </div>

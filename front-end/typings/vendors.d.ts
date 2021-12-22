@@ -1,4 +1,3 @@
-declare module "react-shadow-root" {}
 declare module "react-country-flag" {
   import * as React from "react";
   export interface ReactCountryFlagProps {

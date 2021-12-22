@@ -18,9 +18,11 @@ module.exports = {
     config.module.rules[0].use.options.presets.push('@babel/preset-typescript');
     config.resolve.extensions.push('.ts', '.tsx')
 
-    // SASS support.
+    // Additional rules
+    config.module.rules.push(
+      // SASS support.
     // Extracted from config/webpack.config.js
-    config.module.rules.push({
+    {
       test: sassRegex,
       use: [
         require.resolve('style-loader'),

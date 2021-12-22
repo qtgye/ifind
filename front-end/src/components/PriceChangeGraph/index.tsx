@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
-import Highcharts from "highcharts";
-import HighchartsReact from "highcharts-react-official";
+import { useEffect, useState, useRef } from "react";
 import dayjs from "dayjs";
-import withConditionalRender  from "@utilities/hocs/withConditionalRender";
+
+import { useVendor } from "@contexts/vendorContext";
+import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
 import "./styles.scss";
 
 const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
+  const highChartsLoaded = useVendor('highcharts');
+  const graphRef = useRef<HTMLDivElement>(null);
   const thirtyDaysBefore = dayjs().subtract(30, "days").valueOf;
-  const defaultChartOptions: { [key: string]: any} = {
+  const defaultChartOptions: { [key: string]: any } = {
     title: {
       text: null,
     },
@@ -54,8 +56,8 @@ const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
   useEffect(() => {
     if (priceChanges?.length) {
       const prices = priceChanges
-        .filter(priceChange => !!Number(priceChange?.price))
-        .map(priceChange => Number(priceChange?.price));
+        .filter((priceChange) => !!Number(priceChange?.price))
+        .map((priceChange) => Number(priceChange?.price));
       const min = Math.min(...prices);
       const max = Math.max(...prices);
       const ave = prices.reduce((sum, price) => sum + price, 0) / prices.length;
@@ -72,12 +74,14 @@ const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
       setHighchartsOptions({
         series: [
           {
-            data: priceChanges.map((priceChange) => (
-              priceChange ? [
-                dayjs(priceChange.date_time).valueOf(),
-                Number(priceChange.price),
-              ]: null
-            )),
+            data: priceChanges.map((priceChange) =>
+              priceChange
+                ? [
+                    dayjs(priceChange.date_time).valueOf(),
+                    Number(priceChange.price),
+                  ]
+                : null
+            ),
             pointStart: thirtyDaysBefore,
           },
         ],
@@ -86,9 +90,19 @@ const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
     }
   }, [priceChanges]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return priceChanges?.length ? (
+  useEffect(() => {
+    if (highChartsLoaded && graphRef.current) {
+      window.Highcharts.chart(graphRef.current, highChartsOptions);
+    }
+  }, [highChartsLoaded, graphRef, highChartsOptions]);
+
+  return priceChanges?.length && highChartsLoaded ? (
     <div className="price-change-graph">
-      <HighchartsReact highcharts={Highcharts} options={highChartsOptions} />
+      <div className="price-change-graph__graph" ref={graphRef}></div>
+      {/* <HighchartsReact
+        highcharts={window.Highcharts}
+        options={highChartsOptions}
+      /> */}
     </div>
   ) : null;
 };

@@ -83,10 +83,7 @@
 }
 
 .modal-content {
-  border-top: 2px solid black;
-  margin-top: 45px;
   height: 500px;
-  width: 350px;
   text-align: center;
 
   @include sm_mobile {

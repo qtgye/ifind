@@ -17,7 +17,6 @@ export const useCurrentRouteConfig = () => {
   const matchedRouteConfig = routesExtraConfig.find(
     ({ path }: RouteConfig) => path === match?.path?.replace(/\/$/, "")
   );
-  console.log({ match, matchedRouteConfig });
   return matchedRouteConfig || null;
 };
 

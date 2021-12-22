@@ -8,7 +8,11 @@ module.exports = {
       },
       {
         language: "de",
-        label: "Amazon Flash Offers (German)",
+        label: "Amazon Blitzangebote",
+      },
+      {
+        language: "ru",
+        label: "Горячие скидки (Amazon)",
       },
     ],
   },
@@ -21,7 +25,11 @@ module.exports = {
       },
       {
         language: "de",
-        label: "Ebay Wow Offers (German)",
+        label: "Ebay Wow Angebote",
+      },
+      {
+        language: "ru",
+        label: "Удивительные скидки (Ebay)",
       },
     ],
   },
@@ -34,7 +42,11 @@ module.exports = {
       },
       {
         language: "de",
-        label: "AliExpress Super Value Deals (German)",
+        label: "AliExpress Super Sparangebote",
+      },
+      {
+        language: "ru",
+        label: "Супервыгодные акции (AliExpress)",
       },
     ],
   },

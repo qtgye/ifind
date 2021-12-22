@@ -1,8 +1,8 @@
 /* TODO: Remove scrapeAmazonProduct once this is implemented */
-require('colors');
-const moment = require('moment')
-const createTorProxy = require('../tor-proxy');
-const screenshotPageError = require('./screenshotPageError');
+require("colors");
+const moment = require("moment");
+const createTorProxy = require("../tor-proxy");
+const screenshotPageError = require("./screenshotPageError");
 const { addURLParams } = require("../url");
 
 const TOR_PROXY = createTorProxy();
@@ -93,11 +93,7 @@ class AmazonProductScraper {
    * @param {string} language - The base language from where the other details will be scraped
    * @param {boolean} scrapePriceOnly - Whether to scrape price only or include other details
    */
-  async scrapeProduct(
-    productURL,
-    language = "de",
-    scrapePriceOnly = false,
-  ) {
+  async scrapeProduct(productURL, language = "de", scrapePriceOnly = false) {
     /* Track time spent */
     const startTime = Date.now();
 
@@ -106,7 +102,10 @@ class AmazonProductScraper {
 
     // Scrape for all amazon details if applicable
     if (!scrapePriceOnly) {
-      const scrapedDetails = await this.scrapeProductDetails(productURL, language);
+      const scrapedDetails = await this.scrapeProductDetails(
+        productURL,
+        language
+      );
 
       // Apply scraped details
       Object.entries(scrapedDetails).forEach(([key, value]) => {
@@ -125,11 +124,13 @@ class AmazonProductScraper {
 
     const endTime = Date.now();
     const timeSpent = String(Number(((endTime - startTime) / 1000).toFixed(2)));
-    console.info([
-      `- Product scraper took`.green,
-      timeSpent.green.bold,
-      `seconds.`.green,
-    ].join(' '));
+    console.info(
+      [
+        `- Product scraper took`.green,
+        timeSpent.green.bold,
+        `seconds.`.green,
+      ].join(" ")
+    );
 
     return scrapedData;
   }
@@ -137,12 +138,13 @@ class AmazonProductScraper {
   /**
    * Scrapes for an amazon product's details:
    * @param {string} productURL - The original URL of the product
+   * @param {string} language - The site language
    */
-  async scrapeProductDetails(productURL) {
-    const urlWithLanguage = addURLParams(productURL);
+  async scrapeProductDetails(productURL, language = "de") {
+    const urlWithLanguage = addURLParams(productURL, { language });
 
     /* Ensure puppeteer page instance */
-    if ( !this.page ) {
+    if (!this.page) {
       this.page = await TOR_PROXY.newPage();
     }
 
@@ -155,7 +157,7 @@ class AmazonProductScraper {
       */
       let pageLoaded = false;
       let tries = 3;
-      while ( !pageLoaded && tries ) {
+      while (!pageLoaded && tries) {
         try {
           /* Go to product page */
           await this.page.goto(urlWithLanguage, { timeout: 60000 });
@@ -165,12 +167,13 @@ class AmazonProductScraper {
 
           /* Flag page loaded */
           pageLoaded = true;
-        }
-        catch (err) {
+        } catch (err) {
           console.error(err.message);
           console.info(`Retrying...`.yellow);
-          if ( --tries === 0 ) {
-            throw new Error('Unable to fetch product detail page. Kindly ensure that page exists');
+          if (--tries === 0) {
+            throw new Error(
+              "Unable to fetch product detail page. Kindly ensure that page exists"
+            );
           } else {
             await TOR_PROXY.launchNewBrowser();
             this.page = await TOR_PROXY.newPage();
@@ -178,63 +181,58 @@ class AmazonProductScraper {
         }
       }
 
-      const {
-        title,
-        image,
-        details_html
-      } = await this.page.evaluate((
+      const { title, image, details_html } = await this.page.evaluate(
+        (titleSelector, imageSelector, detailSelector, selectorsToRemove) => {
+          const titleElement = document.querySelector(titleSelector);
+          const imageElement = document.querySelector(imageSelector);
+          const detailElement = document.querySelector(detailSelector);
+
+          // Select highres image from dynamic image data
+          const imageData = imageElement
+            ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
+            : {};
+          const highResImage = Object.entries(imageData).reduce(
+            (selectedEntry, [url, dimensions]) =>
+              !selectedEntry
+                ? [url, dimensions]
+                : dimensions[0] < selectedEntry[1][0]
+                ? [url, dimensions]
+                : selectedEntry,
+            null
+          );
+
+          /* Remove unnecessary elements from detail section */
+          const allSelectorsToRemove = selectorsToRemove.join(",");
+          [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
+            (element) => {
+              try {
+                element.remove();
+              } catch (err) {
+                /**/
+              }
+            }
+          );
+
+          /* Apply scraped details */
+          return {
+            title: titleElement
+              ? titleElement.textContent.trim().replace(/\n/, "")
+              : "",
+            image: highResImage ? highResImage[0] : "",
+            details_html: detailElement.outerHTML.trim().replace(/\n+/g, "\n"),
+          };
+        },
         titleSelector,
         imageSelector,
         detailSelector,
-        selectorsToRemove,
-      ) => {
-        const titleElement = document.querySelector(titleSelector);
-        const imageElement = document.querySelector(imageSelector);
-        const detailElement = document.querySelector(detailSelector);
-
-        // Select highres image from dynamic image data
-        const imageData = imageElement
-          ? JSON.parse(imageElement.dataset.aDynamicImage) || {}
-          : {};
-        const highResImage = Object.entries(imageData).reduce(
-          (selectedEntry, [url, dimensions]) =>
-            !selectedEntry
-              ? [url, dimensions]
-              : dimensions[0] > selectedEntry[1][0]
-              ? [url, dimensions]
-              : selectedEntry,
-          null
-        );
-
-        /* Remove unnecessary elements from detail section */
-        const allSelectorsToRemove = selectorsToRemove.join(",");
-        [...detailElement.querySelectorAll(allSelectorsToRemove)].forEach(
-          (element) => {
-            try {
-              element.remove();
-            } catch (err) {
-              /**/
-            }
-          }
-        );
-
-        /* Apply scraped details */
-        return {
-          title: titleElement
-            ? titleElement.textContent.trim().replace(/\n/, "")
-            : "",
-          image: highResImage ? highResImage[0] : "",
-          details_html: detailElement.outerHTML
-            .trim()
-            .replace(/\n+/g, "\n"),
-        }
-      }, titleSelector,imageSelector,detailSelector,selectorsToRemove);
+        selectorsToRemove
+      );
 
       return {
         title,
         image,
-        details_html
-      }
+        details_html,
+      };
     } catch (err) {
       await screenshotPageError(urlWithLanguage);
       throw err;
@@ -245,10 +243,9 @@ class AmazonProductScraper {
     Scrapes for an amazon product's sale details:
     price, discount_percent, price_original, quantity_available_percent, and release_date
   */
-  async scrapeSaleDetails (productURL) {
-
+  async scrapeSaleDetails(productURL) {
     /* Ensure puppeteer page instance */
-    if ( !this.page ) {
+    if (!this.page) {
       this.page = await TOR_PROXY.newPage();
     }
 
@@ -275,12 +272,13 @@ class AmazonProductScraper {
 
         /* Flag page fetched */
         productPageFetched = true;
-      }
-      catch (err) {
+      } catch (err) {
         console.error(err.message);
         console.info(`Retrying...`.yellow);
-        if ( --tries === 0 ) {
-          throw new Error('Unable to fetch product price page. Kindly ensure that product is available.');
+        if (--tries === 0) {
+          throw new Error(
+            "Unable to fetch product price page. Kindly ensure that product is available."
+          );
         } else {
           await TOR_PROXY.launchNewBrowser();
           this.page = await TOR_PROXY.newPage();
@@ -381,7 +379,8 @@ class AmazonProductScraper {
         if (!additionalInfoTable) return;
         const releaseDateRow = Array.from(additionalInfoTable.rows).find(
           (row) =>
-            row.cells[0] && /date first available/i.test(row.cells[0].textContent)
+            row.cells[0] &&
+            /date first available/i.test(row.cells[0].textContent)
         );
         return releaseDateRow && releaseDateRow.cells[1]
           ? releaseDateRow.cells[1].textContent.trim()
@@ -390,7 +389,8 @@ class AmazonProductScraper {
 
       // Some products have details list
       this.page.evaluate((detailsListSelector) => {
-        const detailsListContainer = document.querySelector(detailsListSelector);
+        const detailsListContainer =
+          document.querySelector(detailsListSelector);
         if (!detailsListContainer) return;
         const releaseDateItemText = [
           ...detailsListContainer.querySelectorAll(".a-list-item"),
@@ -427,10 +427,10 @@ class AmazonProductScraper {
       ),
       quantity_available_percent: quantityAvailablePercentMatch
         ? 100 - Number(quantityAvailablePercentMatch[0])
-        : null
+        : null,
     };
 
-    if ( releaseDate ) {
+    if (releaseDate) {
       scrapedSaleData.release_date = releaseDate;
     }
 
@@ -439,7 +439,7 @@ class AmazonProductScraper {
 
   /* Cleanup browser instance. Ideally, this should be called when done with the scraper */
   async close() {
-    if ( this.page ) {
+    if (this.page) {
       const browser = await this.page.browser();
       await browser.close();
     }

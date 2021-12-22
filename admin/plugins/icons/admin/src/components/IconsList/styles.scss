@@ -19,3 +19,13 @@
   width: 30px;
   height: 30px;
 }
+
+.ifind-icon__image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  mask: var(--icon-path);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  background-color: currentColor;
+}

@@ -1,11 +1,19 @@
+const path = require('path');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ifindIconsPath = require.resolve('ifind-icons');
+const copyIconsTo = require(path.resolve(ifindIconsPath, '../copy-icons-to'));
 
 const paths = require("../config/paths");
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== "false";
 
+// Copy icons
+copyIconsTo(paths.appPublic);
+
 module.exports = {
+  // Allows to reference our static assets
+  staticDirs: ['../public'],
   stories: [
     "../src/sb/**/*.stories.js",
     "../src/sb/**/*.stories.mdx",
