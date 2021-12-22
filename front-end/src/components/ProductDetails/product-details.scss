@@ -44,24 +44,19 @@
 
     &__additional {
         display: grid;
-        grid-template-columns: 1fr 1fr;
         flex-shrink: 0;
         align-items: start;
         align-self: flex-end;
-        position: sticky;
-        bottom: -1px;
         width: calc(100% + 40px);
         padding: 20px;
         border-top: 1px solid silver;
         background-color: white;
         margin-left: -20px;
 
-        @include laptop {
-            bottom: -6rem;
-        }
-
-        @include tablet {
-            bottom: -11rem;
+        @include lg {
+          position: sticky;
+          bottom: -1px;
+          grid-template-columns: 1fr 1fr;
         }
     }
 
@@ -72,6 +67,34 @@
         @include tablet {
             grid-column-start: 1;
         }
+    }
+
+    .product-links {
+      width: 100%;
+      table-layout: fixed;
+
+      &__link-item {
+        > * {
+          width: percentage(1/3);
+          padding-block: 10px;
+        }
+      }
+
+      &__link {
+        height: 50px;
+      }
+    }
+
+    .price-change-graph {
+      width: calc(100% - 50px);
+      position: relative;
+      margin-top: 20px;
+      margin-left: auto;
+      margin-right: auto;
+
+      @include lg {
+        width: calc(100% - 20px);
+      }
     }
 
     // Amazon styles overrides

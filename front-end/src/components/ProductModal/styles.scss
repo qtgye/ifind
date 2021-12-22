@@ -127,7 +127,12 @@
     display: flex;
 
     .product-links__link {
-      height: 30px;
+      height: 70px;
+      width: 150px;
+
+      @include lg {
+        height: 90px;
+      }
     }
   }
 
@@ -172,6 +177,12 @@
 
   &__price-graph {
     margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include lg {
+      max-width: 500px;
+    }
   }
 
   .price-change-graph {

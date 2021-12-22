@@ -14,26 +14,35 @@ const ProductLinks = ({ product }: ProductLinksProps) => {
   useEffect(() => {
     // Add keys to urlList
     if (product?.url_list) {
-      const urlItems = product.url_list?.map((urlData) => ({
+      const urlItems: URLListItemWithKey[] = product.url_list?.map((urlData) => ({
         ...urlData,
+        id: urlData?.id || '',
         key: uuid(),
       }));
+
+      // Add amazon details
+      if ( product?.amazon_url ) {
+        urlItems.push({
+          id: product.id,
+          key: uuid(),
+          url: product.amazon_url,
+          source: amazonSource,
+          price: product?.price,
+          region: product?.region,
+          is_base: true,
+        });
+      }
+
+      // Sort items by price, ascending
+      urlItems.sort((dataA, dataB) => (dataA.price || 0) < (dataB.price || 0) ? -1 : 1);
+
       setURLItems(urlItems as URLListItemWithKey[]);
     }
-  }, [product]);
+  }, [product, amazonSource]);
 
   return (
     <div className="product-links">
-      <ProductURLLink
-        key={product?.amazon_url}
-        url={product?.amazon_url}
-        logo={amazonSource?.button_logo?.url}
-        price={product?.price || 0}
-        isBase={true}
-        basePrice={product?.price || 1}
-        currency={product?.region?.currency?.symbol}
-      />
-      {urlItems.map(({ key, url, source, price, region, is_base }) => (
+      {urlItems.map(({ key, url, source, price, is_base }) => (
         <ProductURLLink
           key={key}
           url={url}
@@ -42,6 +51,7 @@ const ProductLinks = ({ product }: ProductLinksProps) => {
           price={price || 0}
           basePrice={product?.price || 1}
           currency={product?.region?.currency?.symbol}
+          isBase={is_base}
         />
       ))}
     </div>
