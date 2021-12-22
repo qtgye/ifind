@@ -2,6 +2,8 @@
 @import "base/global";
 
 .home {
+  margin-bottom: 5rem;
+
   &__container {
     @include container;
   }
@@ -116,7 +118,6 @@
   .offers {
     display: flex;
     margin-top: 3rem;
-    //background-color: rgb(247, 247, 247);
     padding: 20px 10px;
 
     @include tablet {
@@ -127,7 +128,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid black;
+      //border: 2px solid black;
       margin-right: auto;
 
       img {
@@ -232,11 +233,12 @@
       margin-left: auto;
       align-items: center;
       justify-content: center;
-      border: 2px solid black;
-      background-color: blue;
+      //border: 2px solid black;
+      //background-color: blue;
       //padding: 150px 250px;
       img {
         height: 350px;
+        width: 600px;
       }
 
       @include small_laptop {
@@ -265,8 +267,12 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid black;
+      //border: 2px solid black;
       margin-right: auto;
+
+      img {
+        height: 360px;
+      }
 
       @include small_laptop {
         img {

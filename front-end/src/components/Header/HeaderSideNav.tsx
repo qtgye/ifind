@@ -51,7 +51,7 @@ const HeaderSideNav = () => {
 
   useEffect(() => {
     handleScroll();
-  }, [ handleScroll ]);
+  }, [handleScroll]);
 
   return (
     <div className="header-side-nav">

@@ -2,7 +2,9 @@
 
 .newsletter {
 	background:#fff;
-  padding-block: 50px;
+	margin-top: 4rem;
+	margin-bottom: 6rem;
+  	//padding-block: 50px;
 
   &__container {
     @include container;
