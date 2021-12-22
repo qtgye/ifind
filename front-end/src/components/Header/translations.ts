@@ -1,4 +1,5 @@
 export const categories = {
   en: "Categories",
-  de: "Test Translation",
+  de: "Kategorien",
+  ru: "Категории",
 };
