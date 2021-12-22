@@ -26,7 +26,7 @@ const HeaderSideNav = () => {
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
 
   const listRef = useRef<HTMLDivElement | null>();
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
   const [checked, setChecked] = useState(false);
   const checkChange = () => setChecked(!checked);
 
