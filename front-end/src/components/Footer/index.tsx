@@ -34,9 +34,7 @@ const Footer = () => {
 
   useEffect(() => {
     if (socialNetwork?.social_network?.length) {
-      setSocialLinks(
-        socialNetwork.social_network.map(({ type, url }) => ({ type, url }))
-      );
+      setSocialLinks(socialNetwork.social_network);
     }
   }, [socialNetwork]);
 
@@ -98,7 +96,7 @@ const Footer = () => {
                 {socialLinks.map(({ url, type }) => (
                   <li key={url}>
                     <a href={url}>
-                      <i className={`ti-${type}`}></i>
+                      <i className={`fa fa-${type}`}></i>
                     </a>
                   </li>
                 ))}
