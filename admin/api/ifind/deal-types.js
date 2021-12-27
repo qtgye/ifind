@@ -14,6 +14,18 @@ module.exports = {
         language: "ru",
         label: "Горячие скидки (Amazon)",
       },
+      {
+        language: "sp",
+        label: "Ofertas Flash de Amazon",
+      },
+      {
+        language: "fr",
+        label: "Offres flash Amazon",
+      },
+      {
+        language: "it",
+        label: "Offerte lampo Amazon",
+      },
     ],
   },
   ebay_wow_offers: {
@@ -31,6 +43,18 @@ module.exports = {
         language: "ru",
         label: "Удивительные скидки (Ebay)",
       },
+      {
+        language: "sp",
+        label: "Ofertas Ebay Wow",
+      },
+      {
+        language: "fr",
+        label: "Offres Ebay Wow",
+      },
+      {
+        language: "it",
+        label: "Offerte Ebay Wow",
+      },
     ],
   },
   aliexpress_value_deals: {
@@ -47,6 +71,18 @@ module.exports = {
       {
         language: "ru",
         label: "Супервыгодные акции (AliExpress)",
+      },
+      {
+        language: "sp",
+        label: "Ofertas supervaloradas de AliExpress",
+      },
+      {
+        language: "fr",
+        label: "Offres super avantageuses d'AliExpress",
+      },
+      {
+        language: "it",
+        label: "AliExpress Super Value Deals",
       },
     ],
   },
