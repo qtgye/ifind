@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import GeneralTemplate from "@templates/GeneralTemplate";
 import { withComponentName } from "@utilities/component";
@@ -43,6 +43,13 @@ const Gifts = () => {
   const onModalClose = useCallback(() => {
     setModalVisible(false);
   }, []);
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [products]);
 
   const classNames = [
     "gifts",
