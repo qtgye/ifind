@@ -15,7 +15,7 @@ const CategoryDetail = () => {
   const { category, addCategory, updateCategory, deleteCategory, loading } = useCategory();
   const [ isSaving, setIsSaving ] = useState(false);
   const [ isDeleting, setIsDeleting ] = useState(false);
-  const [ categoryFormData, setCategoryFormData ] = useState();
+  const [ categoryFormData, setCategoryFormData ] = useState({});
 
   const redirectToAddCategory = useCallback(() => {
     history.push(generatePluginLink('categories/create'));
@@ -34,9 +34,9 @@ const CategoryDetail = () => {
   }, [ categoryFormData, category, addCategory, updateCategory ]);
 
   const confirmDelete = useCallback(() => {
-    if ( confirm(`Are you sure to delete category "${category.label_preview}"?`) ) {
+    if ( confirm(`Are you sure to delete category "${category?.label_preview}"?`) ) {
       setIsDeleting(true);
-      deleteCategory(category.id);
+      deleteCategory(category?.id || '');
     }
   }, [ category, deleteCategory, setIsDeleting ]);
 
@@ -67,7 +67,9 @@ const CategoryDetail = () => {
   }, [ category ]);
   
   useEffect(() => {
-    setIsLoading(loading);
+    if ( setIsLoading ) {
+      setIsLoading(loading);
+    }
   }, [ loading ]);
 
   return (
