@@ -172,7 +172,7 @@ const prerender = async (usedPort) => {
     console.info("DONE");
   }
 
-  console.info("Moving Prerendered files".green);
+  console.info(`Moving Prerendered files to web root: ${STATIC_WEB_ROOT.bold}`.green);
 
   // Cleanup old static site files
   if (existsSync(STATIC_WEB_ROOT)) {

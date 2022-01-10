@@ -25,6 +25,10 @@ class ScheduledTasks {
   hookNames = {
     TASK_STOP: "task-stop",
   };
+  // Running hooks
+  runningHooks = {
+    // TASK_STOP: process
+  };
 
   constructor() {
     this.ID = Date.now();
@@ -223,11 +227,18 @@ class ScheduledTasks {
     const hookPath = path.resolve(__dirname, "hooks", `${hookName}.js`);
     const hookPathExists = fs.existsSync(hookPath);
 
+    // Halt any running hook of the same name
+    if ( hookName in this.runningHooks ) {
+      this.runningHooks[hookName].stop();
+    }
+
     if (isValidHookName && hookPathExists) {
       LOGGER.log([`Running hook`.cyan, hookName.cyan.bold].join(" "));
 
       // Require and run hook
-      const hookProcess = childProcess.fork(hookPath, [], { stdio: "pipe" });
+      this.runningHooks[hookName] = childProcess.fork(hookPath, [], { stdio: "pipe" });
+
+      const hookProcess = this.runningHooks[hookName];
 
       hookProcess.on("message", (jsonString) => {
         const { event } = JSON.parse(jsonString);
@@ -254,6 +265,8 @@ class ScheduledTasks {
           reject();
         });
       });
+
+      this.runningHooks[hookName] = null;
 
       LOGGER.log(" DONE".green.bold);
     }
