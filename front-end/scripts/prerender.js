@@ -5,14 +5,23 @@ const {
   copySync,
   rmdirSync,
   moveSync,
+  existsSync,
 } = require("fs-extra");
 const path = require("path");
 const puppeteer = require("puppeteer");
 const express = require("express");
 const fetch = require("node-fetch");
-const { REACT_APP_ADMIN_API_ROOT } = require("dotenv").config().parsed;
+const {
+  REACT_APP_ADMIN_API_ROOT,
+  STATIC_WEB_ROOT,
+} = require("dotenv").config().parsed;
 
-const routes = ["/", "/productcomparison", "/offers", "/gifts", "/contact"];
+// Ensure static web root is supplied
+if (!STATIC_WEB_ROOT) {
+  throw new Error("Please supply STATIC_WEB_ROOT in your .env file.");
+}
+
+const routes = ["/"];
 const languages = [];
 const routesWithLanguages = [];
 
@@ -35,27 +44,27 @@ const prerender = async (usedPort) => {
   try {
     console.info("Getting languages and page routes from API...".cyan);
 
-    const [
-      languageCodes,
-      pageSlugs,
-    ] = await Promise.all([
+    const [languageCodes, pageSlugs] = await Promise.all([
       // Get Languages
       (async () => {
-        const response = await fetch(REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"), {
-          method: "post",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+        const response = await fetch(
+          REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"),
+          {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `
                 query {
                   languages {
                     code
                   }
                 }
               `,
-          }),
-        });
+            }),
+          }
+        );
         const { data } = await response.json();
         const { languages } = data;
 
@@ -67,21 +76,24 @@ const prerender = async (usedPort) => {
 
       // Get Pages
       (async () => {
-        const response = await fetch(REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"), {
-          method: "post",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+        const response = await fetch(
+          REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"),
+          {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `
               query {
                 pages {
                   slug
                 }
               }
             `,
-          }),
-        });
+            }),
+          }
+        );
         const { data } = await response.json();
         const { pages } = data;
         if (pages && pages.length) {
@@ -98,11 +110,11 @@ const prerender = async (usedPort) => {
   }
 
   // Generate routes with languages
-  languages.forEach((language) => {
-    routes.forEach((route) => {
-      routesWithLanguages.push(`/${language}${route}`);
-    });
-  });
+  // languages.forEach((language) => {
+  //   routes.forEach((route) => {
+  //     routesWithLanguages.push(`/${language}${route}`);
+  //   });
+  // });
 
   // Always scrape the homepage last, since this will override index.html
   routesWithLanguages.push("/");
@@ -128,7 +140,11 @@ const prerender = async (usedPort) => {
 
   for (const route of routesWithLanguages) {
     const url = `http://127.0.0.1:${usedPort}${route}`;
-    console.info(`[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${route.bold} at ${url}`.green);
+    console.info(
+      `[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${
+        route.bold
+      } at ${url}`.green
+    );
 
     await page.goto(url, {
       waitUntil: "networkidle0",
@@ -155,6 +171,16 @@ const prerender = async (usedPort) => {
     outputFileSync(routeFile, html);
     console.info("DONE");
   }
+
+  console.info("Moving Prerendered files".green);
+
+  // Cleanup old static site files
+  if (existsSync(STATIC_WEB_ROOT)) {
+    rmdirSync(STATIC_WEB_ROOT, { recursive: true, force: true });
+  }
+
+  // Move static site files
+  moveSync(PRERENDER_TEMP, STATIC_WEB_ROOT);
 
   process.exit();
 };
