@@ -110,11 +110,11 @@ const prerender = async (usedPort) => {
   }
 
   // Generate routes with languages
-  // languages.forEach((language) => {
-  //   routes.forEach((route) => {
-  //     routesWithLanguages.push(`/${language}${route}`);
-  //   });
-  // });
+  languages.forEach((language) => {
+    routes.forEach((route) => {
+      routesWithLanguages.push(`/${language}${route}`);
+    });
+  });
 
   // Always scrape the homepage last, since this will override index.html
   routesWithLanguages.push("/");
