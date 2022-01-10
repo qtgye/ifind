@@ -76,7 +76,7 @@ class ScheduledTasks {
     LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
 
     // TEST
-    this.fireHook('task-stop', 'test-task-id');
+    this.fireHook("task-stop", "test-task-id");
   }
 
   runCommand(command, id) {
@@ -228,15 +228,23 @@ class ScheduledTasks {
     const hookPathExists = fs.existsSync(hookPath);
 
     // Halt any running hook of the same name
-    if ( hookName in this.runningHooks ) {
+    if (hookName in this.runningHooks) {
       this.runningHooks[hookName].stop();
     }
+
+    console.log("Trying to run hook: ", {
+      hookName,
+      isValidHookName,
+      hookPathExists,
+    });
 
     if (isValidHookName && hookPathExists) {
       LOGGER.log([`Running hook`.cyan, hookName.cyan.bold].join(" "));
 
       // Require and run hook
-      this.runningHooks[hookName] = childProcess.fork(hookPath, [], { stdio: "pipe" });
+      this.runningHooks[hookName] = childProcess.fork(hookPath, [], {
+        stdio: "pipe",
+      });
 
       const hookProcess = this.runningHooks[hookName];
 
