@@ -21,7 +21,7 @@ if (!STATIC_WEB_ROOT) {
   throw new Error("Please supply STATIC_WEB_ROOT in your .env file.");
 }
 
-const routes = ["/"];
+const routes = ["/", "/productcomparison", "/offers", "/gifts", "/contact"];
 const languages = [];
 const routesWithLanguages = [];
 
