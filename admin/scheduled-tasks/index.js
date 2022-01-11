@@ -233,12 +233,6 @@ class ScheduledTasks {
       this.runningHooks[hookName].stop();
     }
 
-    console.log("Trying to run hook: ", {
-      hookName,
-      isValidHookName,
-      hookPathExists,
-    });
-
     if (isValidHookName && hookPathExists) {
       LOGGER.log([`Running hook`.cyan, hookName.cyan.bold].join(" "));
 

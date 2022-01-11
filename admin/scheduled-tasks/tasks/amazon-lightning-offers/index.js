@@ -5,7 +5,7 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
 const DEAL_TYPE = "amazon_flash_offers";
-const PRODUCTS_TO_SCRAPE = 1;
+const PRODUCTS_TO_SCRAPE = 20;
 
 (async () => {
   const productScraper = await createAmazonProductScraper();
