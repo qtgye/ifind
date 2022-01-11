@@ -228,7 +228,8 @@ class ScheduledTasks {
     const hookPathExists = fs.existsSync(hookPath);
 
     // Halt any running hook of the same name
-    if (hookName in this.runningHooks) {
+    if (this.runningHooks[hookName]) {
+      console.info(`Stopping currently running ${hookName} hook.`);
       this.runningHooks[hookName].stop();
     }
 

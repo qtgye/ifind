@@ -21,7 +21,10 @@ if (!STATIC_WEB_ROOT) {
   throw new Error("Please supply STATIC_WEB_ROOT in your .env file.");
 }
 
-const routes = ["/", "/productcomparison", "/offers", "/gifts", "/contact"];
+const routes = [
+  "/",
+  // "/productcomparison", "/offers", "/gifts", "/contact"
+];
 const languages = [];
 const routesWithLanguages = [];
 
@@ -68,9 +71,9 @@ const prerender = async (usedPort) => {
         const { data } = await response.json();
         const { languages } = data;
 
-        if (languages && languages.length) {
-          return languages.map(({ code }) => code);
-        }
+        // if (languages && languages.length) {
+        //   return languages.map(({ code }) => code);
+        // }
         return [];
       })(),
 

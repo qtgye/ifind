@@ -5,6 +5,7 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
 const DEAL_TYPE = "amazon_flash_offers";
+const PRODUCTS_TO_SCRAPE = 1;
 
 (async () => {
   const productScraper = await createAmazonProductScraper();
@@ -70,9 +71,9 @@ const DEAL_TYPE = "amazon_flash_offers";
           scrapedProducts.push(productData);
 
           // Current scraped products info
-          console.info(`Scraped ${scrapedProducts.length} of 20`.green.bold);
+          console.info(`Scraped ${scrapedProducts.length} of ${PRODUCTS_TO_SCRAPE}`.green.bold);
 
-          if (scrapedProducts.length === 20) {
+          if (scrapedProducts.length === PRODUCTS_TO_SCRAPE) {
             break;
           }
         } catch (err) {
