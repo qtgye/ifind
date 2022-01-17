@@ -45,7 +45,7 @@ class TorProxy {
     }
 
     /* Close all other pages/tabs */
-    this.closePages();
+    await this.closePages();
 
     /* Log */
     console.info(`Getting new page.`);
@@ -53,11 +53,22 @@ class TorProxy {
     /* Create new Page */
     const page = await this.browser.newPage();
 
+    console.info(`New page created.`);
+
     /* Apply desktop breakpoint */
     await page.setViewport({
       width: 1920,
-      height: 3000,
+      height: 10000,
     });
+
+    /* Apply custom headers */
+    await await page.setExtraHTTPHeaders({
+      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
+      'origin': 'https://www.amazon.de',
+      'referer': 'https://www.amazon.de'
+  })
+
+    console.info(`Page configured.`);
 
     /* Return new page */
     return page;

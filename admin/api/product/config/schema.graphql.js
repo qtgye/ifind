@@ -67,7 +67,6 @@ module.exports = {
         return await strapi.services.product.categoryProducts(args.language, args.categories, args.includeDescendants);
       },
       async productsByDeals(_, args) {
-        console.log({ _ });
         return await strapi.services.product.productsByDeals(args);
       },
       async giftIdeas(_, args) {

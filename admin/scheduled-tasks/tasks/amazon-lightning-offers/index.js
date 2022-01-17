@@ -5,7 +5,7 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
 const DEAL_TYPE = "amazon_flash_offers";
-const PRODUCTS_TO_SCRAPE = 20;
+const PRODUCTS_TO_SCRAPE = null;
 
 (async () => {
   const productScraper = await createAmazonProductScraper();
@@ -33,6 +33,7 @@ const PRODUCTS_TO_SCRAPE = 20;
     });
 
     if (offerProducts.length) {
+      const productsToScrape = PRODUCTS_TO_SCRAPE || offerProducts.length;
       const strapi = await createStrapiInstance();
 
       console.log(
@@ -49,7 +50,9 @@ const PRODUCTS_TO_SCRAPE = 20;
             false
           );
 
-          if (!productData || !productData.title || !productData.price) {
+          console.log('quantity available: ' + productData.quantity_available_percent);
+
+          if (!productData || !productData.title || !productData.price || !productData.quantity_available_percent ) {
             continue;
           }
 
@@ -71,9 +74,9 @@ const PRODUCTS_TO_SCRAPE = 20;
           scrapedProducts.push(productData);
 
           // Current scraped products info
-          console.info(`Scraped ${scrapedProducts.length} of ${PRODUCTS_TO_SCRAPE}`.green.bold);
+          console.info(`Scraped ${scrapedProducts.length} of ${productsToScrape}`.green.bold);
 
-          if (scrapedProducts.length === PRODUCTS_TO_SCRAPE) {
+          if (scrapedProducts.length === productsToScrape) {
             break;
           }
         } catch (err) {

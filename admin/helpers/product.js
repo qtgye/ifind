@@ -193,6 +193,10 @@ const extractProductDealData = (product) => {
   } = product;
   const matchedDealTypeConfig = dealTypesConfig[deal_type];
 
+  if ( !matchedDealTypeConfig ) {
+    return null;
+  }
+
   if (/amazon/i.test(deal_type)) {
     return {
       price,
