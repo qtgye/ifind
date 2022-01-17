@@ -1,27 +1,40 @@
-const dealTypes = appRequire('api/ifind/deal-types');
+const dealTypes = appRequire("api/ifind/deal-types");
 
-module.exports = async () => {
+const PRODUCTS_PER_PAGE = 20;
+
+module.exports = async ({ deal_type = "", start = 0 }) => {
   const sources = await strapi.services.source.find();
 
   const productsByDeals = await Promise.all(
-    Object.entries(dealTypes).map(async ([dealTypeKey, { site, label }]) => {
-      const products = await strapi.services.product.find({
-        deal_type: dealTypeKey,
-        _limit: 20,
-        _sort: "id:DESC",
-      });
+    Object.entries(dealTypes)
+      .filter(([dealTypeKey]) => (deal_type ? dealTypeKey === deal_type : true))
+      .map(async ([dealTypeKey, { site, label }]) => {
+        const [products, total_products] = await Promise.all([
+          strapi.services.product.find({
+            deal_type: dealTypeKey,
+            _limit: PRODUCTS_PER_PAGE,
+            _start: start,
+            _sort: "quantity_available_percent:DESC",
+          }),
+          strapi.services.product.count({
+            deal_type: dealTypeKey,
+          }),
+        ]);
 
-      const source = sources.find(({ name }) => (new RegExp(site, 'i')).test(name));
+        const source = sources.find(({ name }) =>
+          new RegExp(site, "i").test(name)
+        );
 
-      return {
-        deal_type: {
-          name: dealTypeKey,
-          label,
-          source,
-        },
-        products,
-      };
-    })
+        return {
+          deal_type: {
+            name: dealTypeKey,
+            label,
+            source,
+          },
+          products,
+          total_products,
+        };
+      })
   );
 
   return productsByDeals;

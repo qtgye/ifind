@@ -44,7 +44,9 @@ fragment ProductDataFragment on Product {
     region { id }
     url
     price
-    is_base
+    price_original
+    discount_percent
+    quantity_available_percent
   }
   category {
     id
@@ -114,7 +116,7 @@ $website_tab: String!
 $deal_type: ENUM_PRODUCT_DEAL_TYPE
 $category: ID
 $position: Int
-$amazon_url: String!
+$amazon_url: String
 $price: Float
 $final_rating: Float
 $release_date: DateTime

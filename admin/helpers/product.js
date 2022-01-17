@@ -3,6 +3,7 @@ const { amazonLink } = require("./amazon");
 const createAmazonScraper = require("./amazon/amazonProductScraper");
 const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
+const dealTypesConfig = require("../api/ifind/deal-types");
 
 const getProductDetails = async (
   productData,
@@ -180,9 +181,56 @@ const hasInvalidRating = (product) =>
     (attr_rating) => !attr_rating || !attr_rating.product_attribute
   );
 
+// Extracts the appropriate deal-specific data for a product
+const extractProductDealData = (product) => {
+  const {
+    deal_type,
+    price,
+    price_original,
+    discount_percent,
+    quantity_available_percent,
+    url_list,
+  } = product;
+  const matchedDealTypeConfig = dealTypesConfig[deal_type];
+
+  if (/amazon/i.test(deal_type)) {
+    return {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    };
+  } else {
+    const siteNamePattern = new RegExp(matchedDealTypeConfig.name, "i");
+    const matchedSourceData = Array.isArray(url_list)
+      ? url_list.find((otherSiteData) =>
+          siteNamePattern.test(otherSiteData.source.name)
+        )
+      : null;
+
+    if (!matchedSourceData) {
+      return null;
+    }
+
+    const {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    } = matchedSourceData;
+    return {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    };
+  }
+};
+
 module.exports = {
   fetchProductDetails,
   getProductDetails,
   filterProductsWithProblems,
   hasInvalidRating,
+  extractProductDealData,
 };

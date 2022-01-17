@@ -123,6 +123,9 @@
       "via": "products",
       "collection": "tag",
       "dominant": true
+    },
+    "deal_quantity_available_percent": {
+      "type": "decimal"
     }
   }
 }

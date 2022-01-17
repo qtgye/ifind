@@ -10,27 +10,36 @@
   }
  */
 export const validationRules = {
-  required: (message) => (value) => (
-    (
-      !Boolean(value) || (Array.isArray(value) && !value.length)
-    ) && (message || 'Field is required')
-  ),
-  number: (message) => (value) => (
+  required: (message) => (value) =>
+    (!Boolean(value) || (Array.isArray(value) && !value.length)) &&
+    (message || "Field is required"),
+  number: (message) => (value) =>
     // isNaN(null) returns true, so String(value) is needed
-    isNaN(String(value)) && (message || 'Field must be a number')
-  ),
-  greaterThan: (threshold = 0, message) => (value = 0) => (
-    Number(value) <= Number(threshold) && (message || `Field must be greater than ${threshold}`)
-  ),
-  oneOf: (options = [], message) => (value) => (
-    !(Array.isArray(options) && options.includes(value)) && (message || 'Field must be one of the options')
-  ),
-  url: (message) => (value = '') => (
-    !(/^https?:\/\/.+/.test(String(value))) && (message || 'Field must be a URL')
-  ),
+    isNaN(String(value)) && (message || "Field must be a number"),
+  greaterThan:
+    (threshold = 0, message) =>
+    (value = 0) =>
+      Number(value) <= Number(threshold) &&
+      (message || `Field must be greater than ${threshold}`),
+  oneOf:
+    (options = [], message) =>
+    (value) =>
+      !(Array.isArray(options) && options.includes(value)) &&
+      (message || "Field must be one of the options"),
+  url:
+    (message) =>
+    (value = "") =>
+      value
+        ? !/^https?:\/\/.+/.test(String(value)) &&
+          (message || "Field must be a URL")
+        : true,
 
   // Allows one error message for multiple rules
-  set: (rules = [], message) => value => rules.some(rule => rule(value)) && (message || 'Field does not meet validation rules.')
+  set:
+    (rules = [], message) =>
+    (value) =>
+      rules.some((rule) => rule(value)) &&
+      (message || "Field does not meet validation rules."),
 };
 
 /**
@@ -44,14 +53,14 @@ export const validationRules = {
 export const validateData = (data, validationRules = {}) => {
   const validationErrors = {};
 
-  Object.entries(validationRules).forEach(([ field, rules ]) => {
-    const ruleCheckers = Array.isArray(rules) ? rules : [ rules ];
+  Object.entries(validationRules).forEach(([field, rules]) => {
+    const ruleCheckers = Array.isArray(rules) ? rules : [rules];
 
-    const fieldErrors = ruleCheckers.map(ruleChecker => (
-      ruleChecker(data[field])
-    )).filter(Boolean);
+    const fieldErrors = ruleCheckers
+      .map((ruleChecker) => ruleChecker(data[field]))
+      .filter(Boolean);
 
-    if ( fieldErrors.length ) {
+    if (fieldErrors.length) {
       validationErrors[field] = fieldErrors;
     }
   });

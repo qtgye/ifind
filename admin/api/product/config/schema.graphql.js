@@ -32,6 +32,7 @@ module.exports = {
     type ProductsByDeal {
       deal_type: DealType
       products: [Product]
+      total_products: Int
     }
     type GiftIdeasPayload {
       products: [Product]
@@ -43,7 +44,7 @@ module.exports = {
     productComparisonList (language: String, root: ID): [NaturalList]
     categoryProducts (language: String, categories: [ID], includeDescendants: Boolean): [NaturalList]
     productsList (sort: String, limit: Int, start: Int, where: ProductsListWhereParamInput): ProductsListPayload
-    productsByDeals: [ProductsByDeal]
+    productsByDeals( deal_type: String , start: Int ): [ProductsByDeal]
     giftIdeas ( page: Int, tags: [ID] ): GiftIdeasPayload
   `,
   mutation: `
@@ -65,8 +66,9 @@ module.exports = {
       async categoryProducts(_, args) {
         return await strapi.services.product.categoryProducts(args.language, args.categories, args.includeDescendants);
       },
-      async productsByDeals() {
-        return await strapi.services.product.productsByDeals();
+      async productsByDeals(_, args) {
+        console.log({ _ });
+        return await strapi.services.product.productsByDeals(args);
       },
       async giftIdeas(_, args) {
         return await strapi.services.product.giftIdeas(args);

@@ -13,6 +13,7 @@ const productsByDealsQuery = gql`
           label
         }
       }
+      total_products
       products {
         id
         amazon_url
@@ -22,6 +23,7 @@ const productsByDealsQuery = gql`
         quantity_available_percent
         title
         deal_type
+        deal_quantity_available_percent
         image
         url_list {
           source {
