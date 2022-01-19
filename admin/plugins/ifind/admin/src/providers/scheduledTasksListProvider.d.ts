@@ -23,6 +23,7 @@ declare interface I_RawTask {
   frequency: string;
   next_run: string;
   hasModule: boolean;
+  countdown: string;
 }
 
 declare interface I_ScheduledTasksProviderValue {

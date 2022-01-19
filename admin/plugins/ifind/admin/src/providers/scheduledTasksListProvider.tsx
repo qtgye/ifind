@@ -23,6 +23,7 @@ query {
       frequency
       next_run
       hasModule
+      countdown
     }
     logs {
       date_time

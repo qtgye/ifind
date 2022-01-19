@@ -102,6 +102,7 @@ declare global {
     frequency?: string;
     next_run?: number;
     hasModule?: boolean;
+    countdown?: string;
   }
   
   export const enum SCHEDULED_TASK_ACTION {
@@ -4420,6 +4421,7 @@ declare global {
     frequency?: ScheduledTaskToFrequencyResolver<TParent>;
     next_run?: ScheduledTaskToNext_runResolver<TParent>;
     hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
+    countdown?: ScheduledTaskToCountdownResolver<TParent>;
   }
   
   export interface ScheduledTaskToIdResolver<TParent = any, TResult = any> {
@@ -4443,6 +4445,10 @@ declare global {
   }
   
   export interface ScheduledTaskToHasModuleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToCountdownResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

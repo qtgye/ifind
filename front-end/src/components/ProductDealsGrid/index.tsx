@@ -65,8 +65,6 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
     }
   }, [dealTypeName, deal_type.name]);
 
-  console.log({ productsInView });
-
   return (
     <div
       className="product-deals-grid"

@@ -91,7 +91,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     return [
       <div>{utcTimeFormatted} (UTC)</div>,
       <small className="tasks-list__task-schedule-local">
-        • Local Time: {localTimeFormatted}
+        • <strong>Local Time</strong>: {localTimeFormatted}
       </small>,
     ];
   }, []);
@@ -110,6 +110,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     name: "Task Name",
     frequency: "Frequency",
     next_run: "Next Run Schedule",
+    countdown: "Countdown",
     action: "Action",
   };
 
@@ -119,6 +120,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     frequency: task.frequency,
     next_run: formatNextRun(task.next_run),
     action: task.hasModule ? getTaskActions(task) : "-",
+    countdown: task.countdown,
   }));
 
   return <Table className="tasks-list" headers={headers} rows={rowsData} />;

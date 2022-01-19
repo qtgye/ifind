@@ -39,6 +39,7 @@ module.exports = {
     frequency: String
     next_run: Float
     hasModule: Boolean
+    countdown: String
   }
 
   enum SCHEDULED_TASK_ACTION {

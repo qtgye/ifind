@@ -13,6 +13,7 @@ const Database = require("./lib/Database");
 const Logger = require("./lib/Logger");
 const Queue = require("./lib/Queue");
 const mapScheduleToFrequency = require("./utils/mapScheduleToFrequency");
+const formatGranularTime = require("./utils/formatGranularTime");
 
 const LOGGER = new Logger({ baseDir });
 
@@ -101,6 +102,8 @@ class ScheduledTasks {
    * Gets the list of all available tasks
    */
   list() {
+    const serverTime = moment.utc().valueOf();
+
     // Get updated tasks list
     const tasks = Queue.getList();
 
@@ -117,6 +120,7 @@ class ScheduledTasks {
       .map((task) => ({
         ...task,
         frequency: mapScheduleToFrequency(task.schedule),
+        countdown: formatGranularTime(task.next_run - serverTime),
       }))
       .sort((taskA, taskB) => (taskA.next_run < taskB.next_run ? -1 : 1));
   }
