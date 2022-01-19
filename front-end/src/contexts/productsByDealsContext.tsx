@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import productsByDealsQuery from "@gql/productsByDealsQuery";
 
@@ -11,7 +11,6 @@ export const ProductsByDealsContextProvider = ({
   const { loading, error, data } = useQuery(productsByDealsQuery);
 
   useEffect(() => {
-    //console.log({ data });
     setProductsByDeals(data?.productsByDeals || []);
   }, [data]);
 

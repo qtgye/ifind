@@ -108,7 +108,6 @@ const PRODUCTS_COUNT = 20;
         ],
       };
 
-
       await strapi.services.product.create(newData);
       console.log(`[ ${++saved} of ${productsData.length} ] Successfully saved: ${newData.title.bold}`.green);
     }

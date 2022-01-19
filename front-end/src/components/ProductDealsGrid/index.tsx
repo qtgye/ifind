@@ -1,17 +1,25 @@
-import { useContext, useEffect, useRef, useCallback } from "react";
+import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 import ProductDealCard from "@components/ProductDealCard";
 import { useTranslation } from "@translations";
+import RenderIf from "@components/RenderIf";
 
 import "./styles.scss";
+
+const INITIAL_PRODUCTS_IN_VIEW = 20;
+const PRODUCTS_PER_LOAD = 10;
 
 const ProductDealsGrid: ProductDealsGridComponent = ({
   products,
   deal_type,
+  total_products = 0,
 }) => {
   const translate = useTranslation();
   const { dealTypeName } = useContext(GlobalStateContext);
   const offersRef = useRef<HTMLDivElement | null>();
+  const [productsInView, setProductsInView] = useState<Product[]>(
+    products.slice(0, INITIAL_PRODUCTS_IN_VIEW)
+  );
 
   const translationArrayToMap = useCallback(
     (
@@ -30,6 +38,19 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
     []
   );
 
+  const onLoadMoreClick = useCallback(
+    (e) => {
+      e.preventDefault();
+
+      const productsInViewCount = productsInView.length;
+
+      setProductsInView(
+        products.slice(0, productsInViewCount + PRODUCTS_PER_LOAD)
+      );
+    },
+    [products, productsInView]
+  );
+
   useEffect(() => {
     if (dealTypeName === "amazon_flash_offers") {
       return window.scrollTo(0, 0);
@@ -44,6 +65,8 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
     }
   }, [dealTypeName, deal_type.name]);
 
+  console.log({ productsInView });
+
   return (
     <div
       className="product-deals-grid"
@@ -55,13 +78,23 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
       </div>
       {products.length ? (
         <div className="product-deals-grid__items">
-          {products.map((product) => (
+          {productsInView.map((product) => (
             <ProductDealCard key={product.id} {...product} />
           ))}
         </div>
       ) : (
         <p className="product-deals-grid__empty">No products yet.</p>
       )}
+      <RenderIf condition={productsInView.length < total_products}>
+        <div className="product-deals-grid__load-more">
+          <button
+            className="product-deals-grid__load-more-button"
+            onClick={onLoadMoreClick}
+          >
+            Load More Offers
+          </button>
+        </div>
+      </RenderIf>
     </div>
   );
 };
