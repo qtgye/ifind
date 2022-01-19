@@ -175,6 +175,7 @@ declare global {
   export interface ProductsByDeal {
     deal_type?: DealType;
     products?: Array<Product | null>;
+    total_products?: number;
   }
   
   export interface GiftIdeasPayload {
@@ -4603,6 +4604,7 @@ declare global {
   export interface ProductsByDealTypeResolver<TParent = any> {
     deal_type?: ProductsByDealToDeal_typeResolver<TParent>;
     products?: ProductsByDealToProductsResolver<TParent>;
+    total_products?: ProductsByDealToTotal_productsResolver<TParent>;
   }
   
   export interface ProductsByDealToDeal_typeResolver<TParent = any, TResult = any> {
@@ -4610,6 +4612,10 @@ declare global {
   }
   
   export interface ProductsByDealToProductsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductsByDealToTotal_productsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -10052,8 +10058,12 @@ declare global {
     (parent: TParent, args: QueryToProductsListArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
+  export interface QueryToProductsByDealsArgs {
+    deal_type?: string;
+    start?: number;
+  }
   export interface QueryToProductsByDealsResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+    (parent: TParent, args: QueryToProductsByDealsArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface QueryToGiftIdeasArgs {

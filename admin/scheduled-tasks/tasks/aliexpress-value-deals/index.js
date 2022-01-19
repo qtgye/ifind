@@ -114,9 +114,9 @@ const PRODUCTS_COUNT = 20;
     }
 
     console.log(" DONE ".bgGreen.white.bold);
-    process.exit();
   } catch (err) {
     console.error(err, err.data);
-    process.exit();
   }
+
+  process.exit();
 })();
