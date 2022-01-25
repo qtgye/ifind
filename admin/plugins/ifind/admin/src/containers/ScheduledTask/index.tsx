@@ -26,7 +26,9 @@ const ScheduledTask = (): JSX.Element => {
   return (
     <div className="container">
       <div className="row">
-        <Header title={{ label: task?.name }} />
+        <Header
+          title={{ label: task?.name }}
+        />
         <div className="background-process__logs">
           {task?.logs?.length && <LogsList logs={task.logs} />}
         </div>

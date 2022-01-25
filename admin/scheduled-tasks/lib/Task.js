@@ -1,7 +1,3 @@
-/**
- * TODO
- * - Drop the use of status. Get directly from the switch instead.
- */
 const { existsSync } = require("fs-extra");
 const childProcess = require("child_process");
 const path = require("path");
@@ -35,6 +31,7 @@ class Task extends Model {
     this.name = config.name;
     this.schedule = config.schedule;
     this.next_run = config.next_run;
+    this.last_run = config.last_run;
     this.status = config.status || STATUS_STOPPED;
 
     // Get taskModulePath
@@ -63,12 +60,13 @@ class Task extends Model {
     this[EVENT_EMITTER_KEY].on(event, handler);
   }
 
-  start() {
+  async start() {
     if ( this.hasModule && !this.running ) {
       this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
 
-      this.computeNextRun();
-      this.setRunning();
+      await this.computeNextRun();
+      await this.setRunning();
+      await this.saveLastRun();
 
       this.process.stdout.on('data', (data) => this.log(data.toString()));
       this.process.stderr.on('data', (data) => this.log(data.toString(), 'ERROR'));
@@ -89,7 +87,7 @@ class Task extends Model {
 
   stop() {
     if ( this.running && this.process ) {
-      this.process.kill();
+      this.process.kill('SIGINT');
     }
   }
 
@@ -121,6 +119,14 @@ class Task extends Model {
 
     // Save to DB
     Database.update(Task.model, this.id, { next_run: this.next_run });
+  }
+
+  // Saves last_run
+  async saveLastRun() {
+    const now = Date.now();
+
+    // Save to DB
+    Database.update(Task.model, this.id, { last_run: now });
   }
 
   // Adjusts next run by the given milliseconds

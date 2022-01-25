@@ -21,7 +21,7 @@ query {
       name
       status
       frequency
-      next_run
+      last_run
       hasModule
       countdown
     }

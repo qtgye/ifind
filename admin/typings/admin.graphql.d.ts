@@ -93,6 +93,7 @@ declare global {
     name: string;
     status?: TASK_STATUS;
     logs?: Array<TaskLogEntry | null>;
+    canRun?: boolean;
   }
   
   export interface ScheduledTask {
@@ -101,8 +102,14 @@ declare global {
     status?: SCHEDULED_TASK_STATUS;
     frequency?: string;
     next_run?: number;
-    hasModule?: boolean;
     countdown?: string;
+    last_run?: number;
+    
+    /**
+     * Computed values
+     */
+    hasModule?: boolean;
+    canRun?: boolean;
   }
   
   export const enum SCHEDULED_TASK_ACTION {
@@ -4400,6 +4407,7 @@ declare global {
     name?: TaskToNameResolver<TParent>;
     status?: TaskToStatusResolver<TParent>;
     logs?: TaskToLogsResolver<TParent>;
+    canRun?: TaskToCanRunResolver<TParent>;
   }
   
   export interface TaskToNameResolver<TParent = any, TResult = any> {
@@ -4414,14 +4422,20 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
+  export interface TaskToCanRunResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
   export interface ScheduledTaskTypeResolver<TParent = any> {
     id?: ScheduledTaskToIdResolver<TParent>;
     name?: ScheduledTaskToNameResolver<TParent>;
     status?: ScheduledTaskToStatusResolver<TParent>;
     frequency?: ScheduledTaskToFrequencyResolver<TParent>;
     next_run?: ScheduledTaskToNext_runResolver<TParent>;
-    hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
     countdown?: ScheduledTaskToCountdownResolver<TParent>;
+    last_run?: ScheduledTaskToLast_runResolver<TParent>;
+    hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
+    canRun?: ScheduledTaskToCanRunResolver<TParent>;
   }
   
   export interface ScheduledTaskToIdResolver<TParent = any, TResult = any> {
@@ -4444,11 +4458,19 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
+  export interface ScheduledTaskToCountdownResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToLast_runResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
   export interface ScheduledTaskToHasModuleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ScheduledTaskToCountdownResolver<TParent = any, TResult = any> {
+  export interface ScheduledTaskToCanRunResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

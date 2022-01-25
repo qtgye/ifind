@@ -16,14 +16,8 @@ declare interface I_ScheduledTaskContextValues {
   refetch?: () => void;
 }
 
-declare interface I_RawTask {
-  id: string;
-  name: string;
-  status: string;
-  frequency: string;
-  next_run: string;
-  hasModule: boolean;
-  countdown: string;
+declare interface I_RawTask extends Partial<ScheduledTask> {
+  last_run: string;
 }
 
 declare interface I_ScheduledTasksProviderValue {

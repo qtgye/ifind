@@ -30,6 +30,7 @@ module.exports = {
     name: String!
     status: TASK_STATUS
     logs: [TaskLogEntry]
+    canRun: Boolean
   }
 
   type ScheduledTask {
@@ -38,8 +39,12 @@ module.exports = {
     status: SCHEDULED_TASK_STATUS
     frequency: String
     next_run: Float
-    hasModule: Boolean
     countdown: String
+    last_run: Float
+
+    # Computed values
+    hasModule: Boolean
+    canRun: Boolean
   }
 
   enum SCHEDULED_TASK_ACTION {

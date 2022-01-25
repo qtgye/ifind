@@ -34,7 +34,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
-      const isRunning = /run/i.test(task.status);
+      const isRunning = /run/i.test(task.status || "");
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
       const label = isRunning ? "Stop" : "Run";
@@ -83,17 +83,16 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     );
   }, []);
 
-  const formatNextRun = useCallback((nextRunUnix) => {
-    const nextRunTime = moment(nextRunUnix);
-    const localTimeFormatted = nextRunTime.format("YYYY-MMM-DD HH:mm:ss");
-    const utcTimeFormatted = nextRunTime.utc().format("YYYY-MMM-DD HH:mm:ss");
+  const formatLastRun = useCallback((lastRunUnix) => {
+    if (!lastRunUnix) {
+      return "";
+    }
 
-    return [
-      <div>{utcTimeFormatted} (UTC)</div>,
-      <small className="tasks-list__task-schedule-local">
-        • <strong>Local Time</strong>: {localTimeFormatted}
-      </small>,
-    ];
+    const lastRunTime = moment(lastRunUnix);
+    const localTimeFormatted = lastRunTime.format("YYYY-MMM-DD HH:mm:ss");
+    const utcTimeFormatted = lastRunTime.utc().format("YYYY-MMM-DD HH:mm:ss");
+
+    return <div>{utcTimeFormatted} (UTC)</div>;
   }, []);
 
   useEffect(() => {
@@ -109,7 +108,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     status: "Status",
     name: "Task Name",
     frequency: "Frequency",
-    next_run: "Next Run Schedule",
+    last_run: "Last Run (Server Time)",
     countdown: "Countdown",
     action: "Action",
   };
@@ -118,7 +117,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     status: getTaskStatus(task),
     name: task.name,
     frequency: task.frequency,
-    next_run: formatNextRun(task.next_run),
+    last_run: formatLastRun(task.last_run),
     action: task.hasModule ? getTaskActions(task) : "-",
     countdown: task.countdown,
   }));

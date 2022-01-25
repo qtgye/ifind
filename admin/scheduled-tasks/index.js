@@ -18,7 +18,7 @@ const formatGranularTime = require("./utils/formatGranularTime");
 const LOGGER = new Logger({ baseDir });
 
 class ScheduledTasks {
-  // List of all available processes, by id
+  // List of all available tasks, by id
   tasks = {};
   // ID of the currently running task
   runningTask = null;
@@ -112,6 +112,7 @@ class ScheduledTasks {
 
       if (matchedCachedTask) {
         matchedCachedTask.next_run = dbTask.next_run;
+        matchedCachedTask.last_run = dbTask.last_run;
       }
     });
 
@@ -185,9 +186,9 @@ class ScheduledTasks {
 
   stop(id) {
     if (id in this.tasks) {
-      const _process = this.tasks[id];
+      const task = this.tasks[id];
       LOGGER.log(`Killing task: ${id.bold}`);
-      _process.stop();
+      task.stop();
     }
   }
 
@@ -201,6 +202,7 @@ class ScheduledTasks {
       return {
         ...taskData,
         logs: this.tasks[taskID].getLogs(),
+        canRun: !/run/i.test(taskData.status) && taskID !== this.runningTask,
       };
     }
   }
