@@ -64,49 +64,63 @@ const getMultipleFromIDs = async (itemIDs = []) => {
     appid: appId,
     siteid: 0,
     version: 967,
-    IncludeSelector: 'Details',
+    IncludeSelector: "Details",
   };
   const headers = {
     "X-EBAY-API-IAF-TOKEN": accessToken,
   };
 
-  // Append itemIDs param
-  params.ItemID = itemIDs.join(",");
+  // Return as object map by itemID for easier access
+  const itemsMap = {};
 
-  const res = await fetch(BASE_URL + toSearchParams(params), {
-    headers,
-  });
-  const { Item, Errors } = await res.json();
+  // Chunk items by groups of 20, since we can only fetch 20 items at a time from eBay API
+  const chunkedItems = itemIDs.reduce((grouped, item, index) => {
+    grouped[index % 20] = grouped[index % 20] || [];
+    grouped[index % 20].push(item);
+    return grouped;
+  }, []);
 
-  if (Errors) {
-    console.error(Errors[0]);
-  }
+  // Fetch per chunk
+  for (let items of chunkedItems) {
+    const fetchParams = {
+      ...params,
+      // Append itemIDs param
+      ItemID: items.join(","),
+    };
 
-  if (Item) {
-    // Return as object map by itemID for easier access
-    const itemsMap = {};
-
-    // Ensure exact order as with the itemIDs parameter
-    itemIDs.forEach(itemID => {
-      const matchedProductData = Item.find(({ ItemID }) => ItemID === itemID);
-
-      if ( matchedProductData ) {
-        const itemData = {
-          itemID: matchedProductData.ItemID,
-          price: Number(matchedProductData.CurrentPrice.Value),
-          quantity_total: Number(matchedProductData.Quantity),
-          quantity_sold: Number(matchedProductData.QuantitySold),
-          image: (matchedProductData.PictureURL && matchedProductData.PictureURL[0]) || null,
-        };
-
-        itemsMap[itemData.itemID] = itemData;
-      }
+    const res = await fetch(BASE_URL + toSearchParams(fetchParams), {
+      headers,
     });
+    const { Item, Errors } = await res.json();
 
-    return itemsMap;
-  } else {
-    return {};
+    if (Errors) {
+      console.error(Errors[0]);
+    }
+
+    if (Item) {
+      // Ensure exact order as with the itemIDs parameter
+      itemIDs.forEach((itemID) => {
+        const matchedProductData = Item.find(({ ItemID }) => ItemID === itemID);
+
+        if (matchedProductData) {
+          const itemData = {
+            itemID: matchedProductData.ItemID,
+            price: Number(matchedProductData.CurrentPrice.Value),
+            quantity_total: Number(matchedProductData.Quantity),
+            quantity_sold: Number(matchedProductData.QuantitySold),
+            image:
+              (matchedProductData.PictureURL &&
+                matchedProductData.PictureURL[0]) ||
+              null,
+          };
+
+          itemsMap[itemData.itemID] = itemData;
+        }
+      });
+    }
   }
+
+  return itemsMap;
 };
 
 const getWowOffers = async (limit = 100, offset = 0) => {

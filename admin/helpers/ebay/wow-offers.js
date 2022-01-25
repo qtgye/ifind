@@ -1,5 +1,6 @@
-const path = require("path");
 const { getWowOffers, getMultipleFromIDs } = require('./api');
+
+const OFFERS_COUNT = 100;
 
 
 const getEbayWowOffers = async () => {
@@ -7,7 +8,7 @@ const getEbayWowOffers = async () => {
     const fetchedOffers = [];
     let page = 1;
 
-    while ( fetchedOffers.length < 20 ) {
+    while ( fetchedOffers.length < OFFERS_COUNT ) {
       console.log(`Fething page ${page}...`);
 
       const offset = page - 1;
@@ -25,7 +26,7 @@ const getEbayWowOffers = async () => {
           discount_percent: productDeal.discount_percent,
         });
 
-        if ( fetchedOffers.length >= 20 ) {
+        if ( fetchedOffers.length >= OFFERS_COUNT ) {
           break;
         }
       }

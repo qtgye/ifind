@@ -14,7 +14,7 @@ module.exports = async ({ deal_type = "", start = 0 }) => {
             deal_type: dealTypeKey,
             _limit: PRODUCTS_PER_PAGE,
             _start: start,
-            _sort: "quantity_available_percent:ASC",
+            _sort: "deal_quantity_available_percent:ASC,quantity_available_percent:ASC",
           }),
           strapi.services.product.count({
             deal_type: dealTypeKey,

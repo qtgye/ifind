@@ -32,6 +32,7 @@ const EBAY_DEAL_TYPE = "ebay_wow_offers";
         deal_type: EBAY_DEAL_TYPE,
         title: offer.title,
         image: offer.image,
+        deal_quantity_available_percent: offer.quantity_available_percent,
         url_list: [
           {
             source: ebaySource.id,
