@@ -55,11 +55,13 @@ class ScheduledTasks {
       // Check for changes and save if there is any
       if (
         dbTask.name !== configTask.name ||
-        dbTask.schedule !== configTask.schedule
+        dbTask.schedule !== configTask.schedule ||
+        dbTask.meta !== configTask.meta
       ) {
         Database.update(Task.model, dbTask.id, {
           name: configTask.name,
           schedule: configTask.schedule,
+          meta: configTask.meta,
         });
       }
 
@@ -166,6 +168,14 @@ class ScheduledTasks {
         next_run: Date.now(),
       });
     }
+
+    // Halt any running hook
+    Object.entries(this.runningHooks).forEach(([hookName, hookProcess]) => {
+      if ( hookProcess ) {
+        console.log(`Stopping hook: ${hookName.bold}`.cyan);
+        hookProcess.kill('SIGINT');
+      }
+    });
 
     // Start task
     task.start();
@@ -275,7 +285,7 @@ class ScheduledTasks {
         });
       });
 
-      this.runningHooks[hookName] = null;
+      delete this.runningHooks[hookName];
 
       LOGGER.log(" DONE".green.bold);
     }

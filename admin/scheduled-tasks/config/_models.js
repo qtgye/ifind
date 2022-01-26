@@ -9,6 +9,7 @@ module.exports = {
       { name: 'next_run' },
       { name: 'status' },
       { name: 'last_run' },
+      { name: 'meta' }, // Miscellaneous data for a task
     ],
   },
 };

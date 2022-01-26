@@ -32,6 +32,7 @@ class Task extends Model {
     this.schedule = config.schedule;
     this.next_run = config.next_run;
     this.last_run = config.last_run;
+    this.meta = config.meta;
     this.status = config.status || STATUS_STOPPED;
 
     // Get taskModulePath
@@ -61,6 +62,7 @@ class Task extends Model {
   }
 
   async start() {
+    console.log('Starting task', this.hasModule, this.running);
     if ( this.hasModule && !this.running ) {
       this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
 

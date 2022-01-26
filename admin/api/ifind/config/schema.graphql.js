@@ -58,9 +58,10 @@ module.exports = {
   }
 
   type DealType {
-      name: String
-      label: [DealTypeLabelTranslation]
-      source: Source
+    name: String
+    label: [DealTypeLabelTranslation]
+    source: Source
+    last_run: String
   }
 
   type ScheduledTaskPayload {
