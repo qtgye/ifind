@@ -4,6 +4,8 @@ import ProductDealCard from "@components/ProductDealCard";
 import { useTranslation } from "@translations";
 import RenderIf from "@components/RenderIf";
 
+import { updatedTime } from "./translations";
+
 import "./styles.scss";
 
 const INITIAL_PRODUCTS_IN_VIEW = 20;
@@ -73,6 +75,11 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
     >
       <div className="product-deals-grid__heading">
         {translate(translationArrayToMap(deal_type.label || []))}
+        <RenderIf condition={deal_type.last_run ? true : false}>
+          <aside className="product-deals-grid__update-time">
+            {translate(updatedTime, { TIME: deal_type.last_run })}
+          </aside>
+        </RenderIf>
       </div>
       {products.length ? (
         <div className="product-deals-grid__items">

@@ -1,19 +1,35 @@
 import { useLanguages } from "@contexts/languagesContext";
 
 // Translations
-export * as navigation from './navigation';
+export * as navigation from "./navigation";
+
+const applyTranslationVariables = (
+  translatedText: string = "",
+  variables: { [key: string]: any } = {}
+) => {
+  return Object.entries(variables).reduce(
+    (updatedText, [variableName, variableValue]) => {
+      const variableNamePattern = new RegExp(`{${variableName}}`, "g");
+      return updatedText.replace(variableNamePattern, variableValue);
+    },
+    translatedText
+  );
+};
 
 export const useTranslation = () => {
   const { userLanguage } = useLanguages();
 
-  return (translationMap: TranslationMap = {}) => {
+  return (
+    translationMap: TranslationMap = {},
+    variables: { [key: string]: any } = {}
+  ) => {
     // Return matched translation
     if (userLanguage && userLanguage in translationMap) {
-      return translationMap[userLanguage];
+      return applyTranslationVariables(translationMap[userLanguage], variables);
     }
     // Return en as default instead
     else {
-      return translationMap.en || "";
+      return applyTranslationVariables(translationMap.en || "", variables);
     }
   };
 };

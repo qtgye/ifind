@@ -4,9 +4,12 @@
   margin-bottom: 50px;
 
   &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     background-color: color(gray-darker);
     border-block: 1px solid color(white);
-    padding: 9px;
+    padding: 10px 10px 3px;
     color: color(white);
     text-align: center;
     text-transform: uppercase;
@@ -16,9 +19,39 @@
     top: 61px;
     z-index: 1;
 
-    @include md-max {
+    @include sm-max {
       width: auto;
       margin: 0 -12px;
+    }
+
+    @include md {
+      padding: 10px;
+    }
+  }
+
+  &__update-time {
+    display: inline-flex;
+    align-items: center;
+    color: color(gray);
+    text-transform: none;
+    font-weight: normal;
+    font-size: .8em;
+    border-top: 1px solid color(gray-dark);
+    margin-top: 3px;
+    padding-top: 3px;
+
+    @include breakpoint(md) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      background-color: color(white);
+      color: color(gray-dark);
+      margin: 0;
+      padding: 0 10px;
+      border-bottom: 1px solid color(gray-light);
+      border-left: 1px solid color(gray-light);
+      border-right: 1px solid color(gray-light);
     }
   }
 
@@ -49,7 +82,7 @@
 
   &__load-more-button {
     display: inline-flex;
-    height: 30px;
+    height: 50px;
     align-items: center;
     justify-content: center;
     padding: 0 20px;
@@ -59,6 +92,7 @@
     background-color: color(dark-red);
     color: color(white);
     transition: all .3s;
+    font-size: 20px;
 
     &:hover {
       background-color: darken(color(dark-red), 5%);

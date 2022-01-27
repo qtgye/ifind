@@ -2,6 +2,7 @@ const { existsSync } = require("fs-extra");
 const childProcess = require("child_process");
 const path = require("path");
 const EventEmitter = require("events");
+const moment = require("moment");
 
 const { frequencies } = require("../config");
 const Database = require("./Database");
@@ -68,7 +69,6 @@ class Task extends Model {
 
       await this.computeNextRun();
       await this.setRunning();
-      await this.saveLastRun();
 
       this.process.stdout.on('data', (data) => this.log(data.toString()));
       this.process.stderr.on('data', (data) => this.log(data.toString(), 'ERROR'));
@@ -78,10 +78,11 @@ class Task extends Model {
         this.stop();
       });
 
-      this.process.on('exit', () => {
+      this.process.on('exit', async () => {
         console.log('process exits');
         this[EVENT_EMITTER_KEY].emit('exit');
-        this.setStopped();
+        await this.setStopped();
+        await this.saveLastRun();
         this.process = null;
       });
     }
@@ -125,7 +126,7 @@ class Task extends Model {
 
   // Saves last_run
   async saveLastRun() {
-    const now = Date.now();
+    const now = moment.utc().valueOf();
 
     // Save to DB
     Database.update(Task.model, this.id, { last_run: now });

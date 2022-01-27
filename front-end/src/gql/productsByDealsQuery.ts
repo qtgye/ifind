@@ -12,6 +12,7 @@ const productsByDealsQuery = gql`
           language
           label
         }
+        last_run
       }
       total_products
       products {

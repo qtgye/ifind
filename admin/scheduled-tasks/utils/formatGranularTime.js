@@ -5,13 +5,25 @@ const timeToMsMap = {
   second: 1000,
 };
 
+const timeUnitShort = {
+  day: "d",
+  hour: "h",
+  minute: "m",
+  second: "s",
+};
+
 /**
  * Formats a given milliseconds amount into readable time amounts (days, hours, minutes, seconds)
  * e.g., 2 hours, 3 minutes, 55 seconds
  * @param {Int} milliseconds
  * @param {Boolean} expressive - Whether to use time units ('hour', 'min', etc.)
+ * @param {Boolean} omitSeconds - Whether to remove seconds
  */
-module.exports = (milliseconds = 0, expressive = false) => {
+module.exports = (
+  milliseconds = 0,
+  expressive = false,
+  omitSeconds = false
+) => {
   const timeToMsEntries = Object.entries(timeToMsMap);
 
   const timeAmount = timeToMsEntries
@@ -20,9 +32,15 @@ module.exports = (milliseconds = 0, expressive = false) => {
         const segmentCount = Math.floor(remainingMs / timeMs);
 
         if (expressive) {
+          if (omitSeconds && /second/i.test(timeUnit)) {
+            return [timeAmountSegments, remainingMs];
+          }
+
+          const unit = timeUnitShort[timeUnit];
+
           if (segmentCount) {
             timeAmountSegments.push(
-              `${segmentCount} ${timeUnit}${segmentCount > 1 ? "s" : ""}`
+              `${segmentCount}${unit}`
             );
           }
         } else {
@@ -37,7 +55,7 @@ module.exports = (milliseconds = 0, expressive = false) => {
       },
       [[], milliseconds]
     )[0]
-    .join(":");
+    .join(expressive ? ", " : ":");
 
   return timeAmount;
 };
