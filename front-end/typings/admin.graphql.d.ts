@@ -126,6 +126,7 @@ declare global {
     name?: string;
     label?: Array<DealTypeLabelTranslation | null>;
     source?: Source;
+    last_run?: string;
   }
   
   export interface ScheduledTaskPayload {
@@ -4491,6 +4492,7 @@ declare global {
     name?: DealTypeToNameResolver<TParent>;
     label?: DealTypeToLabelResolver<TParent>;
     source?: DealTypeToSourceResolver<TParent>;
+    last_run?: DealTypeToLast_runResolver<TParent>;
   }
   
   export interface DealTypeToNameResolver<TParent = any, TResult = any> {
@@ -4502,6 +4504,10 @@ declare global {
   }
   
   export interface DealTypeToSourceResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface DealTypeToLast_runResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

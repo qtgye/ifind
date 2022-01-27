@@ -1,22 +1,29 @@
-const { getWowOffers, getMultipleFromIDs } = require('./api');
+const { getWowOffers, getMultipleFromIDs } = require("./api");
 
 const OFFERS_COUNT = 100;
 
-
 const getEbayWowOffers = async () => {
   try {
-    const fetchedOffers = [];
+    const fetchedOffersCount = 0;
+    const fetchedOffers = {};
     let page = 1;
 
-    while ( fetchedOffers.length < OFFERS_COUNT ) {
+    // It makes no sense to have more than 20 pages to fetch,
+    // products might only being repeated at that point
+    while (fetchedOffersCount < OFFERS_COUNT && page <= 20) {
       console.log(`Fething page ${page}...`);
 
       const offset = page - 1;
       const productDeals = await getWowOffers(100, offset);
 
-      for ( const productDeal of productDeals ) {
+      for (const productDeal of productDeals) {
+        // Prevent duplicate products
+        if (productDeal.itemID in fetchedOffers) {
+          continue;
+        }
+
         // Append sanitized product data
-        fetchedOffers.push({
+        fetchedOffers[productDeal.itemID] = {
           itemID: productDeal.itemID,
           title: productDeal.title,
           image: productDeal.image,
@@ -24,9 +31,9 @@ const getEbayWowOffers = async () => {
           price: productDeal.price,
           price_original: productDeal.price_original,
           discount_percent: productDeal.discount_percent,
-        });
+        };
 
-        if ( fetchedOffers.length >= OFFERS_COUNT ) {
+        if (fetchedOffersCount >= OFFERS_COUNT) {
           break;
         }
       }
@@ -34,17 +41,19 @@ const getEbayWowOffers = async () => {
       page++;
     }
 
-    console.log('Getting additional details...');
+    console.log("Getting additional details...");
 
     // Get quantity details (not available from Deals API)
-    const itemIDs = fetchedOffers.map(({ itemID }) => itemID);
+    const itemIDs = Object.keys(fetchedOffers);
+    const itemDetails = Object.values(fetchedOffers);
     const additionalProductDetails = await getMultipleFromIDs(itemIDs);
 
-    return fetchedOffers.map(productOfferData => {
-      const additionalDetails = additionalProductDetails[productOfferData.itemID];
+    return itemDetails.map((productOfferData) => {
+      const additionalDetails =
+        additionalProductDetails[productOfferData.itemID];
 
       // Sanitized product data
-      if ( additionalDetails ) {
+      if (additionalDetails) {
         const newProductData = {
           title: productOfferData.title,
           image: productOfferData.image,
@@ -52,7 +61,12 @@ const getEbayWowOffers = async () => {
           price: productOfferData.price,
           price_original: productOfferData.price_original,
           discount_percent: productOfferData.discount_percent,
-          quantity_available_percent: Math.round(100 * (additionalDetails.quantity_total - additionalDetails.quantity_sold) / additionalDetails.quantity_total),
+          quantity_available_percent: Math.round(
+            (100 *
+              (additionalDetails.quantity_total -
+                additionalDetails.quantity_sold)) /
+              additionalDetails.quantity_total
+          ),
         };
 
         return newProductData;
