@@ -2,7 +2,7 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useCallback } from "react";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, addURLParams } from "@utilities/url";
-import { useTranslation } from "@translations";
+import { useTranslation } from "@translations/index";
 import RenderIf from "@components/RenderIf";
 import { previous, next } from "./translations";
 

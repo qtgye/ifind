@@ -1,7 +1,7 @@
 import { useContext, useEffect, useRef, useCallback, useState } from "react";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 import ProductDealCard from "@components/ProductDealCard";
-import { useTranslation } from "@translations";
+import { useTranslation } from "@translations/index";
 import RenderIf from "@components/RenderIf";
 
 import { updatedTime } from "./translations";

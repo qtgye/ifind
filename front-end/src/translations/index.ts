@@ -27,9 +27,10 @@ export const useTranslation = () => {
     if (userLanguage && userLanguage in translationMap) {
       return applyTranslationVariables(translationMap[userLanguage], variables);
     }
-    // Return en as default instead
+    // Return en as default instead, or any other available language
     else {
-      return applyTranslationVariables(translationMap.en || "", variables);
+      const [ firstAvailableTranslation ] = Object.keys(translationMap);
+      return applyTranslationVariables(translationMap.en || translationMap[firstAvailableTranslation] || '', variables);
     }
   };
 };
