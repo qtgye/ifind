@@ -106,7 +106,8 @@ const prerender = async (usedPort) => {
     languages.push(...languageCodes);
     routes.push(...pageSlugs);
   } catch (err) {
-    console.info(err.message.red);
+    console.error(`Unable to prerender due to error: ${err.message.red}`);
+    process.exit();
   }
 
   // Generate routes with languages
