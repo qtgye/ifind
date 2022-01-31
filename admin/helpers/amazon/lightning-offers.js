@@ -51,7 +51,7 @@ const getLightningOffers = async () => {
 
   } catch (err) {
     console.error([err.message.red, err.stack].join(" "));
-    await screenshotPageError(LIGHTNING_OFFERS_PAGE);
+    await screenshotPageError(LIGHTNING_OFFERS_PAGE, page);
     return [];
   }
 
