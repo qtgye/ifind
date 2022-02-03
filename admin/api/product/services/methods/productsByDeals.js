@@ -1,8 +1,4 @@
-const moment = require("moment");
 const dealTypes = appRequire("api/ifind/deal-types");
-const formatGranularTime = appRequire(
-  "scheduled-tasks/utils/formatGranularTime"
-);
 
 const PRODUCTS_PER_PAGE = 999999;
 
@@ -14,7 +10,6 @@ module.exports = async ({ deal_type = "", start = 0 }) => {
     Object.entries(dealTypes)
       .filter(([dealTypeKey]) => (deal_type ? dealTypeKey === deal_type : true))
       .map(async ([dealTypeKey, { site, label }]) => {
-        const now = moment.utc().valueOf();
         const [products, total_products] = await Promise.all([
           strapi.services.product.find({
             deal_type: dealTypeKey,
@@ -38,7 +33,7 @@ module.exports = async ({ deal_type = "", start = 0 }) => {
         );
 
         const last_run = matchedScheduledTask
-          ? formatGranularTime(now - matchedScheduledTask.last_run, true, true)
+          ? matchedScheduledTask.last_run
           : null;
 
         return {

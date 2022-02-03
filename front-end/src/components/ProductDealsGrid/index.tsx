@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useCallback, useState } from "react";
+import { dateTime } from "ifind-utils";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 import ProductDealCard from "@components/ProductDealCard";
 import { useTranslation } from "@translations/index";
@@ -77,7 +78,9 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
         {translate(translationArrayToMap(deal_type.label || []))}
         <RenderIf condition={deal_type.last_run ? true : false}>
           <aside className="product-deals-grid__update-time">
-            {translate(updatedTime, { TIME: deal_type.last_run })}
+            {translate(updatedTime, {
+              TIME: dateTime.formatGranularTime(Date.now() - Number(deal_type.last_run), true, true),
+            })}
           </aside>
         </RenderIf>
       </div>

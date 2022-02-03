@@ -134,6 +134,8 @@ class TorProxy {
   async saveScreenShot() {
     const [page] = await this.browser.pages();
     const url = await page.url();
+
+    // Build this page's screenshot directory path
     const screenshotDir = path.resolve(SCREENSHOT_DIR, url.replace(/^https?\/\/:/, ''));
 
     // Ensure directory is present
