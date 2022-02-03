@@ -101,6 +101,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   }, [someTaskRuns]);
 
   useEffect(() => {
+    setTriggeredTask('');
     setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
   }, [tasks]);
 

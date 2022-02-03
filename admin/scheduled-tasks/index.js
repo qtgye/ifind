@@ -171,9 +171,9 @@ class ScheduledTasks {
 
     // Halt any running hook
     Object.entries(this.runningHooks).forEach(([hookName, hookProcess]) => {
-      if ( hookProcess ) {
+      if (hookProcess) {
         console.log(`Stopping hook: ${hookName.bold}`.cyan);
-        hookProcess.kill('SIGINT');
+        hookProcess.kill("SIGINT");
       }
     });
 
@@ -222,7 +222,8 @@ class ScheduledTasks {
 
     // Handle task events
     task.on("message", (...args) => this.onProcessMessage(args));
-    task.on("exit", () => this.onProcessExit(task.id));
+    task.on("exit", (exitCode) => this.onProcessExit(task.id, exitCode));
+    task.on("error", (error) => this.onProcessError(task.id, error));
 
     // Save task to list
     this.tasks[task.id] = task;
@@ -232,10 +233,27 @@ class ScheduledTasks {
     LOGGER.log({ processArgs });
   }
 
-  onProcessExit(id) {
+  onProcessError(taskId, error) {
+    LOGGER.log(
+      ` Error in task process ${taskId.bold}:<br>${error.reset.red}`,
+      "ERROR"
+    );
+  }
+
+  onProcessExit(id, exitCode) {
+    const logType = exitCode ? "ERROR" : "INFO";
+    const bg = exitCode ? "bgYellow" : "bgCyan";
+
     this.runningTask = null;
-    LOGGER.log(` Process exitted: `.black.bold.bgCyan + `${id} `.black.bgCyan);
-    this.fireHook(this.hookNames.TASK_STOP, id);
+    LOGGER.log(
+      ` Process exitted ${exitCode ? "with error" : ""}: `.black.bold[bg] +
+        `${id} `.black[bg],
+      logType
+    );
+
+    if (!exitCode) {
+      this.fireHook(this.hookNames.TASK_STOP, id);
+    }
   }
 
   async fireHook(hookName, data) {

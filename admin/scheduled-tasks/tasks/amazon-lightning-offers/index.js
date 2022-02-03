@@ -116,11 +116,10 @@ const PRODUCTS_TO_SCRAPE = null;
     }
 
     console.log(" DONE ".bgGreen.white.bold);
+    productScraper.close();
   } catch (err) {
     console.error(err.message);
+    productScraper.close();
+    throw err;
   }
-
-  productScraper.close()
-
-  process.exit();
 })();

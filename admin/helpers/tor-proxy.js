@@ -5,7 +5,8 @@
  */
 
 require("colors");
-const { existsSync, readFileSync } = require("fs-extra");
+const path = require("path");
+const { existsSync, readFileSync, ensureDirSync } = require("fs-extra");
 const puppeteer = require("puppeteer");
 
 // Parse Tor config file path provided in the .env
@@ -25,6 +26,8 @@ const availablePorts = portsConfig
   .map((portConfig) => portConfig.split(/\s+/)[1])
   .filter(Boolean);
 
+// Set screenshot director for reference
+const SCREENSHOT_DIR = path.resolve(__dirname, "tor-proxy-screenshots");
 class TorProxy {
   /**
    * Creates a new instance of this class
@@ -38,7 +41,6 @@ class TorProxy {
    * @return Puppeteer Page
    */
   async newPage(newBrowser = false) {
-
     /* Ensure a browser instance is present */
     if (!this.browser) {
       await this.launchNewBrowser();
@@ -48,12 +50,12 @@ class TorProxy {
     await this.closePages();
 
     /* Log */
-    console.info(`Getting new page.`);
+    console.info(`- Getting new page.`);
 
     /* Create new Page */
     const page = await this.browser.newPage();
 
-    console.info(`New page created.`);
+    console.info(`- New page created.`);
 
     /* Apply desktop breakpoint */
     await page.setViewport({
@@ -63,12 +65,13 @@ class TorProxy {
 
     /* Apply custom headers */
     await await page.setExtraHTTPHeaders({
-      'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36',
-      'origin': 'https://www.amazon.de',
-      'referer': 'https://www.amazon.de'
-  })
+      "user-agent":
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+      origin: "https://www.amazon.de",
+      referer: "https://www.amazon.de",
+    });
 
-    console.info(`Page configured.`);
+    console.info(`- Page configured.`);
 
     /* Return new page */
     return page;
@@ -78,18 +81,17 @@ class TorProxy {
    * Launches a new browser with proxy settings
    */
   async launchNewBrowser() {
-
     /* Get proxy */
     const proxy = this.generateProxy();
 
     /* Close existing browser if there is any */
     console.log(`Closing existing browser...`);
-    if ( this.browser && this.browser.disconnect ) {
+    if (this.browser && this.browser.disconnect) {
       await this.browser.disconnect();
     }
 
     /* Log */
-    console.info(`Launching new browser using proxy: ${proxy.bold}`);
+    console.info(`- Launching new browser using proxy: ${proxy.bold}`);
 
     /* Launching browser */
     this.browser = await puppeteer.launch({
@@ -127,6 +129,22 @@ class TorProxy {
   async closePages() {
     const pages = await this.browser.pages();
     await Promise.all(pages.map((page) => page.close()));
+  }
+
+  async saveScreenShot() {
+    const [page] = await this.browser.pages();
+    const url = await page.url();
+    const screenshotDir = path.resolve(SCREENSHOT_DIR, url.replace(/^https?\/\/:/, ''));
+
+    // Ensure directory is present
+    ensureDirSync(screenshotDir);
+
+    // Save screenshot
+    console.info('- Saving screenshot');
+    await page.screenshot({
+      path: path.resolve(screenshotDir, "screenshot.jpg"),
+      fullPage: true,
+    });
   }
 }
 

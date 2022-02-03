@@ -71,16 +71,14 @@ class Task extends Model {
       await this.setRunning();
 
       this.process.stdout.on('data', (data) => this.log(data.toString()));
-      this.process.stderr.on('data', (data) => this.log(data.toString(), 'ERROR'));
-
-      this.process.on('error', (data) => {
-        this[EVENT_EMITTER_KEY].emit('error', data);
-        this.stop();
+      this.process.stderr.on('data', (data, additionalData) => {
+        const errorData = data.toString().trim().replace(/[\r\n]/g, '<br>');
+        this.log(errorData, 'ERROR');
+        this[EVENT_EMITTER_KEY].emit('error', errorData);
       });
 
-      this.process.on('exit', async () => {
-        console.log('process exits');
-        this[EVENT_EMITTER_KEY].emit('exit');
+      this.process.on('exit', async (exitCode) => {
+        this[EVENT_EMITTER_KEY].emit('exit', exitCode);
         await this.setStopped();
         await this.saveLastRun();
         this.process = null;
