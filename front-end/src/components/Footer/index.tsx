@@ -8,7 +8,7 @@ import "./styles.scss";
 const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
-  const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
+  const { footerSetting, socialNetwork, contactInfo }: GlobalContextData = useGlobalData();
   const [informationLinks, setInformationLinks] = useState<FooterLink[]>([]);
   const [footerText, setFooterText] = useState("");
   const [footerFootnote, setFooterFootnote] = useState("");
