@@ -12,13 +12,11 @@ const PRODUCT_CARD = '[class^="DealGridItem-module__dealItem_"]';
 const getLightningOffers = async () => {
   try {
     let page;
-    let browser;
 
     let germanLocationTries = 0;
     while ( ++germanLocationTries <= 3 ) {
       try {
         page = await TOR_PROXY.newPage();
-        browser = await page.browser();
 
         console.info(" - Getting to Lightning Offers Page...".cyan);
         await page.goto(LIGHTNING_OFFERS_PAGE, { timeout: 60000 });
@@ -44,6 +42,7 @@ const getLightningOffers = async () => {
       }
       catch (err) {
         console.warn(err.message.red);
+        TOR_PROXY.screenshotPageError();
         console.warn('Unable to apply German location for the current page. Changing proxy...');
         await TOR_PROXY.launchNewBrowser();
       }

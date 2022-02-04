@@ -117,6 +117,7 @@ const PRODUCTS_TO_SCRAPE = null;
 
     console.log(" DONE ".bgGreen.white.bold);
     productScraper.close();
+    process.exit();
   } catch (err) {
     console.error(err.message);
     productScraper.close();
