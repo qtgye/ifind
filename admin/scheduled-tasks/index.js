@@ -56,11 +56,13 @@ class ScheduledTasks {
       if (
         dbTask.name !== configTask.name ||
         dbTask.schedule !== configTask.schedule ||
+        dbTask.timeout_minutes !== configTask.timeout_minutes ||
         dbTask.meta !== configTask.meta
       ) {
         Database.update(Task.model, dbTask.id, {
           name: configTask.name,
           schedule: configTask.schedule,
+          timeout_minutes: configTask.timeout_minutes,
           meta: configTask.meta,
         });
       }
@@ -69,6 +71,7 @@ class ScheduledTasks {
         ...dbTask,
         name: configTask.name,
         schedule: configTask.schedule,
+        timeout_minutes: configTask.timeout_minutes,
       });
     });
 
