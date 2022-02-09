@@ -73,7 +73,6 @@ const selectorsToRemove = [
 ];
 
 class AmazonProductScraper {
-
   /* Creates a new instance  */
   static async create() {
     return new AmazonProductScraper();
@@ -157,11 +156,11 @@ class AmazonProductScraper {
       while (!pageLoaded && tries) {
         try {
           /* Go to product page */
-          console.info(' - Getting to product page...'.cyan);
+          console.info(" - Getting to product page...".cyan);
           await this.page.goto(urlWithLanguage, { timeout: 30000 });
 
           /* Wait for selector */
-          console.info(' - Waiting for the element to scrape...'.cyan);
+          console.info(" - Waiting for the element to scrape...".cyan);
           await this.page.waitForSelector(detailSelector, { timeout: 10000 });
 
           /* Flag page loaded */
@@ -233,7 +232,7 @@ class AmazonProductScraper {
         details_html,
       };
     } catch (err) {
-      await screenshotPageError(urlWithLanguage);
+      await screenshotPageError(urlWithLanguage, this.page);
       throw err;
     }
   }

@@ -1,5 +1,5 @@
-//import React from 'react';
-//import * as FaIcons from 'react-icons/fa';
+// TODO: Move this to a more appropriate location
+import IfindIcon from "@components/IfindIcon";
 
 export const offersdata = [
     {
@@ -59,24 +59,24 @@ export const offersdata = [
         // ]
     },
 
-    // {
-    //     categoryLabel: 'Idealo',
-    //     categoryName: 'idealo_offers',
-    //     categoryIcon: <i className="fa fa-ioxhost" aria-hidden="true"></i>,
+    {
+        categoryLabel: 'Highlights',
+        categoryName: 'highlights_offers',
+        categoryIcon: <IfindIcon icon='warp' />,
 
-    //     // subCategories: [
-    //     //     {
-    //     //         categoryLabel: 'Test Category',
-    //     //         categoryURL: '/idealo/testcategory',
-    //     //         //subcategoryIcon: <IoIcons.IoIosPaper />
-    //     //     },
-    //     //     {
-    //     //         categoryLabel: 'Test Category 2',
-    //     //         categoryURL: '/idealo/testcategory2',
-    //     //         //subcategoryIcon: <IoIcons.IoIosPaper />
-    //     //     },
-    //     // ]
-    // },
+        // subCategories: [
+        //     {
+        //         categoryLabel: 'Test Category',
+        //         categoryURL: '/idealo/testcategory',
+        //         //subcategoryIcon: <IoIcons.IoIosPaper />
+        //     },
+        //     {
+        //         categoryLabel: 'Test Category 2',
+        //         categoryURL: '/idealo/testcategory2',
+        //         //subcategoryIcon: <IoIcons.IoIosPaper />
+        //     },
+        // ]
+    },
 
 
 ];
