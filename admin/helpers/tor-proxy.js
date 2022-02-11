@@ -86,8 +86,8 @@ class TorProxy {
 
     /* Close existing browser if there is any */
     console.log(`Closing existing browser...`);
-    if (this.browser && this.browser.disconnect) {
-      await this.browser.disconnect();
+    if (this.browser && this.browser.close) {
+      await this.browser.close();
     }
 
     /* Log */
@@ -136,7 +136,7 @@ class TorProxy {
     const url = await page.url();
 
     // Build this page's screenshot directory path
-    const screenshotDir = path.resolve(SCREENSHOT_DIR, url.replace(/^https?\/\/:/, ''));
+    const screenshotDir = path.resolve(SCREENSHOT_DIR, url.replace(/(^https?\/\/:|\?[^\?]+$)/, ''));
 
     // Ensure directory is present
     ensureDirSync(screenshotDir);
