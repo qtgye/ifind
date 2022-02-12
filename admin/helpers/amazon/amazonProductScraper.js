@@ -33,6 +33,7 @@ const PRICE_SELECTOR = [
   '[data-action="show-all-offers-display"] .a-color-price',
   "#usedOnlyBuybox .offer-price",
   "#olp_feature_div .a-color-price",
+  "#corePriceDisplay_desktop_feature_div .priceToPay",
 ].join(",");
 const ORIGINAL_PRICE_SELECTOR =
   '#corePrice_desktop .a-text-price[data-a-color="secondary"] > :first-child';
