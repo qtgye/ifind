@@ -188,9 +188,6 @@ const prerender = async (usedPort) => {
   // Close puppeteer
   await browser.close();
 
-  // Close express server
-  app.close();
-
   process.exit();
 };
 
