@@ -42,7 +42,7 @@ const getLightningOffers = async () => {
       }
       catch (err) {
         console.warn(err.message.red);
-        TOR_PROXY.screenshotPageError();
+        await TOR_PROXY.saveScreenShot();
         console.warn('Unable to apply German location for the current page. Changing proxy...');
         await TOR_PROXY.launchNewBrowser();
       }

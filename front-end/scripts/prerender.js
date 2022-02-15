@@ -185,6 +185,9 @@ const prerender = async (usedPort) => {
   // Move static site files
   moveSync(PRERENDER_TEMP, STATIC_WEB_ROOT);
 
+  // Close puppeteer
+  await browser.close();
+
   process.exit();
 };
 

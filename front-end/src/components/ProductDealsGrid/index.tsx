@@ -5,12 +5,12 @@ import ProductDealCard from "@components/ProductDealCard";
 import { useTranslation } from "@translations/index";
 import RenderIf from "@components/RenderIf";
 
-import { updatedTime } from "./translations";
+import { updatedTime, loadMoreButton } from "./translations";
 
 import "./styles.scss";
 
 const INITIAL_PRODUCTS_IN_VIEW = 20;
-const PRODUCTS_PER_LOAD = 10;
+const PRODUCTS_PER_LOAD = 12;
 
 const ProductDealsGrid: ProductDealsGridComponent = ({
   products,
@@ -79,7 +79,11 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
         <RenderIf condition={deal_type.last_run ? true : false}>
           <aside className="product-deals-grid__update-time">
             {translate(updatedTime, {
-              TIME: dateTime.formatGranularTime(Date.now() - Number(deal_type.last_run), true, true),
+              TIME: dateTime.formatGranularTime(
+                Date.now() - Number(deal_type.last_run),
+                true,
+                true
+              ),
             })}
           </aside>
         </RenderIf>
@@ -99,7 +103,7 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
             className="product-deals-grid__load-more-button"
             onClick={onLoadMoreClick}
           >
-            Load More Offers
+            {translate(loadMoreButton)}
           </button>
         </div>
       </RenderIf>

@@ -3841,6 +3841,7 @@ declare global {
     usersConnection?: UsersPermissionsUserConnection;
     me?: UsersPermissionsMe;
     categoryTree?: Array<CategoryWithChild | null>;
+    categoriesList?: Array<Category | null>;
     footerSettingsByLanguage?: ComponentEntryFieldsFooterFields;
     getTask?: Task;
     scheduledTasksList?: ScheduledTaskListPayload;
@@ -9608,6 +9609,7 @@ declare global {
     usersConnection?: QueryToUsersConnectionResolver<TParent>;
     me?: QueryToMeResolver<TParent>;
     categoryTree?: QueryToCategoryTreeResolver<TParent>;
+    categoriesList?: QueryToCategoriesListResolver<TParent>;
     footerSettingsByLanguage?: QueryToFooterSettingsByLanguageResolver<TParent>;
     getTask?: QueryToGetTaskResolver<TParent>;
     scheduledTasksList?: QueryToScheduledTasksListResolver<TParent>;
@@ -10021,6 +10023,10 @@ declare global {
   }
   export interface QueryToCategoryTreeResolver<TParent = any, TResult = any> {
     (parent: TParent, args: QueryToCategoryTreeArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface QueryToCategoriesListResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface QueryToFooterSettingsByLanguageArgs {
