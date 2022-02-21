@@ -103,7 +103,8 @@
         "none",
         "amazon_flash_offers",
         "ebay_wow_offers",
-        "aliexpress_value_deals"
+        "aliexpress_value_deals",
+        "mydealz_highlights"
       ],
       "default": "none"
     },
@@ -126,6 +127,9 @@
     },
     "deal_quantity_available_percent": {
       "type": "decimal"
+    },
+    "deal_merchant": {
+      "type": "string"
     }
   }
 }

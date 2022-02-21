@@ -18,6 +18,7 @@ module.exports = [
     timeout_minutes: 120,
     meta: {
       deal_type: "amazon_flash_offers",
+      deal_merchant: "amazon",
     },
   },
   {
@@ -27,6 +28,7 @@ module.exports = [
     timeout_minutes: 120,
     meta: {
       deal_type: "ebay_wow_offers",
+      deal_merchant: "ebay",
     },
   },
   {
@@ -36,6 +38,16 @@ module.exports = [
     timeout_minutes: 120,
     meta: {
       deal_type: "aliexpress_value_deals",
+      deal_merchant: "aliexpress",
+    },
+  },
+  {
+    id: "mydealz-highlights",
+    name: "MyDealz Highlights",
+    schedule: frequencies.hourly,
+    timeout_minutes: 120,
+    meta: {
+      deal_type: "mydealz_highlights",
     },
   },
 ];

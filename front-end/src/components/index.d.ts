@@ -13,6 +13,7 @@ import  "./Link/index.d";
 import  "./Modal/index.d";
 import  "./NaturalList/index.d";
 import  "./NewsLetter/index.d";
+import  "./OffersSideNav/index.d";
 import  "./Pagination/index.d";
 import  "./PercentCircle/index.d";
 import  "./Portal/index.d";

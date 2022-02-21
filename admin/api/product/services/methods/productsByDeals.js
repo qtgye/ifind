@@ -9,7 +9,7 @@ module.exports = async ({ deal_type = "", start = 0 }) => {
   const productsByDeals = await Promise.all(
     Object.entries(dealTypes)
       .filter(([dealTypeKey]) => (deal_type ? dealTypeKey === deal_type : true))
-      .map(async ([dealTypeKey, { site, label }]) => {
+      .map(async ([dealTypeKey, { site, label, nav_label, nav_icon }]) => {
         const [products, total_products] = await Promise.all([
           strapi.services.product.find({
             deal_type: dealTypeKey,
@@ -42,6 +42,8 @@ module.exports = async ({ deal_type = "", start = 0 }) => {
             label,
             source,
             last_run,
+            nav_label,
+            nav_icon,
           },
           products,
           total_products,

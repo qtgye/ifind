@@ -28,9 +28,13 @@
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
     overflow: hidden;
     border-radius: var(--corner-radius);
+    height: 100%;
   }
 
   &__image {
@@ -46,6 +50,10 @@
   }
 
   &__details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
     padding: 10px;
   }
 
