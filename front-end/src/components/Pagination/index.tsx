@@ -31,7 +31,7 @@ const Pagination = ({ totalPages = 1 }: PaginationProps) => {
           pageCount={totalPages}
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
-          initialPage={Number(page) - 1}
+          forcePage={Number(page) - 1}
           onPageChange={onPaginationPageSelect}
           disableInitialCallback={true}
         />
