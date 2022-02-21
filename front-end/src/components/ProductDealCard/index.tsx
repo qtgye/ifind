@@ -11,6 +11,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   title,
   image,
   deal_type,
+  deal_merchant,
   amazon_url,
   url_list,
   price,
@@ -28,8 +29,12 @@ const ProductDealCard: ProductDealCardComponent = ({
   const [stockPercent, setStockPercent] = useState<number>();
 
   const getProductDetails = useCallback(() => {
-    // Use default product details if deal_type is amazon or none
-    if (!deal_type || /amazon|none/.test(deal_type as string)) {
+    // Use default product details if deal_merchant/deal_type is amazon, mydealz, or none
+    if (
+      !deal_type ||
+      /amazon|none/.test(deal_merchant as string) ||
+      /amazon|none/.test(deal_type as string)
+    ) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -39,7 +44,7 @@ const ProductDealCard: ProductDealCardComponent = ({
       // Determine url and price according to product.deal_type
       const [dealKey, dealData] =
         Object.entries(dealTypes as DealTypeSiteMap).find(
-          ([key]) => key === deal_type
+          ([key, deal]) => deal.site === deal_merchant || key === deal_type
         ) || [];
 
       if (dealKey) {
@@ -60,6 +65,7 @@ const ProductDealCard: ProductDealCardComponent = ({
     }
   }, [
     deal_type,
+    deal_merchant,
     amazon_url,
     url_list,
     price,

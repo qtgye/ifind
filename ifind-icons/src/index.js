@@ -16,7 +16,7 @@ const readMeTemplate = fs
 fs.mkdirpSync(resolveApp("dist"), { recursive: true });
 fs.outputFileSync(resolveApp("dist/ifind-icons-sprite.svg"), "");
 
-const iconFiles = glob.sync(resolveApp("src/icons/*.svg"));
+const iconFiles = glob.sync(resolveApp("src/icons/**/*.svg"));
 const iconsList = [];
 
 // Add SVG source files — the manual way ...

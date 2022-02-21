@@ -4,6 +4,7 @@ const { addURLParams, removeURLParams } = require("../../../helpers/url");
 const createAmazonScraper = require("../../../helpers/amazon/amazonProductScraper");
 const { getDetailsFromURL } = require("../../../helpers/ebay/api");
 const ebayLink = require("../../../helpers/ebay/ebayLink");
+const amazonLink = require("../../../helpers/amazon/amazonLink");
 const createStrapiInstance = require("../../../scripts/strapi-custom");
 const dealTypesConfig = require("../../../api/ifind/deal-types");
 
@@ -64,6 +65,7 @@ const getProductDetails = async (productSummaries) => {
 const sanitizeScrapedData = ({ merchantName, productLink, ...productData }) => {
   productData.website_tab = "home";
   productData.deal_type = MYDEAL_DEAL_ID;
+  productData.deal_merchant = merchantName;
   productData.deal_quantity_available_percent =
     productData.quantity_available_percent;
 
@@ -80,6 +82,9 @@ const sanitizeScrapedData = ({ merchantName, productLink, ...productData }) => {
           quantity_available_percent: productData.quantity_available_percent,
         },
       ];
+      break;
+    case "amazon":
+      productData.amazon_url = amazonLink(productLink);
       break;
   }
 

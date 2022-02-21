@@ -57,9 +57,16 @@ module.exports = {
     label: String
   }
 
+  type DealTypeNavIcon {
+    type: String!
+    icon: String!
+  }
+
   type DealType {
     name: String
     label: [DealTypeLabelTranslation]
+    nav_label: [DealTypeLabelTranslation]
+    nav_icon: DealTypeNavIcon
     source: Source
     last_run: String
   }

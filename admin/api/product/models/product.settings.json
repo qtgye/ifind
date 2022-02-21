@@ -127,6 +127,9 @@
     },
     "deal_quantity_available_percent": {
       "type": "decimal"
+    },
+    "deal_merchant": {
+      "type": "string"
     }
   }
 }

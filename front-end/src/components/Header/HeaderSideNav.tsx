@@ -7,7 +7,6 @@ import {
   useContext,
 } from "react";
 import { useSubCategories } from "@contexts/categoriesContext";
-import { offersdata } from "@mocks/components/offerssidenav";
 import eventBus from "@utilities/EventBus";
 import { useCurrentRouteConfig, useIsRouteMatch } from "@utilities/route";
 import { useTranslation } from "@translations/index";
@@ -18,6 +17,7 @@ import HeaderSideNavSubMenu from "./HeaderSideNavSubMenu";
 import HeaderSideNavSubMenu2 from "./HeaderSideNavSubMenu2";
 import HeaderSideNavButton from "./HeaderSideNavButton";
 import RenderIf from "@components/RenderIf";
+import OffersSideNav from "@components/OffersSideNav";
 
 import { categories as categoriesLabel } from "./translations";
 
@@ -76,26 +76,11 @@ const HeaderSideNav = () => {
           ref={listRef as LegacyRef<HTMLDivElement>}
           className="header-side-nav__list"
         >
-          <RenderIf condition={isRouteMath("/offers")}>
-            <div className="offers-sidenav">
-              {offersdata.map((item, index) => {
-                return (
-                  <div
-                    key={index}
-                    className={[
-                      "list",
-                      dealTypeName === item.categoryName ? "active" : "",
-                    ].join(" ")}
-                  >
-                    <button onClick={() => ecommerceClick(item.categoryName)}>
-                      <span className="offers-icon">{item.categoryIcon}</span>
-                      <span className="offers-label">{item.categoryLabel}</span>
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </RenderIf>
+          <OffersSideNav
+            renderIf={isRouteMath("/offers")}
+            onDealClick={ecommerceClick}
+            activeDealTypeName={dealTypeName}
+          />
           <RenderIf condition={isRouteMath("/productcomparison")}>
             <div className="prodcomp-sidenav">
               <div className="header-side-nav__label">
@@ -115,7 +100,6 @@ const HeaderSideNav = () => {
                   renderIf={checked}
                   categories={subCategories}
                   checked={checked}
-                  //checkChange={checkChange}
                   triggerScroll={triggerScroll}
                 />
                 <HeaderSideNavSubMenu2

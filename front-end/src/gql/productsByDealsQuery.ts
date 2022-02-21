@@ -13,6 +13,14 @@ const productsByDealsQuery = gql`
           label
         }
         last_run
+        nav_label {
+          label
+          language
+        }
+        nav_icon {
+          type
+          icon
+        }
       }
       total_products
       products {
@@ -24,6 +32,7 @@ const productsByDealsQuery = gql`
         quantity_available_percent
         title
         deal_type
+        deal_merchant
         deal_quantity_available_percent
         image
         url_list {
