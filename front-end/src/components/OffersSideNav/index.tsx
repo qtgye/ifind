@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
+import { useTranslation } from "@translations/index";
 import {
   useProductsByDeals,
   ProductsByDealsContextProvider,
 } from "@contexts/productsByDealsContext";
-import { useLanguages } from "@contexts/languagesContext";
 import RenderIf from "@components/RenderIf";
 import IfindIcon from "@components/IfindIcon";
 
@@ -14,19 +14,26 @@ const OffersSideNav = ({
   activeDealTypeName,
   onDealClick,
 }: OffersSideNavProps) => {
-  const { userLanguage } = useLanguages();
+  const translate = useTranslation();
   const productsByDeals = useProductsByDeals();
   const [dealTypes, setDealTypes] = useState<DealType[]>([]);
 
-  const extraceNavLabel = useCallback(
-    (dealType) => {
-      const matchedLabel = dealType?.nav_label?.find(
-        ({ language }: DealTypeLabelTranslation) => language === userLanguage
+  const extractNavLabel = useCallback(
+    (dealType: DealType) => {
+      const translatedLabelMap = dealType?.nav_label?.reduce(
+        (labelMap: TranslationMap, navLabelTranslation) => {
+          const code = navLabelTranslation?.language || "";
+          labelMap[code] = navLabelTranslation?.label || "";
+          return labelMap;
+        },
+        {}
       );
 
-      return matchedLabel?.label ?? "";
+      console.log({ translatedLabelMap });
+
+      return translate(translatedLabelMap);
     },
-    [userLanguage]
+    [translate]
   );
 
   useEffect(() => {
@@ -60,7 +67,7 @@ const OffersSideNav = ({
                   <IfindIcon icon={item.nav_icon?.icon || ""} />
                 </RenderIf>
               </span>
-              <span className="offers-label">{extraceNavLabel(item)}</span>
+              <span className="offers-label">{extractNavLabel(item)}</span>
             </button>
           </div>
         );
