@@ -3,14 +3,21 @@ const { JSDOM } = require("jsdom");
 const { addURLParams, removeURLParams } = require("../../../helpers/url");
 const createAmazonScraper = require("../../../helpers/amazon/amazonProductScraper");
 const { getDetailsFromURL } = require("../../../helpers/ebay/api");
+const ebayLink = require("../../../helpers/ebay/ebayLink");
 const createStrapiInstance = require("../../../scripts/strapi-custom");
+const dealTypesConfig = require("../../../api/ifind/deal-types");
 
+const MYDEAL_DEAL_ID = Object.entries(dealTypesConfig).find(
+  ([dealID, dealTypeConfig]) => /mydealz/i.test(dealTypeConfig.site)
+)[0];
 const MYDEALZ_URL = "https://www.mydealz.de";
 const MAX_PRODUCTS = 20;
 
 const PRODUCT_CARD_SELECTOR = ".cept-thread-item";
 const PRODUCT_MERCHANT_SELECTOR = ".cept-merchant-name";
 const PRODUCT_DEAL_LINK_SELECTOR = ".cept-dealBtn";
+
+let ebaySource, germanRegion;
 
 const MERCHANTS_NAME_PATTERN = {
   amazon: /^amazon$/i,
@@ -27,11 +34,19 @@ const getProductDetails = async (productSummaries) => {
       switch (merchantName) {
         case "amazon":
           const amazonScraper = await createAmazonScraper();
-          scrapedProducts.push(await amazonScraper.scrapeProduct(productLink));
+          scrapedProducts.push({
+            ...(await amazonScraper.scrapeProduct(productLink)),
+            productLink,
+            merchantName,
+          });
           break;
 
         case "ebay":
-          scrapedProducts.push(await getDetailsFromURL(productLink));
+          scrapedProducts.push({
+            ...(await getDetailsFromURL(productLink)),
+            productLink,
+            merchantName,
+          });
           break;
 
         default:
@@ -46,11 +61,41 @@ const getProductDetails = async (productSummaries) => {
   return scrapedProducts;
 };
 
+const sanitizeScrapedData = ({ merchantName, productLink, ...productData }) => {
+  productData.website_tab = "home";
+  productData.deal_type = MYDEAL_DEAL_ID;
+  productData.deal_quantity_available_percent =
+    productData.quantity_available_percent;
+
+  switch (merchantName) {
+    case "ebay":
+      productData.url_list = [
+        {
+          source: ebaySource.id,
+          region: germanRegion.id,
+          url: ebayLink(productLink),
+          price: productData.price,
+          price_original: productData.price_original,
+          discount_percent: productData.discount_percent,
+          quantity_available_percent: productData.quantity_available_percent,
+        },
+      ];
+      break;
+  }
+
+  return productData;
+};
+
 (async () => {
   const merchantNamesKeys = Object.keys(MERCHANTS_NAME_PATTERN);
   const merchantNamesRegExplist = Object.values(MERCHANTS_NAME_PATTERN);
 
   try {
+    const strapiInstance = await createStrapiInstance();
+    [ebaySource, germanRegion] = await Promise.all([
+      strapi.services.source.findOne({ name_contains: "ebay" }),
+      strapi.services.region.findOne({ code: "de" }),
+    ]);
     const scrapedProducts = [];
     // Cache product links to check for duplicate products
     const productLinks = [];
@@ -113,16 +158,47 @@ const getProductDetails = async (productSummaries) => {
         });
       }
 
-      console.info(
-        `Getting details for ${fetchedProducts.length} product(s)`.cyan
-      );
-
-      const productDetails = await getProductDetails(fetchedProducts);
-
-      scrapedProducts.push(...productDetails);
+      if (fetchedProducts.length) {
+        console.info(
+          `Getting details for ${fetchedProducts.length} product(s)`.cyan
+        );
+        const productDetails = await getProductDetails(fetchedProducts);
+        scrapedProducts.push(...productDetails);
+      } else {
+        console.info(`No products fetched`);
+      }
 
       page++;
     }
+
+    // Remove old products
+    console.info(`Removing old products...`.cyan);
+    const deletedProducts = await strapiInstance.services.product.delete({
+      deal_type: "mydealz_highlights",
+    });
+    console.info(`Deleted ${deletedProducts.length} products(s)`.cyan);
+
+    // Save new products
+    console.log("Saving new products...".green);
+
+    let saved = 0;
+
+    for (const productData of scrapedProducts) {
+      const newData = sanitizeScrapedData(productData);
+
+      try {
+        await strapi.services.product.create(newData);
+        console.info(
+          `[ ${++saved} of ${scrapedProducts.length} ] Successfully saved: ${
+            newData.title.bold
+          }`.green
+        );
+      } catch (err) {
+        console.error(err.data);
+      }
+    }
+
+    console.log(" DONE ".bgGreen.white.bold);
 
     process.exit();
   } catch (err) {

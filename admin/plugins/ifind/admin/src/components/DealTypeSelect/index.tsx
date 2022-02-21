@@ -1,16 +1,12 @@
 import React, { useState, useEffect, useCallback, FormEvent } from "react";
 import { Select, Label } from "@buffetjs/core";
 import InputBlock from "../InputBlock";
+const dealTypes: DealTypesConfig = require('../../../../../../api/ifind/deal-types');
 
 import "./styles.scss";
 
-export type T_DealTypes = [
-  'amazon_flash_offers',
-  'ebay_wow_offers',
-  'aliexpress_value_deals',
-];
 export interface I_DealTypeOption {
-  value: T_DealTypes;
+  value: string;
   label: string;
 }
 
@@ -34,7 +30,12 @@ const DealTypeSelect = ({
   label,
 }: T_DealTypeSelectProps): JSX.Element => {
   const [inputValue, setInputValue] = useState<string>(value);
-  const options: I_DealTypeOption[] = [
+  const options: I_DealTypeOption[] = Object.entries(dealTypes).map(([ dealType, dealData ]) => ({
+    value: dealType,
+    label: dealData.label.find(({ language }) => language === 'en')?.label || ''
+  }));
+  
+  [
     { value: "amazon_flash_offers", label: "Amazon Flash Offers" },
     { value: "ebay_wow_offers", label: "Ebay Wow Offers" },
     {

@@ -38,4 +38,13 @@ module.exports = [
       deal_type: "aliexpress_value_deals",
     },
   },
+  // {
+  //   id: "mydealz-highlights",
+  //   name: "MyDealz Highlights",
+  //   schedule: frequencies.hourly,
+  //   timeout_minutes: 120,
+  //   meta: {
+  //     deal_type: "mydealz_highlights",
+  //   },
+  // },
 ];

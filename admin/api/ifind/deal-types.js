@@ -1,6 +1,13 @@
 module.exports = {
   amazon_flash_offers: {
     site: "amazon",
+    nav_label: {
+      en: 'Amazon'
+    },
+    nav_icon: {
+      type: 'fontawesome',
+      icon: 'amazon',
+    },
     label: [
       {
         language: "en",
@@ -30,6 +37,13 @@ module.exports = {
   },
   ebay_wow_offers: {
     site: "ebay",
+    nav_label: {
+      en: 'eBay'
+    },
+    nav_icon: {
+      type: 'fontawesome',
+      icon: 'etsy',
+    },
     label: [
       {
         language: "en",
@@ -59,6 +73,13 @@ module.exports = {
   },
   aliexpress_value_deals: {
     site: "aliexpress",
+    nav_label: {
+      en: 'AliExpress'
+    },
+    nav_icon: {
+      type: 'fontawesome',
+      icon: 'adn',
+    },
     label: [
       {
         language: "en",
@@ -83,6 +104,22 @@ module.exports = {
       {
         language: "it",
         label: "AliExpress Super Value Deals",
+      },
+    ],
+  },
+  mydealz_highlights: {
+    site: "mydealz",
+    nav_label: {
+      en: 'Highlights'
+    },
+    nav_icon: {
+      type: 'ifind',
+      icon: 'warp',
+    },
+    label: [
+      {
+        language: "en",
+        label: "MyDealz Highlights",
       },
     ],
   },
