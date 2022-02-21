@@ -1,9 +1,21 @@
 declare interface TagsFilterProps extends React.HTMLAttributes<HTMLElement> {
-  onUpdate?: (tags: (string|number)[]) => void;
-  selectedTags: (string | number)[];
+  onUpdate?: (activeTag: string | number) => void;
+  activeTag?: string | number;
 }
 
-declare interface SelectableTag extends Tag {
+declare interface SelectableTagLabelOverride {
+  label:
+    | ({
+        label?: string;
+        language?: {
+          code: string;
+        };
+      } | null)[]
+    | null;
+}
+
+declare interface SelectableTag
+  extends Partial<Pick<Tag, "id"> & SelectableTagLabelOverride> {
   selected: boolean;
 }
 
