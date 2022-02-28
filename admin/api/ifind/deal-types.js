@@ -131,7 +131,7 @@ module.exports = {
     label: [
       {
         language: "en",
-        label: "MyDealz Highlights",
+        label: "Highlights",
       },
     ],
   },

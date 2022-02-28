@@ -73,6 +73,9 @@ const selectorsToRemove = [
   "#HLCXComparisonJumplink_feature_div",
 ];
 
+const NAVIGATION_TIMEOUT = 30000;
+const SELECTOR_TIMEOUT = 30000;
+
 class AmazonProductScraper {
   /* Creates a new instance  */
   static async create() {
@@ -154,22 +157,30 @@ class AmazonProductScraper {
       */
       let pageLoaded = false;
       let tries = 5;
-      while (!pageLoaded && tries) {
+      while (!pageLoaded && tries--) {
         try {
-          /* Go to product page */
           console.info(" - Getting to product page...".cyan);
-          await this.page.goto(urlWithLanguage, { timeout: 30000 });
 
-          /* Wait for selector */
-          console.info(" - Waiting for the element to scrape...".cyan);
-          await this.page.waitForSelector(detailSelector, { timeout: 10000 });
+          /* Go to product page */
+          try {
+            await this.page.goto(urlWithLanguage, {
+              timeout: NAVIGATION_TIMEOUT,
+              waitUntil: "networkidle0",
+            });
+          } catch (err) {
+            // Sometimes, timeout error fires even the page is loaded.
+            // We can still possibly query the details at that point.
+            console.error(err.message);
+          }
 
-          /* Flag page loaded */
-          pageLoaded = true;
+          /* Flag page loaded when detailsSelector is present */
+          pageLoaded = await this.page.evaluate((detailsSelector) => {
+            return Boolean(document.querySelector(detailsSelector));
+          }, detailSelector);
         } catch (err) {
           console.error(err.message);
           console.info(`Retrying...`.yellow);
-          if (--tries === 0) {
+          if (tries === 0) {
             throw new Error(
               "Unable to fetch product detail page. Kindly ensure that page exists"
             );
@@ -264,10 +275,12 @@ class AmazonProductScraper {
     while (!productPageFetched && tries) {
       try {
         /* Go to product page */
-        await this.page.goto(englishPageURL, { timeout: 60000 });
+        await this.page.goto(englishPageURL, { timeout: NAVIGATION_TIMEOUT });
 
         /* Wait for price selector */
-        await this.page.waitForSelector(PRICE_SELECTOR, { timeout: 10000 });
+        await this.page.waitForSelector(PRICE_SELECTOR, {
+          timeout: SELECTOR_TIMEOUT,
+        });
 
         /* Flag page fetched */
         productPageFetched = true;
@@ -415,18 +428,28 @@ class AmazonProductScraper {
         : "";
     }
 
+    // Compute for final sale values
+    const price = Number((priceMatch && priceMatch[0].replace(",", "")) || 0);
+    const price_original = Number(
+      (originalPriceMatch && originalPriceMatch[0]) || 0
+    );
+    const discount_percent = Number(
+      discountPercentMatch && discountPercentMatch[0]
+        ? discountPercentMatch[0]
+        : price && price_original
+        ? Math.floor(((price_original - price) / price_original) * 100)
+        : null
+    );
+    const quantity_available_percent = quantityAvailablePercentMatch
+      ? 100 - Number(quantityAvailablePercentMatch[0])
+      : null;
+
     // Apply prices and discount data
     const scrapedSaleData = {
-      price: Number((priceMatch && priceMatch[0].replace(",", "")) || 0),
-      discount_percent: Number(
-        (discountPercentMatch && discountPercentMatch[0]) || null
-      ),
-      price_original: Number(
-        (originalPriceMatch && originalPriceMatch[0]) || null
-      ),
-      quantity_available_percent: quantityAvailablePercentMatch
-        ? 100 - Number(quantityAvailablePercentMatch[0])
-        : null,
+      price,
+      discount_percent,
+      price_original,
+      quantity_available_percent,
     };
 
     if (releaseDate) {
