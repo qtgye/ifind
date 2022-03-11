@@ -5,7 +5,7 @@
   "description": "A Strapi application",
   "scripts": {
     "tsc": "tsc",
-    "develop": "rm -rf .cache/ build/ && node ./scripts/load-icons.js && node ./scripts/strapi-custom.js develop",
+    "develop": "rm -rf .cache/ build/ && node ./scripts/load-icons.js && node ./scripts/api-data.js && node ./scripts/strapi-custom.js develop",
     "start": "node ./scripts/strapi-custom.js start",
     "build": "node ./scripts/strapi-custom.js build",
     "strapi": "node ./scripts/strapi-custom.js",
@@ -48,6 +48,7 @@
     "chokidar": "^3.5.2",
     "ebay-oauth-nodejs-client": "^1.2.1",
     "form-data": "^0.2.0",
+    "fs": "0.0.1-security",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
     "got": "^11.8.2",
