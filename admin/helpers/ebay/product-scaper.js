@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const { JSDOM } = require("jsdom");
 const { getDetailsFromURL } = require("./api");
 
-const scapeProduct = async (productURL, language = "de") => {
+const scrapeProduct = async (productURL, language = "de") => {
   const [apiData, pageData] = await Promise.all([
     getDetailsFromURL(productURL),
     extractPageData(productURL, language),
@@ -23,19 +23,23 @@ const extractPageData = async (productURL, language = "de") => {
     const titleElement = document.querySelector(".x-item-title__mainTitle");
     const priceElement = document.querySelector("#prcIsum");
     const originalPriceElement = document.querySelector(".vi-originalPrice");
-    const discountElement = document.querySelector("#vi-discountValue");
+
+    // Computed values
+    const price = priceElement
+      ? normalizePriceValue(priceElement.textContent.trim(), language)
+      : null;
+    const price_original = originalPriceElement
+      ? normalizePriceValue(originalPriceElement.textContent.trim(), language)
+      : null;
+    const discount_percent = price_original
+      ? Math.round(100 * (1 - price / price_original))
+      : null;
 
     return {
       title: titleElement ? titleElement.textContent.trim() : null,
-      price: priceElement
-        ? normalizePriceValue(priceElement.textContent.trim(), language)
-        : null,
-      price_original: originalPriceElement
-        ? normalizePriceValue(originalPriceElement.textContent.trim(), language)
-        : null,
-      discount_percent: discountElement
-        ? Number(discountElement.textContent.trim())
-        : null,
+      price,
+      price_original: price_original !== price ? price_original : null,
+      discount_percent,
     };
   }
 
@@ -74,5 +78,13 @@ const getProductPageDOM = async (productURL) => {
 };
 
 module.exports = {
-  scapeProduct,
+  scrapeProduct,
 };
+
+(async () => {
+  console.log(
+    await scrapeProduct(
+      `https://www.ebay.de/itm/184380494607?campid=5338787715&mkevt=1&mkcid=1&toolid=10001&mkrid=707-53477-19255-0`
+    )
+  );
+})();
