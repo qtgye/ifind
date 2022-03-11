@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const { JSDOM } = require("jsdom");
 const { addURLParams, removeURLParams } = require("../../../helpers/url");
 const createAmazonScraper = require("../../../helpers/amazon/amazonProductScraper");
-const { getDetailsFromURL } = require("../../../helpers/ebay/api");
+const { scapeProduct } = require("../../../helpers/ebay/product-scaper");
 const ebayLink = require("../../../helpers/ebay/ebayLink");
 const amazonLink = require("../../../helpers/amazon/amazonLink");
 const createStrapiInstance = require("../../../scripts/strapi-custom");
@@ -12,7 +12,7 @@ const MYDEAL_DEAL_ID = Object.entries(dealTypesConfig).find(
   ([dealID, dealTypeConfig]) => /mydealz/i.test(dealTypeConfig.site)
 )[0];
 const MYDEALZ_URL = "https://www.mydealz.de";
-const MAX_PRODUCTS = 20;
+const MAX_PRODUCTS = 50;
 
 const PRODUCT_CARD_SELECTOR = ".cept-thread-item";
 const PRODUCT_MERCHANT_SELECTOR = ".cept-merchant-name";
@@ -44,7 +44,7 @@ const getProductDetails = async (productSummaries) => {
 
         case "ebay":
           scrapedProducts.push({
-            ...(await getDetailsFromURL(productLink)),
+            ...(await scapeProduct(productLink)),
             productLink,
             merchantName,
           });

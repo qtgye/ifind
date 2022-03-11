@@ -14,8 +14,7 @@ const getDetailsFromURL = async (productURL) => {
     IncludeSelector: "Details",
   };
 
-  // Extract ebay itemID
-  const [itemID] = productURL.match(/[0-9]{9,12}/g) || [];
+  const itemID = extractIDFromURL(productURL);
 
   if (itemID) {
     const accessToken = await token.getToken("shopping");
@@ -157,8 +156,16 @@ const getWowOffers = async (limit = 100, offset = 0) => {
   }));
 };
 
+const extractIDFromURL = (productURL) => {
+  // Extract ebay itemID
+  const [itemID] = productURL.match(/[0-9]{9,12}/g) || [];
+
+  return itemID;
+};
+
 module.exports = {
   getDetailsFromURL,
   getMultipleFromIDs,
   getWowOffers,
+  extractIDFromURL,
 };
