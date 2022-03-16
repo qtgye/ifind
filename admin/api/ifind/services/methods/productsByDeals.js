@@ -3,6 +3,7 @@ const dealTypes = appRequire("api/ifind/deal-types");
 const PRODUCTS_PER_PAGE = 999999;
 
 module.exports = async ({ deal_type = "", start = 0 }) => {
+  console.log({ deal_type });
   const sources = await strapi.services.source.find();
   const scheduledTasks = await strapi.scheduledTasks.list();
 

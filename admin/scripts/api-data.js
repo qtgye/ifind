@@ -28,7 +28,7 @@ FILE_PATHS.forEach((filePath) => {
 //  Output mappedData into individual files
 Object.entries(mappedData).forEach(([dataID, data]) => {
   const dataFilePath = path.resolve(API_ROOT, `${dataID}.js`);
-  const dataFileContent = `module.exports = ${JSON.stringify(data)}`;
+  const dataFileContent = `module.exports = ${JSON.stringify(data, null, '  ')}`;
   fs.outputFileSync(dataFilePath, dataFileContent);
 });
 
