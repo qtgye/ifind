@@ -1,9 +1,7 @@
-import React, { lazy, Suspense } from "react";
-import { PageContextProvider } from "@contexts/pageContext";
-import { ProductComparisonContextProvider } from "@contexts/productComparisonContext";
+import { lazy } from "react";
 import { dynamicRoutes } from "./routes";
 
-const Home = lazy(() => import("@pages/Home") as Promise<any>);
+// const Home = lazy(() => import("@pages/AboutUs") as Promise<any>);
 const Offers = lazy(() => import("@pages/Offers") as Promise<any>);
 const ProductComparison = lazy(
   () => import("@pages/ProductComparison") as Promise<any>
@@ -25,7 +23,7 @@ const AboutUs = lazy(() => import("@pages/AboutUs") as Promise<any>);
 const BasicPage = lazy(() => import("@pages/BasicPage") as Promise<any>);
 
 export const pages = [
-  Home,
+  // Home,
   Offers,
   ProductComparison,
   Gifts,
@@ -39,31 +37,5 @@ export const pages = [
 ];
 
 export const dynamicPages: (ComponentWithProviderLazy | null)[] = [BasicPage];
-
-const providers = [PageContextProvider, ProductComparisonContextProvider];
-
-const wrapWithProvider = (PageComponent?: ComponentWithProvider) => {
-  if (PageComponent?.provider) {
-    const MatchedProvider = providers.find(
-      (provider) => provider.providerName === PageComponent.provider
-    );
-    if (MatchedProvider) {
-      return (props: any) => (
-        <MatchedProvider>
-          <Suspense fallback={<div>Loading...</div>}>
-            <PageComponent {...props} />
-          </Suspense>
-        </MatchedProvider>
-      );
-    }
-  }
-  return PageComponent
-    ? (props: any) => (
-        <Suspense fallback={<div>Loading...</div>}>
-          <PageComponent {...props} />
-        </Suspense>
-      )
-    : null;
-};
 
 export const dynamicRoutePages = dynamicRoutes;
