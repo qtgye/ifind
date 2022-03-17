@@ -1,5 +1,6 @@
 module.exports = {
   "warehouse": {
+    "isDefault": true,
     "label": [
       {
         "language": "en",

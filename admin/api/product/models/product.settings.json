@@ -101,9 +101,9 @@
       "type": "enumeration",
       "enum": [
         "none",
+        "aliexpress_value_deals",
         "amazon_flash_offers",
         "ebay_wow_offers",
-        "aliexpress_value_deals",
         "mydealz_highlights"
       ],
       "default": "none"
@@ -130,6 +130,14 @@
     },
     "deal_merchant": {
       "type": "string"
+    },
+    "offer_category": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "warehouse"
+      ],
+      "default": "none"
     }
   }
 }

@@ -1,11 +1,27 @@
 const dealTypes = appRequire("api/ifind/deal-types");
+const offersCategories = appRequire("api/ifind/offers-categories");
 
 const PRODUCTS_PER_PAGE = 999999;
 
-module.exports = async ({ deal_type = "", start = 0 }) => {
-  console.log({ deal_type });
+module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
   const scheduledTasks = await strapi.scheduledTasks.list();
+
+  console.log({ offersCategories, dealTypes });
+
+  const defaultOffersCategory = Object.keys(offersCategories).find(
+    (categoryKey) => offersCategories[categoryKey].isDefault
+  );
+  const offerCategory = offer_category
+    ? offersCategories[offer_category]
+    : offersCategories[defaultOffersCategory];
+  const selectedDealTypes = offerCategory
+    ? offerCategory.dealTypes.map((dealTypeKey) => dealTypes[dealTypeKey])
+    : null;
+
+  if (!selectedDealTypes) {
+    return null;
+  }
 
   const productsByDeals = await Promise.all(
     Object.entries(dealTypes)

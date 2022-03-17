@@ -13,7 +13,7 @@
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
     "currencies:import": "node scripts/currencies-import.js",
     "serve:amazon-page-errors": "node amazon-scraper-errors/index.js",
-    "api-data": "node ./scripts/api-data.js"
+    "api-data": "node ./scripts/api-data"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",

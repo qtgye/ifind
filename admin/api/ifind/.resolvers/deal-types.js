@@ -1,6 +1,6 @@
 module.exports = {
   query: `
-    productsByDeals( deal_type: String , start: Int ): [ProductsByDeal]
+    productsByDeals( deal_type: String , start: Int, offer_category: String ): [ProductsByDeal]
   `,
   resolveQuery: {
     async productsByDeals(_, args) {
