@@ -10,4 +10,6 @@ declare interface GlobalStateContextData {
   setSpritesRendered?: (args: boolean) => any;
   toggleBodyScroll?: (args: boolean) => void;
   currentBreakpoint?: string;
+  activeOffer?: string;
+  setActiveOffer?: (offerCategory: string) => void;
 }

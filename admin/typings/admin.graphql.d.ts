@@ -1548,6 +1548,14 @@ declare global {
   
   export const enum ENUM_PRODUCT_OFFER_CATEGORY {
     none = 'none',
+    children = 'children',
+    electronics = 'electronics',
+    fashion = 'fashion',
+    furniture = 'furniture',
+    grocery = 'grocery',
+    health = 'health',
+    hobby = 'hobby',
+    travel = 'travel',
     warehouse = 'warehouse'
   }
   
@@ -3907,7 +3915,7 @@ declare global {
     scheduledTasksList?: ScheduledTaskListPayload;
     sheduledTasks?: ScheduledTaskPayload;
     productsByDeals?: Array<ProductsByDeal | null>;
-    offerCategories?: Array<OffersCategory | null>;
+    offersCategories?: Array<OffersCategory | null>;
     pageBySlug?: PageData;
     productDetails?: Product;
     productComparisonList?: Array<NaturalList | null>;
@@ -9780,7 +9788,7 @@ declare global {
     scheduledTasksList?: QueryToScheduledTasksListResolver<TParent>;
     sheduledTasks?: QueryToSheduledTasksResolver<TParent>;
     productsByDeals?: QueryToProductsByDealsResolver<TParent>;
-    offerCategories?: QueryToOfferCategoriesResolver<TParent>;
+    offersCategories?: QueryToOffersCategoriesResolver<TParent>;
     pageBySlug?: QueryToPageBySlugResolver<TParent>;
     productDetails?: QueryToProductDetailsResolver<TParent>;
     productComparisonList?: QueryToProductComparisonListResolver<TParent>;
@@ -10226,7 +10234,7 @@ declare global {
     (parent: TParent, args: QueryToProductsByDealsArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface QueryToOfferCategoriesResolver<TParent = any, TResult = any> {
+  export interface QueryToOffersCategoriesResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

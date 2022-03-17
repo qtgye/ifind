@@ -7,8 +7,6 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
   const scheduledTasks = await strapi.scheduledTasks.list();
 
-  console.log({ offersCategories, dealTypes });
-
   const defaultOffersCategory = Object.keys(offersCategories).find(
     (categoryKey) => offersCategories[categoryKey].isDefault
   );
@@ -16,15 +14,20 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     ? offersCategories[offer_category]
     : offersCategories[defaultOffersCategory];
   const selectedDealTypes = offerCategory
-    ? offerCategory.dealTypes.map((dealTypeKey) => dealTypes[dealTypeKey])
+    ? offerCategory.dealTypes.reduce((dealTypesMap, dealTypeKey) => {
+        dealTypesMap[dealTypeKey] = dealTypes[dealTypeKey];
+        return dealTypesMap;
+      }, {})
     : null;
+
+  console.log({ offerCategory });
 
   if (!selectedDealTypes) {
     return null;
   }
 
   const productsByDeals = await Promise.all(
-    Object.entries(dealTypes)
+    Object.entries(selectedDealTypes)
       .filter(([dealTypeKey]) => (deal_type ? dealTypeKey === deal_type : true))
       .map(async ([dealTypeKey, { site, label, nav_label, nav_icon }]) => {
         const [products, total_products] = await Promise.all([

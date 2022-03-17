@@ -135,6 +135,14 @@
       "type": "enumeration",
       "enum": [
         "none",
+        "children",
+        "electronics",
+        "fashion",
+        "furniture",
+        "grocery",
+        "health",
+        "hobby",
+        "travel",
         "warehouse"
       ],
       "default": "none"

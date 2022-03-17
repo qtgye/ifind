@@ -91,7 +91,7 @@ const Routes = () => (
   <Switch>
     {/* <Route path={routeWithLanguage("/")} component={HomePage} exact /> */}
     <Route path={routeWithLanguage("/")} component={Offers} exact />
-    <Route path={routeWithLanguage("/offers/:offer_id?")} component={Offers} exact />
+    <Route path={routeWithLanguage("/offers/:offer_id?")} component={Offers} />
     <Route
       path={routeWithLanguage("/productcomparison")}
       component={ProductComparison}

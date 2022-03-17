@@ -6,6 +6,7 @@ import { CategoriesContextProvider } from "./categoriesContext";
 import { GlobalStateContextProvider } from "./globalStateContext";
 import { SourceRegionProvider } from "./sourceRegionContext";
 import { LanguagesProvider } from "./languagesContext";
+import { OffersCategoriesProvider } from "./offersCategoriesContext";
 import { PropsWithChildren } from "react";
 
 export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
@@ -17,7 +18,9 @@ export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
             <SourceRegionProvider>
               <RegionContextProvider>
                 <CategoriesContextProvider>
-                  <ProductContextProvider>{children}</ProductContextProvider>
+                  <OffersCategoriesProvider>
+                    <ProductContextProvider>{children}</ProductContextProvider>
+                  </OffersCategoriesProvider>
                 </CategoriesContextProvider>
               </RegionContextProvider>
             </SourceRegionProvider>

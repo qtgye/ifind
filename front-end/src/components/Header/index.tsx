@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
-import HeaderMiddle from "./HeaderMiddle";
-import HeaderNav from "./HeaderNav";
 
 import { useCurrentRouteConfig } from "@utilities/route";
 
+import HeaderMiddle from "./HeaderMiddle";
+import HeaderNav from "./HeaderNav";
 import "./header.scss";
 
 const Header = () => {

@@ -2,10 +2,10 @@ const offersCategories = require("../offers-categories");
 
 module.exports = {
   query: `
-      offerCategories: [OffersCategory]
+      offersCategories: [OffersCategory]
     `,
   resolveQuery: {
-    async offerCategories() {
+    async offersCategories() {
       return await Promise.all(
         Object.entries(offersCategories).map(async ([id, offerCategory]) => ({
           ...offerCategory,
