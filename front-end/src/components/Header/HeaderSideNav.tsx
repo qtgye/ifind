@@ -28,6 +28,9 @@ const HeaderSideNav = () => {
   const { subCategories } = useSubCategories();
   const { on } = eventBus;
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
+  const [withSideNav, setWithSideNav] = useState<boolean>(
+    currentRouteConfig?.withSideNav || false
+  );
 
   const listRef = useRef<HTMLDivElement | null>();
   const [isVisible, setIsVisible] = useState(false);
@@ -54,12 +57,16 @@ const HeaderSideNav = () => {
   }, [on, triggerScroll]);
 
   useEffect(() => {
+    setWithSideNav(currentRouteConfig?.withSideNav || false);
+  }, [currentRouteConfig]);
+
+  useEffect(() => {
     handleScroll();
   }, [handleScroll]);
 
   return (
     <div className="header-side-nav">
-      <RenderIf condition={currentRouteConfig?.withSideNav || false}>
+      <RenderIf condition={withSideNav || false}>
         <h3
           className={[
             "header-side-nav__heading",

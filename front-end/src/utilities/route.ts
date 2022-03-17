@@ -1,4 +1,4 @@
-import { useRouteMatch, useLocation } from "react-router";
+import { useRouteMatch, useLocation, matchPath } from "react-router";
 import { routesExtraConfig } from "@config/routes";
 import { useLanguages } from "@contexts/languagesContext";
 
@@ -13,11 +13,13 @@ export const useCurrentRouteMatch = () => {
 };
 
 export const useCurrentRouteConfig = () => {
-  const match = useCurrentRouteMatch();
-  const matchedRouteConfig = routesExtraConfig.find(
-    ({ path }: RouteConfig) => path === match?.path?.replace(/\/$/, "")
+  const location = useLocation();
+  const matchedRouteConfig = routesExtraConfig.find(({ path }: RouteConfig) =>
+    matchPath(location.pathname, {
+      path,
+    })
   );
-  return matchedRouteConfig || null;
+  return matchedRouteConfig;
 };
 
 export const useLinkWithLanguage = () => {
@@ -29,6 +31,8 @@ export const useIsRouteMatch = () => {
   const currentRouteMatch = useCurrentRouteMatch();
 
   return (route: string = "/", omitLanguage: boolean = false): boolean =>
-    currentRouteMatch?.path.replace(/\/$/, '') ===
-    (omitLanguage ? route.replace(/\/$/, '') : routeWithLanguage(route).replace(/\/$/, ''));
+    currentRouteMatch?.path.replace(/\/$/, "") ===
+    (omitLanguage
+      ? route.replace(/\/$/, "")
+      : routeWithLanguage(route).replace(/\/$/, ""));
 };

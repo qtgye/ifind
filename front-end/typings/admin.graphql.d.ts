@@ -163,7 +163,7 @@ declare global {
     id: string;
     label?: Array<OffersCategoryLabelTranslation | null>;
     dealTypes?: Array<string | null>;
-    productsByDeal?: Array<ProductsByDeal | null>;
+    productsByDeals?: Array<ProductsByDeal | null>;
   }
   
   export interface PageData {
@@ -4655,7 +4655,7 @@ declare global {
     id?: OffersCategoryToIdResolver<TParent>;
     label?: OffersCategoryToLabelResolver<TParent>;
     dealTypes?: OffersCategoryToDealTypesResolver<TParent>;
-    productsByDeal?: OffersCategoryToProductsByDealResolver<TParent>;
+    productsByDeals?: OffersCategoryToProductsByDealsResolver<TParent>;
   }
   
   export interface OffersCategoryToIdResolver<TParent = any, TResult = any> {
@@ -4670,7 +4670,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface OffersCategoryToProductsByDealResolver<TParent = any, TResult = any> {
+  export interface OffersCategoryToProductsByDealsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
