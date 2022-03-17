@@ -163,7 +163,6 @@ declare global {
     id: string;
     label?: Array<OffersCategoryLabelTranslation | null>;
     dealTypes?: Array<string | null>;
-    productsByDeals?: Array<ProductsByDeal | null>;
   }
   
   export interface PageData {
@@ -1541,15 +1540,15 @@ declare global {
   
   export const enum ENUM_PRODUCT_DEAL_TYPE {
     none = 'none',
+    aliexpress_value_deals = 'aliexpress_value_deals',
     amazon_flash_offers = 'amazon_flash_offers',
     ebay_wow_offers = 'ebay_wow_offers',
-    aliexpress_value_deals = 'aliexpress_value_deals',
     mydealz_highlights = 'mydealz_highlights'
   }
   
   export const enum ENUM_PRODUCT_OFFER_CATEGORY {
     none = 'none',
-    test = 'test'
+    warehouse = 'warehouse'
   }
   
   export interface Product {
@@ -4673,7 +4672,6 @@ declare global {
     id?: OffersCategoryToIdResolver<TParent>;
     label?: OffersCategoryToLabelResolver<TParent>;
     dealTypes?: OffersCategoryToDealTypesResolver<TParent>;
-    productsByDeals?: OffersCategoryToProductsByDealsResolver<TParent>;
   }
   
   export interface OffersCategoryToIdResolver<TParent = any, TResult = any> {
@@ -4685,10 +4683,6 @@ declare global {
   }
   
   export interface OffersCategoryToDealTypesResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
-  export interface OffersCategoryToProductsByDealsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

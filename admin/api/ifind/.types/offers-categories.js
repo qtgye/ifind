@@ -8,6 +8,5 @@ module.exports = `
     id: ID!
     label: [OffersCategoryLabelTranslation]
     dealTypes: [ID]
-    productsByDeals: [ProductsByDeal]
   }
 `
