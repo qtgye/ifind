@@ -4,6 +4,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Children"
+      },
+      {
+        "language": "de",
+        "label": "Kinder"
       }
     ],
     "dealTypes": []
@@ -13,6 +17,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Electronics"
+      },
+      {
+        "language": "de",
+        "label": "Elektronik"
       }
     ],
     "dealTypes": []
@@ -22,6 +30,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Fashion"
+      },
+      {
+        "language": "de",
+        "label": "Mode"
       }
     ],
     "dealTypes": []
@@ -31,6 +43,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Furniture"
+      },
+      {
+        "language": "de",
+        "label": "Möbel"
       }
     ],
     "dealTypes": []
@@ -40,6 +56,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Grocery"
+      },
+      {
+        "language": "de",
+        "label": "Lebensmitteln"
       }
     ],
     "dealTypes": []
@@ -49,6 +69,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Health"
+      },
+      {
+        "language": "de",
+        "label": "Medizin"
       }
     ],
     "dealTypes": []
@@ -58,6 +82,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Hobby"
+      },
+      {
+        "language": "de",
+        "label": "Hobbys"
       }
     ],
     "dealTypes": []
@@ -67,6 +95,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Travel"
+      },
+      {
+        "language": "de",
+        "label": "Reisen"
       }
     ],
     "dealTypes": []
@@ -77,6 +109,10 @@ module.exports = {
       {
         "language": "en",
         "label": "Warehouse"
+      },
+      {
+        "language": "de",
+        "label": "Warenhäuser"
       }
     ],
     "dealTypes": [
