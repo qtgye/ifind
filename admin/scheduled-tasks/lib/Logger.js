@@ -108,7 +108,7 @@ class Logger {
       } catch (err) {
         logs.push({
           date_time: "",
-          type: type || "ERROR",
+          type: "ERROR",
           message: "Log file too large",
         });
       }
