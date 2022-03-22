@@ -23,7 +23,7 @@ const HeaderNav = () => {
         offersCategories.map(({ id, label }) => ({
           active: id === activeOffer,
           href: linkWithLanguage(`/offers/${id}`),
-          label: (label ?? []).map<NavPillItemTranslatableLabel>(
+          label: (label || []).map<NavPillItemTranslatableLabel>(
             (offersCategoryLabel) => ({
               language: offersCategoryLabel?.language || "",
               label: offersCategoryLabel?.label || "",
