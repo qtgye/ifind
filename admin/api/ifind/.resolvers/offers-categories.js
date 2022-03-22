@@ -1,4 +1,5 @@
 const offersCategories = require("../offers-categories");
+const offersCategoriesOrder = require("../config/offers-categories-order");
 
 module.exports = {
   query: `
@@ -6,12 +7,10 @@ module.exports = {
     `,
   resolveQuery: {
     async offersCategories() {
-      return await Promise.all(
-        Object.entries(offersCategories).map(async ([id, offerCategory]) => ({
-          ...offerCategory,
-          id,
-        }))
-      );
+      return offersCategoriesOrder.map((offerCategoryID) => ({
+        id: offerCategoryID,
+        ...offersCategories[offerCategoryID],
+      }));
     },
   },
 };

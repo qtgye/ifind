@@ -1,12 +1,9 @@
-import { useState, useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
 import { useTranslation } from "@translations/index";
-import {
-  useProductsByDeals,
-  ProductsByDealsContextProvider,
-} from "@contexts/productsByDealsContext";
 import RenderIf from "@components/RenderIf";
 import IfindIcon from "@components/IfindIcon";
+import { useOffersSideNav } from "./context";
 
 import "./styles.scss";
 
@@ -15,8 +12,7 @@ const OffersSideNav = ({
   onDealClick,
 }: OffersSideNavProps) => {
   const translate = useTranslation();
-  const productsByDeals = useProductsByDeals();
-  const [dealTypes, setDealTypes] = useState<DealType[]>([]);
+  const { items } = useOffersSideNav();
 
   const extractNavLabel = useCallback(
     (dealType: DealType) => {
@@ -29,24 +25,14 @@ const OffersSideNav = ({
         {}
       );
 
-      console.log({ translatedLabelMap });
-
       return translate(translatedLabelMap);
     },
     [translate]
   );
 
-  useEffect(() => {
-    if (productsByDeals.productsByDeals?.length) {
-      setDealTypes(
-        productsByDeals.productsByDeals.map(({ deal_type }) => deal_type)
-      );
-    }
-  }, [productsByDeals]);
-
   return (
     <div className="offers-sidenav">
-      {dealTypes.map((item) => {
+      {items?.map((item) => {
         return (
           <div
             key={item.name}
@@ -76,10 +62,4 @@ const OffersSideNav = ({
   );
 };
 
-const OffersSideNavWrapped = (props: OffersSideNavProps) => (
-  <ProductsByDealsContextProvider>
-    <OffersSideNav {...props} />
-  </ProductsByDealsContextProvider>
-);
-
-export default withConditionalRender<OffersSideNavProps>(OffersSideNavWrapped);
+export default withConditionalRender<OffersSideNavProps>(OffersSideNav);

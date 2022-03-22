@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 
+import { routesExtraConfig } from "@config/routes";
 import { useCurrentRouteConfig } from "@utilities/route";
 
 import HeaderMiddle from "./HeaderMiddle";
@@ -9,10 +10,10 @@ import "./header.scss";
 const Header = () => {
   const currentRouteConfig = useCurrentRouteConfig();
   const [isSticky, setIsSticky] = useState(false);
-  const classNames = [
-    "header",
-    currentRouteConfig?.withSideNav ? "header--with-side-nav" : false,
-  ]
+  const [additionalClassNames, setAdditionalClassNames] = useState<string[]>(
+    []
+  );
+  const classNames = ["header", ...additionalClassNames]
     .filter(Boolean)
     .join(" ");
 
@@ -24,15 +25,18 @@ const Header = () => {
     setIsSticky(!isInterSected);
   }, []);
 
-  // Apply necessary classnames for sticky state
   useEffect(() => {
-    //const updatedClassNames = ['header'];
-    // if (isSticky) {
-    //     updatedClassNames.push('header--sticked');
-    // }
-    // setClassNames(updatedClassNames.join(' '));
-    //console.log(isSticky);
-  }, [isSticky]);
+    const additionalClassNames = [];
+    const offersRouteConfig = routesExtraConfig.find(
+      ({ id }) => id === "offers"
+    );
+
+    if (offersRouteConfig?.pattern?.test(window.location.pathname)) {
+      additionalClassNames.push("header--with-side-nav");
+    }
+
+    setAdditionalClassNames(additionalClassNames);
+  }, []);
 
   return (
     <header className={classNames}>

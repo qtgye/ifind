@@ -11,6 +11,7 @@ import eventBus from "@utilities/EventBus";
 import { useCurrentRouteConfig, useIsRouteMatch } from "@utilities/route";
 import { useTranslation } from "@translations/index";
 import { GlobalStateContext } from "@contexts/globalStateContext";
+import { routesExtraConfig } from "@config/routes";
 
 import "./header-side-nav.scss";
 import HeaderSideNavSubMenu from "./HeaderSideNavSubMenu";
@@ -35,6 +36,8 @@ const HeaderSideNav = () => {
   const listRef = useRef<HTMLDivElement | null>();
   const [isVisible, setIsVisible] = useState(false);
   const [checked, setChecked] = useState(false);
+  const offersRouteConfig = routesExtraConfig.find(({ id }) => id === "offers");
+
   const checkChange = () => setChecked(!checked);
 
   const ecommerceClick = useCallback(
@@ -56,13 +59,22 @@ const HeaderSideNav = () => {
     on("scrollPanelScroll", triggerScroll);
   }, [on, triggerScroll]);
 
+  const isMatch = useCallback(
+    (regExp?: RegExp) => regExp?.test(window.location.pathname),
+    []
+  );
+
   useEffect(() => {
     setWithSideNav(currentRouteConfig?.withSideNav || false);
   }, [currentRouteConfig]);
 
   useEffect(() => {
     handleScroll();
-  }, [handleScroll]);
+
+    if (isMatch(offersRouteConfig?.pattern)) {
+      setWithSideNav(true);
+    }
+  }, [handleScroll, isMatch, offersRouteConfig]);
 
   return (
     <div className="header-side-nav">
@@ -84,7 +96,7 @@ const HeaderSideNav = () => {
           className="header-side-nav__list"
         >
           <OffersSideNav
-            renderIf={isRouteMath("/offers")}
+            renderIf={isMatch(offersRouteConfig?.pattern)}
             onDealClick={ecommerceClick}
             activeDealTypeName={dealTypeName}
           />

@@ -1,3 +1,4 @@
+import { offers } from "@translations/navigation";
 import { lazy } from "react";
 import { Switch, Route } from "react-router-dom";
 // import { routeWithLanguage } from "@utilities/route";
@@ -6,12 +7,16 @@ const AboutUs = lazy(() => import("@pages/AboutUs") as Promise<any>);
 const Offers = lazy(() => import("@pages/Offers") as Promise<any>);
 const ProductComparison = lazy(
   () => import("@pages/ProductComparison") as Promise<any>
-  );
-  const Gifts = lazy(() => import("@pages/Gifts") as Promise<any>);
-  const BasicPage = lazy(() => import("@pages/BasicPage") as Promise<any>);
+);
+const Gifts = lazy(() => import("@pages/Gifts") as Promise<any>);
+const BasicPage = lazy(() => import("@pages/BasicPage") as Promise<any>);
 const Contact = lazy(() => import("@pages/Contact") as Promise<any>);
 
 const routeWithLanguage = (path: string) => `/:language${path}`;
+
+export const routePaths = {
+  offers: routeWithLanguage("/offers/:offer_id?"),
+};
 
 export const routesExtraConfig: RouteConfig[] = [
   /**
@@ -23,10 +28,12 @@ export const routesExtraConfig: RouteConfig[] = [
     translationKey: "home",
   },
   {
+    id: 'offers',
     path: routeWithLanguage("/offers"),
     label: "Offers",
     withSideNav: true,
     translationKey: "offers",
+    pattern: /\/[a-z]+\/offers/i,
   },
   {
     path: routeWithLanguage("/productcomparison"),
@@ -91,7 +98,7 @@ const Routes = () => (
   <Switch>
     {/* <Route path={routeWithLanguage("/")} component={HomePage} exact /> */}
     <Route path={routeWithLanguage("/")} component={Offers} exact />
-    <Route path={routeWithLanguage("/offers/:offer_id?")} component={Offers} />
+    <Route path={routePaths.offers} component={Offers} />
     <Route
       path={routeWithLanguage("/productcomparison")}
       component={ProductComparison}
