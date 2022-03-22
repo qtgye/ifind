@@ -15,6 +15,7 @@ export const GlobalStateContextProvider = ({
   const [focusedCategory, setFocusedCategory] = useState(0);
   const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
   const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(true);
+  const [activeOffer, setActiveOffer] = useState("");
 
   const onCategoryClick = useCallback((id) => {
     setFocusedCategory(id);
@@ -43,7 +44,7 @@ export const GlobalStateContextProvider = ({
         0,
         parseFloat(document.body.style.getPropertyValue("--body-fixed-scroll"))
       );
-      document.documentElement.style.removeProperty('scroll-behavior');
+      document.documentElement.style.removeProperty("scroll-behavior");
     } else {
       document.body.style.setProperty(
         "--body-fixed-scroll",
@@ -63,6 +64,8 @@ export const GlobalStateContextProvider = ({
         dealTypeName,
         onOffersClick,
         toggleBodyScroll,
+        activeOffer,
+        setActiveOffer,
       }}
     >
       {children}

@@ -1,138 +1,138 @@
 module.exports = {
-  amazon_flash_offers: {
-    site: "amazon",
-    nav_label: [
+  "aliexpress_value_deals": {
+    "site": "aliexpress",
+    "nav_label": [
       {
-        language: "en",
-        label: "Amazon",
-      },
+        "language": "en",
+        "label": "AliExpress"
+      }
     ],
-    nav_icon: {
-      type: "ifind",
-      icon: "amazon",
+    "nav_icon": {
+      "type": "ifind",
+      "icon": "aliexpress"
     },
-    label: [
+    "label": [
       {
-        language: "en",
-        label: "Amazon Flash Offers",
+        "language": "en",
+        "label": "AliExpress Super Value Deals"
       },
       {
-        language: "de",
-        label: "Amazon Blitzangebote",
+        "language": "de",
+        "label": "AliExpress Super Sparangebote"
       },
       {
-        language: "ru",
-        label: "Горячие скидки (Amazon)",
+        "language": "ru",
+        "label": "Супервыгодные акции (AliExpress)"
       },
       {
-        language: "sp",
-        label: "Ofertas Flash de Amazon",
+        "language": "sp",
+        "label": "Ofertas supervaloradas de AliExpress"
       },
       {
-        language: "fr",
-        label: "Offres flash Amazon",
+        "language": "fr",
+        "label": "Offres super avantageuses d'AliExpress"
       },
       {
-        language: "it",
-        label: "Offerte lampo Amazon",
-      },
-    ],
+        "language": "it",
+        "label": "AliExpress Super Value Deals"
+      }
+    ]
   },
-  ebay_wow_offers: {
-    site: "ebay",
-    nav_label: [
+  "amazon_flash_offers": {
+    "site": "amazon",
+    "nav_label": [
       {
-        language: "en",
-        label: "eBay",
-      },
+        "language": "en",
+        "label": "Amazon"
+      }
     ],
-    nav_icon: {
-      type: "ifind",
-      icon: "ebay",
+    "nav_icon": {
+      "type": "ifind",
+      "icon": "amazon"
     },
-    label: [
+    "label": [
       {
-        language: "en",
-        label: "Ebay Wow Offers",
+        "language": "en",
+        "label": "Amazon Flash Offers"
       },
       {
-        language: "de",
-        label: "Ebay Wow Angebote",
+        "language": "de",
+        "label": "Amazon Blitzangebote"
       },
       {
-        language: "ru",
-        label: "Удивительные скидки (Ebay)",
+        "language": "ru",
+        "label": "Горячие скидки (Amazon)"
       },
       {
-        language: "sp",
-        label: "Ofertas Ebay Wow",
+        "language": "sp",
+        "label": "Ofertas Flash de Amazon"
       },
       {
-        language: "fr",
-        label: "Offres Ebay Wow",
+        "language": "fr",
+        "label": "Offres flash Amazon"
       },
       {
-        language: "it",
-        label: "Offerte Ebay Wow",
-      },
-    ],
+        "language": "it",
+        "label": "Offerte lampo Amazon"
+      }
+    ]
   },
-  aliexpress_value_deals: {
-    site: "aliexpress",
-    nav_label: [
+  "ebay_wow_offers": {
+    "site": "ebay",
+    "nav_label": [
       {
-        language: "en",
-        label: "AliExpress",
-      },
+        "language": "en",
+        "label": "eBay"
+      }
     ],
-    nav_icon: {
-      type: "ifind",
-      icon: "aliexpress",
+    "nav_icon": {
+      "type": "ifind",
+      "icon": "ebay"
     },
-    label: [
+    "label": [
       {
-        language: "en",
-        label: "AliExpress Super Value Deals",
+        "language": "en",
+        "label": "Ebay Wow Offers"
       },
       {
-        language: "de",
-        label: "AliExpress Super Sparangebote",
+        "language": "de",
+        "label": "Ebay Wow Angebote"
       },
       {
-        language: "ru",
-        label: "Супервыгодные акции (AliExpress)",
+        "language": "ru",
+        "label": "Удивительные скидки (Ebay)"
       },
       {
-        language: "sp",
-        label: "Ofertas supervaloradas de AliExpress",
+        "language": "sp",
+        "label": "Ofertas Ebay Wow"
       },
       {
-        language: "fr",
-        label: "Offres super avantageuses d'AliExpress",
+        "language": "fr",
+        "label": "Offres Ebay Wow"
       },
       {
-        language: "it",
-        label: "AliExpress Super Value Deals",
-      },
-    ],
+        "language": "it",
+        "label": "Offerte Ebay Wow"
+      }
+    ]
   },
-  mydealz_highlights: {
-    site: "mydealz",
-    nav_label: [
+  "mydealz_highlights": {
+    "site": "mydealz",
+    "nav_label": [
       {
-        language: "en",
-        label: "Highlights",
-      },
+        "language": "en",
+        "label": "Highlights"
+      }
     ],
-    nav_icon: {
-      type: "ifind",
-      icon: "warp",
+    "nav_icon": {
+      "type": "ifind",
+      "icon": "warp"
     },
-    label: [
+    "label": [
       {
-        language: "en",
-        label: "Highlights",
-      },
-    ],
-  },
-};
+        "language": "en",
+        "label": "Highlights"
+      }
+    ]
+  }
+}
