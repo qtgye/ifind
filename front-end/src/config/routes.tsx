@@ -1,7 +1,5 @@
-import { offers } from "@translations/navigation";
 import { lazy } from "react";
 import { Switch, Route } from "react-router-dom";
-// import { routeWithLanguage } from "@utilities/route";
 
 const AboutUs = lazy(() => import("@pages/AboutUs") as Promise<any>);
 const Offers = lazy(() => import("@pages/Offers") as Promise<any>);
@@ -28,7 +26,7 @@ export const routesExtraConfig: RouteConfig[] = [
     translationKey: "home",
   },
   {
-    id: 'offers',
+    id: "offers",
     path: routeWithLanguage("/offers"),
     label: "Offers",
     withSideNav: true,
