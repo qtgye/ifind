@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useSubCategories } from "@contexts/categoriesContext";
 import eventBus from "@utilities/EventBus";
-import { useCurrentRouteConfig, useIsRouteMatch } from "@utilities/route";
+import { useIsRouteMatch } from "@utilities/route";
 import { useTranslation } from "@translations/index";
 import { GlobalStateContext } from "@contexts/globalStateContext";
 import { routesExtraConfig } from "@config/routes";
@@ -24,14 +24,11 @@ import { categories as categoriesLabel } from "./translations";
 
 const HeaderSideNav = () => {
   const translate = useTranslation();
-  const currentRouteConfig = useCurrentRouteConfig();
   const isRouteMath = useIsRouteMatch();
   const { subCategories } = useSubCategories();
   const { on } = eventBus;
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
-  const [withSideNav, setWithSideNav] = useState<boolean>(
-    currentRouteConfig?.withSideNav || false
-  );
+  const [withSideNav, setWithSideNav] = useState<boolean>(false);
 
   const listRef = useRef<HTMLDivElement | null>();
   const [isVisible, setIsVisible] = useState(false);
@@ -63,10 +60,6 @@ const HeaderSideNav = () => {
     (regExp?: RegExp) => regExp?.test(window.location.pathname),
     []
   );
-
-  useEffect(() => {
-    setWithSideNav(currentRouteConfig?.withSideNav || false);
-  }, [currentRouteConfig]);
 
   useEffect(() => {
     handleScroll();

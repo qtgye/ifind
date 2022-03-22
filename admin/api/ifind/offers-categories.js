@@ -1,6 +1,5 @@
 module.exports = {
   "children": {
-    "isDefault": true,
     "label": [
       {
         "language": "en",

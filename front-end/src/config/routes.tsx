@@ -31,7 +31,7 @@ export const routesExtraConfig: RouteConfig[] = [
     label: "Offers",
     withSideNav: true,
     translationKey: "offers",
-    pattern: /\/[a-z]+\/offers/i,
+    pattern: /(^\/$|^\/[a-z]{2}\/?$|^\/[a-z]{2}\/offers(\/.*)?$)/i,
   },
   {
     path: routeWithLanguage("/productcomparison"),
@@ -94,7 +94,6 @@ export const dynamicRoutes: RouteConfig[] = [
 
 const Routes = () => (
   <Switch>
-    {/* <Route path={routeWithLanguage("/")} component={HomePage} exact /> */}
     <Route path={routeWithLanguage("/")} component={Offers} exact />
     <Route path={routePaths.offers} component={Offers} />
     <Route
