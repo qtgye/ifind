@@ -108,11 +108,11 @@ module.exports = {
     "label": [
       {
         "language": "en",
-        "label": "Warehouse"
+        "label": "Shops"
       },
       {
         "language": "de",
-        "label": "Warenhäuser"
+        "label": "Shops"
       }
     ],
     "dealTypes": [

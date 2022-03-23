@@ -1,6 +1,6 @@
 export const categories = {
   en: "Websites",
-  de: "Websiten",
+  de: "Webseiten",
   ru: "Категории",
   fr: "Categories",
   sp: "Categorías",
