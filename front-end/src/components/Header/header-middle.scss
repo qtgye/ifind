@@ -11,7 +11,15 @@
 
   &__container {
     @include container;
+    position: relative;
     height: 100%;
+
+    @include below-xs {
+      margin-left: 10px;
+      margin-right: 10px;
+      max-width: none;
+      width: calc(100% - 20px);
+    }
   }
 
   &__row {
@@ -32,6 +40,10 @@
     right: 0;
     height: 0;
     overflow: visible;
+
+    @include below-xs {
+      justify-content: flex-end;
+    }
 
     @include lg {
       position: static;
@@ -206,6 +218,27 @@
   .right-bar {
     display: flex;
     align-items: center;
+
+    &__links {
+      display: none;
+
+      @include desktop-up {
+        display: flex;
+        padding-left: 10px;
+        padding-right: 10px;
+        border-right: 1px solid color(gray-light);
+      }
+
+      a:link,
+      a:active,
+      a:visited {
+        color: color(gray);
+
+        &:hover {
+          color: color(gray-light);
+        }
+      }
+    }
   }
 
   .single-bar {
@@ -220,6 +253,7 @@
     margin-top: 7px;
     margin-left: 0;
     margin-right: 0px;
+    z-index: $z-index-language-select;
   }
 
   .menu-flags {

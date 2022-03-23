@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
-  useOffersCategories,
-} from "@contexts/offersCategoriesContext";
+import { useOffersCategories } from "@contexts/offersCategoriesContext";
 import { useGlobalState } from "@contexts/globalStateContext";
 import NavPills from "@components/NavPills";
 import { useLinkWithLanguage } from "@utilities/route";

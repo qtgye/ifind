@@ -1,4 +1,4 @@
-import { OffersSideNavProvider } from '../components/OffersSideNav/context';
+import { OffersSideNavProvider } from "../components/OffersSideNav/context";
 import { VendorProvider } from "./vendorContext";
 import { GlobalContextProvider } from "./globalDataContext";
 import { RegionContextProvider } from "./regionContext";
@@ -12,11 +12,11 @@ import { PropsWithChildren } from "react";
 
 export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
   return (
-    <OffersSideNavProvider>
-      <LanguagesProvider>
-        <VendorProvider>
-          <GlobalContextProvider>
-            <GlobalStateContextProvider>
+    <LanguagesProvider>
+      <VendorProvider>
+        <GlobalContextProvider>
+          <GlobalStateContextProvider>
+            <OffersSideNavProvider>
               <SourceRegionProvider>
                 <RegionContextProvider>
                   <CategoriesContextProvider>
@@ -28,10 +28,10 @@ export const Providers = ({ children }: PropsWithChildren<React.ReactNode>) => {
                   </CategoriesContextProvider>
                 </RegionContextProvider>
               </SourceRegionProvider>
-            </GlobalStateContextProvider>
-          </GlobalContextProvider>
-        </VendorProvider>
-      </LanguagesProvider>
-    </OffersSideNavProvider>
+            </OffersSideNavProvider>
+          </GlobalStateContextProvider>
+        </GlobalContextProvider>
+      </VendorProvider>
+    </LanguagesProvider>
   );
 };

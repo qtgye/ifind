@@ -9,11 +9,24 @@ import "./offers.scss";
 import ProgressBars from "@components/ProgressBar";
 import RenderIf from "@components/RenderIf";
 import { useOffersSideNav } from "@components/OffersSideNav/context";
+import { useParams } from "react-router";
+import { useGlobalState } from "@contexts/globalStateContext";
+import { useOffersCategories } from "@contexts/offersCategoriesContext";
 
 const Offers: React.FunctionComponent = () => {
+  const { offer_id } = useParams<OffersRouteParams>();
   const { setItems } = useOffersSideNav();
+  const { setActiveOffer } = useGlobalState();
   const { loading = false, productsByDeals } = useProductsByDeals();
+  const { offersCategories } = useOffersCategories();
   const icon = "/images/loading.png";
+
+  useEffect(() => {
+    if (setActiveOffer && !offer_id) {
+      const defaultOffer = offersCategories?.find(({ isDefault }) => isDefault);
+      setActiveOffer(defaultOffer?.id || "");
+    }
+  }, [setActiveOffer, offer_id, offersCategories]);
 
   useEffect(() => {
     if (productsByDeals?.length && setItems) {

@@ -1,3 +1,7 @@
+declare interface OffersRouteParams {
+  offer_id?: string;
+}
+
 declare interface RouteConfig {
   id?: string;
   path: string;

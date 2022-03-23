@@ -6,3 +6,9 @@ export const categories = {
   sp: "Categorías",
   it: "Categorie",
 };
+
+export const contact = {
+  en: "Contact",
+  de: "Test",
+  ru: "Test",
+};

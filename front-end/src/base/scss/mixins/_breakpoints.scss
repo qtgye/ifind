@@ -39,6 +39,12 @@
 
 // Create a mixin for each breakpoint
 
+@mixin below-xs {
+  @include breakpoint(default, max) {
+    @content;
+  }
+}
+
 @mixin sm-max {
   @include breakpoint(sm, max) {
     @content;

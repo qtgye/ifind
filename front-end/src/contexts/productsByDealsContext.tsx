@@ -3,10 +3,7 @@ import { useParams } from "react-router";
 import { useQuery } from "@apollo/react-hooks";
 import productsByDealsQuery from "@gql/productsByDealsQuery";
 
-import {
-  GlobalStateContextProvider,
-  useGlobalState,
-} from "./globalStateContext";
+import { useGlobalState } from "./globalStateContext";
 
 export const ProductsByDealsContext = createContext<ProductsByDealsValues>({});
 
@@ -31,17 +28,15 @@ export const ProductsByDealsContextProvider = ({
   }, [data]);
 
   return (
-    <GlobalStateContextProvider>
-      <ProductsByDealsContext.Provider
-        value={{
-          loading,
-          error,
-          productsByDeals,
-        }}
-      >
-        {children}
-      </ProductsByDealsContext.Provider>
-    </GlobalStateContextProvider>
+    <ProductsByDealsContext.Provider
+      value={{
+        loading,
+        error,
+        productsByDeals,
+      }}
+    >
+      {children}
+    </ProductsByDealsContext.Provider>
   );
 };
 

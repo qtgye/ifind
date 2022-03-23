@@ -8,6 +8,7 @@ const offersCategoriesQuery = gql`
         label
         language
       }
+      isDefault
       dealTypes
     }
   }
