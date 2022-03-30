@@ -9,6 +9,6 @@ export const categories = {
 
 export const contact = {
   en: "Contact",
-  de: "Test",
-  ru: "Test",
+  de: "Kontakt",
+  ru: "Контакт",
 };
