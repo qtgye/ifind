@@ -16,6 +16,8 @@ const {
   STATIC_WEB_ROOT,
 } = require("dotenv").config().parsed;
 
+const ADMIN_ROOT = path.resolve(__dirname, "../../admin");
+
 // Ensure static web root is supplied
 if (!STATIC_WEB_ROOT) {
   throw new Error("Please supply STATIC_WEB_ROOT in your .env file.");
@@ -44,7 +46,7 @@ const prerender = async (usedPort) => {
   try {
     console.info("Getting languages and page routes from API...".cyan);
 
-    const [languageCodes, pageSlugs] = await Promise.all([
+    const [languageCodes, pageSlugs, offerCategoriesSlugs] = await Promise.all([
       // Get Languages
       (async () => {
         const response = await fetch(
@@ -101,14 +103,28 @@ const prerender = async (usedPort) => {
         }
         return [];
       })(),
+
+      // Get category offers
+      (async () => {
+        const offersCategoriesDataPath = path.resolve(
+          ADMIN_ROOT,
+          "api/ifind/offers-categories"
+        );
+        const offersCategoriesData = require(offersCategoriesDataPath);
+        const offersSlugs = Object.keys(offersCategoriesData);
+        return (offersSlugs || []).map((offerSlug) => `/offers/${offerSlug}`);
+      })(),
     ]);
 
     languages.push(...languageCodes);
     routes.push(...pageSlugs);
+    routes.push(...offerCategoriesSlugs);
   } catch (err) {
     console.error(`Unable to prerender due to error: ${err.message.red}`);
     process.exit();
   }
+
+  console.log({ routes });
 
   // Generate routes with languages
   languages.forEach((language) => {
