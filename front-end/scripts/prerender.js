@@ -121,10 +121,9 @@ const prerender = async (usedPort) => {
     routes.push(...offerCategoriesSlugs);
   } catch (err) {
     console.error(`Unable to prerender due to error: ${err.message.red}`);
+    console.error(err.stack.gray);
     process.exit();
   }
-
-  console.log({ routes });
 
   // Generate routes with languages
   languages.forEach((language) => {
