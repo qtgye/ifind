@@ -2,7 +2,7 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html className="ifind-app">
+    <Html>
       <Head>
         <meta charSet="utf-8" />
         <link rel="icon" href="/favicon.ico" />
@@ -50,21 +50,20 @@ export default function Document() {
         */}
         <link rel="manifest" href="/manifest.json" />
         <link
-          rel="preload"
+          // rel="preload"
+          // as="style"
+          rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Poppins:200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap"
-          as="style"
-          onLoad={function () {
-            this.rel = "stylesheet";
-          }}
         />
 
         {/* Font Awesome */}
         <link
-          rel="preload"
-          as="style"
-          onLoad={function () {
-            this.rel = "stylesheet";
-          }}
+          // rel="preload"
+          // as="style"
+          // onLoad={function () {
+          //   this.rel = "stylesheet";
+          // }}
+            rel="stylesheet"
           href="/css/font-awesome.css"
         />
 
@@ -76,11 +75,12 @@ export default function Document() {
 
         {/* Cookie Consent Banner */}
         <link
-          rel="preload"
-          as="style"
-          onLoad={function () {
-            this.rel = "stylesheet";
-          }}
+          // rel="preload"
+          // as="style"
+          // onLoad={function () {
+          //   this.rel = "stylesheet";
+          // }}
+          rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/cookieconsent@3/build/cookieconsent.min.css"
         />
 
