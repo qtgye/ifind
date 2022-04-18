@@ -1,1 +1,2 @@
-import './hocs/withConditionalRender.d';
+import "./hocs/withConditionalRender.d";
+import "./gqlFetch.d";

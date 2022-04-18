@@ -13,8 +13,8 @@ import gqlFetch from "utilities/gqlFetch";
 // import { getSourcesRegions } from "./sourceRegionContext";
 
 // TODO: Move this to languages provider
-export const getLanguages = async (): Promise<Language[]> =>
-  gqlFetch(`
+export const getLanguages = async () =>
+  gqlFetch<LanguagesPayload>(`
     query Languages {
       languages {
         code
@@ -25,8 +25,8 @@ export const getLanguages = async (): Promise<Language[]> =>
   `);
 
 // TODO: Move this to sourcesRegions provider
-export const getSourcesRegions = async (): Promise<SourceRegionContextData> =>
-  gqlFetch(`
+export const getSourcesRegions = async () =>
+  gqlFetch<SourceRegionContextData>(`
     query SourceRegionQuery {
       sources {
           id
@@ -99,21 +99,14 @@ export const GlobalContextProvider = ({
 
 export const useGlobalData = () => useContext(GlobalContext);
 
-type InitialGlobalDataPromises = [
-  globalData: Promise<GlobalDataPayload>,
-  languages: Promise<Language[]>,
-  sourcesRegions: Promise<SourceRegionContextData>
-];
-
 export const getGlobalData = async ({
   language = "en",
 }: GetGlobalDataParams): Promise<GlobalContextData> => {
-  const [globalData, languages, { sources, regions }] =
-    await Promise.all<InitialGlobalDataPromises>([
-      gqlFetch(globalDataQuery, { language }),
-      getLanguages(),
-      getSourcesRegions(),
-    ]);
+  const [globalData, { languages }, { sources, regions }] = await Promise.all([
+    gqlFetch<GlobalDataPayload>(globalDataQuery, { language }),
+    getLanguages(),
+    getSourcesRegions(),
+  ]);
 
   return {
     contactInfo: globalData?.contactDetail,

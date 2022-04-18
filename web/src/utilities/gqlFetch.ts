@@ -1,6 +1,6 @@
 import fetch from "cross-fetch";
 
-const gqlFetch = async (query: string, variables = {}) => {
+const gqlFetch: gqlFetchType = async (query, variables = {}) => {
   return fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_ROOT}`, {
     method: "POST",
     headers: {

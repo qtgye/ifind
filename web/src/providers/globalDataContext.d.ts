@@ -44,3 +44,7 @@ declare interface GlobalContextData {
 declare interface GetGlobalDataParams {
   language?: string;
 }
+
+declare interface LanguagesPayload {
+  languages: Language[];
+}

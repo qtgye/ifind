@@ -1,36 +1,43 @@
-import { Suspense, lazy, useEffect, useState, useCallback } from "react";
-import { useLanguages } from "providers/languagesContext";
+import { useEffect, useState, useCallback } from "react";
+import FlagSelect from "components/FlagsSelect";
+import { useRouter } from "next/router";
 
 import countriesConfig from "config/countries";
-
-const FlagSelect = lazy(
-  () => import("components/FlagsSelect") as Promise<any>
-);
+import { useGlobalData } from "providers/globalDataContext";
 
 const HeaderLanguageButton = () => {
-  const {
-    languages = [],
-    userLanguage = "en",
-    replaceLanguage,
-  } = useLanguages();
+  const { asPath: pathname } = useRouter();
+  const { languages, userLanguage = "en" } = useGlobalData();
   const [countries, setCountries] = useState<string[]>([]);
   const [labels, setLabels] = useState<{ [key: string]: string }>();
   const [selected, setSelected] = useState<string>("");
 
+  const replaceLanguage = useCallback(
+    (languageCode: string) => {
+      const urlSegments = pathname.replace(/\/$/, "").split("/");
+
+      // Replace language code
+      urlSegments[1] = languageCode;
+
+      // Redirect
+      window.location.href = urlSegments.join("/");
+    },
+    [pathname]
+  );
+
   const applyUserLanguage = useCallback(
-    (countryCode) => {
-      const matchedCountryConfig:
-        | CountryConfig
-        | undefined = countriesConfig.find(
-        ({ code }: CountryConfig) => code.toLocaleLowerCase() === countryCode
-      );
+    (countryCode: string) => {
+      const matchedCountryConfig: CountryConfig | undefined =
+        countriesConfig.find(
+          ({ code }: CountryConfig) => code.toLocaleLowerCase() === countryCode
+        );
 
       if (!matchedCountryConfig) {
         return;
       }
 
       const countryNameSlug = matchedCountryConfig.name;
-      const matchedLanguage = languages.find(
+      const matchedLanguage = languages?.find(
         ({ country_flag }) => countryNameSlug === country_flag
       );
 
@@ -42,17 +49,23 @@ const HeaderLanguageButton = () => {
   );
 
   useEffect(() => {
-    if (languages.length) {
+    if (languages?.length) {
       setCountries(
-        languages.map(({ flag }) => flag?.toLocaleLowerCase() || "")
+        languages.map(
+          ({ country_flag }) => country_flag?.toLocaleLowerCase() || ""
+        )
       );
       setLabels(
         languages.reduce(
           (
             all: { [key: string]: string },
-            { flag, name }: LanguageWithFlag
+            { country_flag, name }: LanguageWithFlag
           ) => {
-            all[flag?.toLocaleLowerCase() || ""] = name || "";
+            // Get matching country code for language
+            const matchedCountry = countriesConfig.find(
+              ({ name }) => name === country_flag
+            );
+            all[matchedCountry?.code?.toLocaleLowerCase() || ""] = name || "";
             return all;
           },
           {}
@@ -63,7 +76,7 @@ const HeaderLanguageButton = () => {
 
   useEffect(() => {
     if (countries?.length && userLanguage) {
-      const matchedLanguage = languages.find(
+      const matchedLanguage = languages?.find(
         ({ code }) => code === userLanguage
       );
       const matchedCountryNameSlug = matchedLanguage
@@ -77,19 +90,16 @@ const HeaderLanguageButton = () => {
         setSelected(matchedCountry?.code?.toLocaleLowerCase() || "");
       }
     }
-
   }, [languages, countries, userLanguage]);
 
   return (
     <div>
-      <Suspense fallback="">
-        <FlagSelect
-          placeholder='Please Select'
-          selected={selected}
-          onSelect={(flag: string) => applyUserLanguage(flag)}
-          customLabels={labels}
-        />
-      </Suspense>
+      <FlagSelect
+        placeholder="Please Select"
+        selected={selected}
+        onSelect={(flag: string) => applyUserLanguage(flag)}
+        customLabels={labels}
+      />
     </div>
   );
 };
