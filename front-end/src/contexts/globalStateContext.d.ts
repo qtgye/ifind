@@ -1,3 +1,7 @@
+declare interface AllPageParams extends OffersRouteParams {
+  language?: string;
+}
+
 declare interface GlobalStateContextData {
   activeCategory?: string | number;
   setActiveCategory?: (args: any) => any;
@@ -10,4 +14,6 @@ declare interface GlobalStateContextData {
   setSpritesRendered?: (args: boolean) => any;
   toggleBodyScroll?: (args: boolean) => void;
   currentBreakpoint?: string;
+  activeOffer?: string;
+  setActiveOffer?: (offerCategory: string) => void;
 }

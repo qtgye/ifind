@@ -5,12 +5,23 @@ const {
   copySync,
   rmdirSync,
   moveSync,
+  existsSync,
 } = require("fs-extra");
 const path = require("path");
 const puppeteer = require("puppeteer");
 const express = require("express");
 const fetch = require("node-fetch");
-const { REACT_APP_ADMIN_API_ROOT } = require("dotenv").config().parsed;
+const {
+  REACT_APP_ADMIN_API_ROOT,
+  STATIC_WEB_ROOT,
+} = require("dotenv").config().parsed;
+
+const ADMIN_ROOT = path.resolve(__dirname, "../../admin");
+
+// Ensure static web root is supplied
+if (!STATIC_WEB_ROOT) {
+  throw new Error("Please supply STATIC_WEB_ROOT in your .env file.");
+}
 
 const routes = ["/", "/productcomparison", "/offers", "/gifts", "/contact"];
 const languages = [];
@@ -35,27 +46,27 @@ const prerender = async (usedPort) => {
   try {
     console.info("Getting languages and page routes from API...".cyan);
 
-    const [
-      languageCodes,
-      pageSlugs,
-    ] = await Promise.all([
+    const [languageCodes, pageSlugs, offerCategoriesSlugs] = await Promise.all([
       // Get Languages
       (async () => {
-        const response = await fetch(REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"), {
-          method: "post",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+        const response = await fetch(
+          REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"),
+          {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `
                 query {
                   languages {
                     code
                   }
                 }
               `,
-          }),
-        });
+            }),
+          }
+        );
         const { data } = await response.json();
         const { languages } = data;
 
@@ -67,21 +78,24 @@ const prerender = async (usedPort) => {
 
       // Get Pages
       (async () => {
-        const response = await fetch(REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"), {
-          method: "post",
-          headers: {
-            "content-type": "application/json",
-          },
-          body: JSON.stringify({
-            query: `
+        const response = await fetch(
+          REACT_APP_ADMIN_API_ROOT.replace("localhost", "127.0.0.1"),
+          {
+            method: "post",
+            headers: {
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              query: `
               query {
                 pages {
                   slug
                 }
               }
             `,
-          }),
-        });
+            }),
+          }
+        );
         const { data } = await response.json();
         const { pages } = data;
         if (pages && pages.length) {
@@ -89,12 +103,26 @@ const prerender = async (usedPort) => {
         }
         return [];
       })(),
+
+      // Get category offers
+      (async () => {
+        const offersCategoriesDataPath = path.resolve(
+          ADMIN_ROOT,
+          "api/ifind/offers-categories"
+        );
+        const offersCategoriesData = require(offersCategoriesDataPath);
+        const offersSlugs = Object.keys(offersCategoriesData);
+        return (offersSlugs || []).map((offerSlug) => `/offers/${offerSlug}`);
+      })(),
     ]);
 
     languages.push(...languageCodes);
     routes.push(...pageSlugs);
+    routes.push(...offerCategoriesSlugs);
   } catch (err) {
-    console.info(err.message.red);
+    console.error(`Unable to prerender due to error: ${err.message.red}`);
+    console.error(err.stack.gray);
+    process.exit();
   }
 
   // Generate routes with languages
@@ -128,7 +156,11 @@ const prerender = async (usedPort) => {
 
   for (const route of routesWithLanguages) {
     const url = `http://127.0.0.1:${usedPort}${route}`;
-    console.info(`[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${route.bold} at ${url}`.green);
+    console.info(
+      `[ ${++routeIndex} of ${routesWithLanguages.length} ] Scraping route: ${
+        route.bold
+      } at ${url}`.green
+    );
 
     await page.goto(url, {
       waitUntil: "networkidle0",
@@ -155,6 +187,21 @@ const prerender = async (usedPort) => {
     outputFileSync(routeFile, html);
     console.info("DONE");
   }
+
+  console.info(
+    `Moving Prerendered files to web root: ${STATIC_WEB_ROOT.bold}`.green
+  );
+
+  // Cleanup old static site files
+  if (existsSync(STATIC_WEB_ROOT)) {
+    rmdirSync(STATIC_WEB_ROOT, { recursive: true, force: true });
+  }
+
+  // Move static site files
+  moveSync(PRERENDER_TEMP, STATIC_WEB_ROOT);
+
+  // Close puppeteer
+  await browser.close();
 
   process.exit();
 };

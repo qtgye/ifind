@@ -4,13 +4,14 @@ import dealTypes from "@config/deal-types";
 import PercentCircle from "@components/PercentCircle";
 import RatingWarps from "@components/RatingWarps";
 
-import "./styles.scss";
+import "./styles.module.scss";
 
 const ProductDealCard: ProductDealCardComponent = ({
   id,
   title,
   image,
   deal_type,
+  deal_merchant,
   amazon_url,
   url_list,
   price,
@@ -19,7 +20,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   quantity_available_percent,
   final_rating,
   onClick,
-  additional_info = 'stocks_available',
+  additional_info = "stocks_available",
 }) => {
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
@@ -28,8 +29,12 @@ const ProductDealCard: ProductDealCardComponent = ({
   const [stockPercent, setStockPercent] = useState<number>();
 
   const getProductDetails = useCallback(() => {
-    // Use default product details if deal_type is amazon or none
-    if (!deal_type || /amazon|none/.test(deal_type as string)) {
+    // Use default product details if deal_merchant/deal_type is amazon, mydealz, or none
+    if (
+      !deal_type ||
+      /amazon|none/.test(deal_merchant as string) ||
+      /amazon|none/.test(deal_type as string)
+    ) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -38,13 +43,13 @@ const ProductDealCard: ProductDealCardComponent = ({
     } else {
       // Determine url and price according to product.deal_type
       const [dealKey, dealData] =
-        Object.entries(dealTypes as DealTypeMap).find(
-          ([key]) => key === deal_type
+        Object.entries(dealTypes as DealTypeSiteMap).find(
+          ([key, deal]) => deal.site === deal_merchant || key === deal_type
         ) || [];
 
       if (dealKey) {
         const matchedOtherSiteDetails = url_list?.find((otherSiteDetails) =>
-          new RegExp(dealData?.source?.name || "no-match-name", "i").test(
+          new RegExp(dealData?.site || "no-match-name", "i").test(
             otherSiteDetails?.source?.name || ""
           )
         );
@@ -60,6 +65,7 @@ const ProductDealCard: ProductDealCardComponent = ({
     }
   }, [
     deal_type,
+    deal_merchant,
     amazon_url,
     url_list,
     price,
@@ -124,12 +130,13 @@ const ProductDealCard: ProductDealCardComponent = ({
               </strong>
             </div>
             <PercentCircle
-              renderIf={additional_info === 'stocks_available'}
+              renderIf={additional_info === "stocks_available"}
               percent={stockPercent === null ? null : stockPercent || null}
             />
             <RatingWarps
-              renderIf={additional_info === 'rating'}
-              rating={final_rating || 0} />
+              renderIf={additional_info === "rating"}
+              rating={final_rating || 0}
+            />
           </div>
         </div>
       </div>

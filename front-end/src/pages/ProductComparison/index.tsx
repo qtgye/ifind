@@ -10,7 +10,7 @@ import { GlobalStateContext } from "@contexts/globalStateContext";
 import NaturalList from "@components/NaturalList";
 import IfindIcon from "@components/IfindIcon";
 
-import "./product-comparison.scss";
+import "./product-comparison.module.scss";
 import { useCategoryTree } from "@contexts/categoriesContext";
 import { useSubCategories } from "../../contexts/categoriesContext";
 import ProgressBars from "../../components/ProgressBar";
@@ -60,7 +60,7 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
 
   const observeItem = useCallback(
     (e) => {
-      if ( e instanceof HTMLElement ) {
+      if (e instanceof HTMLElement) {
         observerRef.current.observe(e);
         return () => {
           observerRef.current.unobserve(e);
@@ -96,7 +96,7 @@ const ProductComparison: React.FunctionComponent<React.PropsWithChildren<ReactNo
 
     if (content.scrollLeft != null) {
       if (scrollable < 0) {
-        content.scrollLeft += 255;
+        content.scrollLeft += 355;
       }
       else {
         content.scrollLeft += 150;

@@ -1,9 +1,10 @@
 export declare global {
   interface Window {
-    gtag: (event: string, action: string, data: {[key: string]: any}) => any;
+    gtag: (event: string, action: string, data: { [key: string]: any }) => any;
     cookieconsent?: {
       initialise: (args: any) => any;
-    }
+    };
+    Highcharts: Highcharts;
   }
 
   interface NamedComponent extends React.FunctionComponent {
@@ -13,5 +14,4 @@ export declare global {
   interface ComponentWithProvider extends NamedComponent {
     provider?: string;
   }
-
 }

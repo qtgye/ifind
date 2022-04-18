@@ -2,11 +2,11 @@ import { useLocation, useHistory } from "react-router-dom";
 import { useCallback } from "react";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, addURLParams } from "@utilities/url";
-import { useTranslation } from "@translations";
+import { useTranslation } from "@translations/index";
 import RenderIf from "@components/RenderIf";
 import { previous, next } from "./translations";
 
-import "./styles.scss";
+import "./styles.module.scss";
 
 const Pagination = ({ totalPages = 1 }: PaginationProps) => {
   const translate = useTranslation();
@@ -31,7 +31,7 @@ const Pagination = ({ totalPages = 1 }: PaginationProps) => {
           pageCount={totalPages}
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
-          initialPage={Number(page) - 1}
+          forcePage={Number(page) - 1}
           onPageChange={onPaginationPageSelect}
           disableInitialCallback={true}
         />

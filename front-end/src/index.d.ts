@@ -1,5 +1,5 @@
-import './contexts';
-import './translations';
+import './contexts/index.d';
+import './translations/index.d';
 
 declare global {
   interface GenericObject {

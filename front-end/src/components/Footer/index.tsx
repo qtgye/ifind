@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { useGlobalData } from "@contexts/globalDataContext";
 import CustomLink from "@components/Link";
+import PreloadedImage from "@components/PreloadedImage";
 
-import "./styles.scss";
+import "./styles.module.scss";
 
 const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
-  const { footerSetting, socialNetwork, contactInfo } = useGlobalData();
+  const { footerSetting, socialNetwork, contactInfo }: GlobalContextData = useGlobalData();
   const [informationLinks, setInformationLinks] = useState<FooterLink[]>([]);
   const [footerText, setFooterText] = useState("");
   const [footerFootnote, setFooterFootnote] = useState("");
@@ -33,9 +34,7 @@ const Footer = () => {
 
   useEffect(() => {
     if (socialNetwork?.social_network?.length) {
-      setSocialLinks(
-        socialNetwork.social_network.map(({ type, url }) => ({ type, url }))
-      );
+      setSocialLinks(socialNetwork.social_network);
     }
   }, [socialNetwork]);
 
@@ -47,18 +46,17 @@ const Footer = () => {
             <div className="footer__about">
               <div className="logo">
                 <a href="index.html">
-                  <img height={200} width={400} src={logo} alt="/" />
+                  <PreloadedImage src={logo} alt="/" />
                 </a>
               </div>
               <p className="text">
                 {footerText ||
                   `
-
-                                        Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
-                                        magna eros eu erat.
-                                        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
-                                        metus.
-                                    `}
+                    Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue,
+                    magna eros eu erat.
+                    Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus,
+                    metus.
+                `}
               </p>
 
               {contactInfo?.phone_number && (
@@ -98,7 +96,7 @@ const Footer = () => {
                 {socialLinks.map(({ url, type }) => (
                   <li key={url}>
                     <a href={url}>
-                      <i className={`ti-${type}`}></i>
+                      <i className={`fa fa-${type}`}></i>
                     </a>
                   </li>
                 ))}

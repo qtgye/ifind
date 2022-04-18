@@ -1,8 +1,8 @@
 import { gql } from "apollo-boost";
 
 const productsByDealsQuery = gql`
-  query ProductsByDealsQuery {
-    productsByDeals {
+  query ProductsByDealsQuery($offer_id: String) {
+    productsByDeals(offer_category: $offer_id) {
       deal_type {
         name
         source {
@@ -12,7 +12,17 @@ const productsByDealsQuery = gql`
           language
           label
         }
+        last_run
+        nav_label {
+          label
+          language
+        }
+        nav_icon {
+          type
+          icon
+        }
       }
+      total_products
       products {
         id
         amazon_url
@@ -22,6 +32,8 @@ const productsByDealsQuery = gql`
         quantity_available_percent
         title
         deal_type
+        deal_merchant
+        deal_quantity_available_percent
         image
         url_list {
           source {

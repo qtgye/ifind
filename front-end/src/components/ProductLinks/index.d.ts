@@ -1,4 +1,4 @@
-declare interface URLListItemWithKey extends ComponentAtomsUrlWithType {
+declare interface URLListItemWithKey extends Partial<ComponentAtomsUrlWithType> {
   key: string;
   id: string;
 }

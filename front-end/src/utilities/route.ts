@@ -1,35 +1,48 @@
-import { useRouteMatch, useLocation } from "react-router";
+import {
+  matchPath
+} from "react-router";
 import { routesExtraConfig } from "@config/routes";
 import { useLanguages } from "@contexts/languagesContext";
+import { useLocation, useParams } from "@contexts/nextRouter";
+import { useCallback } from "react";
 
 export const routeWithLanguage = (path: string) => `/:language${path}`;
 
 export const useCurrentRouteMatch = () => {
-  const { pathname } = useLocation();
-  const match = useRouteMatch({
-    path: pathname.replace(/\/[^/]+/, "/:language"),
-  });
-  return match;
+  const { pathname, route } = useLocation();
+  const params = useParams();
+
+  return {
+    params,
+    path: route || '',
+    url: pathname,
+  }
 };
 
 export const useCurrentRouteConfig = () => {
-  const match = useCurrentRouteMatch();
-  const matchedRouteConfig = routesExtraConfig.find(
-    ({ path }: RouteConfig) => path === match?.path?.replace(/\/$/, "")
+  const location = useLocation();
+  const matchedRouteConfig = routesExtraConfig.find(({ path }: RouteConfig) =>
+    matchPath(location.pathname, {
+      path,
+    })
   );
-  console.log({ match, matchedRouteConfig });
-  return matchedRouteConfig || null;
+  return matchedRouteConfig;
 };
 
 export const useLinkWithLanguage = () => {
   const { userLanguage } = useLanguages();
-  return (absoluteLink: string = "/") => `/${userLanguage}${absoluteLink}`;
+  return useCallback(
+    (absoluteLink: string = "/") => `/${userLanguage}${absoluteLink}`,
+    [userLanguage]
+  );
 };
 
 export const useIsRouteMatch = () => {
   const currentRouteMatch = useCurrentRouteMatch();
 
   return (route: string = "/", omitLanguage: boolean = false): boolean =>
-    currentRouteMatch?.path.replace(/\/$/, '') ===
-    (omitLanguage ? route.replace(/\/$/, '') : routeWithLanguage(route).replace(/\/$/, ''));
+    currentRouteMatch?.path.replace(/\/$/, "") ===
+    (omitLanguage
+      ? route.replace(/\/$/, "")
+      : routeWithLanguage(route).replace(/\/$/, ""));
 };

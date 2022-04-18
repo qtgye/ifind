@@ -1,4 +1,4 @@
-declare interface IfindIconProps extends React.HTMLAttributes<SVGSVGElement> {
+declare interface IfindIconProps extends React.HTMLAttributes<HTMLImageElement> {
   icon: string;
   dark?: boolean;
 }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import GeneralTemplate from "@templates/GeneralTemplate";
 import { withComponentName } from "@utilities/component";
@@ -12,10 +12,10 @@ import Pagination from "@components/Pagination";
 import IfindLoading from "@components/IfindLoading";
 import ProductModal from "@components/ProductModal";
 
-import "./styles.scss";
+import "./styles.module.scss";
 
 const Gifts = () => {
-  const { tags = "" } = useSearchParams();
+  const { tags = "all" } = useSearchParams();
   const { loading: isTagsLoading } = useTags();
   const { pathname, search } = useLocation();
   const history = useHistory();
@@ -26,11 +26,16 @@ const Gifts = () => {
   }: GiftIdeasContextData = useGiftIdeas();
   const [modalVisible, setModalVisible] = useState(false);
   const [activeProduct, setActiveProduct] = useState<Product>();
-  const selectedTags = tags.split(",").filter(Boolean);
+  const [activeTag = null] = tags.split(",").filter(Boolean);
 
   const onTagsUpdate = useCallback(
-    (tags: (string | number)[]) => {
-      history.push(addURLParams(pathname + search, { tags, page: 1 }));
+    (activeTag: string | number) => {
+      history.push(
+        addURLParams(pathname + search, {
+          tags: activeTag ? [activeTag] : [],
+          page: 1,
+        })
+      );
     },
     [history, pathname, search]
   );
@@ -44,6 +49,13 @@ const Gifts = () => {
     setModalVisible(false);
   }, []);
 
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [products]);
+
   const classNames = [
     "gifts",
     isGiftsLoading || isTagsLoading ? "gifts--loading" : "",
@@ -56,7 +68,7 @@ const Gifts = () => {
       <div className={classNames}>
         <div className="gifts__container">
           <div className="gifts__columns">
-            <TagsFilter selectedTags={selectedTags} onUpdate={onTagsUpdate} />
+            <TagsFilter activeTag={activeTag} onUpdate={onTagsUpdate} />
             <div className="gifts__products">
               <div className="gifts__products-grid">
                 {products?.map((product) => (

@@ -5,16 +5,20 @@ import React, {
   useContext,
   useEffect,
 } from "react";
+import { useParams } from "react-router";
+// import { useParams } from "@contexts/nextRouter";
 
 export const GlobalStateContext = createContext<GlobalStateContextData>({});
 
 export const GlobalStateContextProvider = ({
   children,
 }: React.PropsWithChildren<React.ReactNode>) => {
+  const { offer_id } = useParams<AllPageParams>();
   const [activeCategory, setActiveCategory] = useState(null);
   const [focusedCategory, setFocusedCategory] = useState(0);
   const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
   const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(true);
+  const [activeOffer, setActiveOffer] = useState(offer_id || "");
 
   const onCategoryClick = useCallback((id) => {
     setFocusedCategory(id);
@@ -43,7 +47,7 @@ export const GlobalStateContextProvider = ({
         0,
         parseFloat(document.body.style.getPropertyValue("--body-fixed-scroll"))
       );
-      document.documentElement.style.removeProperty('scroll-behavior');
+      document.documentElement.style.removeProperty("scroll-behavior");
     } else {
       document.body.style.setProperty(
         "--body-fixed-scroll",
@@ -63,6 +67,8 @@ export const GlobalStateContextProvider = ({
         dealTypeName,
         onOffersClick,
         toggleBodyScroll,
+        activeOffer,
+        setActiveOffer,
       }}
     >
       {children}

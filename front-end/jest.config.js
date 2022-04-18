@@ -1,4 +1,3 @@
-const path = require('path');
 const { webpackAliases } = require('./config/paths');
 
 const projectRoot = process.cwd();
