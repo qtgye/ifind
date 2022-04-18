@@ -1,3 +1,3 @@
-import OfferPage from "pages/[language]/offers/[offer_id]";
+import OfferPage from "pages/[language]/[page]/[offer_id]";
 
 export default OfferPage;

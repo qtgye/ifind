@@ -1,10 +1,3 @@
-//import React from 'react';
-// import {
-//     CarouselProvider, Slider, Slide,
-//     ButtonBack, ButtonNext,
-//     ImageWithZoom
-// } from 'pure-react-carousel';
-// import 'pure-react-carousel/dist/react-carousel.es.css';
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { useLanguages } from "providers/languagesContext";

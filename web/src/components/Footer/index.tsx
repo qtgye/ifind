@@ -5,7 +5,7 @@ import PreloadedImage from "components/PreloadedImage";
 const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
-  const { footerSetting, socialNetwork, contactInfo }: GlobalContextData =
+  const { footerSetting, socialNetwork, contactInfo, userLanguage } =
     useGlobalData();
   const [informationLinks, setInformationLinks] = useState<FooterLink[]>([]);
   const [footerText, setFooterText] = useState("");
@@ -75,7 +75,14 @@ const Footer = () => {
                   (infoRoute) =>
                     infoRoute && (
                       <li key={infoRoute.path}>
-                        <a href={infoRoute?.path || "/"}>{infoRoute.label}</a>
+                        <a
+                          href={
+                            `/${userLanguage}${infoRoute?.path}` ||
+                            `/${userLanguage}`
+                          }
+                        >
+                          {infoRoute.label}
+                        </a>
                       </li>
                     )
                 )}

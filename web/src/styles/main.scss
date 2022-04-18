@@ -12,7 +12,9 @@
 @import "components/BreadCrumbs/styles";
 @import "components/Footer/styles";
 @import "components/NewsLetter/styles";
+@import "components/HomeCarousel/homecarousel";
 
 // Pages
-@import "pages/[language]/offers/styles";
+@import "pages/[language]/[page]/styles";
 @import "pages/[language]/contact";
+@import "pages/[language]/about-us";
