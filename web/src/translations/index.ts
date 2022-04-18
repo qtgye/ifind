@@ -1,3 +1,4 @@
+import { useGlobalData } from "providers/globalDataContext";
 import { useLanguages } from "providers/languagesContext";
 
 // Translations
@@ -17,7 +18,7 @@ const applyTranslationVariables = (
 };
 
 export const useTranslation = () => {
-  const { userLanguage } = useLanguages();
+  const { userLanguage } = useGlobalData();
 
   return (
     translationMap: TranslationMap = {},

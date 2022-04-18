@@ -13,7 +13,7 @@ export const OffersSideNavContext = createContext<OfferSideNavContext>({});
 export const OffersSideNavProvider = ({
   children,
 }: PropsWithChildren<ReactNode>) => {
-  const { activeOffer } = useOffersCategories();
+  const { activeOffer, offersCategories } = useOffersCategories();
   const { productsByDeals = [] } = useProductsByDeals();
   const items: OffersSideNavItem[] = activeOffer
     ? productsByDeals
@@ -22,8 +22,6 @@ export const OffersSideNavProvider = ({
         )
         ?.map(({ deal_type }) => deal_type)
     : [];
-
-  console.log({ productsByDeals, activeOffer, items });
 
   return (
     <OffersSideNavContext.Provider value={{ items }}>

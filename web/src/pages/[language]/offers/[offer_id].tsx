@@ -1,29 +1,53 @@
 import { NextPageContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
+
 import { useGlobalState } from "providers/globalStateContext";
 import {
   getOffersCategories,
   OffersCategoriesProvider,
 } from "providers/offersCategoriesContext";
-import {
-  OffersSideNavProvider
-} from 'components/OffersSideNav/context'
+import RenderIf from "components/RenderIf";
+import ProductDealsGrid from "components/ProductDealsGrid";
+import ProgressBars from "components/ProgressBar";
+import { OffersSideNavProvider } from "components/OffersSideNav/context";
 import {
   getProductsByDeals,
   ProductsByDealsContextProvider,
+  useProductsByDeals,
 } from "providers/productsByDealsContext";
 import { useEffect } from "react";
 import GeneralTemplate from "templates/GeneralTemplate";
 
 function Offer() {
+  const { loading = false, productsByDeals } = useProductsByDeals();
+  const icon = "/images/loading.png";
+
   return (
-    <>
+    <GeneralTemplate>
       <Head>
         <title>Offers Page</title>
       </Head>
-      <GeneralTemplate>Offer Page</GeneralTemplate>
-    </>
+      <div className="offers">
+        <div className="offers__container">
+          <RenderIf condition={loading}>
+            <span className="loading">
+              <img src={icon} className="loading-icon" alt="icon" />
+            </span>
+            <div className="progress">
+              <ProgressBars />
+            </div>
+          </RenderIf>
+          {!loading &&
+            (productsByDeals || []).map((productsByDeal) => (
+              <ProductDealsGrid
+                key={productsByDeal.deal_type.name}
+                {...productsByDeal}
+              />
+            ))}
+        </div>
+      </div>
+    </GeneralTemplate>
   );
 }
 
@@ -58,10 +82,11 @@ export default function OfferWrapped({
 OfferWrapped.getInitialProps = async ({ query }: NextPageContext) => {
   const { offer_id } = query;
 
-  const [{ offersCategories }, { productsByDeals, ...data }] = await Promise.all([
-    getOffersCategories(),
-    getProductsByDeals((offer_id || "") as string),
-  ]);
+  const [{ offersCategories }, { productsByDeals, ...data }] =
+    await Promise.all([
+      getOffersCategories(),
+      getProductsByDeals((offer_id || "") as string),
+    ]);
 
   return { offersCategories, productsByDeals };
 };

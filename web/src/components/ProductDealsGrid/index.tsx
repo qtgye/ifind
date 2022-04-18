@@ -1,13 +1,11 @@
 import { useContext, useEffect, useRef, useCallback, useState } from "react";
-import { dateTime } from "ifind-utilities";
-import { GlobalStateContext } from "providers/globalStateContext";
+import { dateTime } from "ifind-utils";
+import { useGlobalState } from "providers/globalStateContext";
 import ProductDealCard from "components/ProductDealCard";
 import { useTranslation } from "translations/index";
 import RenderIf from "components/RenderIf";
 
 import { updatedTime, loadMoreButton } from "./translations";
-
-
 
 const INITIAL_PRODUCTS_IN_VIEW = 20;
 const PRODUCTS_PER_LOAD = 12;
@@ -18,7 +16,7 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   total_products = 0,
 }) => {
   const translate = useTranslation();
-  const { dealTypeName } = useContext(GlobalStateContext);
+  const { dealTypeName } = useGlobalState();
   const offersRef = useRef<HTMLDivElement | null>();
   const [productsInView, setProductsInView] = useState<Product[]>(
     products.slice(0, INITIAL_PRODUCTS_IN_VIEW)
