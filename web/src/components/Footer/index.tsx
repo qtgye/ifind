@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useGlobalData } from "providers/globalDataContext";
-import CustomLink from "components/Link";
 import PreloadedImage from "components/PreloadedImage";
-
-
 
 const logo = "/images/NewLogowith1Warp_White.png";
 
 const Footer = () => {
-  const { footerSetting, socialNetwork, contactInfo }: GlobalContextData = useGlobalData();
+  const { footerSetting, socialNetwork, contactInfo }: GlobalContextData =
+    useGlobalData();
   const [informationLinks, setInformationLinks] = useState<FooterLink[]>([]);
   const [footerText, setFooterText] = useState("");
   const [footerFootnote, setFooterFootnote] = useState("");
@@ -77,9 +75,7 @@ const Footer = () => {
                   (infoRoute) =>
                     infoRoute && (
                       <li key={infoRoute.path}>
-                        <CustomLink to={infoRoute?.path || "/"}>
-                          {infoRoute.label}
-                        </CustomLink>
+                        <a href={infoRoute?.path || "/"}>{infoRoute.label}</a>
                       </li>
                     )
                 )}
