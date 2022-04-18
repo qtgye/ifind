@@ -1,0 +1,100 @@
+@import "@base/scss";
+
+.product-deals-grid {
+  margin-bottom: 50px;
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: color(gray-darker);
+    border-block: 1px solid color(white);
+    padding: 10px 10px 3px;
+    color: color(white);
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: var(--corner-radius) var(--corner-radius) 0 0;
+    position: sticky;
+    top: 61px;
+    z-index: 1;
+
+    @include sm-max {
+      width: auto;
+      margin: 0 -12px;
+    }
+
+    @include md {
+      padding: 10px;
+    }
+  }
+
+  &__update-time {
+    display: inline-flex;
+    align-items: center;
+    color: color(gray);
+    text-transform: none;
+    font-weight: normal;
+    font-size: .7em;
+    border-top: 1px solid color(gray);
+    margin-top: 3px;
+    padding-top: 3px;
+
+    @include breakpoint(md) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      color: color(gray);
+      margin: 0;
+      padding: 0 10px;
+      border-bottom: 1px solid color(gray);
+      border-left: 1px solid color(gray);
+      border-right: 1px solid color(gray);
+    }
+  }
+
+  &__items {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: 10px;
+    overflow: visible;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+
+    @include md {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 12px;
+    }
+
+    @include xl {
+      grid-template-columns: repeat(4, 1fr);
+      column-gap: 20px;
+    }
+  }
+
+  &__load-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  &__load-more-button {
+    display: inline-flex;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    overflow: hidden;
+    border-radius: 100px;
+    border: 0;
+    background-color: color(dark-red);
+    color: color(white);
+    transition: all .3s;
+    font-size: 20px;
+
+    &:hover {
+      background-color: darken(color(dark-red), 5%);
+    }
+  }
+}

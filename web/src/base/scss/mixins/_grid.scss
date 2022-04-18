@@ -1,0 +1,36 @@
+@mixin grid($breakpoint: all) {
+  display: grid;
+
+  @if $breakpoint == all {
+    @each $breakpoint, $column-count in $grid-column-counts {
+      $gap: map-get($grid-gaps, $breakpoint);
+
+      @include breakpoint($breakpoint) {
+        grid-template-columns: repeat(#{$column-count}, 1fr);
+        column-gap: $gap;
+      }
+    }
+  } @else {
+    @if (map-has-key($grid-column-counts, $breakpoint)) {
+      $columns: map-get($grid-column-counts, $breakpoint);
+      $gap: map-get($grid-gaps, $breakpoint);
+      grid-template-columns: repeat(#{$columns}, 1fr);
+      column-gap: $gap;
+    }
+  }
+}
+
+@mixin col-span($columns: full) {
+  @if ( $columns == full ) {
+    grid-column: 1 / -1;
+  }
+  @else if (type-of($columns) == number) {
+    grid-column: auto / span $columns;
+  }
+}
+
+@mixin col-start($columns: 1) {
+  @if (type-of($columns) == number) {
+    grid-column-start: $columns;
+  }
+}

@@ -1,0 +1,26 @@
+@import 'base/scss';
+
+.breadcrumbs {
+    width: 100%;
+    height: 100px;
+}
+
+.bread-inner {
+    margin-top: 6px;
+}
+
+.bread-list {
+    display: flex;
+    position: absolute;
+    left: 16%;
+    font-size: 12px;
+
+    @include small_laptop {
+        left: 12%;
+    }
+
+    @include xs_tablet {
+        left: 8%;
+    }
+
+}
