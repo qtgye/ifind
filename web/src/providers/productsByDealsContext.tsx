@@ -5,7 +5,7 @@ export const ProductsByDealsContext = createContext<ProductsByDealsValues>({});
 
 export const ProductsByDealsContextProvider = ({
   children,
-  productsByDeals = []
+  productsByDeals = [],
 }: ProductsByDealsContextProviderProps) => {
   return (
     <ProductsByDealsContext.Provider
@@ -21,7 +21,9 @@ export const ProductsByDealsContextProvider = ({
 // Supply a name in order to check for it outside
 ProductsByDealsContextProvider.providerName = "ProductsByDealsContextProvider";
 
-export const getProductsByDeals = async(offer_id: string = '') => gqlFetch<ProductsByDealsPayload>(`
+export const getProductsByDeals = async (offer_id: string = "") =>
+  gqlFetch<ProductsByDealsPayload>(
+    `
   query ProductsByDealsQuery($offer_id: String) {
     productsByDeals(offer_category: $offer_id) {
       deal_type {
@@ -73,7 +75,8 @@ export const getProductsByDeals = async(offer_id: string = '') => gqlFetch<Produ
       }
     }
   }
-`)
+`,
+    { offer_id }
+  );
 
 export const useProductsByDeals = () => useContext(ProductsByDealsContext);
-

@@ -17,7 +17,7 @@ const IfindIcon = ({ icon, dark, className, ...props }: IfindIconProps) => {
       <div
         className="ifind-icon__image"
         style={{
-          ["--icon-path" as string]: `url(/icons/${iconName}.svg)`,
+          ["--icon-path" as string]: `url('/icons/${iconName}.svg')`,
         }}
       />
     </div>

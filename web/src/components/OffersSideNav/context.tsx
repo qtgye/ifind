@@ -1,3 +1,5 @@
+import { useOffersCategories } from "providers/offersCategoriesContext";
+import { useProductsByDeals } from "providers/productsByDealsContext";
 import {
   createContext,
   PropsWithChildren,
@@ -11,10 +13,20 @@ export const OffersSideNavContext = createContext<OfferSideNavContext>({});
 export const OffersSideNavProvider = ({
   children,
 }: PropsWithChildren<ReactNode>) => {
-  const [items, setItems] = useState<OffersSideNavItem[]>([]);
+  const { activeOffer } = useOffersCategories();
+  const { productsByDeals = [] } = useProductsByDeals();
+  const items: OffersSideNavItem[] = activeOffer
+    ? productsByDeals
+        ?.filter(({ deal_type }) =>
+          activeOffer.dealTypes?.includes(deal_type.name || "")
+        )
+        ?.map(({ deal_type }) => deal_type)
+    : [];
+
+  console.log({ productsByDeals, activeOffer, items });
 
   return (
-    <OffersSideNavContext.Provider value={{ items, setItems }}>
+    <OffersSideNavContext.Provider value={{ items }}>
       {children}
     </OffersSideNavContext.Provider>
   );

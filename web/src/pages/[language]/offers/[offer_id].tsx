@@ -7,6 +7,9 @@ import {
   OffersCategoriesProvider,
 } from "providers/offersCategoriesContext";
 import {
+  OffersSideNavProvider
+} from 'components/OffersSideNav/context'
+import {
   getProductsByDeals,
   ProductsByDealsContextProvider,
 } from "providers/productsByDealsContext";
@@ -42,18 +45,20 @@ export default function OfferWrapped({
   }, [offer_id, offersCategories, setActiveOffer]);
 
   return (
-    <OffersCategoriesProvider offersCategories={offersCategories}>
-      <ProductsByDealsContextProvider productsByDeals={productsByDeals}>
-        <Offer {...pageProps} />
-      </ProductsByDealsContextProvider>
-    </OffersCategoriesProvider>
+    <ProductsByDealsContextProvider productsByDeals={productsByDeals}>
+      <OffersCategoriesProvider offersCategories={offersCategories}>
+        <OffersSideNavProvider>
+          <Offer {...pageProps} />
+        </OffersSideNavProvider>
+      </OffersCategoriesProvider>
+    </ProductsByDealsContextProvider>
   );
 }
 
 OfferWrapped.getInitialProps = async ({ query }: NextPageContext) => {
   const { offer_id } = query;
 
-  const [{ offersCategories }, { productsByDeals }] = await Promise.all([
+  const [{ offersCategories }, { productsByDeals, ...data }] = await Promise.all([
     getOffersCategories(),
     getProductsByDeals((offer_id || "") as string),
   ]);

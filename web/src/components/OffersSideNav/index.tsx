@@ -5,8 +5,6 @@ import RenderIf from "components/RenderIf";
 import IfindIcon from "components/IfindIcon";
 import { useOffersSideNav } from "./context";
 
-
-
 const OffersSideNav = ({
   activeDealTypeName,
   onDealClick,

@@ -1,5 +1,6 @@
 declare interface OffersCategoriesContext {
   offersCategories?: OffersCategory[];
+  activeOffer?: OffersCategory;
   loading?: boolean;
 }
 
