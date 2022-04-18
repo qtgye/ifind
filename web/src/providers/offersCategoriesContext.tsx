@@ -19,7 +19,7 @@ export const OffersCategoriesProvider = ({
 export const useOffersCategories = () => useContext(OffersCategoriesContext);
 
 export const getOffersCategories = async () =>
-  gqlFetch(`
+  gqlFetch<OfferCategoriesPayload>(`
     query OffersCategoriesQuery {
       offersCategories {
         id

@@ -21,7 +21,7 @@ export const ProductsByDealsContextProvider = ({
 // Supply a name in order to check for it outside
 ProductsByDealsContextProvider.providerName = "ProductsByDealsContextProvider";
 
-export const getProductsByDeals = async(offer_id: string = '') => gqlFetch(`
+export const getProductsByDeals = async(offer_id: string = '') => gqlFetch<ProductsByDealsPayload>(`
   query ProductsByDealsQuery($offer_id: String) {
     productsByDeals(offer_category: $offer_id) {
       deal_type {

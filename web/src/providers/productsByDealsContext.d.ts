@@ -17,3 +17,7 @@ declare interface ProductsByDealsValues {
 declare interface DealTypeMap {
   [dealKey: string]: DealType;
 }
+
+declare interface ProductsByDealsPayload {
+  productsByDeals: ProductsByDeal[]
+}

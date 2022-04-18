@@ -7,12 +7,10 @@ import { useLinkWithLanguage } from "utilities/route";
 
 import HeaderSideNav from "./HeaderSideNav";
 
-
-
 const HeaderNav = () => {
   const { activeOffer } = useGlobalState();
-  const linkWithLanguage = useLinkWithLanguage();
   const { offersCategories } = useOffersCategories();
+  const linkWithLanguage = useLinkWithLanguage();
   const [navPillsItems, setNavPillsItems] = useState<NavPillItemProps[]>([]);
 
   useEffect(() => {

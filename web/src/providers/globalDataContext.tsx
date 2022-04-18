@@ -81,7 +81,7 @@ export const GlobalContextProvider = ({
   data: GlobalContextData;
 }) => {
   const {
-    query: { language },
+    query: { language = "en" },
   } = useRouter();
   const [globalData] = useState<Partial<GlobalContextData>>(data);
 

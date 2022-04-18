@@ -7,13 +7,19 @@ import {
   getGlobalData,
   GlobalContextProvider,
 } from "providers/globalDataContext";
+import {
+  GlobalStateContextProvider,
+} from 'providers/globalStateContext';
 
 function MyApp({ Component, pageProps, globalData, query }: AppPropsExtended) {
+
   // Wrap page component with GlobalContextProvider
   // to allow usage of useGlobalContext withing pages and components
   return (
     <GlobalContextProvider data={globalData}>
-      <Component {...pageProps} query={query} />;
+      <GlobalStateContextProvider>
+        <Component {...pageProps} query={query} />;
+      </GlobalStateContextProvider>
     </GlobalContextProvider>
   );
 }

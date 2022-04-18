@@ -5,26 +5,29 @@ import React, {
   useContext,
   useEffect,
 } from "react";
-import { useParams } from "react-router";
-// import { useParams } from "providers/nextRouter";
+import { useRouter } from "next/router";
 
 export const GlobalStateContext = createContext<GlobalStateContextData>({});
 
 export const GlobalStateContextProvider = ({
   children,
 }: React.PropsWithChildren<React.ReactNode>) => {
-  const { offer_id } = useParams<AllPageParams>();
+  const {
+    query: { offer_id },
+  } = useRouter();
   const [activeCategory, setActiveCategory] = useState(null);
   const [focusedCategory, setFocusedCategory] = useState(0);
   const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
   const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(true);
-  const [activeOffer, setActiveOffer] = useState(offer_id || "");
+  const [activeOffer, setActiveOffer] = useState<string>(
+    (offer_id as string) || ""
+  );
 
-  const onCategoryClick = useCallback((id) => {
+  const onCategoryClick = useCallback((id: number) => {
     setFocusedCategory(id);
   }, []);
 
-  const onOffersClick = useCallback((name) => {
+  const onOffersClick = useCallback((name: string) => {
     setDealTypeName(name);
   }, []);
 

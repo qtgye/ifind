@@ -2,8 +2,8 @@ import {
   matchPath
 } from "react-router";
 import { routesExtraConfig } from "config/routes";
-import { useLanguages } from "providers/languagesContext";
 import { useCallback } from "react";
+import { useGlobalData } from "providers/globalDataContext";
 
 export const routeWithLanguage = (path: string) => `/:language${path}`;
 
@@ -31,7 +31,7 @@ export const useCurrentRouteConfig = () => {
 };
 
 export const useLinkWithLanguage = () => {
-  const { userLanguage } = useLanguages();
+  const { userLanguage } = useGlobalData();
   return useCallback(
     (absoluteLink: string = "/") => `/${userLanguage}${absoluteLink}`,
     [userLanguage]

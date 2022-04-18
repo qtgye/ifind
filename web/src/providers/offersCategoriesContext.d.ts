@@ -11,3 +11,7 @@ declare interface OffersCategoriesProviderProps {
   children: ReactNode;
   offersCategories: OffersCategory[];
 }
+
+declare interface OfferCategoriesPayload {
+  offersCategories: OffersCategory[];
+}
