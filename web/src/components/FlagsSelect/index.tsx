@@ -3,8 +3,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import PreloadedImage from "components/PreloadedImage";
 import useBodyClick from "utilities/useBodyClick";
 
-
-
 const FlagSelect = ({
   className,
   selected,
@@ -15,7 +13,7 @@ const FlagSelect = ({
   const flagSelectRef = useRef<HTMLDivElement>(null);
   const onBodyClick = useBodyClick();
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedCountry, setSelectedCountry] = useState<string>('');
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const [countryLabels, setCountryLabels] = useState<FlagSelectCountryLabel[]>(
     []
   );
@@ -109,8 +107,8 @@ const FlagSelect = ({
   }, [onBodyClick, bodyClickHandler]);
 
   useEffect(() => {
-    setSelectedCountry(selected || '');
-  }, [ selected ]);
+    setSelectedCountry(selected || "");
+  }, [selected]);
 
   return (
     <div className={classNames} ref={flagSelectRef}>

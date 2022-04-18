@@ -1,1 +1,1 @@
-import './hocs/withConditionalRender';
+import './hocs/withConditionalRender.d';
