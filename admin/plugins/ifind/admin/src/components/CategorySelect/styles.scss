@@ -2,4 +2,8 @@
   .input-block:first-child {
     margin-top: 0;
   }
+
+  .custom-select__label-text {
+    display: flex;
+  }
 }

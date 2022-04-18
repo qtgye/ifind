@@ -1,6 +1,7 @@
 const moment = require("moment");
 const { compareProductChanges } = appRequire("helpers/productChanges");
-const { getProductDetails } = appRequire("helpers/product");
+const { getProductDetails, extractProductDealData } =
+  appRequire("helpers/product");
 const { applyCustomFormula } = appRequire("helpers/productAttribute");
 const { getState, setProductChangeParams } = appRequire("helpers/redux");
 
@@ -95,18 +96,30 @@ module.exports = async (data, id) => {
     })(),
   ]);
 
+  // If the product is a deal, compute for the additional deal-specific data
+  if (!/none/i.test(data.deal_type)) {
+    const dealData = extractProductDealData(data);
+
+    if ( dealData ) {
+      if (dealData.quantity_available_percent) {
+        data.deal_quantity_available_percent = dealData.quantity_available_percent;
+      }
+    }
+
+  }
+
   // Change product status to Draft if some issues arised from the scraper
-  if ( Object.values(data.product_issues || {}).some(Boolean) ) {
-    data.status = 'draft';
+  if (Object.values(data.product_issues || {}).some(Boolean)) {
+    data.status = "draft";
   }
   // Else, set product as published
   else {
-    data.status = 'published';
+    data.status = "published";
   }
 
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
-  if ( data.attrs_rating && data.attrs_rating.length ) {
+  if (data.attrs_rating && data.attrs_rating.length) {
     data.attrs_rating = data.attrs_rating.map((attrRating) => {
       const matchedProductAttribute = productAttributes.find(
         ({ id }) => attrRating.product_attribute == id
@@ -114,7 +127,10 @@ module.exports = async (data, id) => {
 
       if (matchedProductAttribute) {
         // Autofill release date if applicable
-        if (/release/i.test(matchedProductAttribute.name) && data.release_date) {
+        if (
+          /release/i.test(matchedProductAttribute.name) &&
+          data.release_date
+        ) {
           attrRating.use_custom_formula = true;
           attrRating.min = data.release_date;
           attrRating.max = moment.utc().subtract(3, "years").toISOString();

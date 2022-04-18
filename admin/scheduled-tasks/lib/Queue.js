@@ -27,8 +27,6 @@ const Queue = {
       }
 
       const oldNextRun = task.next_run;
-      const isPastCurrentTime = oldNextRun < currentTime;
-      const isDueToRun = this.isTaskDueToRun(task);
 
       if (task.next_run < currentTime && !this.isTaskDueToRun(task)) {
         EVENTEMITTER.emit(

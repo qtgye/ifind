@@ -4,7 +4,7 @@ import { useDebounce } from "react-use";
 import RenderIf from "@components/RenderIf";
 
 import NavPillItem from "./item";
-import "./styles.module.scss";
+import "./styles.scss";
 
 const NavPills = ({ items = [] }: NavPillsProps) => {
   const [showLeftButton, setShowLeftButton] = useState(false);

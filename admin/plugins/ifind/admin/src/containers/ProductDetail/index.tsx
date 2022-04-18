@@ -20,8 +20,8 @@ const productValidationRules = {
     validationRules.required('Please select website tab'),
   ],
   amazon_url: validationRules.set([
-    validationRules.required(),
-    validationRules.url(),
+    // validationRules.required(),
+    // validationRules.url(),
   ], 'Please provide a valid Amazon Product URL'),
   // image: validationRules.set([
   //   validationRules.required('Please provide an image'),

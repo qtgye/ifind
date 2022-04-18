@@ -1,6 +1,6 @@
 import { useTranslation, navigation } from '@translations/index';
 
-import './breadcrumbs.module.scss';
+import './breadcrumbs.scss';
 
 const BreadCrumbs = () => {
   const translate = useTranslation();

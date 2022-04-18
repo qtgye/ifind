@@ -1,11 +1,8 @@
-/**
- * TODO
- * - Drop the use of status. Get directly from the switch instead.
- */
 const { existsSync } = require("fs-extra");
 const childProcess = require("child_process");
 const path = require("path");
 const EventEmitter = require("events");
+const moment = require("moment");
 
 const { frequencies } = require("../config");
 const Database = require("./Database");
@@ -15,8 +12,8 @@ const Model = require("./Model");
 const tasksRoot = path.resolve(__dirname, "../tasks");
 const EVENT_EMITTER_KEY = Symbol();
 
-const STATUS_RUNNING = 'running';
-const STATUS_STOPPED = 'stopped';
+const STATUS_RUNNING = "running";
+const STATUS_STOPPED = "stopped";
 
 /**
  * Task base class
@@ -35,11 +32,14 @@ class Task extends Model {
     this.name = config.name;
     this.schedule = config.schedule;
     this.next_run = config.next_run;
+    this.last_run = config.last_run;
+    this.meta = config.meta;
+    this.timeoutMs = Number(config.timeout_minutes || 0) * 60 * 1000;
     this.status = config.status || STATUS_STOPPED;
 
     // Get taskModulePath
     this.taskModulePath = path.resolve(tasksRoot, this.id);
-    this.taskModuleFile = path.resolve(this.taskModulePath, 'index.js');
+    this.taskModuleFile = path.resolve(this.taskModulePath, "index.js");
     this.hasModule = existsSync(this.taskModuleFile);
 
     // Event emitter
@@ -63,33 +63,46 @@ class Task extends Model {
     this[EVENT_EMITTER_KEY].on(event, handler);
   }
 
-  start() {
-    if ( this.hasModule && !this.running ) {
-      this.process = childProcess.fork(this.taskModuleFile, [], { stdio: 'pipe' });
-
-      this.computeNextRun();
-      this.setRunning();
-
-      this.process.stdout.on('data', (data) => this.log(data.toString()));
-      this.process.stderr.on('data', (data) => this.log(data.toString(), 'ERROR'));
-
-      this.process.on('error', (data) => {
-        this[EVENT_EMITTER_KEY].emit('error', data);
+  async start() {
+    if (this.timeoutMs) {
+      // Automatically stop task if its running more than the timeout
+      setTimeout(() => {
+        this.log(`Stopping task due to timeout: ${this.id}`, 'ERROR');
         this.stop();
+      }, this.timeoutMs);
+    }
+
+    console.log("Starting task");
+    if (this.hasModule && !this.running) {
+      this.process = childProcess.fork(this.taskModuleFile, [], {
+        stdio: "pipe",
       });
 
-      this.process.on('exit', () => {
-        console.log('process exits');
-        this[EVENT_EMITTER_KEY].emit('exit');
-        this.setStopped();
+      await this.computeNextRun();
+      await this.setRunning();
+
+      this.process.stdout.on("data", (data) => this.log(data.toString()));
+      this.process.stderr.on("data", (data, additionalData) => {
+        const errorData = data
+          .toString()
+          .trim()
+          .replace(/[\r\n]/g, "<br>");
+        this.log(errorData, "ERROR");
+        this[EVENT_EMITTER_KEY].emit("error", errorData);
+      });
+
+      this.process.on("exit", async (exitCode) => {
+        this[EVENT_EMITTER_KEY].emit("exit", exitCode);
+        await this.setStopped();
+        await this.saveLastRun();
         this.process = null;
       });
     }
   }
 
   stop() {
-    if ( this.running && this.process ) {
-      this.process.kill();
+    if (this.running && this.process) {
+      this.process.kill("SIGINT");
     }
   }
 
@@ -121,6 +134,14 @@ class Task extends Model {
 
     // Save to DB
     Database.update(Task.model, this.id, { next_run: this.next_run });
+  }
+
+  // Saves last_run
+  async saveLastRun() {
+    const now = moment.utc().valueOf();
+
+    // Save to DB
+    Database.update(Task.model, this.id, { last_run: now });
   }
 
   // Adjusts next run by the given milliseconds
@@ -163,7 +184,7 @@ Task.getAll = function (willInitialize = false) {
     // Get alll database entries
     Database.getAll(this.model)
       // Instantiate as Task instances
-      .map(taskData => Task.initializeWithData(taskData, willInitialize))
+      .map((taskData) => Task.initializeWithData(taskData, willInitialize))
   );
 };
 

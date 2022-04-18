@@ -17,6 +17,7 @@ query GetScheduledTask ( $task: String! ) {
       type
       message
     }
+    canRun
   }
 }
 `;

@@ -101,9 +101,10 @@
       "type": "enumeration",
       "enum": [
         "none",
+        "aliexpress_value_deals",
         "amazon_flash_offers",
         "ebay_wow_offers",
-        "aliexpress_value_deals"
+        "mydealz_highlights"
       ],
       "default": "none"
     },
@@ -123,6 +124,28 @@
       "via": "products",
       "collection": "tag",
       "dominant": true
+    },
+    "deal_quantity_available_percent": {
+      "type": "decimal"
+    },
+    "deal_merchant": {
+      "type": "string"
+    },
+    "offer_category": {
+      "type": "enumeration",
+      "enum": [
+        "none",
+        "children",
+        "electronics",
+        "fashion",
+        "furniture",
+        "grocery",
+        "health",
+        "hobby",
+        "travel",
+        "warehouse"
+      ],
+      "default": "none"
     }
   }
 }

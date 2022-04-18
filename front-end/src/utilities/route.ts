@@ -1,22 +1,16 @@
-import {
-  matchPath
-} from "react-router";
+import { useRouteMatch, useLocation, matchPath } from "react-router";
 import { routesExtraConfig } from "@config/routes";
 import { useLanguages } from "@contexts/languagesContext";
-import { useLocation, useParams } from "@contexts/nextRouter";
 import { useCallback } from "react";
 
 export const routeWithLanguage = (path: string) => `/:language${path}`;
 
 export const useCurrentRouteMatch = () => {
-  const { pathname, route } = useLocation();
-  const params = useParams();
-
-  return {
-    params,
-    path: route || '',
-    url: pathname,
-  }
+  const { pathname } = useLocation();
+  const match = useRouteMatch({
+    path: pathname.replace(/\/[^/]+/, "/:language"),
+  });
+  return match;
 };
 
 export const useCurrentRouteConfig = () => {

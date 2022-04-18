@@ -13,17 +13,22 @@ const Database = require("./lib/Database");
 const Logger = require("./lib/Logger");
 const Queue = require("./lib/Queue");
 const mapScheduleToFrequency = require("./utils/mapScheduleToFrequency");
+const formatGranularTime = require("./utils/formatGranularTime");
 
 const LOGGER = new Logger({ baseDir });
 
 class ScheduledTasks {
-  // List of all available processes, by id
+  // List of all available tasks, by id
   tasks = {};
   // ID of the currently running task
   runningTask = null;
   // Valid hook names
   hookNames = {
     TASK_STOP: "task-stop",
+  };
+  // Running hooks
+  runningHooks = {
+    // TASK_STOP: process
   };
 
   constructor() {
@@ -50,11 +55,15 @@ class ScheduledTasks {
       // Check for changes and save if there is any
       if (
         dbTask.name !== configTask.name ||
-        dbTask.schedule !== configTask.schedule
+        dbTask.schedule !== configTask.schedule ||
+        dbTask.timeout_minutes !== configTask.timeout_minutes ||
+        dbTask.meta !== configTask.meta
       ) {
         Database.update(Task.model, dbTask.id, {
           name: configTask.name,
           schedule: configTask.schedule,
+          timeout_minutes: configTask.timeout_minutes,
+          meta: configTask.meta,
         });
       }
 
@@ -62,6 +71,7 @@ class ScheduledTasks {
         ...dbTask,
         name: configTask.name,
         schedule: configTask.schedule,
+        timeout_minutes: configTask.timeout_minutes,
       });
     });
 
@@ -72,7 +82,7 @@ class ScheduledTasks {
     LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
 
     // TEST
-    this.fireHook('task-stop', 'test-task-id');
+    this.fireHook("task-stop", "test-task-id");
   }
 
   runCommand(command, id) {
@@ -97,6 +107,8 @@ class ScheduledTasks {
    * Gets the list of all available tasks
    */
   list() {
+    const serverTime = moment.utc().valueOf();
+
     // Get updated tasks list
     const tasks = Queue.getList();
 
@@ -105,6 +117,7 @@ class ScheduledTasks {
 
       if (matchedCachedTask) {
         matchedCachedTask.next_run = dbTask.next_run;
+        matchedCachedTask.last_run = dbTask.last_run;
       }
     });
 
@@ -113,6 +126,7 @@ class ScheduledTasks {
       .map((task) => ({
         ...task,
         frequency: mapScheduleToFrequency(task.schedule),
+        countdown: formatGranularTime(task.next_run - serverTime),
       }))
       .sort((taskA, taskB) => (taskA.next_run < taskB.next_run ? -1 : 1));
   }
@@ -158,6 +172,14 @@ class ScheduledTasks {
       });
     }
 
+    // Halt any running hook
+    Object.entries(this.runningHooks).forEach(([hookName, hookProcess]) => {
+      if (hookProcess) {
+        console.log(`Stopping hook: ${hookName.bold}`.cyan);
+        hookProcess.kill("SIGINT");
+      }
+    });
+
     // Start task
     task.start();
 
@@ -177,9 +199,9 @@ class ScheduledTasks {
 
   stop(id) {
     if (id in this.tasks) {
-      const _process = this.tasks[id];
+      const task = this.tasks[id];
       LOGGER.log(`Killing task: ${id.bold}`);
-      _process.stop();
+      task.stop();
     }
   }
 
@@ -193,6 +215,7 @@ class ScheduledTasks {
       return {
         ...taskData,
         logs: this.tasks[taskID].getLogs(),
+        canRun: !/run/i.test(taskData.status) && taskID !== this.runningTask,
       };
     }
   }
@@ -202,7 +225,8 @@ class ScheduledTasks {
 
     // Handle task events
     task.on("message", (...args) => this.onProcessMessage(args));
-    task.on("exit", () => this.onProcessExit(task.id));
+    task.on("exit", (exitCode) => this.onProcessExit(task.id, exitCode));
+    task.on("error", (error) => this.onProcessError(task.id, error));
 
     // Save task to list
     this.tasks[task.id] = task;
@@ -212,10 +236,27 @@ class ScheduledTasks {
     LOGGER.log({ processArgs });
   }
 
-  onProcessExit(id) {
+  onProcessError(taskId, error) {
+    LOGGER.log(
+      ` Error in task process ${taskId.bold}:<br>${error.reset.red}`,
+      "ERROR"
+    );
+  }
+
+  onProcessExit(id, exitCode) {
+    const logType = exitCode ? "ERROR" : "INFO";
+    const bg = exitCode ? "bgYellow" : "bgCyan";
+
     this.runningTask = null;
-    LOGGER.log(` Process exitted: `.black.bold.bgCyan + `${id} `.black.bgCyan);
-    this.fireHook(this.hookNames.TASK_STOP, id);
+    LOGGER.log(
+      ` Process exitted ${exitCode ? "with error" : ""}: `.black.bold[bg] +
+        `${id} `.black[bg],
+      logType
+    );
+
+    if (!exitCode) {
+      this.fireHook(this.hookNames.TASK_STOP, id);
+    }
   }
 
   async fireHook(hookName, data) {
@@ -223,11 +264,21 @@ class ScheduledTasks {
     const hookPath = path.resolve(__dirname, "hooks", `${hookName}.js`);
     const hookPathExists = fs.existsSync(hookPath);
 
+    // Halt any running hook of the same name
+    if (this.runningHooks[hookName]) {
+      console.info(`Stopping currently running ${hookName} hook.`);
+      this.runningHooks[hookName].stop();
+    }
+
     if (isValidHookName && hookPathExists) {
       LOGGER.log([`Running hook`.cyan, hookName.cyan.bold].join(" "));
 
       // Require and run hook
-      const hookProcess = childProcess.fork(hookPath, [], { stdio: "pipe" });
+      this.runningHooks[hookName] = childProcess.fork(hookPath, [], {
+        stdio: "pipe",
+      });
+
+      const hookProcess = this.runningHooks[hookName];
 
       hookProcess.on("message", (jsonString) => {
         const { event } = JSON.parse(jsonString);
@@ -254,6 +305,8 @@ class ScheduledTasks {
           reject();
         });
       });
+
+      delete this.runningHooks[hookName];
 
       LOGGER.log(" DONE".green.bold);
     }

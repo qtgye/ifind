@@ -5,7 +5,7 @@ import RenderIf from "@components/RenderIf";
 import IfindIcon from "@components/IfindIcon";
 import { useOffersSideNav } from "./context";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const OffersSideNav = ({
   activeDealTypeName,

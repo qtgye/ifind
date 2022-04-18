@@ -208,6 +208,7 @@ const CategoryForm = ({
         className="category-form__panel category-form__panel--parent"
       >
         <CategorySelect
+          renderIf={true}
           category={parent}
           onChange={onParentSelect}
           exclude={category?.id ? [category?.id] : []}

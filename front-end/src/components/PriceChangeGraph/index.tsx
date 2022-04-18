@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { useVendor } from "@contexts/vendorContext";
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const PriceChangeGraph = ({ priceChanges }: PriceChangeGraphProps) => {
   const highChartsLoaded = useVendor('highcharts');

@@ -3,7 +3,6 @@ const { getValueDeals } = require("../../../helpers/aliexpress/value-deals");
 const { getDetailsFromURL } = require("../../../helpers/aliexpress/api");
 
 const RETRY_WAIT = 30000;
-const PRODUCTS_COUNT = 20;
 
 (async () => {
   const strapi = await adminStrapi();
@@ -52,21 +51,12 @@ const PRODUCTS_COUNT = 20;
             `[ ${productsData.length} ] Details fetched for ${productData.title.bold}`
               .green
           );
-
-          // We only need a certain amount of products
-          if (productsData.length == PRODUCTS_COUNT) {
-            break;
-          }
         } catch (err) {
-          console.error(
-            `Error while fetching ${productLink}: ${err.message}`
-          );
+          console.error(`Error while fetching ${productLink}: ${err.message}`);
         }
       }
 
-      console.log(
-        `Total of ${productsData.length} products has been fetched.`
-      );
+      console.log(`Total of ${productsData.length} products has been fetched.`);
 
       if (!productsData.length) {
         console.log(
@@ -108,15 +98,18 @@ const PRODUCTS_COUNT = 20;
         ],
       };
 
-
       await strapi.services.product.create(newData);
-      console.log(`[ ${++saved} of ${productsData.length} ] Successfully saved: ${newData.title.bold}`.green);
+      console.log(
+        `[ ${++saved} of ${productsData.length} ] Successfully saved: ${
+          newData.title.bold
+        }`.green
+      );
     }
 
     console.log(" DONE ".bgGreen.white.bold);
     process.exit();
   } catch (err) {
     console.error(err, err.data);
-    process.exit();
+    throw err;
   }
 })();

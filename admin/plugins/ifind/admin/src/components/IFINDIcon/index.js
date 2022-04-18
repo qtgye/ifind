@@ -2,12 +2,17 @@ import React from 'react';
 
 const IFINDIcon = ({ icon, className = '' }) => {
   return (
-    <svg className={[
+    <div className={[
       'ifind-icon',
       className
     ].join(' ')}>
-      <use xlinkHref={`#${icon.replace('_', '-')}`} />
-    </svg>
+      <div
+        className="ifind-icon__image"
+        style={{
+          ["--icon-path"]: `url(/icons/${icon.replace(/_/g, '-')}.svg)`,
+        }}
+      />
+    </div>
   )
 };
 

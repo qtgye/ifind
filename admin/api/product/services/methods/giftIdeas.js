@@ -1,7 +1,7 @@
 module.exports = async (args) => {
   const queryParams = {
     website_tab: "gifts",
-    _sort: "id:desc",
+    _sort: "final_rating:desc",
   };
 
   if (args && args.tags && args.tags.length) {

@@ -5,6 +5,7 @@ const amazonLink = require("../../../helpers/amazon/amazonLink");
 
 const RETRY_WAIT = 10000;
 const DEAL_TYPE = "amazon_flash_offers";
+const PRODUCTS_TO_SCRAPE = null;
 
 (async () => {
   const productScraper = await createAmazonProductScraper();
@@ -32,6 +33,7 @@ const DEAL_TYPE = "amazon_flash_offers";
     });
 
     if (offerProducts.length) {
+      const productsToScrape = PRODUCTS_TO_SCRAPE || offerProducts.length;
       const strapi = await createStrapiInstance();
 
       console.log(
@@ -48,7 +50,9 @@ const DEAL_TYPE = "amazon_flash_offers";
             false
           );
 
-          if (!productData || !productData.title || !productData.price) {
+          console.log('quantity available: ' + productData.quantity_available_percent);
+
+          if (!productData || !productData.title || !productData.price || !productData.quantity_available_percent ) {
             continue;
           }
 
@@ -70,9 +74,9 @@ const DEAL_TYPE = "amazon_flash_offers";
           scrapedProducts.push(productData);
 
           // Current scraped products info
-          console.info(`Scraped ${scrapedProducts.length} of 20`.green.bold);
+          console.info(`Scraped ${scrapedProducts.length} of ${productsToScrape}`.green.bold);
 
-          if (scrapedProducts.length === 20) {
+          if (scrapedProducts.length === productsToScrape) {
             break;
           }
         } catch (err) {
@@ -112,11 +116,11 @@ const DEAL_TYPE = "amazon_flash_offers";
     }
 
     console.log(" DONE ".bgGreen.white.bold);
+    productScraper.close();
+    process.exit();
   } catch (err) {
     console.error(err.message);
+    productScraper.close();
+    throw err;
   }
-
-  productScraper.close()
-
-  process.exit();
 })();

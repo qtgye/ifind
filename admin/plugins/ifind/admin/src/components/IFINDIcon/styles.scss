@@ -1,0 +1,11 @@
+.ifind-icon {
+  &__image {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    background-color: currentColor;
+    mask: var(--icon-path);
+    mask-position: center;
+    mask-repeat: no-repeat;
+  }
+}

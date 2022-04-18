@@ -3,6 +3,7 @@ const moment = require("moment");
 const EventEmitter = require("events");
 const Queue = require("./Queue");
 const Logger = require("./Logger");
+const formatGranularTime = require("../utils/formatGranularTime");
 
 const LOGGER = new Logger({ baseDir: path.resolve(__dirname, "../") });
 const EVENTEMITTER = new EventEmitter();
@@ -19,7 +20,7 @@ const Timer = {
   },
 
   runNextTask() {
-    LOGGER.log('Running next available task'.bold.green);
+    LOGGER.log("Running next available task".bold.green);
     LOGGER.log("Determining next task to run...");
     const timeNow = Date.now();
 
@@ -56,9 +57,10 @@ const Timer = {
       resetTimeInterval = firstTask.next_run - timeNow;
 
       LOGGER.log(
-        `None found, next task runs in ${Number(
-          resetTimeInterval / 1000
-        ).toFixed(2)} second(s) : ${firstTask.id.bold}`
+        `None found, next task runs in ${formatGranularTime(
+          resetTimeInterval,
+          true
+        )}: ${firstTask.id.bold}`
       );
     }
 
@@ -70,7 +72,9 @@ const Timer = {
         // Run the task
         EVENTEMITTER.emit("taskstart", firstTask.id);
       } else {
-        LOGGER.log("Task is already running: ".yellow + firstTask.id.bold.yellow);
+        LOGGER.log(
+          "Task is already running: ".yellow + firstTask.id.bold.yellow
+        );
       }
 
       // Get the new tasks queue

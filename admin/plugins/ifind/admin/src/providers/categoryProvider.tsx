@@ -1,7 +1,3 @@
-/**
- * NOTE: WIP
- */
-
 import React, { useState, useEffect, useCallback, useContext, createContext } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useGQLFetch } from '../helpers/gqlFetch';
@@ -95,12 +91,26 @@ mutation DeleteCategory ($id: ID!) {
 }
 `
 
-export const CategoryContext = createContext({});
+declare interface CategoryContextData {
+  category: Category|null;
+  loading: boolean;
+  addCategory: (data: Partial<Category>) => void;
+  updateCategory: (categoryID?: string, data?: Partial<Category>) => void;
+  deleteCategory: (categoryID: string) => void;
+}
 
-export const CategoryProvider = ({ children }) => {
+export const CategoryContext = createContext<CategoryContextData>({
+  category: null,
+  loading: false,
+  addCategory: () => {},
+  updateCategory: () => {},
+  deleteCategory: () => {},
+});
+
+export const CategoryProvider = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
   const gqlFetch = useGQLFetch();
   const history = useHistory();
-  const { categoryId } = useParams();
+  const { categoryId } = useParams<{ categoryId: string }>();
   const [ category, setCategory ] = useState(null);
   const [ loading, setLoading ] = useState(false);
   const [ error, setError ] = useState(null);

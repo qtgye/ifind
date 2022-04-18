@@ -1,5 +1,6 @@
 const ScheduledTasks = appRequire('scheduled-tasks');
 const generateAdminTypes = appRequire('scripts/generateAdminTypes');
+const clearAmazonScraperErrors = appRequire('helpers/amazon/clearPageErrors');
 
 module.exports = strapi => {
   return {
@@ -13,6 +14,9 @@ module.exports = strapi => {
         // In order for external consuming modules to always have the
         // updated admin types
         generateAdminTypes();
+
+        // Remove existing scraper error files
+        clearAmazonScraperErrors();
       }
     },
   };
