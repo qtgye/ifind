@@ -5,6 +5,7 @@ const PROJECT_ROOT = path.resolve(__dirname);
 const nextConfig = {
   reactStrictMode: true,
   distDir: "build",
+  trailingSlash: true,
   sassOptions: {
     includePaths: [path.resolve(PROJECT_ROOT, "src")],
   },
