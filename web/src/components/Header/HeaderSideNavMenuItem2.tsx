@@ -14,14 +14,14 @@ const HeaderSideNavMenuItem2 = ({ category }: HeaderSideNavMenuItem2Props) => {
     const withSpace = str.indexOf(" ");
     const categoryRef = useRef<HTMLDivElement | null>();
 
-    const onItemClick = useCallback((id) => {
+    const onItemClick = useCallback((id?: string | number) => {
         if (onCategoryClick) {
             onCategoryClick(id);
         }
     }, [onCategoryClick]);
 
-    const onActiveCategory = useCallback((activeCategory) => {
-        if (grandChildren.find((category) => category?.id === activeCategory.toString())) {
+    const onActiveCategory = useCallback((activeCategory?: string | number) => {
+        if (grandChildren.find((category) => category?.id === activeCategory?.toString())) {
             setSubCategories(true);
         }
         else {

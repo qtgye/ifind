@@ -1,5 +1,6 @@
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useCallback } from "react";
+import { useRouter } from "next/router";
 import ReactPaginate from "react-paginate";
 import { useSearchParams, addURLParams } from "utilities/url";
 import { useTranslation } from "translations/index";
@@ -10,15 +11,15 @@ import { previous, next } from "./translations";
 
 const Pagination = ({ totalPages = 1 }: PaginationProps) => {
   const translate = useTranslation();
-  const history = useHistory();
+  const router = useRouter();
   const { page = 1 } = useSearchParams();
   const { pathname, search } = useLocation();
 
   const onPaginationPageSelect = useCallback(
-    ({ selected }) => {
-      history.push(addURLParams(pathname + search, { page: selected + 1 }));
+    ({ selected }: PageSelectProps) => {
+      router.push(addURLParams(pathname + search, { page: selected + 1 }));
     },
-    [history, pathname, search]
+    [router, pathname, search]
   );
 
   return (

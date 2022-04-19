@@ -11,7 +11,7 @@ export const GlobalStateContext = createContext<GlobalStateContextData>({});
 
 export const GlobalStateContextProvider = ({
   children,
-}: React.PropsWithChildren<React.ReactNode>) => {
+}: GlobalStateContextProviderProps) => {
   const {
     query: { offer_id },
   } = useRouter();

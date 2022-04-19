@@ -27,7 +27,7 @@ const FlagSelect = ({
     .join(" ");
 
   const getCountryFlagImage = useCallback(
-    (countryCode) => (
+    (countryCode: string) => (
       <PreloadedImage
         className="flag-select__image"
         src={`https://www.worldatlas.com/r/w30/img/flag/${countryCode.toLocaleLowerCase()}-flag.jpg`}
@@ -51,12 +51,9 @@ const FlagSelect = ({
     return placeholder;
   }, [selectedCountry, placeholder, countryLabels, getCountryFlagImage]);
 
-  const onClick = useCallback(
-    (e) => {
-      setIsExpanded(!isExpanded);
-    },
-    [isExpanded]
-  );
+  const onClick = useCallback(() => {
+    setIsExpanded(!isExpanded);
+  }, [isExpanded]);
 
   const onOptionSelect = useCallback(
     (country: string) => {

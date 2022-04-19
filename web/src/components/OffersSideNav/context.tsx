@@ -12,7 +12,7 @@ export const OffersSideNavContext = createContext<OfferSideNavContext>({});
 
 export const OffersSideNavProvider = ({
   children,
-}: PropsWithChildren<ReactNode>) => {
+}: OffersSideNavProps) => {
   const { activeOffer, offersCategories } = useOffersCategories();
   const { productsByDeals = [] } = useProductsByDeals();
   const items: OffersSideNavItem[] = activeOffer

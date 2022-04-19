@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { v4 as uuid } from "uuid";
-import { useSourceRegion } from "providers/sourceRegionContext";
+import { useGlobalData } from "providers/globalDataContext";
 
 import ProductURLLink from "./product-url-link";
 
 
 
 const ProductLinks = ({ product }: ProductLinksProps) => {
-  const { sources } = useSourceRegion();
+  const { sources } = useGlobalData();
   const [urlItems, setURLItems] = useState<URLListItemWithKey[]>([]);
   const amazonSource = sources?.find((source) => /amazon/i.test(source.name));
 

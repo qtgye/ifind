@@ -18,7 +18,7 @@ import {
   topButton,
   topText,
   topTitle,
-} from "./about-us.translations";
+} from "translations/pages/about-us";
 
 const AboutUs = () => {
   const { userLanguage = "en" } = useGlobalData();

@@ -15,15 +15,15 @@ const HeaderSideNavMenuItem = ({ category, checked }: HeaderSideNavMenuItemProps
     const withSpace = str.indexOf(" ");
     const categoryRef = useRef<HTMLDivElement | null>();
 
-    const onItemClick = useCallback((id) => {
+    const onItemClick = useCallback((id?: string) => {
         if (onCategoryClick) {
             onCategoryClick(id);
         }
         console.log(id);
     }, [onCategoryClick]);
 
-    const onActiveCategory = useCallback((activeCategory) => {
-        if (grandChildren.find((category) => category?.id === activeCategory.toString())) {
+    const onActiveCategory = useCallback((activeCategory?: string | number) => {
+        if (grandChildren.find((category) => category?.id === activeCategory?.toString())) {
             setSubCategories(true);
         }
         else {

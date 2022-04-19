@@ -6,14 +6,12 @@ import {
   LegacyRef,
   useContext,
 } from "react";
-import { useSubCategories } from "providers/categoriesContext";
 import eventBus from "utilities/EventBus";
 import { useIsRouteMatch } from "utilities/route";
 import { useTranslation } from "translations/index";
 import { GlobalStateContext } from "providers/globalStateContext";
 import { routesExtraConfig } from "config/routes";
 import useWindow from "utilities/window";
-
 
 import HeaderSideNavSubMenu from "./HeaderSideNavSubMenu";
 import HeaderSideNavSubMenu2 from "./HeaderSideNavSubMenu2";
@@ -27,7 +25,8 @@ const HeaderSideNav = () => {
   const window = useWindow();
   const translate = useTranslation();
   const isRouteMath = useIsRouteMatch();
-  const { subCategories } = useSubCategories();
+  // const { subCategories } = useSubCategories();
+  const subCategories: (CategoryWithChild | null)[] = [];
   const { on } = eventBus;
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
   const [withSideNav, setWithSideNav] = useState<boolean>(false);
@@ -40,7 +39,7 @@ const HeaderSideNav = () => {
   const checkChange = () => setChecked(!checked);
 
   const ecommerceClick = useCallback(
-    (catName) => {
+    (catName: string) => {
       if (onOffersClick) {
         onOffersClick(catName);
       }

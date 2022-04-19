@@ -17,3 +17,7 @@ declare interface GlobalStateContextData {
   activeOffer?: string;
   setActiveOffer?: (offerCategory: string) => void;
 }
+
+declare interface GlobalStateContextProviderProps {
+  children: ReactNode;
+}

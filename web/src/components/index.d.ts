@@ -1,6 +1,6 @@
 import "./AttributesTable/index.d";
 import "./BreadCrumbs/index.d";
-import "./Carousel/index.d";
+// import "./~Carousel";
 import "./ContactForm/index.d";
 import "./ContactSidebar/index.d";
 import "./FlagsSelect/index.d";

@@ -77,9 +77,7 @@ const GlobalContext = createContext<GlobalContextData>({});
 export const GlobalContextProvider = ({
   children,
   data = {},
-}: PropsWithChildren<ReactNode> & {
-  data: GlobalContextData;
-}) => {
+}: GlobalContextProviderProps) => {
   const {
     query: { language = "en" },
   } = useRouter();

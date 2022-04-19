@@ -6,6 +6,7 @@ declare interface OfferSideNavContext {
 }
 
 declare interface OffersSideNavProps {
-  activeDealTypeName: string | null;
-  onDealClick: (dealTypeName: string) => void;
+  activeDealTypeName?: string | null;
+  onDealClick?: (dealTypeName: string) => void;
+  children?: ReactNode;
 }

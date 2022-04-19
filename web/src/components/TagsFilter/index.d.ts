@@ -1,5 +1,5 @@
 declare interface TagsFilterProps extends React.HTMLAttributes<HTMLElement> {
-  onUpdate?: (activeTag: string | number) => void;
+  onUpdate?: (activeTag?: string | number) => void;
   activeTag?: string | number;
 }
 

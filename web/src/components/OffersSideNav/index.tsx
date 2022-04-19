@@ -7,7 +7,7 @@ import { useOffersSideNav } from "./context";
 
 const OffersSideNav = ({
   activeDealTypeName,
-  onDealClick,
+  onDealClick = () => {},
 }: OffersSideNavProps) => {
   const translate = useTranslation();
   const { items } = useOffersSideNav();

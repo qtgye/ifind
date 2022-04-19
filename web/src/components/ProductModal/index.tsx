@@ -6,8 +6,6 @@ import PriceChangeGraph from "components/PriceChangeGraph";
 import ProductRating from "components/ProductRating";
 import Modal from "components/Modal";
 
-
-
 const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
   const {
     productDetail,
@@ -32,8 +30,10 @@ const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
     .filter(Boolean)
     .join(' ');
 
-  const onScroll = useCallback((e) => {
-    setIsScrolled(e.currentTarget?.scrollTop > 5);
+  const onScroll = useCallback((e: UIEvent) => {
+    if ( e.currentTarget ) {
+      setIsScrolled((e.currentTarget as Window).scrollY > 5);
+    }
   }, []);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const ProductModal = ({ product, ...modalProps }: ProductModalProps) => {
         ".ifind-modal__scrollarea"
       );
       console.log({ modalScrollArea });
-      modalScrollArea?.addEventListener("scroll", onScroll);
+      modalScrollArea?.addEventListener("scroll", e => onScroll(e as UIEvent));
     }
   }, [modalRef, onScroll]);
 

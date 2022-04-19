@@ -8,8 +8,6 @@ import { FaTimes } from "react-icons/fa";
 import { useGlobalState } from "providers/globalStateContext";
 import Portal from "components/Portal";
 
-
-
 const Modal = forwardRef(
   (
     { children, className, visible = false, onClose }: ModalProps,
@@ -37,7 +35,7 @@ const Modal = forwardRef(
     );
 
     const onKeyPress = useCallback(
-      (e) => {
+      (e: KeyboardEvent) => {
         if (/esc/i.test(e.key) && typeof onClose === "function") {
           onClose();
         }
@@ -52,7 +50,7 @@ const Modal = forwardRef(
     }, [visible, toggleBodyScroll]);
 
     useEffect(() => {
-      window.addEventListener("keydown", onKeyPress);
+      window.addEventListener("keydown", (e) => onKeyPress(e));
 
       return () => window.removeEventListener("keydown", onKeyPress);
     }, [onKeyPress]);

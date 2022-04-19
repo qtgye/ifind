@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, MouseEventHandler } from "react";
-import { useTags } from "providers/tagsContext";
+// import { useTags } from "providers/tagsContext";
 import { useGlobalState } from "providers/globalStateContext";
-import { useLanguages } from "providers/languagesContext";
+import { useGlobalData } from "providers/globalDataContext";
 import { useBreakpoints } from "utilities/breakpoints";
 
 import TagsFiterItem from "./item";
@@ -10,9 +10,10 @@ import { allFilter } from "./translations";
 
 
 const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
-  const { tags } = useTags();
+  // const { tags } = useTags();
+  const tags: Tag[] = [];
   const { toggleBodyScroll } = useGlobalState();
-  const { userLanguage } = useLanguages();
+  const { userLanguage } = useGlobalData();
   const [tagOptions, setTagOptions] = useState<SelectableTag[]>([]);
   const [expanded, setExpanded] = useState<boolean>(false);
   const [overlap, setOverlap] = useState<boolean>(false);
@@ -29,7 +30,7 @@ const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
   const selected = tagOptions.filter((tag: SelectableTag) => tag.selected);
 
   const onTagClick = useCallback(
-    (tag) => {
+    (tag: SelectableTag) => {
       const willActivate = String(activeTag) !== String(tag.id);
 
       // Do nothing if tag is still active
@@ -46,7 +47,7 @@ const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
 
       // Return only active tag
       if (typeof onUpdate === "function") {
-        onUpdate(tag.id === "all" ? null : tag.id);
+        onUpdate(tag.id === "all" ? '' : tag.id);
       }
     },
     [tagOptions, onUpdate, activeTag]
@@ -97,7 +98,7 @@ const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
   }, []);
 
   const onTransitionEnd = useCallback(
-    (e) => {
+    (e: UIEvent) => {
       if (e.target === e.currentTarget) {
         if (!expanded) {
           setOverlap(false);
@@ -163,9 +164,9 @@ const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
           +
         </button>
       </div>
-      <div className="tags-filter__list" onTransitionEnd={onTransitionEnd}>
+      <div className="tags-filter__list" onTransitionEnd={e => onTransitionEnd(e as unknown as UIEvent)}>
         {tagOptions.map((tag) => (
-          <TagsFiterItem key={tag.id} tag={tag} onClick={onTagClick} />
+          <TagsFiterItem key={tag.id} tag={tag} onClick={() => onTagClick(tag)} />
         ))}
         <button
           className="tags-filter__close"

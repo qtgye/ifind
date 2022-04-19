@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback, useState, MouseEvent } from "react";
 import { dateTime } from "ifind-utils";
 import { useGlobalState } from "providers/globalStateContext";
 import ProductDealCard from "components/ProductDealCard";
@@ -40,7 +40,7 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   );
 
   const onLoadMoreClick = useCallback(
-    (e) => {
+    (e: MouseEvent) => {
       e.preventDefault();
 
       const productsInViewCount = productsInView.length;

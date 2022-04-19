@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { useLanguages } from "providers/languagesContext";
+import { useGlobalData } from "providers/globalDataContext";
 
 const TagsFiterItem = ({ tag, onClick }: TagsFiterItemProps) => {
-  const { userLanguage } = useLanguages();
+  const { userLanguage } = useGlobalData();
   const [label, setLabel] = useState("");
 
   const classNames = [

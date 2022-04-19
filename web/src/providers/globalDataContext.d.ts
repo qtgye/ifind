@@ -48,3 +48,8 @@ declare interface GetGlobalDataParams {
 declare interface LanguagesPayload {
   languages: Language[];
 }
+
+declare interface GlobalContextProviderProps {
+  children: ReacctNode;
+  data: GlobalContextData;
+}

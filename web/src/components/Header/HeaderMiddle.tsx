@@ -1,4 +1,10 @@
-import { useRef, useEffect, useCallback } from "react";
+import React, {
+  useRef,
+  useEffect,
+  useCallback,
+  FormEvent,
+  FormEventHandler,
+} from "react";
 // import { useLocation } from "react-router-dom";
 
 // import routes from "config/routes";
@@ -8,7 +14,6 @@ import { useTranslation } from "translations/index";
 
 import HeaderLanguageButton from "./HeaderLanguageButton";
 import { contact } from "./translations";
-
 
 const logo = "/images/logowith1warp.jpg";
 
@@ -42,12 +47,12 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
     return () => observer.current?.disconnect();
   }, [onInterSect]);
 
-  const submitHandler = useCallback(
+  const submitHandler = useCallback<FormEventHandler<Element>>(
     (e) => {
       e.preventDefault();
 
-      const rawFormData = new FormData(e.currentTarget);
-      const formData = [...rawFormData.entries()].reduce(
+      const rawFormData = new FormData(e.currentTarget as HTMLFormElement);
+      const formData = Array.from(rawFormData.entries()).reduce(
         (all, [key, value]) => ({
           ...all,
           [key]: value,

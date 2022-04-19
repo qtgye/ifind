@@ -1,6 +1,6 @@
-import {
-  matchPath
-} from "react-router";
+// import {
+//   matchPath
+// } from "react-router";
 import { routesExtraConfig } from "config/routes";
 import { useCallback } from "react";
 import { useGlobalData } from "providers/globalDataContext";
@@ -8,25 +8,25 @@ import { useGlobalData } from "providers/globalDataContext";
 export const routeWithLanguage = (path: string) => `/:language${path}`;
 
 export const useCurrentRouteMatch = () => {
-  const [pathname, route] = ['',''];
+  const [pathname, route] = ["", ""];
   const params = {};
 
   return {
     params,
-    path: route || '',
+    path: route || "",
     url: pathname,
-  }
+  };
 };
 
 export const useCurrentRouteConfig = () => {
   const location = {
-    pathname: '/'
+    pathname: "/",
   };
-  const matchedRouteConfig = routesExtraConfig.find(({ path }: RouteConfig) =>
-    matchPath(location.pathname, {
-      path,
-    })
-  );
+  const matchedRouteConfig = routesExtraConfig.find(({ path }: RouteConfig) => {
+    // matchPath(location.pathname, {
+    //   path,
+    // })
+  });
   return matchedRouteConfig;
 };
 

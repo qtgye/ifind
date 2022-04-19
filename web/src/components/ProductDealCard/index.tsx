@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, MouseEvent } from "react";
 import dealTypes from "config/deal-types";
 
 import PercentCircle from "components/PercentCircle";
@@ -75,7 +75,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   ]);
 
   const onCardClick = useCallback(
-    (e) => {
+    (e: MouseEvent) => {
       if (typeof onClick === "function") {
         e.preventDefault();
 
@@ -102,7 +102,7 @@ const ProductDealCard: ProductDealCardComponent = ({
       href={productURL}
       target="_blank"
       rel="noreferrer"
-      onClick={onCardClick}
+      onClick={(e) => onCardClick(e)}
     >
       <div className="product-deal-card__content">
         {discountPercent ? (

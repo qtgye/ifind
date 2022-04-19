@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, MouseEvent } from 'react';
 import { toAdminURL } from 'utilities/url';
 import { trackClick } from 'utilities/tracking';
 
@@ -6,8 +6,8 @@ const ProductURLLink = ({ url, source, logo, price, isBase, basePrice, currency 
 
     const percentDifference = 100 * (price - basePrice) / basePrice;
 
-    const onClick = useCallback(({ currentTarget }) => {
-        trackClick(currentTarget, {
+    const onClick = useCallback(({ currentTarget }: MouseEvent) => {
+        trackClick(currentTarget as HTMLElement, {
             category: 'Product',
             action: `click` + (source ? `.${source.toLowerCase()}` : ''),
         });

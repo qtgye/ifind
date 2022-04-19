@@ -12,7 +12,6 @@ import {
 } from 'providers/globalStateContext';
 
 function MyApp({ Component, pageProps, globalData, query }: AppPropsExtended) {
-
   // Wrap page component with GlobalContextProvider
   // to allow usage of useGlobalContext withing pages and components
   return (

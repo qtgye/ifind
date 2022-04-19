@@ -1,5 +1,4 @@
 import { useGlobalData } from "providers/globalDataContext";
-import { useLanguages } from "providers/languagesContext";
 
 // Translations
 export * as navigation from "./navigation";
