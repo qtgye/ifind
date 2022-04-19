@@ -94,18 +94,25 @@ export const getStaticPaths = async () => {
   const offerPaths: {
     params: {
       language: string;
-      page: string;
-      offer_id: string;
+      offer_id: string[] | null;
     };
   }[] = [];
 
-  offersCategories.forEach(({ id: offer_id }) => {
-    languages.forEach(({ code: language }) => {
+  languages.forEach(({ code: language }) => {
+    // Add offers root
+    offerPaths.push({
+      params: {
+        language,
+        offer_id: null,
+      },
+    });
+
+    offersCategories.forEach(({ id: offer_id }) => {
+      // Add offers per id
       offerPaths.push({
         params: {
           language,
-          offer_id,
-          page: "offers",
+          offer_id: [offer_id],
         },
       });
     });
@@ -122,15 +129,22 @@ export const getStaticProps = async ({
 }: GetStaticPropsContext<OfferPageParams>) => {
   const { offer_id } = params || {};
 
-  const [{ offersCategories }, { productsByDeals }] = await Promise.all([
-    getOffersCategories(),
-    getProductsByDeals((offer_id || "") as string),
-  ]);
+  try {
+    const [{ offersCategories }, { productsByDeals }] = await Promise.all([
+      getOffersCategories(),
+      getProductsByDeals(offer_id ? offer_id[0] : ""),
+    ]);
 
-  return {
-    props: {
-      offersCategories,
-      productsByDeals,
-    },
-  };
+    return {
+      props: {
+        offersCategories,
+        productsByDeals,
+      },
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      props: {},
+    };
+  }
 };
