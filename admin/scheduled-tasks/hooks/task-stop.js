@@ -8,7 +8,7 @@ const path = require("path");
 const childProcess = require("child_process");
 const Hook = require("../lib/Hook");
 
-const FE_ROOT = path.resolve(__dirname, "../../../front-end");
+const FE_ROOT = path.resolve(__dirname, "../../../web");
 const prerender_script = path.resolve(FE_ROOT, "scripts/prerender.js");
 
 class TaskStopHook extends Hook {

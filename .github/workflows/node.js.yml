@@ -59,11 +59,7 @@ jobs:
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== BUILDING SITE ====/" && \
-          npm run prerender && \
-
-          echo "/==== BUILDING STORYBOOK ====/" && \
-          CI=true npm run build-storybook && \
-          rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end
+          npm run prerender
 
     # TO DO:
     # Add scripts for admin and api server builds
