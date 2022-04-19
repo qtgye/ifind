@@ -1,0 +1,112 @@
+@import 'base/scss';
+@import 'base/global';
+
+.product-rating {
+    --font-size: 14px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    @include small_laptop {
+        position: absolute;
+        top: 22rem;
+        right: 5.5rem;
+        height: 2.5rem;
+    }
+
+    @include tablet{
+        position: absolute;
+        top: 20rem;
+        right: 5rem;
+        height: 2rem;
+    }
+
+    @include xs_tablet {
+        right: 8.2rem;
+    }
+
+    @include xl_mobile {
+        right: 8rem;
+    }
+
+    @include xml_mobile {
+        right: 6.3rem;
+    }
+
+    @include large_mobile {
+        right: 6.5rem;
+    }
+
+    @include mobile {
+        right: 5.3rem;
+    }
+
+    @include sl_mobile {
+        right: 4.6rem;
+    }
+
+    @include sm_mobile {
+        right: 4rem;
+    }
+
+    @include small_mobile {
+        right: 2.8rem;
+    }
+
+    &__content {
+      display: flex;
+      align-items: center;
+    }
+
+    &:hover &__tooltip {
+        display: block;
+    }
+
+    &__tooltip {
+        position: absolute;
+        bottom: 100%;
+        right: 0;
+        padding: 20px 10px;
+        background-color: white;
+        box-shadow: 0 0 3px rgba(0,0,0,.3);
+        display: none;
+
+        @include small_laptop {
+            right: -4.3rem;
+            padding: 15px 8px;
+        }
+
+        @include tablet {
+            bottom: 2rem;
+            right: -3.2rem;
+            padding: 10px 5px;
+        }
+
+        @include large_mobile {
+            right: -3.2rem;
+        }
+
+        @include small_mobile {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+    }
+
+    .rating-warps {
+        margin: 0 10px;
+
+        @include tablet {
+            &__title {
+                font-size: var(--font-size);
+            }
+
+            &__numeric {
+                font-size: var(--font-size);
+            }
+        }
+    }
+
+}

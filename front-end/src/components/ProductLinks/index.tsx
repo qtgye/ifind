@@ -4,7 +4,7 @@ import { useSourceRegion } from "@contexts/sourceRegionContext";
 
 import ProductURLLink from "./product-url-link";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const ProductLinks = ({ product }: ProductLinksProps) => {
   const { sources } = useSourceRegion();

@@ -12,7 +12,7 @@ import Pagination from "@components/Pagination";
 import IfindLoading from "@components/IfindLoading";
 import ProductModal from "@components/ProductModal";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Gifts = () => {
   const { tags = "all" } = useSearchParams();

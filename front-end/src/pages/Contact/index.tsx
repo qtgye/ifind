@@ -4,7 +4,7 @@ import ContactForm from "@components/ContactForm";
 import ContactSidebar from "@components/ContactSidebar";
 import { withComponentName } from "@utilities/component";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Contact = () => (
   <GeneralTemplate>

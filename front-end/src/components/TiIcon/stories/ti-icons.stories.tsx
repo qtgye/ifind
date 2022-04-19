@@ -2,7 +2,7 @@ import { component } from '@sb';
 import TiIconComponent from '..';
 
 import icons from './icons';
-import './styles.module.scss';
+import './styles.scss';
 
 export default component({
     title: 'Ti Icon',

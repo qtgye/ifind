@@ -5,7 +5,7 @@ import PriceChangeGraph from "@components/PriceChangeGraph";
 import ProductRating from "@components/ProductRating";
 
 import inlineStyles from "./detail-styles";
-import "./product-details.module.scss";
+import "./product-details.scss";
 
 const icon = "/images/loading.png";
 

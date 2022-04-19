@@ -1,4 +1,4 @@
-import './header-top.module.scss';
+import './header-top.scss';
 
 const HeaderTop = () => {
     return (

@@ -6,7 +6,7 @@ import { useTranslation } from "@translations/index";
 import RenderIf from "@components/RenderIf";
 import { previous, next } from "./translations";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Pagination = ({ totalPages = 1 }: PaginationProps) => {
   const translate = useTranslation();

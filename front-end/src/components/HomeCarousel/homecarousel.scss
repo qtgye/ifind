@@ -1,0 +1,75 @@
+@import 'base/scss';
+@import 'base/global';
+
+.home-carousel {
+    margin-right: 0;
+    // .hcarousel-container {
+    //     height: 400px;
+    //     width: 600px;
+    // }
+
+    .buttonBack {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        border: none;
+        font-size: 14px;
+        background-color: transparent;
+        padding: 1px 5px;
+
+        i {
+            font-weight: bolder;
+            font-size: 50px;
+            color: #fff;
+        }
+
+        i:hover {
+            color: color(red);
+        }
+    }
+
+    .buttonNext {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        border: none;
+        background-color: transparent;
+        padding: 1px 5px;
+
+        i {
+            font-weight: bolder;
+            font-size: 50px;
+            color: #fff;
+        }
+
+        i:hover {
+            color: color(red);
+        }
+    }
+
+    .title-container {
+        border: 1px solid color(gray-darker);
+        background-color: color(gray-darker);
+        border-radius: 3px;
+        margin-bottom: 2px;
+
+        .title {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 7px;
+            color: color(white);
+        }
+    }
+
+    .dotGroup {
+        margin-top: 20px;
+        color: blue;
+        height: 10px;
+        width: 10px;
+    }
+
+}

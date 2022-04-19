@@ -3,7 +3,7 @@ import AttributesTable from "@components/AttributesTable";
 
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const ProductRating = ({ finalRating, attributes }: ProductRatingProps) => {
   return (

@@ -1,7 +1,7 @@
 import IfindIcon from "@components/IfindIcon";
 import withConditionalRender from "@utilities/hocs/withConditionalRender";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Warps = (): JSX.Element => (
   <>

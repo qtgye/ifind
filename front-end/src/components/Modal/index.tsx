@@ -8,7 +8,7 @@ import { FaTimes } from "react-icons/fa";
 import { useGlobalState } from "@contexts/globalStateContext";
 import Portal from "@components/Portal";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Modal = forwardRef(
   (

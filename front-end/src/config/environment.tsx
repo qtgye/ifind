@@ -1,5 +1,1 @@
-export const ENVIRONMENT =
-  typeof document !== "undefined"
-    ? (document.querySelector('[name="environment"]') as HTMLMetaElement)
-        ?.content || "local"
-    : "local";
+export const ENVIRONMENT = (document.querySelector('[name="environment"]') as HTMLMetaElement)?.content || 'local';

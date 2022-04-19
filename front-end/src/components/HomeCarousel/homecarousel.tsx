@@ -8,7 +8,7 @@
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
 import { useLanguages } from "@contexts/languagesContext";
-import './reactcarousel.module.scss'
+import './reactcarousel.scss'
 
 const Homecarousel = () => {
 

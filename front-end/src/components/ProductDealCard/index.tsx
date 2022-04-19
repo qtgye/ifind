@@ -4,7 +4,7 @@ import dealTypes from "@config/deal-types";
 import PercentCircle from "@components/PercentCircle";
 import RatingWarps from "@components/RatingWarps";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const ProductDealCard: ProductDealCardComponent = ({
   id,

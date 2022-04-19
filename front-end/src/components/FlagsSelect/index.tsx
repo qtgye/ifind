@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import PreloadedImage from "@components/PreloadedImage";
 import useBodyClick from "@utilities/useBodyClick";
 
-import "./styles.module.scss";
+import "./styles.scss";
 
 const FlagSelect = ({
   className,

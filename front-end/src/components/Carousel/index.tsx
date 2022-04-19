@@ -4,7 +4,7 @@ import IfindIcon from "@components/IfindIcon";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import "./styles.module.scss";
+import "./styles.scss";
 
 const Carousel = ({
   categories,

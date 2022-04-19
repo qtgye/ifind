@@ -1,5 +1,5 @@
 import { LegacyRef, useCallback, useEffect, useRef, useState } from "react";
-import './styles.module.scss';
+import './styles.scss';
 
 const placeholderSrc = "/images/loading.png";
 

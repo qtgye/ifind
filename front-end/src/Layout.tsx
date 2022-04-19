@@ -11,7 +11,7 @@ import Footer from "@components/Footer";
 import NewsLetter from "@components/NewsLetter";
 import IfindLoading from "@components/IfindLoading";
 
-import "./App.module.scss";
+// const routes: any[] = routesPages.concat(dynamicRoutePages);
 
 const Layout = () => (
   <Switch>

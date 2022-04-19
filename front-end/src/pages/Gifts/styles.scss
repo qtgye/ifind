@@ -1,0 +1,78 @@
+@import "base/scss";
+
+.gifts {
+  position: relative;
+
+  &__container {
+    @include container;
+  }
+
+  &__columns {
+    @include container-bleed(default);
+
+    @include md {
+      @include container-bleed(md);
+    }
+
+    @include lg {
+      padding-top: 20px;
+      margin-inline: 0;
+    }
+
+    @include xl {
+      @include grid(xl);
+    }
+  }
+
+  .tags-filter {
+    @include xl {
+      @include col-span(3);
+      width: 100%;
+    }
+  }
+
+  &__products {
+    @include xl {
+      @include col-span(9);
+      @include col-start(4);
+    }
+  }
+
+  &__products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 15px;
+    row-gap: 15px;
+    padding: 0 10px;
+    margin-top: 20px;
+
+    @include lg {
+      grid-template-columns: repeat(3, 1fr);
+      margin-top: 0;
+      padding: 0;
+    }
+
+    @include xl {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .ifind-loading {
+    transition: all 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+
+    img {
+      width: 75px;
+      height: 75px;
+    }
+  }
+
+  // Loading State
+  &--loading {
+    .ifind-loading.ifind-loading {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+}

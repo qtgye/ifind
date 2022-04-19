@@ -1,4 +1,4 @@
-import './styles.module.scss';
+import './styles.scss';
 import { useState } from "react";
 import withConditionalRender from '@utilities/hocs/withConditionalRender';
 
