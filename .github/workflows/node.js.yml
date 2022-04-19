@@ -55,14 +55,11 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
-          cd ../front-end && \
+          cd ../web && \
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
-          echo "/==== RUNNING TESTS ====/" && \
-          CI=true npm run test && \
-          rm -rf /var/www/html/coverage && mv coverage /var/www/html/coverage && \
           echo "/==== BUILDING SITE ====/" && \
-          CI=true npm run build && npm run prerender && \
+          npm run prerender && \
 
           echo "/==== BUILDING STORYBOOK ====/" && \
           CI=true npm run build-storybook && \

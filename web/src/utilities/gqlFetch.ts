@@ -1,5 +1,8 @@
 import fetch from "cross-fetch";
 
+// Disables SSL check in server
+process.env.NODE_TLS_REJECT_UNAUTHORIZED="0";
+
 const gqlFetch: gqlFetchType = async (query, variables = {}) => {
   return fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_ROOT}`, {
     method: "POST",
