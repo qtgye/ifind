@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "node scripts/load-icons.js && next dev",
     "build": "node scripts/load-icons.js && next build",
-    "export": "node scripts/load-icons.js && next build && next export",
+    "export": "NODE_TLS_REJECT_UNAUTHORIZED=0 node scripts/load-icons.js && next build && next export",
     "start": "next start",
     "lint": "next lint",
     "tsc": "tsc",

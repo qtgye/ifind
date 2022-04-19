@@ -20,10 +20,10 @@ const nextConfig = {
       permanent: true,
     },
   ],
-  exportPathMap: async () => ({}),
+  // exportPathMap: async () => ({}),
   images: {
-    loader: 'akamai',
-    path: '',
+    loader: "akamai",
+    path: "",
   },
 };
 

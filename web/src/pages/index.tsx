@@ -1,4 +1,4 @@
-import OfferPage, { getStaticProps } from "pages/[language]/[page]/[offer_id]";
+import OfferPage, { getStaticProps } from "pages/[language]/offers/[offer_id]";
 
 export default OfferPage;
 

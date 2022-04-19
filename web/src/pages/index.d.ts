@@ -1,2 +1,2 @@
 import "./_app.d";
-import "./[language]/[page]/index.d";
+import "./[language]/offers/index.d";

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Aos from "aos";
 
-import { useGlobalData } from "providers/globalDataContext";
+import { getLanguages, useGlobalData } from "providers/globalDataContext";
 import GeneralTemplate from "templates/GeneralTemplate";
 import { withComponentName } from "utilities/component";
 import VideoPlayer from "components/VideoPlayer";
@@ -124,5 +124,31 @@ const AboutUs = () => {
     </GeneralTemplate>
   );
 };
+
+export const getStaticPaths = async () => {
+  const { languages } = await getLanguages();
+
+  // Build [language]/page-name paths
+  const pagePaths: {
+    params: {
+      language: string;
+    };
+  }[] = [];
+
+  languages.forEach(({ code: language }) => {
+    pagePaths.push({
+      params: {
+        language,
+      },
+    });
+  });
+
+  return {
+    paths: pagePaths,
+    fallback: "blocking", // false or 'blocking'
+  };
+};
+
+export const getStaticProps = async () => ({ props: {} });
 
 export default withComponentName("AboutUsPage")(AboutUs);
