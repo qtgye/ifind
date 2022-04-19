@@ -1,0 +1,59 @@
+@import 'base/scss';
+
+.pagination {
+  margin: auto;
+  margin-top: 20px;
+  padding: 3px 0;
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 5px;
+    margin: auto;
+
+    > li {
+      &.disabled.disabled {
+        a {
+          opacity: .5;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    a {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 30px;
+      height: 30px;
+      transition: all .3s ease;
+      border-radius: 5px;
+
+      &[aria-current][role="button"] {
+        background-color: color(dark-red);
+        color: color(white);
+
+        &:hover {
+          background-color: rgba(color(dark-red), .8);
+          color: color(white);
+        }
+      }
+
+      &:active,
+      &:link,
+      &:visited {
+        color: currentColor;
+      }
+
+      &:not([aria-current]):not([aria-current]) {
+        color: color(dark-red);
+
+        &:hover {
+          box-shadow: 0 0 5px rgba(color(dark-red), .5);
+          color: color(dark-red);
+        }
+      }
+    }
+  }
+}
