@@ -1,14 +1,27 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import { useParams } from "react-router";
 import { useQuery } from "@apollo/react-hooks";
 import productsByDealsQuery from "@gql/productsByDealsQuery";
+
+import { useGlobalState } from "./globalStateContext";
 
 export const ProductsByDealsContext = createContext<ProductsByDealsValues>({});
 
 export const ProductsByDealsContextProvider = ({
   children,
 }: ProductsByDealsContextProviderProps) => {
+  const { setActiveOffer } = useGlobalState();
+  const { offer_id } = useParams<{ offer_id: string }>();
   const [productsByDeals, setProductsByDeals] = useState<ProductsByDeal[]>([]);
-  const { loading, error, data } = useQuery(productsByDealsQuery);
+  const { loading, error, data } = useQuery(productsByDealsQuery, {
+    variables: { offer_id },
+  });
+
+  useEffect(() => {
+    if (setActiveOffer && offer_id) {
+      setActiveOffer(offer_id);
+    }
+  }, [setActiveOffer, offer_id]);
 
   useEffect(() => {
     setProductsByDeals(data?.productsByDeals || []);

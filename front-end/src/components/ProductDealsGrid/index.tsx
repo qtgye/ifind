@@ -56,7 +56,10 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
 
   useEffect(() => {
     if (dealTypeName === "amazon_flash_offers") {
-      return window.scrollTo(0, 0);
+      return window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
     }
 
     if (dealTypeName === deal_type.name && offersRef.current) {
@@ -64,7 +67,10 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
       const { top } = offersRef.current.getBoundingClientRect();
       const targetScroll = currentScroll + (top - 60);
 
-      window.scrollTo(0, targetScroll);
+      window.scrollTo({
+        top: targetScroll,
+        behavior: "smooth",
+      });
     }
   }, [dealTypeName, deal_type.name]);
 

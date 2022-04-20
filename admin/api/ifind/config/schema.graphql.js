@@ -1,115 +1,38 @@
 /**
  * TODO: Abstract out custom Schema definitions for better structure
  */
-const moment = require("moment");
+const scheduledTasksTypes = require("../.types/scheduled-tasks");
+const dealTypesTypes = require("../.types/deal-types");
+const offersCategoriesTypes = require("../.types/offers-categories");
+
+const scheduledTasksResolver = require("../.resolvers/scheduled-tasks");
+const dealTypesResolver = require("../.resolvers/deal-types");
+const offersCategoriesResolver = require("../.resolvers/offers-categories");
 
 module.exports = {
   definition: `
-  enum TASK_STATUS {
-    START
-    STOP
-    ERROR
-  }
-
-  enum SCHEDULED_TASK_NAME {
-    product_validator
-  }
-
-  enum SCHEDULED_TASK_STATUS {
-    stopped
-    running
-  }
-
-  type TaskLogEntry {
-    date_time: String
-    type: String
-    message: String
-  }
-
-  type Task {
-    name: String!
-    status: TASK_STATUS
-    logs: [TaskLogEntry]
-    canRun: Boolean
-  }
-
-  type ScheduledTask {
-    id: String
-    name: String
-    status: SCHEDULED_TASK_STATUS
-    frequency: String
-    next_run: Float
-    countdown: String
-    last_run: Float
-
-    # Computed values
-    hasModule: Boolean
-    canRun: Boolean
-  }
-
-  enum SCHEDULED_TASK_ACTION {
-    start
-    stop
-  }
-
-  type DealTypeLabelTranslation {
-    language: String!
-    label: String
-  }
-
-  type DealType {
-    name: String
-    label: [DealTypeLabelTranslation]
-    source: Source
-    last_run: String
-  }
-
-  type ScheduledTaskPayload {
-    error: String
-    data: [ScheduledTask]
-  }
-
-  type ScheduledTaskListPayload {
-    serverTimeUnix: String
-    serverTimeFormatted: String
-    tasks: [ScheduledTask]
-    logs: [TaskLogEntry]
-  }
-  `,
+    ${dealTypesTypes}
+    ${scheduledTasksTypes}
+    ${offersCategoriesTypes}
+   `,
   query: `
-  getTask ( id: String! ): Task
-  scheduledTasksList: ScheduledTaskListPayload
-  sheduledTasks ( command: String, id: String ): ScheduledTaskPayload
-  `,
+    ${scheduledTasksResolver.query}
+    ${dealTypesResolver.query}
+    ${offersCategoriesResolver.query}
+   `,
   mutation: `
-  triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): ScheduledTaskListPayload
-  `,
+    ${scheduledTasksResolver.mutation}
+   `,
   type: {},
   resolver: {
     Query: {
-      async sheduledTasks(_, { command, id }) {
-        const tasks = strapi.scheduledTasks.runCommand(command, id);
-        return { tasks };
-      },
-      async scheduledTasksList() {
-        const serverTime = moment.utc();
-        const serverTimeUnix = String(serverTime.valueOf());
-        const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
-        const tasks = strapi.scheduledTasks.list();
-        const logs = strapi.scheduledTasks.getLogs();
-
-        return { serverTimeUnix, serverTimeFormatted, tasks, logs };
-      },
-      async getTask(_, { id }) {
-        return strapi.scheduledTasks.getTask(id);
-      },
+      ...scheduledTasksResolver.resolveQuery,
+      ...dealTypesResolver.resolveQuery,
+      ...offersCategoriesResolver.resolveQuery,
     },
     Mutation: {
-      async triggerTask(_, args) {
-        const { action: command, taskID: id } = args;
-        const tasks = strapi.scheduledTasks.runCommand(command, id);
-        return { tasks };
-      },
+      ...scheduledTasksResolver.resolveMutation,
+      // ...dealTypesResolver.resolveMutation,
     },
   },
 };

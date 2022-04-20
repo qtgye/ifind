@@ -108,7 +108,7 @@ const TagsFilter = ({ activeTag = "all", onUpdate }: TagsFilterProps) => {
   );
 
   const extractTagLabel = useCallback(
-    (tag: Tag) => {
+    (tag: SelectableTag) => {
       if (userLanguage) {
         const matchedLabel = tag.label?.find(
           (label) => label?.language?.code === userLanguage

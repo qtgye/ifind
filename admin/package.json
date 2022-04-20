@@ -12,7 +12,8 @@
     "config:export": "node ./scripts/config-dump.js --f config-dump.json",
     "config:import": " node scripts/strapi-custom.js config:restore -f config-dump.json",
     "currencies:import": "node scripts/currencies-import.js",
-    "serve:amazon-page-errors": "node amazon-scraper-errors/index.js"
+    "serve:amazon-page-errors": "node amazon-scraper-errors/index.js",
+    "api-data": "node ./scripts/api-data"
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.8",
@@ -48,6 +49,7 @@
     "chokidar": "^3.5.2",
     "ebay-oauth-nodejs-client": "^1.2.1",
     "form-data": "^0.2.0",
+    "fs": "0.0.1-security",
     "fs-extra": "^10.0.0",
     "glob": "^7.1.7",
     "got": "^11.8.2",

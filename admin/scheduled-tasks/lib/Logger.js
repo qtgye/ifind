@@ -1,4 +1,4 @@
-require('colors');
+require("colors");
 const { ensureDirSync, readFileSync } = require("fs-extra");
 const path = require("path");
 const glob = require("glob");
@@ -76,34 +76,42 @@ class Logger {
 
   // Get all logs
   getAll() {
-    const logFilesPaths = glob.sync(
-      path.resolve(this.logDir, "*.log")
-    );
+    const logFilesPaths = glob.sync(path.resolve(this.logDir, "*.log"));
 
     // Get only recent 100 logs
     const logs = [];
 
     // Get log entries from recent to oldest
     logFilesPaths.reverse().some((logFilePath) => {
-      const logFileContents = readFileSync(logFilePath).toString();
-      const logEntries = logFileContents.split("\n");
-      const logsCountToGet = 100 - logs.length;
+      // Catch "string too long" error
+      try {
+        const logFileContents = readFileSync(logFilePath).toString();
+        const logEntries = logFileContents.split("\n");
+        const logsCountToGet = 100 - logs.length;
 
-      logEntries
-        .reverse()
-        .slice(0, logsCountToGet)
-        .some((logEntry) => {
-          const [date_time = "", type = "", message = ""] = logEntry.split(" | ");
+        logEntries
+          .reverse()
+          .slice(0, logsCountToGet)
+          .some((logEntry) => {
+            const [date_time = "", type = "", message = ""] =
+              logEntry.split(" | ");
 
-          if (message || type || message) {
-            // Remove ANSI formatting on some properties
-            logs.push({
-              date_time: date_time.trim(),
-              type: type || "INFO",
-              message,
-            });
-          }
+            if (message || type || message) {
+              // Remove ANSI formatting on some properties
+              logs.push({
+                date_time: date_time.trim(),
+                type: type || "INFO",
+                message,
+              });
+            }
+          });
+      } catch (err) {
+        logs.push({
+          date_time: "",
+          type: "ERROR",
+          message: "Log file too large",
         });
+      }
 
       // Break loop if there's already 100 log entries
       if (logs.length >= 100) {

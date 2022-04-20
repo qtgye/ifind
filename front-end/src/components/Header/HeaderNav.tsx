@@ -1,19 +1,36 @@
-import { useLocation } from "react-router-dom";
-import { navigationRoutes } from "@config/routes";
-import { useTranslation, navigation } from "@translations/index";
+import { useEffect, useState } from "react";
 
-import CustomLink from "@components/Link";
-import HeaderSideNav from './HeaderSideNav';
-
-import "./header-nav.scss";
+import { useOffersCategories } from "@contexts/offersCategoriesContext";
+import { useGlobalState } from "@contexts/globalStateContext";
+import NavPills from "@components/NavPills";
 import { useLinkWithLanguage } from "@utilities/route";
 
+import HeaderSideNav from "./HeaderSideNav";
+
+import "./header-nav.scss";
 
 const HeaderNav = () => {
+  const { activeOffer } = useGlobalState();
   const linkWithLanguage = useLinkWithLanguage();
-  const { pathname } = useLocation();
-  const noLanguagePathName = "/" + pathname.split("/").slice(2).join("/");
-  const translate = useTranslation();
+  const { offersCategories } = useOffersCategories();
+  const [navPillsItems, setNavPillsItems] = useState<NavPillItemProps[]>([]);
+
+  useEffect(() => {
+    if (offersCategories?.length) {
+      setNavPillsItems(
+        offersCategories.map(({ id, label }) => ({
+          active: id === activeOffer,
+          href: linkWithLanguage(`/offers/${id}`),
+          label: (label || []).map<NavPillItemTranslatableLabel>(
+            (offersCategoryLabel) => ({
+              language: offersCategoryLabel?.language || "",
+              label: offersCategoryLabel?.label || "",
+            })
+          ),
+        }))
+      );
+    }
+  }, [offersCategories, activeOffer, linkWithLanguage]);
 
   return (
     <div className="header-nav">
@@ -22,24 +39,7 @@ const HeaderNav = () => {
           <HeaderSideNav />
           <div className="menu-area">
             <ul className="main-menu">
-              {navigationRoutes.map((navItem) => (
-                <li key={navItem?.path}>
-                  <CustomLink
-                    href={linkWithLanguage(navItem?.path || "/")}
-                    className={
-                      noLanguagePathName === navItem?.path
-                        ? "active current"
-                        : ""
-                    }
-                  >
-                    {translate(
-                      (navigation as GenericObject)[
-                        navItem?.translationKey || ""
-                      ]
-                    ) || navItem?.label}
-                  </CustomLink>
-                </li>
-              ))}
+              <NavPills items={navPillsItems} />
             </ul>
             {/* <div className="clock">
               <span>{time}</span>

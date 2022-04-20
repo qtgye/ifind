@@ -1,0 +1,20 @@
+@import "./globals";
+
+// Components
+@import "components/Header/styles";
+@import "components/FlagsSelect/styles";
+@import "components/NavPills/styles";
+@import "components/IfindIcon/styles";
+@import "components/OffersSideNav/styles";
+@import "components/ProductDealsGrid/styles";
+@import "components/ProductDealCard/styles";
+@import "components/PercentCircle/styles";
+@import "components/BreadCrumbs/styles";
+@import "components/Footer/styles";
+@import "components/NewsLetter/styles";
+@import "components/HomeCarousel/homecarousel";
+
+// Pages
+@import "pages/[language]/offers/styles";
+@import "pages/[language]/contact";
+@import "pages/[language]/about-us";

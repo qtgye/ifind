@@ -55,18 +55,11 @@ jobs:
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
-          cd ../front-end && \
+          cd ../web && \
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
-          echo "/==== RUNNING TESTS ====/" && \
-          CI=true npm run test && \
-          rm -rf /var/www/html/coverage && mv coverage /var/www/html/coverage && \
           echo "/==== BUILDING SITE ====/" && \
-          CI=true npm run build && npm run prerender && \
-
-          echo "/==== BUILDING STORYBOOK ====/" && \
-          CI=true npm run build-storybook && \
-          rm -rf /var/www/html/front-end/storybook-static && mv storybook-static /var/www/html/front-end
+          npm run prerender
 
     # TO DO:
     # Add scripts for admin and api server builds

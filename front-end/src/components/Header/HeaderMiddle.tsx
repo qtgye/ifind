@@ -1,16 +1,21 @@
 import { useRef, useEffect, useCallback } from "react";
 // import { useLocation } from "react-router-dom";
+
 // import routes from "@config/routes";
+//import { languages } from '@mocks/components/languages';
+import { useLinkWithLanguage } from "@utilities/route";
+import { useTranslation } from "@translations/index";
 
 import HeaderLanguageButton from "./HeaderLanguageButton";
-//import { languages } from '@mocks/components/languages';
-
+import { contact } from "./translations";
 import "./header-middle.scss";
 
 const logo = "/images/logowith1warp.jpg";
 
 const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
   // const { pathname } = useLocation();
+  const linkWithLanguage = useLinkWithLanguage();
+  const translate = useTranslation();
 
   const headerMiddleRef = useRef(null);
   const observer = useRef<IntersectionObserver | null>(null);
@@ -190,6 +195,14 @@ const HeaderMiddle = ({ onInterSect, onSubmit }: HeaderMiddleProps) => {
           </div>
           <div className="header-middle__controls">
             <div className="right-bar">
+              <div className="right-bar__links">
+                <a
+                  href={linkWithLanguage("/contact")}
+                  className="header-contact"
+                >
+                  {translate(contact)}
+                </a>
+              </div>
               <div className="flag-container">
                 <HeaderLanguageButton />
               </div>

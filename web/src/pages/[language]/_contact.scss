@@ -1,0 +1,143 @@
+@import "base/scss";
+
+.contact-us {
+  &__container {
+    @include container;
+    @include grid;
+  }
+
+  .contact-form {
+    @include col-span;
+
+    @include lg {
+      @include col-span(7);
+    }
+
+    @include xl {
+      @include col-span(8);
+    }
+  }
+
+  .contact-sidebar {
+    @include col-span;
+
+    @include lg {
+      @include col-span(3);
+    }
+
+    @include xl {
+      @include col-span(4);
+    }
+  }
+
+  // From old codes
+  .title {
+    margin-bottom: 30px;
+  }
+  .title h4 {
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #ba0130;
+  }
+  .title h3 {
+    font-size: 25px;
+    text-transform: capitalize;
+    font-weight: 600;
+  }
+  .single-head {
+    padding: 50px;
+    box-shadow: 0px 0px 15px #0000001a;
+    height: 100%;
+  }
+  .single-info {
+    text-align: left;
+    margin-bottom: 30px;
+  }
+  .single-info i {
+    color: #fff;
+    font-size: 18px;
+    display: inline-block;
+    margin-bottom: 15px;
+    height: 40px;
+    width: 40px;
+    display: block;
+    text-align: center;
+    border-radius: 3px;
+    line-height: 40px;
+    background: #ba0130;
+
+    &:hover {
+      background: #333;
+    }
+  }
+  .single-info ul,
+  .single-info ul li {
+    margin-bottom: 5px;
+  }
+  .single-info ul li:last-child {
+    margin-bottom: 0;
+  }
+  .single-info ul li a {
+    font-weight: 400;
+  }
+  .single-info ul li a:hover {
+    color: #ba0130;
+  }
+  .single-info .title {
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: #333;
+    font-size: 18px;
+  }
+  .form-main {
+    box-shadow: 0px 0px 15px #0000001a;
+    padding: 50px;
+  }
+  .form .form-group input {
+    height: 48px;
+    line-height: 48px;
+    width: 100%;
+    border: 1px solid #e6e2f5;
+    padding: 0px 20px;
+    color: #333;
+    border-radius: 0px;
+    font-weight: 400;
+  }
+  .form .form-group textarea {
+    height: 180px;
+    width: 100%;
+    border: 1px solid #e6e2f5;
+    padding: 15px 20px;
+    color: #333;
+    border-radius: 0px;
+    resize: none;
+    font-weight: 400;
+  }
+  .form .form-group label {
+    color: #333;
+    position: relative;
+  }
+  .form .form-group label span {
+    color: #ff2c18;
+    display: inline-block;
+    position: absolute;
+    right: -12px;
+    top: 4px;
+    font-size: 16px;
+  }
+  .form .button {
+    margin: 0;
+  }
+  .form .button .btn {
+    height: 50px;
+    border: none;
+    background-color: #bc0031;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: #2e3137;
+    }
+  }
+}
