@@ -14,4 +14,6 @@ The site has 3 different layers with their own individual folders for separation
 ```
 
 Each layer has its own development and build setup, kindly refer to the `README.md` file of each layer for specific instructions.
-
+-  Admin: [`admin/README.md`](admin/README.md)  
+-  Front End: [`front-end/README.md`](front-end/README.md)  
+- API:  [`api/READMe.md`](api/READMe.md)  
