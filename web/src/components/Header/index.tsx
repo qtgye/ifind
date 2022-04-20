@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 import { routesExtraConfig } from "config/routes";
 
@@ -6,25 +7,16 @@ import HeaderMiddle from "./HeaderMiddle";
 import HeaderNav from "./HeaderNav";
 
 const Header = () => {
-  const [additionalClassNames, setAdditionalClassNames] = useState<string[]>(
-    []
-  );
+  const { asPath: pathname = "" } = useRouter();
+  const additionalClassNames = [];
+  const offersRouteConfig = routesExtraConfig.find(({ id }) => id === "offers");
+
+  if (offersRouteConfig?.pattern?.test(pathname)) {
+    additionalClassNames.push("header--with-side-nav");
+  }
   const classNames = ["header", ...additionalClassNames]
     .filter(Boolean)
     .join(" ");
-
-  useEffect(() => {
-    const additionalClassNames = [];
-    const offersRouteConfig = routesExtraConfig.find(
-      ({ id }) => id === "offers"
-    );
-
-    if (offersRouteConfig?.pattern?.test(window.location.pathname)) {
-      additionalClassNames.push("header--with-side-nav");
-    }
-
-    setAdditionalClassNames(additionalClassNames);
-  }, []);
 
   return (
     <header className={classNames}>

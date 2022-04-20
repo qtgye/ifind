@@ -17,7 +17,7 @@ const NavPillItem = ({ href, label, active = false }: NavPillItemProps) => {
     <li>
       <a
         className={["navpills__item", active && "navpills__item--active"]
-          .filter(window.Boolean)
+          .filter(Boolean)
           .join(" ")}
         href={href}
       >

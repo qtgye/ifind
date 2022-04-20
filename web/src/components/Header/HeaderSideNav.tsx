@@ -11,7 +11,6 @@ import { useIsRouteMatch } from "utilities/route";
 import { useTranslation } from "translations/index";
 import { GlobalStateContext } from "providers/globalStateContext";
 import { routesExtraConfig } from "config/routes";
-import useWindow from "utilities/window";
 
 import HeaderSideNavSubMenu from "./HeaderSideNavSubMenu";
 import HeaderSideNavSubMenu2 from "./HeaderSideNavSubMenu2";
@@ -20,20 +19,17 @@ import RenderIf from "components/RenderIf";
 import OffersSideNav from "components/OffersSideNav";
 
 import { categories as categoriesLabel } from "./translations";
+import { useRouter } from "next/router";
 
 const HeaderSideNav = () => {
-  const window = useWindow();
+  const { asPath: pathname = "" } = useRouter();
   const translate = useTranslation();
   const isRouteMath = useIsRouteMatch();
   // const { subCategories } = useSubCategories();
   const subCategories: (CategoryWithChild | null)[] = [];
   const { on } = eventBus;
   const { dealTypeName, onOffersClick } = useContext(GlobalStateContext);
-  const [withSideNav, setWithSideNav] = useState<boolean>(false);
-
   const listRef = useRef<HTMLDivElement | null>();
-  const [isVisible, setIsVisible] = useState(false);
-  const [checked, setChecked] = useState(false);
   const offersRouteConfig = routesExtraConfig.find(({ id }) => id === "offers");
 
   const checkChange = () => setChecked(!checked);
@@ -58,21 +54,22 @@ const HeaderSideNav = () => {
   }, [on, triggerScroll]);
 
   const isMatch = useCallback(
-    (regExp?: RegExp) => regExp?.test(window?.location.pathname || ""),
-    []
+    (regExp?: RegExp) => regExp?.test(pathname.replace(/\/$/, "")) || false,
+    [pathname]
   );
+
+  const withSideNav = isMatch(offersRouteConfig?.pattern);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     handleScroll();
-
-    if (isMatch(offersRouteConfig?.pattern)) {
-      setWithSideNav(true);
-    }
-  }, [handleScroll, isMatch, offersRouteConfig]);
+  }, []);
 
   return (
     <div className="header-side-nav">
-      <RenderIf condition={withSideNav || false}>
+      <RenderIf condition={withSideNav}>
         <h3
           className={[
             "header-side-nav__heading",

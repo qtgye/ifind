@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { useOffersCategories } from "providers/offersCategoriesContext";
 import { useGlobalState } from "providers/globalStateContext";
@@ -9,26 +9,19 @@ import HeaderSideNav from "./HeaderSideNav";
 
 const HeaderNav = () => {
   const { activeOffer } = useGlobalState();
-  const { offersCategories } = useOffersCategories();
+  const { offersCategories = [] } = useOffersCategories();
   const linkWithLanguage = useLinkWithLanguage();
-  const [navPillsItems, setNavPillsItems] = useState<NavPillItemProps[]>([]);
 
-  useEffect(() => {
-    if (offersCategories?.length) {
-      setNavPillsItems(
-        offersCategories.map(({ id, label }) => ({
-          active: id === activeOffer,
-          href: linkWithLanguage(`/offers/${id}`),
-          label: (label || []).map<NavPillItemTranslatableLabel>(
-            (offersCategoryLabel) => ({
-              language: offersCategoryLabel?.language || "",
-              label: offersCategoryLabel?.label || "",
-            })
-          ),
-        }))
-      );
-    }
-  }, [offersCategories, activeOffer, linkWithLanguage]);
+  const navPillsItems = offersCategories.map(({ id, label }) => ({
+    active: id === activeOffer,
+    href: linkWithLanguage(`/offers/${id}`),
+    label: (label || []).map<NavPillItemTranslatableLabel>(
+      (offersCategoryLabel) => ({
+        language: offersCategoryLabel?.language || "",
+        label: offersCategoryLabel?.label || "",
+      })
+    ),
+  }));
 
   return (
     <div className="header-nav">

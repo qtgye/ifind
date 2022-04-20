@@ -13,14 +13,14 @@ export const GlobalStateContextProvider = ({
   children,
 }: GlobalStateContextProviderProps) => {
   const {
-    query: { offer_id },
+    query: { offer_id = [] },
   } = useRouter();
   const [activeCategory, setActiveCategory] = useState(null);
   const [focusedCategory, setFocusedCategory] = useState(0);
   const [dealTypeName, setDealTypeName] = useState("amazon_flash_offers");
   const [bodyScrollEnabled, setBodyScrollEnabled] = useState<boolean>(true);
   const [activeOffer, setActiveOffer] = useState<string>(
-    (offer_id as string) || ""
+    (offer_id[0] as string) || ""
   );
 
   const onCategoryClick = useCallback((id: number) => {
