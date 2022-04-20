@@ -54,7 +54,7 @@ const HeaderSideNav = () => {
   }, [on, triggerScroll]);
 
   const isMatch = useCallback(
-    (regExp?: RegExp) => regExp?.test(pathname.replace(/\/$/, "")) || false,
+    (regExp?: RegExp) => regExp?.test(pathname) || false,
     [pathname]
   );
 
