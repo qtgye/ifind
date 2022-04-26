@@ -1,13 +1,14 @@
 #!/bin/sh
-cd front-end && \
 
-echo "=============================" && \
-echo "=       Linting Files       =" && \
-echo "=============================" && \
-npm run lint && \
+# cd front-end && \
+
+# echo "=============================" && \
+# echo "=       Linting Files       =" && \
+# echo "=============================" && \
+# npm run lint && \
 
 
-echo "=============================" && \
-echo "=       Running Tests       =" && \
-echo "=============================" && \
-npm test -- --watchAll=false --coverage
+# echo "=============================" && \
+# echo "=       Running Tests       =" && \
+# echo "=============================" && \
+# npm test -- --watchAll=false --coverage
