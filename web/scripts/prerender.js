@@ -6,7 +6,7 @@ const { trace } = require("next/dist/trace");
 const { STATIC_WEB_ROOT } = require("dotenv").config().parsed;
 
 const PROJECT_ROOT = path.resolve(__dirname, "../");
-const OUT_DIR = STATIC_WEB_ROOT || path.resolve(PROJECT_ROOT, "out");
+const OUT_DIR = path.resolve(PROJECT_ROOT, "out");
 
 // Source: next/dist/cli/next-export
 const span = trace("next-export-cli");
@@ -27,5 +27,9 @@ const span = trace("next-export-cli");
     span
   );
 
-  console.info(`Successfuly exported files to ${OUT_DIR}`);
+  // Move static site files
+  console.log("Static files generated. Moving to web root...");
+  fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
+
+  console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
 })();
