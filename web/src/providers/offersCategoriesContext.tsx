@@ -1,7 +1,12 @@
 import { useRouter } from "next/router";
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import gqlFetch from "utilities/gqlFetch";
-import { useProductsByDeals } from "./productsByDealsContext";
 
 export const OffersCategoriesContext = createContext<OffersCategoriesContext>(
   {}
@@ -14,20 +19,33 @@ export const OffersCategoriesProvider = ({
   const {
     query: { offer_id },
   } = useRouter();
-  const [activeOffer, setActiveOffer] = useState<OffersCategory>();
+  const activeOffer: OffersCategory | undefined =
+    offersCategories.find(({ id }) => (offer_id?.length ? offer_id[0] === id : false )) ||
+    offersCategories.find(({ isDefault }) => isDefault);
 
-  useEffect(() => {
-    const currentOffer =
-      (offer_id ? offersCategories.find(({ id }) => offer_id === id) : null) ||
-      offersCategories.find(({ isDefault }) => isDefault);
-
-    if (currentOffer) {
-      setActiveOffer(currentOffer);
-    }
-  }, [offersCategories, offer_id]);
+  const offersCategoryTranslationArrayToMap = useCallback(
+    (translationArray: (OffersCategoryLabelTranslation | null)[]) =>
+      translationArray.reduce(
+        (translationMap: TranslationMap, translationLabel) => {
+          if (translationLabel?.language) {
+            translationMap[translationLabel.language] =
+              translationLabel.label as string;
+          }
+          return translationMap;
+        },
+        {}
+      ),
+    []
+  );
 
   return (
-    <OffersCategoriesContext.Provider value={{ offersCategories, activeOffer }}>
+    <OffersCategoriesContext.Provider
+      value={{
+        offersCategories,
+        activeOffer,
+        offersCategoryTranslationArrayToMap,
+      }}
+    >
       {children}
     </OffersCategoriesContext.Provider>
   );

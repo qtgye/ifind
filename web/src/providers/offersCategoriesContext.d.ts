@@ -2,6 +2,9 @@ declare interface OffersCategoriesContext {
   offersCategories?: OffersCategory[];
   activeOffer?: OffersCategory;
   loading?: boolean;
+  offersCategoryTranslationArrayToMap: (
+    translations: (OffersCategoryLabelTranslation | null)[]
+  ) => TranslationMap;
 }
 
 declare interface OffersCategoriesQueryData {

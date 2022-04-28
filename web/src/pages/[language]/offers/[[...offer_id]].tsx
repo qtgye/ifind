@@ -1,4 +1,4 @@
-import { GetStaticPropsContext, NextPageContext } from "next";
+import { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -7,6 +7,7 @@ import { getLanguages } from "providers/globalDataContext";
 import {
   getOffersCategories,
   OffersCategoriesProvider,
+  useOffersCategories,
 } from "providers/offersCategoriesContext";
 import RenderIf from "components/RenderIf";
 import ProductDealsGrid from "components/ProductDealsGrid";
@@ -19,6 +20,7 @@ import {
 } from "providers/productsByDealsContext";
 import { useEffect } from "react";
 import GeneralTemplate from "templates/GeneralTemplate";
+import { useTranslation } from "translations";
 
 type OfferPageParams = {
   offer_id: string;
@@ -26,12 +28,21 @@ type OfferPageParams = {
 
 function Offer() {
   const { loading = false, productsByDeals } = useProductsByDeals();
+  const { activeOffer, offersCategoryTranslationArrayToMap } =
+    useOffersCategories();
+  const translate = useTranslation();
   const icon = "/images/loading.png";
 
   return (
     <GeneralTemplate>
       <Head>
-        <title>Offers Page</title>
+        <title>
+          {translate(
+            offersCategoryTranslationArrayToMap(
+              activeOffer?.label || []
+            )
+          ) + ' - Offers'}
+        </title>
       </Head>
       <div className="offers">
         <div className="offers__container">
