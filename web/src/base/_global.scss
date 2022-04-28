@@ -41,3 +41,20 @@ a[href] {
     background-color: $color-value;
   }
 }
+
+.container {
+  @include container;
+}
+
+.content {
+  p {
+    margin-top: 1em;
+  }
+
+  & h2,
+  & h3,
+  & h4,
+  & h5 {
+    margin-top: 1em;
+  }
+}

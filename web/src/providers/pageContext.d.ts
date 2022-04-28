@@ -4,5 +4,20 @@ declare interface GetPageVariables {
 }
 
 declare interface PagePayload {
-  pageBySlug: Page;
+  pageBySlug: PageData;
+}
+
+declare interface PagesPayload {
+  pages: Page[];
+}
+
+declare interface PageContextData {
+  loading?: boolean;
+  data?: {
+    data?: ComponentEntryFieldsPageFields;
+  };
+}
+
+declare interface PageContextProviderProps {
+  children: React.ReactNode;
 }

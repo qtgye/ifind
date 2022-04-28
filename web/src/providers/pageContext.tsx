@@ -1,14 +1,4 @@
-import { useParams } from "react-router-dom";
-import React, { createContext, useContext } from "react";
-import { locale as language } from "config/locale";
 import gqlFetch from "utilities/gqlFetch";
-
-interface PageContextData {
-  loading?: boolean;
-  data?: {
-    data?: ComponentEntryFieldsPageFields;
-  };
-}
 
 export const pageBySlugQuery = `
 query PageBySlugQuery ($slug: String!, $language: String) {
@@ -21,27 +11,19 @@ query PageBySlugQuery ($slug: String!, $language: String) {
   }
 }`;
 
-export const PageContext = createContext<PageContextData>({});
+export const pagesQuery = `
+query {
+  pages {
+    slug
+  }
+}
+`;
 
-export const PageContextProvider = ({
-  children,
-}: React.PropsWithChildren<React.ReactNode>) => {
-  return <PageContext.Provider value={{}}>{children}</PageContext.Provider>;
-};
+export const getPages = async () => gqlFetch<PagesPayload>(pagesQuery);
 
-// Supply a name in order to check for it outside
-PageContextProvider.providerName = "PageContextProvider";
-
-export const usePageData = () => {
-  const context = useContext(PageContext);
-  return context;
-};
-
-export const getPage = ({ language, slug }: GetPageVariables) =>
-  gqlFetch<PagePayload>(pageBySlugQuery, {
+export const getPage = async ({ language, slug }: GetPageVariables) => {
+  return gqlFetch<PagePayload>(pageBySlugQuery, {
     language,
     slug,
   });
-
-// Export as default to be used in testing
-export default PageContext;
+};

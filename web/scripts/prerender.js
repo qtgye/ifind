@@ -29,7 +29,9 @@ const span = trace("next-export-cli");
 
   // Move static site files
   console.log("Static files generated. Moving to web root...");
-  fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
 
+  if ( OUT_DIR !== STATIC_WEB_ROOT ) {
+    fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
+  }
   console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
 })();
