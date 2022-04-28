@@ -34,4 +34,6 @@ const span = trace("next-export-cli");
     fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
   }
   console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
+
+  process.exit();
 })();
