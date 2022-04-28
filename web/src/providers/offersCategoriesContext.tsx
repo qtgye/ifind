@@ -8,9 +8,9 @@ import React, {
 } from "react";
 import gqlFetch from "utilities/gqlFetch";
 
-export const OffersCategoriesContext = createContext<OffersCategoriesContext>(
-  {}
-);
+export const OffersCategoriesContext = createContext<OffersCategoriesContext>({
+  offersCategoryTranslationArrayToMap: () => ({}),
+});
 
 export const OffersCategoriesProvider = ({
   children,
@@ -20,8 +20,9 @@ export const OffersCategoriesProvider = ({
     query: { offer_id },
   } = useRouter();
   const activeOffer: OffersCategory | undefined =
-    offersCategories.find(({ id }) => (offer_id?.length ? offer_id[0] === id : false )) ||
-    offersCategories.find(({ isDefault }) => isDefault);
+    offersCategories.find(({ id }) =>
+      offer_id?.length ? offer_id[0] === id : false
+    ) || offersCategories.find(({ isDefault }) => isDefault);
 
   const offersCategoryTranslationArrayToMap = useCallback(
     (translationArray: (OffersCategoryLabelTranslation | null)[]) =>
