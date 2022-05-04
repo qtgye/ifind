@@ -11,12 +11,26 @@ const outputPath = path.resolve(projectRoot, "typings/admin.graphql.d.ts");
 ensureDirSync(path.resolve(projectRoot, "typings"));
 
 module.exports = async () => {
-  const [schemaFile] = glob.sync(
-    path.resolve(projectRoot, "../admin/exports/**/*.graphql")
-  );
+  let schemaFile,
+    tries = 5;
+
+  while (tries--) {
+    [schemaFile] = glob.sync(
+      path.resolve(projectRoot, "../admin/exports/**/*.graphql")
+    );
+
+    if (!schemaFile) {
+      console.log(`No schema file found. Retrying...`.yellow);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      continue;
+    }
+
+    break;
+  }
 
   if (!schemaFile) {
     console.log(`Unable to find schema file`.yellow);
+    return;
   }
 
   const schemaContents = readFileSync(schemaFile).toString();
