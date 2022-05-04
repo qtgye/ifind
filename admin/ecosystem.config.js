@@ -5,6 +5,7 @@ module.exports = {
       script: "npm",
       args: "run develop",
       watch: false,
+      max_memory_restart: "200M",
     },
     {
       name: "amazon-page-errors",
