@@ -71,6 +71,11 @@ const Footer = () => {
             <div className="footer__links">
               <h4>Information</h4>
               <ul>
+                {/* Static about-us page */}
+                <li key="about-us">
+                  <a href={`/${userLanguage}/about-us`}>About Us</a>
+                </li>
+                {/* Dynamic Pages */}
                 {informationLinks.map(
                   (infoRoute) =>
                     infoRoute && (
