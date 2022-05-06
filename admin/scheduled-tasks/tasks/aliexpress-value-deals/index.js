@@ -1,6 +1,8 @@
 const adminStrapi = require("../../../scripts/strapi-custom");
 const { getValueDeals } = require("../../../helpers/aliexpress/value-deals");
 const { getDetailsFromURL } = require("../../../helpers/aliexpress/api");
+const axios = require('axios').default;
+
 
 const RETRY_WAIT = 30000;
 
@@ -12,61 +14,18 @@ const RETRY_WAIT = 30000;
   ]);
 
   try {
-    let valueDealsLinks = [];
 
-    await new Promise(async (resolve) => {
-      while (!valueDealsLinks.length) {
-        try {
-          console.log("Fetching from Super Value Deals Page...".cyan);
-          valueDealsLinks = await getValueDeals();
-        } catch (err) {
-          console.error(err);
-          console.error(
-            `Unable to fetch deals page. Retrying in ${Number(
-              RETRY_WAIT / 1000
-            )} second(s)...`.red
-          );
-          await new Promise((resolve) => setTimeout(resolve, RETRY_WAIT));
-        }
+    let productsData = null
+    await axios.post("http://localhost:3000/aliexpress/getAliExpressData").then(
+      (response) => {
+        productsData = response.data.data;
+        // offers.push(response.data)
+      },
+      (error) => {
+        console.log(error);
       }
-      resolve();
-    });
-
-    const productsData = [];
-
-    while (!productsData.length) {
-      console.log(
-        `Getting product details for ${valueDealsLinks.length} product link(s) scraped...`
-          .cyan
-      );
-
-      for (let productLink of valueDealsLinks) {
-        console.log(`Fetching data for: ${productLink}`.gray);
-
-        try {
-          const productData = await getDetailsFromURL(productLink);
-          productsData.push(productData);
-
-          console.log(
-            `[ ${productsData.length} ] Details fetched for ${productData.title.bold}`
-              .green
-          );
-        } catch (err) {
-          console.error(`Error while fetching ${productLink}: ${err.message}`);
-        }
-      }
-
-      console.log(`Total of ${productsData.length} products has been fetched.`);
-
-      if (!productsData.length) {
-        console.log(
-          `No products fetched. Retring in ${Number(
-            RETRY_WAIT / 1000
-          )} second(s)...`.magenta
-        );
-        await new Promise((resolve) => setTimeout(resolve, RETRY_WAIT));
-      }
-    }
+    );
+    console.log("productsData", productsData);
 
     // Remove old products
     console.log("Removing old products...".green);
@@ -81,6 +40,7 @@ const RETRY_WAIT = 30000;
     let saved = 0;
 
     for (const productData of productsData) {
+      console.log("productData", productData)
       const newData = {
         website_tab: "home",
         deal_type: "aliexpress_value_deals",
@@ -88,7 +48,7 @@ const RETRY_WAIT = 30000;
         image: productData.image,
         url_list: [
           {
-            url: productData.affiliateLink,
+            url: productData.url,
             source: aliexpressSource.id,
             region: germanRegion.id,
             price: productData.price,
@@ -100,9 +60,8 @@ const RETRY_WAIT = 30000;
 
       await strapi.services.product.create(newData);
       console.log(
-        `[ ${++saved} of ${productsData.length} ] Successfully saved: ${
-          newData.title.bold
-        }`.green
+        `[ ${++saved} of ${productsData.length} ] Successfully saved: ${newData.title.bold
+          }`.green
       );
     }
 
