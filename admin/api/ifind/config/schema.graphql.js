@@ -22,6 +22,7 @@ module.exports = {
    `,
   mutation: `
     ${scheduledTasksResolver.mutation}
+    ${dealTypesResolver.mutation}
    `,
   type: {},
   resolver: {
@@ -32,7 +33,7 @@ module.exports = {
     },
     Mutation: {
       ...scheduledTasksResolver.resolveMutation,
-      // ...dealTypesResolver.resolveMutation,
+      ...dealTypesResolver.resolveMutation,
     },
   },
 };

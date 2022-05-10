@@ -4007,6 +4007,7 @@ declare global {
     updateCategories?: Array<Category | null>;
     updateProductCounts?: Array<Category | null>;
     triggerTask?: ScheduledTaskListPayload;
+    deleteProductsByDeals?: Array<string | null>;
     addProductClick?: ProductClicksDetails;
     fixProducts?: FixedProductsPayload;
     updateProductLinks?: FixedProductsPayload;
@@ -10349,6 +10350,7 @@ declare global {
     updateCategories?: MutationToUpdateCategoriesResolver<TParent>;
     updateProductCounts?: MutationToUpdateProductCountsResolver<TParent>;
     triggerTask?: MutationToTriggerTaskResolver<TParent>;
+    deleteProductsByDeals?: MutationToDeleteProductsByDealsResolver<TParent>;
     addProductClick?: MutationToAddProductClickResolver<TParent>;
     fixProducts?: MutationToFixProductsResolver<TParent>;
     updateProductLinks?: MutationToUpdateProductLinksResolver<TParent>;
@@ -10731,6 +10733,13 @@ declare global {
   }
   export interface MutationToTriggerTaskResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToTriggerTaskArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface MutationToDeleteProductsByDealsArgs {
+    deal_type?: string;
+  }
+  export interface MutationToDeleteProductsByDealsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: MutationToDeleteProductsByDealsArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface MutationToAddProductClickArgs {
