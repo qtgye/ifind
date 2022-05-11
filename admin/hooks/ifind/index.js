@@ -13,7 +13,7 @@ module.exports = strapi => {
         // Always export admin types when Strapi is loaded,
         // In order for external consuming modules to always have the
         // updated admin types
-        generateAdminTypes();
+        setTimeout(generateAdminTypes, 3000);
 
         // Remove existing scraper error files
         clearAmazonScraperErrors();

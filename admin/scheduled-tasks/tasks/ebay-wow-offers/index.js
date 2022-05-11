@@ -1,14 +1,27 @@
 const createStrapiInstance = require("../../../scripts/strapi-custom");
 const getEbayWowOffers = require("../../../helpers/ebay/wow-offers");
 const ebayLink = require("../../../helpers/ebay/ebayLink");
+const { NULL } = require("node-sass");
+const axios = require('axios').default;
+
 
 const EBAY_DEAL_TYPE = "ebay_wow_offers";
 
 (async () => {
   try {
     console.log("Getting Ebay Wow Offers...");
-    const offers = await getEbayWowOffers();
-
+    // const offers = await getEbayWowOffers();
+    let offers = null
+    await axios.post("http://localhost:3000/ebay/fetchEbayStore").then(
+      (response) => {
+        offers = response.data.data;
+        // offers.push(response.data)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log("offers", offers);
     const strapi = await createStrapiInstance();
     const [ebaySource, germanRegion] = await Promise.all([
       strapi.services.source.findOne({ name_contains: "ebay" }),
@@ -48,9 +61,8 @@ const EBAY_DEAL_TYPE = "ebay_wow_offers";
 
       await strapi.services.product.create(newProduct);
       console.log(
-        `[ ${++savedProducts} of ${offers.length} ] Saved new product: ${
-          newProduct.title
-        }`.green
+        `[ ${++savedProducts} of ${offers.length} ] Saved new product: ${newProduct.title
+          }`.green
       );
     }
 

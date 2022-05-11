@@ -23,6 +23,7 @@ const gqlFetch: gqlFetchType = async (query, variables = {}) => {
     })
     .then(({ data, errors }) => {
       if (errors) {
+        console.error(errors[0]);
         throw new Error(errors[0]);
       }
 
