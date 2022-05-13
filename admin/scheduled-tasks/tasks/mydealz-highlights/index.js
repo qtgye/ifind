@@ -20,6 +20,8 @@ const MERCHANTS_NAME_PATTERN = {
   amazon: /^amazon$/i,
   ebay: /^ebay$/i,
 };
+const axios = require('axios').default;
+
 
 (async () => {
   
