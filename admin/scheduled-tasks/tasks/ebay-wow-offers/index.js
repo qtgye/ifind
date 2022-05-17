@@ -21,7 +21,7 @@ const EBAY_DEAL_TYPE = "ebay_wow_offers";
         console.log(error);
       }
     );
-
+    console.log("offers",offers)
     console.log(`Deleted  product(s).`.cyan);
 
     console.log("Saving new products...");
