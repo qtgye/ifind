@@ -59,7 +59,7 @@ jobs:
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== BUILDING SITE ====/" && \
-          npm run prerender
+          node scripts/prerender.js
 
     # TO DO:
     # Add scripts for admin and api server builds
