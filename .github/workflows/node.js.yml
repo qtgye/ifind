@@ -13,7 +13,7 @@ jobs:
    runs-on: ubuntu-latest
 
    # Add timeout
-   # timeout-minutes: 10
+   timeout-minutes: 15
 
  # this will check connection and run a command to transfer the commited files
    steps:
