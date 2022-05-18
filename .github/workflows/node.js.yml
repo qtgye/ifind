@@ -13,7 +13,7 @@ jobs:
    runs-on: ubuntu-latest
 
    # Add timeout
-   timeout-minutes: 10
+   # timeout-minutes: 10
 
  # this will check connection and run a command to transfer the commited files
    steps:
@@ -60,8 +60,10 @@ jobs:
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd ../web && \
           echo "/==== INSTALLING PACKAGES ====/" && \
-          npm install && sleep 30s && \
+          npm install && \
           echo "/==== BUILDING SITE ====/" && \
+          echo "Waiting for 30s before proceeding to ensure admin is up..." && \
+          sleep 30s && \
           node scripts/prerender.js
 
     # TO DO:

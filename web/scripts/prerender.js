@@ -7,6 +7,6 @@ const prerenderProcess = childProcess.fork(prerenderScript, [], {
   stdio: "pipe"
 });
 
-prerenderProcess.stdout.on("data", (data) => console.log(data.toString()));
+prerenderProcess.stdout.on("data", (data) => console.log(data.toString().replace(/(^\s+|\s+$)/g, '')));
 
-prerenderProcess.stderr.on("data", (data) => console.log(data.toString()));
+prerenderProcess.stderr.on("data", (data) => console.log(data.toString().replace(/(^\s+|\s+$)/g, '')));
