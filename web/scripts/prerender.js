@@ -11,29 +11,33 @@ const OUT_DIR = path.resolve(PROJECT_ROOT, "out");
 // Source: next/dist/cli/next-export
 const span = trace("next-export-cli");
 
-(async () => {
-  // Ensure empty out dir
-  fs.rmdirSync(OUT_DIR, { recursive: true, force: true });
+try {
+  (async () => {
+    // Ensure empty out dir
+    fs.rmdirSync(OUT_DIR, { recursive: true, force: true });
 
-  // Run next build
-  await nextBuild(PROJECT_ROOT, null, false, true, true);
+    // Run next build
+    await nextBuild(PROJECT_ROOT, null, false, true, true);
 
-  // Run next export
-  await nextExport(
-    PROJECT_ROOT,
-    {
-      outdir: OUT_DIR,
-    },
-    span
-  );
+    // Run next export
+    await nextExport(
+      PROJECT_ROOT,
+      {
+        outdir: OUT_DIR,
+      },
+      span
+    );
 
-  // Move static site files
-  console.log("Static files generated. Moving to web root...");
+    // Move static site files
+    console.log("Static files generated. Moving to web root...");
 
-  if (OUT_DIR !== STATIC_WEB_ROOT) {
-    fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
-  }
-  console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
+    if (OUT_DIR !== STATIC_WEB_ROOT) {
+      fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
+    }
+    console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
 
-  process.exit();
-})();
+    process.exit();
+  })();
+} catch (err) {
+  console.error(err);
+}
