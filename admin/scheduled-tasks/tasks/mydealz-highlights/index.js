@@ -17,6 +17,8 @@ const MAX_PRODUCTS = 50;
 const PRODUCT_CARD_SELECTOR = ".cept-thread-item";
 const PRODUCT_MERCHANT_SELECTOR = ".cept-merchant-name";
 const PRODUCT_DEAL_LINK_SELECTOR = ".cept-dealBtn";
+const axios = require('axios').default;
+
 
 let ebaySource, germanRegion;
 
