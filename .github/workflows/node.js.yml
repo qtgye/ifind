@@ -12,6 +12,9 @@ jobs:
    # it will build on any host- we can do self-hosted
    runs-on: ubuntu-latest
 
+   # Add timeout
+   timeout-minutes: 10
+
  # this will check connection and run a command to transfer the commited files
    steps:
     - uses: actions/checkout@v2
