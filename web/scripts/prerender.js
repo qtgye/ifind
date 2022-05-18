@@ -16,7 +16,7 @@ const span = trace("next-export-cli");
   fs.rmdirSync(OUT_DIR, { recursive: true, force: true });
 
   // Run next build
-  await nextBuild(PROJECT_ROOT);
+  await nextBuild(PROJECT_ROOT, null, false, true, true);
 
   // Run next export
   await nextExport(
@@ -30,7 +30,7 @@ const span = trace("next-export-cli");
   // Move static site files
   console.log("Static files generated. Moving to web root...");
 
-  if ( OUT_DIR !== STATIC_WEB_ROOT ) {
+  if (OUT_DIR !== STATIC_WEB_ROOT) {
     fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });
   }
   console.info(`Successfuly exported files to ${STATIC_WEB_ROOT}`);
