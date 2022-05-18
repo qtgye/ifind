@@ -4,6 +4,7 @@ module.exports = {
   `,
   mutation: `
     deleteProductsByDeals( deal_type: String ): [ID]
+    addProductsByDeals( deal_type: String!, products: [ProductInput] ): [Product]
   `,
   resolveQuery: {
     async productsByDeals(_, args) {
@@ -14,5 +15,8 @@ module.exports = {
     async deleteProductsByDeals(_, args) {
       return await strapi.services.ifind.deleteProductsByDeals(args);
     },
+    async addProductsByDeals(_, args) {
+      return await strapi.services.ifind.addProductsByDeals(args);
+    }
   },
 };

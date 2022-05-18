@@ -4008,6 +4008,7 @@ declare global {
     updateProductCounts?: Array<Category | null>;
     triggerTask?: ScheduledTaskListPayload;
     deleteProductsByDeals?: Array<string | null>;
+    addProductsByDeals?: Array<Product | null>;
     addProductClick?: ProductClicksDetails;
     fixProducts?: FixedProductsPayload;
     updateProductLinks?: FixedProductsPayload;
@@ -10351,6 +10352,7 @@ declare global {
     updateProductCounts?: MutationToUpdateProductCountsResolver<TParent>;
     triggerTask?: MutationToTriggerTaskResolver<TParent>;
     deleteProductsByDeals?: MutationToDeleteProductsByDealsResolver<TParent>;
+    addProductsByDeals?: MutationToAddProductsByDealsResolver<TParent>;
     addProductClick?: MutationToAddProductClickResolver<TParent>;
     fixProducts?: MutationToFixProductsResolver<TParent>;
     updateProductLinks?: MutationToUpdateProductLinksResolver<TParent>;
@@ -10740,6 +10742,14 @@ declare global {
   }
   export interface MutationToDeleteProductsByDealsResolver<TParent = any, TResult = any> {
     (parent: TParent, args: MutationToDeleteProductsByDealsArgs, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface MutationToAddProductsByDealsArgs {
+    deal_type: string;
+    products?: Array<ProductInput | null>;
+  }
+  export interface MutationToAddProductsByDealsResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: MutationToAddProductsByDealsArgs, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface MutationToAddProductClickArgs {
