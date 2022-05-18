@@ -80,9 +80,6 @@ class ScheduledTasks {
     timer.init();
 
     LOGGER.log("Scheduled Tasks Runner initialized".magenta.bold);
-
-    // TEST
-    this.fireHook("task-stop", "test-task-id");
   }
 
   runCommand(command, id) {

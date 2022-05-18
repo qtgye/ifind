@@ -60,7 +60,7 @@ jobs:
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd ../web && \
           echo "/==== INSTALLING PACKAGES ====/" && \
-          npm install && \
+          npm install && sleep 30s && \
           echo "/==== BUILDING SITE ====/" && \
           node scripts/prerender.js
 

@@ -7,6 +7,6 @@ const prerenderProcess = childProcess.fork(prerenderScript, [], {
   stdio: "pipe"
 });
 
-prerenderProcess.stdout.on("data", (data) => process.stdout.write(data.toString()));
+prerenderProcess.stdout.on("data", (data) => console.log(data.toString()));
 
-prerenderProcess.stderr.on("data", (data) => process.stderr.write(data.toString()));
+prerenderProcess.stderr.on("data", (data) => console.log(data.toString()));
