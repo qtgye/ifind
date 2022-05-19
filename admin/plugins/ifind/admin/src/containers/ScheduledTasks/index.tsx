@@ -19,20 +19,61 @@ const ScheduledTasks = () => {
   const history = useHistory();
   const {startTask,stopTask,serverTimeFormatted, logs } =
     useScheduledTasksList();
-  const [tasks,setTasks] = useState(null)  
-
-  useEffect(() => {
-    
-    axios.post("http://164.90.181.113:3000/task/getTaskList").then(
-      (response) => {
-        setTasks(response.data.tasks);
-        // offers.push(response.data)
+  // const [tasks,setTasks] = useState(null) 
+  const tasks =  [
+    {
+      id: "amazon-lightning-offers",
+      name: "Amazon Lightning Offers",
+      // schedule: frequencies.hourly,
+      timeout_minutes: 120,
+      meta: {
+        deal_type: "amazon_flash_offers",
+        deal_merchant: "amazon",
       },
-      (error) => {
-        console.log(error);
-      }
-    );
-  },[]);
+    },
+    {
+      id: "ebay-wow-offers",
+      name: "Ebay Wow Offers",
+      // schedule: frequencies.hourly,
+      timeout_minutes: 120,
+      meta: {
+        deal_type: "ebay_wow_offers",
+        deal_merchant: "ebay",
+      },
+    },
+    {
+      id: "aliexpress-value-deals",
+      name: "AliExpress Super Value Deals",
+      // schedule: frequencies.hourly,
+      timeout_minutes: 120,
+      meta: {
+        deal_type: "aliexpress_value_deals",
+        deal_merchant: "aliexpress",
+      },
+    },
+    {
+      id: "mydealz-highlights",
+      name: "MyDealz Highlights",
+      // schedule: frequencies.hourly,
+      timeout_minutes: 120,
+      meta: {
+        deal_type: "mydealz_highlights",
+      },
+    },
+  ]; 
+
+  // useEffect(() => {
+    
+  //   axios.post("http://164.90.181.113:3000/task/getTaskList").then(
+  //     (response) => {
+  //       setTasks(response.data.tasks);
+  //       // offers.push(response.data)
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // },[]);
 
   const onTaskAction = useCallback(
     (action, taskID) => {
