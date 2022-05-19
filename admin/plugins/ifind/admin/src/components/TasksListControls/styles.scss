@@ -1,0 +1,27 @@
+.tasks-list {
+  &__status {
+    &--running {
+      color: green;
+    }
+
+    &--stopped {
+      color: darkred;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+  }
+
+  &__task-schedule-local {
+    color: gray;
+  }
+
+  .table-row {
+    td {
+      vertical-align: middle;
+    }
+  }
+}

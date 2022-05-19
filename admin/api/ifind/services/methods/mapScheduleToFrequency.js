@@ -1,4 +1,4 @@
-const { frequencies } = appRequire('scheduled-tasks/config');
+// const { frequencies } = appRequire('scheduled-tasks/config');
 
 const msIntervals = {
   days: 1000 * 60 * 60 * 24,
@@ -8,11 +8,11 @@ const msIntervals = {
 };
 
 module.exports = (scheduleMs) => {
-  for ( let frequency in frequencies ) {
-    if ( scheduleMs === frequencies[frequency] ) {
-      return frequency;
-    }
-  }
+  // for ( let frequency in frequencies ) {
+  //   if ( scheduleMs === frequencies[frequency] ) {
+  //     return frequency;
+  //   }
+  // }
 
   // Custom frequency
   for ( let intervalName in msIntervals ) {

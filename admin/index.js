@@ -3,7 +3,7 @@
  * This is only to expose some modules that will be
  * needed by other external modules, such as the product-validator module
  */
-require('./helpers/customGlobals');
+// require('./helpers/customGlobals');
 
 module.exports = {
 

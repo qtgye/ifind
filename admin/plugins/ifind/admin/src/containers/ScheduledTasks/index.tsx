@@ -1,4 +1,4 @@
-import React, { useCallback, ComponentProps } from "react";
+import React, { useCallback, ComponentProps, useEffect, useState } from "react";
 import { Header } from "@buffetjs/custom";
 import { useHistory } from "react-router-dom";
 
@@ -10,13 +10,29 @@ import {
 import TasksList from "../../components/TasksList";
 import FontAwesomeIcon from "../../components/FontAwesomeIcon";
 import LogsList from "../../components/LogsList";
+import axios from 'axios';
+
 
 import "./styles.scss";
 
 const ScheduledTasks = () => {
   const history = useHistory();
-  const { tasks, startTask, stopTask, serverTimeFormatted, logs } =
+  const {startTask,stopTask,serverTimeFormatted, logs } =
     useScheduledTasksList();
+  const [tasks,setTasks] = useState(null)  
+
+  useEffect(() => {
+    
+    axios.post("http://164.90.181.113:3000/task/getTaskList").then(
+      (response) => {
+        setTasks(response.data.tasks);
+        // offers.push(response.data)
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  },[]);
 
   const onTaskAction = useCallback(
     (action, taskID) => {
@@ -32,9 +48,31 @@ const ScheduledTasks = () => {
     [startTask, stopTask]
   );
 
-  return (
-    <div className="container scheduled-tasks">
-      <Header
+  // return (
+  //   <div className="container scheduled-tasks">
+  //     <Header
+  //       title={{ label: "Scheduled Tasks" }}
+  //       actions={[
+  //         {
+  //           Component: () => (
+  //             <div className="scheduled-tasks__server-time">
+  //               <strong>Server Time:&nbsp;</strong> {serverTimeFormatted} (UTC)
+  //             </div>
+  //           ),
+  //         },
+  //       ]}
+  //     />
+  //     <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
+  //     <div className="scheduled-tasks__logs">
+  //       <LogsList logs={logs || []} title="Runner Logs" />
+  //     </div>
+  //   </div>
+  // );
+
+  console.log("taskLists",tasks)
+  return(<div>
+     <div className="container scheduled-tasks">
+       <Header
         title={{ label: "Scheduled Tasks" }}
         actions={[
           {
@@ -47,11 +85,8 @@ const ScheduledTasks = () => {
         ]}
       />
       <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
-      <div className="scheduled-tasks__logs">
-        <LogsList logs={logs || []} title="Runner Logs" />
-      </div>
-    </div>
-  );
+     </div>
+  </div>)
 };
 
 export default (props: ComponentProps<any>) => (

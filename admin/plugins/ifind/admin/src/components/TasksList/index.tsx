@@ -1,13 +1,10 @@
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@buffetjs/core";
-
-import { generatePluginLink } from "../../helpers/url";
-
 import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
-
+import axios from 'axios';
 import "./styles.scss";
 
 export type I_GetTaskActionsCallback = (
@@ -21,16 +18,87 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
 
+  // const onTaskActionClick = useCallback(
+  //   (action, taskID) => {
+  //     if (typeof onTaskAction === "function") {
+  //       setTriggeredAction(action);
+  //       setTriggeredTask(taskID);
+  //       onTaskAction(action, taskID);
+  //     }
+  //   },
+  //   [onTaskAction]
+  // );
+
   const onTaskActionClick = useCallback(
-    (action, taskID) => {
-      if (typeof onTaskAction === "function") {
-        setTriggeredAction(action);
-        setTriggeredTask(taskID);
-        onTaskAction(action, taskID);
+    (action, task) => {
+      console.log("task",task)
+      let scrapedProducts = null
+      if(task.id == "ebay-wow-offers")
+      {
+    axios.post("http://164.90.181.113:3000/ebay/fetchEbayStore").then(
+       (response) => {
+         scrapedProducts = response.data.data;
+         // offers.push(response.data)
+       },
+       (error) => {
+         console.log(error);
+       }
+     );
       }
-    },
-    [onTaskAction]
+      else if(task.id == "amazon-lightning-offers")
+      {
+        axios.post("http://164.90.181.113:3000/amazon/getAmazonProducts").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else if(task.id == "mydealz-highlights")
+      {
+        axios.post("http://164.90.181.113:3000/mydealz/getMyDealsProduct").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else if(task.id == "aliexpress-value-deals")
+      {
+        axios.post("http://164.90.181.113:3000/aliexpress/getAliExpressData").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+
+    },[]
   );
+
+  // function onTaskActionClick(task){
+  //   console.log("task",task.name)
+  //   let scrapedProducts = null
+  //   axios.post("http://localhost:3000/ebay/fetchEbayStore").then(
+  //      (response) => {
+  //        scrapedProducts = response.data.data;
+  //        // offers.push(response.data)
+  //      },
+  //      (error) => {
+  //        console.log(error);
+  //      }
+  //    );
+  //    console.log("scrapedProducts",scrapedProducts)
+  //  }
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
@@ -53,11 +121,11 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
           <Button
             disabled={isDisabled}
             color={color}
-            onClick={() => onTaskActionClick(buttonAction, task.id)}
+            onClick={() => onTaskActionClick(buttonAction,task)}
           >
             <FontAwesomeIcon icon={icon} pulse={iconPulse} /> {label}
           </Button>
-          <ButtonLink
+          {/* <ButtonLink
             routerLink
             href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
             color={E_ButtonLinkColor.secondary}
@@ -65,7 +133,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
           >
             <FontAwesomeIcon icon="terminal" />
             <span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs` }} />
-          </ButtonLink>
+          </ButtonLink> */}
         </div>
       );
     },
@@ -106,21 +174,23 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   }, [tasks]);
 
   const headers: T_ColumnHeader = {
-    status: "Status",
+    status: "Position",
     name: "Task Name",
-    frequency: "Frequency",
+    // frequency: "Frequency",
     last_run: "Last Run (Server Time)",
     countdown: "Countdown",
     action: "Action",
+    order:"Order"
   };
 
   const rowsData: T_GenericRowData[] = tasks.map((task) => ({
     status: getTaskStatus(task),
     name: task.name,
-    frequency: task.frequency,
+    // frequency: task.frequency,
     last_run: formatLastRun(task.last_run),
-    action: task.hasModule ? getTaskActions(task) : "-",
+    action: getTaskActions(task),
     countdown: task.countdown,
+    order:"",
   }));
 
   return <Table className="tasks-list" headers={headers} rows={rowsData} />;
