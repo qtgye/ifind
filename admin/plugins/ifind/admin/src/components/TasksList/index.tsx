@@ -35,7 +35,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       let scrapedProducts = null
       if(task.id == "ebay-wow-offers")
       {
-    axios.post("http://164.90.181.113:3000/ebay/fetchEbayStore").then(
+    axios.post("https://164.90.181.113:8443/ebay/fetchEbayStore").then(
        (response) => {
          scrapedProducts = response.data.data;
          // offers.push(response.data)
@@ -47,7 +47,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       }
       else if(task.id == "amazon-lightning-offers")
       {
-        axios.post("http://164.90.181.113:3000/amazon/getAmazonProducts").then(
+        axios.post("https://164.90.181.113:8443/amazon/getAmazonProducts").then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
@@ -59,7 +59,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       }
       else if(task.id == "mydealz-highlights")
       {
-        axios.post("http://164.90.181.113:3000/mydealz/getMyDealsProduct").then(
+        axios.post("https://164.90.181.113:8443/mydealz/getMyDealsProduct").then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
@@ -71,7 +71,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       }
       else if(task.id == "aliexpress-value-deals")
       {
-        axios.post("http://164.90.181.113:3000/aliexpress/getAliExpressData").then(
+        axios.post("https://164.90.181.113:8443/aliexpress/getAliExpressData").then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
