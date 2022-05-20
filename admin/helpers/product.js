@@ -1,240 +1,240 @@
-// const { isAmazonLink } = require("./amazon");
-// const { amazonLink } = require("./amazon");
-// const createAmazonScraper = require("./amazon/amazonProductScraper");
-// const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
-// const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
+const { isAmazonLink } = require("./amazon");
+const { amazonLink } = require("./amazon");
+const createAmazonScraper = require("./amazon/amazonProductScraper");
+const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
+const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
 const dealTypesConfig = require("../api/ifind/deal-types");
 
-// const getProductDetails = async (
-//   productData,
-//   language,
-//   scrapePriceOnly = false
-// ) => {
-//   const amazonProductScraper = await createAmazonScraper();
-//   const productURL = productData.amazon_url;
-//   const scrapedData = {};
+const getProductDetails = async (
+  productData,
+  language,
+  scrapePriceOnly = false
+) => {
+  const amazonProductScraper = await createAmazonScraper();
+  const productURL = productData.amazon_url;
+  const scrapedData = {};
 
-//   if (!productURL) {
-//     return null;
-//   }
+  if (!productURL) {
+    return null;
+  }
 
-//   console.log("Getting product details...".cyan);
+  console.log("Getting product details...".cyan);
 
-//   // Prepare to save product issues
-//   scrapedData.product_issues = productData.product_issues || {};
+  // Prepare to save product issues
+  scrapedData.product_issues = productData.product_issues || {};
 
-//   await Promise.all([
-//     // Scrape amazon
-//     (async () => {
-//       // Go to product page first to set german location for the page
-//       // try {
-//       //   await browser.goto(productURL);
-//       //   await applyGermanLocation(browser);
-//       // }
-//       // catch (err) {
-//       //   console.error(err);
-//       //   await screenshotPageError(productURL);
-//       // }
+  await Promise.all([
+    // Scrape amazon
+    (async () => {
+      // Go to product page first to set german location for the page
+      // try {
+      //   await browser.goto(productURL);
+      //   await applyGermanLocation(browser);
+      // }
+      // catch (err) {
+      //   console.error(err);
+      //   await screenshotPageError(productURL);
+      // }
 
-//       const scrapedDetails = await amazonProductScraper.scrapeProduct(
-//         productURL,
-//         "de",
-//         scrapePriceOnly
-//       );
-//       Object.entries(scrapedDetails).forEach(([key, value]) => {
-//         scrapedData[key] = value;
-//       });
+      const scrapedDetails = await amazonProductScraper.scrapeProduct(
+        productURL,
+        "de",
+        scrapePriceOnly
+      );
+      Object.entries(scrapedDetails).forEach(([key, value]) => {
+        scrapedData[key] = value;
+      });
 
-//       // Apply amazon affiliate link
-//       scrapedData.amazon_url = amazonLink(productData.amazon_url);
-//     })(),
+      // Apply amazon affiliate link
+      scrapedData.amazon_url = amazonLink(productData.amazon_url);
+    })(),
 
-//     // Scrape other sites data
-//     (async () => {
-//       if (
-//         !productData ||
-//         !productData.url_list ||
-//         !productData.url_list.length
-//       ) {
-//         return;
-//       }
+    // Scrape other sites data
+    (async () => {
+      if (
+        !productData ||
+        !productData.url_list ||
+        !productData.url_list.length
+      ) {
+        return;
+      }
 
-//       const [ebaySource, aliExpressSource] = await Promise.all([
-//         strapi.services.source.findOne({ name_contains: "ebay" }),
-//         strapi.services.source.findOne({ name_contains: "ali" }),
-//       ]);
+      const [ebaySource, aliExpressSource] = await Promise.all([
+        strapi.services.source.findOne({ name_contains: "ebay" }),
+        strapi.services.source.findOne({ name_contains: "ali" }),
+      ]);
 
-//       scrapedData.url_list = await Promise.all(
-//         productData.url_list.map(async (urlData) => {
-//           // Scrapte EBAY details
-//           if (Number(urlData.source) == Number(ebaySource.id) && urlData.url) {
-//             const ebayProductDetails = await getEbayDetails(urlData.url);
-//             if (ebayProductDetails) {
-//               urlData.price = ebayProductDetails.price || urlData.price || "";
-//               urlData.url = ebayLink(urlData.url);
+      scrapedData.url_list = await Promise.all(
+        productData.url_list.map(async (urlData) => {
+          // Scrapte EBAY details
+          if (Number(urlData.source) == Number(ebaySource.id) && urlData.url) {
+            const ebayProductDetails = await getEbayDetails(urlData.url);
+            if (ebayProductDetails) {
+              urlData.price = ebayProductDetails.price || urlData.price || "";
+              urlData.url = ebayLink(urlData.url);
 
-//               scrapedData.product_issues.ebay_link_invalid = false;
-//             } else {
-//               // Ebay URL is invalid
-//               scrapedData.product_issues.ebay_link_invalid = true;
-//             }
-//           }
-//           // Scrape ALIEXPRESS details
-//           else if (
-//             Number(urlData.source) == Number(aliExpressSource.id) &&
-//             urlData.url
-//           ) {
-//             const aliExpressProductDetails = await getAliExpressDetails(
-//               urlData.url
-//             );
-//             if (aliExpressProductDetails) {
-//               urlData.price =
-//                 aliExpressProductDetails.price || urlData.price || "";
-//               urlData.url =
-//                 aliExpressProductDetails.affiliateLink || urlData.url || "";
+              scrapedData.product_issues.ebay_link_invalid = false;
+            } else {
+              // Ebay URL is invalid
+              scrapedData.product_issues.ebay_link_invalid = true;
+            }
+          }
+          // Scrape ALIEXPRESS details
+          else if (
+            Number(urlData.source) == Number(aliExpressSource.id) &&
+            urlData.url
+          ) {
+            const aliExpressProductDetails = await getAliExpressDetails(
+              urlData.url
+            );
+            if (aliExpressProductDetails) {
+              urlData.price =
+                aliExpressProductDetails.price || urlData.price || "";
+              urlData.url =
+                aliExpressProductDetails.affiliateLink || urlData.url || "";
 
-//               scrapedData.product_issues.aliexpress_link_invalid = false;
-//             } else {
-//               // AliExpress URL is invalid
-//               scrapedData.product_issues.aliexpress_link_invalid = true;
-//             }
-//           }
+              scrapedData.product_issues.aliexpress_link_invalid = false;
+            } else {
+              // AliExpress URL is invalid
+              scrapedData.product_issues.aliexpress_link_invalid = true;
+            }
+          }
 
-//           return urlData;
-//         })
-//       );
-//     })(),
-//   ]);
+          return urlData;
+        })
+      );
+    })(),
+  ]);
 
-//   console.log("Contents queried.");
+  console.log("Contents queried.");
 
-//   return scrapedData;
-// };
+  return scrapedData;
+};
 
 /**
  * Fetches product details using google puppeteer
  * @param {ID} productID -  The product data matching Product type
  * @returns Object
  */
-// const fetchProductDetails = async (productID, language = "en") => {
-//   if (!productID) return null;
+const fetchProductDetails = async (productID, language = "en") => {
+  if (!productID) return null;
 
-//   const product = await strapi.services.product.findOne({ id: productID });
+  const product = await strapi.services.product.findOne({ id: productID });
 
-//   if (!product) return null;
+  if (!product) return null;
 
-//   const amazonURL = product.amazon_url;
+  const amazonURL = product.amazon_url;
 
-//   if (!amazonURL) return null;
+  if (!amazonURL) return null;
 
-//   const productDetails = await getProductDetails(product, language);
+  const productDetails = await getProductDetails(product, language);
 
-//   return {
-//     ...productDetails,
-//     id: productID,
-//   };
-// };
+  return {
+    ...productDetails,
+    id: productID,
+  };
+};
 
-// const filterProductsWithProblems = (products) => {
-//   return products.filter((product) => {
-//     const productChanges = product.product_changes || [];
+const filterProductsWithProblems = (products) => {
+  return products.filter((product) => {
+    const productChanges = product.product_changes || [];
 
-//     // Check amazon_url
-//     if (
-//       !isAmazonLink(product.amazon_url) &&
-//       productChanges.some(
-//         ({ state }) => state && isAmazonLink(state.amazon_url)
-//       )
-//     ) {
-//       return true;
-//     }
+    // Check amazon_url
+    if (
+      !isAmazonLink(product.amazon_url) &&
+      productChanges.some(
+        ({ state }) => state && isAmazonLink(state.amazon_url)
+      )
+    ) {
+      return true;
+    }
 
-//     // Check url_list
-//     // Check if url_list is provided before but was removed unknowingly
-//     if (
-//       (!product.url_list || !product.url_list.length) &&
-//       productChanges.some(
-//         ({ state }) => state && state.url_list && state.url_list.length
-//       )
-//     ) {
-//       return true;
-//     }
+    // Check url_list
+    // Check if url_list is provided before but was removed unknowingly
+    if (
+      (!product.url_list || !product.url_list.length) &&
+      productChanges.some(
+        ({ state }) => state && state.url_list && state.url_list.length
+      )
+    ) {
+      return true;
+    }
 
-//     // Check attrs_rating
-//     // Each product should have attrs_rating as it's being supplied by default
-//     if (hasInvalidRating(product)) {
-//       return true;
-//     }
+    // Check attrs_rating
+    // Each product should have attrs_rating as it's being supplied by default
+    if (hasInvalidRating(product)) {
+      return true;
+    }
 
-//     // Check title and details_html for unnecessary newlines
-//     if (product.title.match(/\n/) || product.details_html.match(/\n+/g)) {
-//       return true;
-//     }
-//   });
-// };
+    // Check title and details_html for unnecessary newlines
+    if (product.title.match(/\n/) || product.details_html.match(/\n+/g)) {
+      return true;
+    }
+  });
+};
 
 // Checks if a given product has invalid Product Attribute Rating
-// const hasInvalidRating = (product) =>
-//   !product.attrs_rating ||
-//   !product.attrs_rating.length ||
-//   product.attrs_rating.some(
-//     (attr_rating) => !attr_rating || !attr_rating.product_attribute
-//   );
+const hasInvalidRating = (product) =>
+  !product.attrs_rating ||
+  !product.attrs_rating.length ||
+  product.attrs_rating.some(
+    (attr_rating) => !attr_rating || !attr_rating.product_attribute
+  );
 
 // Extracts the appropriate deal-specific data for a product
-// const extractProductDealData = (product) => {
-//   const {
-//     deal_type,
-//     price,
-//     price_original,
-//     discount_percent,
-//     quantity_available_percent,
-//     url_list,
-//   } = product;
-//   const matchedDealTypeConfig = dealTypesConfig[deal_type];
+const extractProductDealData = (product) => {
+  const {
+    deal_type,
+    price,
+    price_original,
+    discount_percent,
+    quantity_available_percent,
+    url_list,
+  } = product;
+  const matchedDealTypeConfig = dealTypesConfig[deal_type];
 
-//   if ( !matchedDealTypeConfig ) {
-//     return null;
-//   }
+  if ( !matchedDealTypeConfig ) {
+    return null;
+  }
 
-//   if (/amazon/i.test(deal_type)) {
-//     return {
-//       price,
-//       price_original,
-//       discount_percent,
-//       quantity_available_percent,
-//     };
-//   } else {
-//     const siteNamePattern = new RegExp(matchedDealTypeConfig.name, "i");
-//     const matchedSourceData = Array.isArray(url_list)
-//       ? url_list.find((otherSiteData) =>
-//           siteNamePattern.test(otherSiteData.source.name)
-//         )
-//       : null;
+  if (/amazon/i.test(deal_type)) {
+    return {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    };
+  } else {
+    const siteNamePattern = new RegExp(matchedDealTypeConfig.name, "i");
+    const matchedSourceData = Array.isArray(url_list)
+      ? url_list.find((otherSiteData) =>
+          siteNamePattern.test(otherSiteData.source.name)
+        )
+      : null;
 
-//     if (!matchedSourceData) {
-//       return null;
-//     }
+    if (!matchedSourceData) {
+      return null;
+    }
 
-//     const {
-//       price,
-//       price_original,
-//       discount_percent,
-//       quantity_available_percent,
-//     } = matchedSourceData;
-//     return {
-//       price,
-//       price_original,
-//       discount_percent,
-//       quantity_available_percent,
-//     };
-//   }
-// };
+    const {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    } = matchedSourceData;
+    return {
+      price,
+      price_original,
+      discount_percent,
+      quantity_available_percent,
+    };
+  }
+};
 
 module.exports = {
-  // fetchProductDetails,
-  // getProductDetails,
-  // filterProductsWithProblems,
-  // hasInvalidRating,
-  // extractProductDealData,
+  fetchProductDetails,
+  getProductDetails,
+  filterProductsWithProblems,
+  hasInvalidRating,
+  extractProductDealData,
 };
