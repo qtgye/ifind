@@ -1,8 +1,8 @@
-const { isAmazonLink } = require("./amazon");
-const { amazonLink } = require("./amazon");
-const createAmazonScraper = require("./amazon/amazonProductScraper");
-const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
-const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
+// const { isAmazonLink } = require("./amazon");
+// const { amazonLink } = require("./amazon");
+// const createAmazonScraper = require("./amazon/amazonProductScraper");
+// const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
+// const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
 const dealTypesConfig = require("../api/ifind/deal-types");
 
 const getProductDetails = async (
@@ -10,7 +10,7 @@ const getProductDetails = async (
   language,
   scrapePriceOnly = false
 ) => {
-  const amazonProductScraper = await createAmazonScraper();
+  // const amazonProductScraper = await createAmazonScraper();
   const productURL = productData.amazon_url;
   const scrapedData = {};
 
@@ -36,17 +36,17 @@ const getProductDetails = async (
       //   await screenshotPageError(productURL);
       // }
 
-      const scrapedDetails = await amazonProductScraper.scrapeProduct(
-        productURL,
-        "de",
-        scrapePriceOnly
-      );
-      Object.entries(scrapedDetails).forEach(([key, value]) => {
-        scrapedData[key] = value;
-      });
+      // const scrapedDetails = await amazonProductScraper.scrapeProduct(
+      //   productURL,
+      //   "de",
+      //   scrapePriceOnly
+      // );
+      // Object.entries(scrapedDetails).forEach(([key, value]) => {
+      //   scrapedData[key] = value;
+      // });
 
       // Apply amazon affiliate link
-      scrapedData.amazon_url = amazonLink(productData.amazon_url);
+      // scrapedData.amazon_url = amazonLink(productData.amazon_url);
     })(),
 
     // Scrape other sites data
@@ -67,38 +67,38 @@ const getProductDetails = async (
       scrapedData.url_list = await Promise.all(
         productData.url_list.map(async (urlData) => {
           // Scrapte EBAY details
-          if (Number(urlData.source) == Number(ebaySource.id) && urlData.url) {
-            const ebayProductDetails = await getEbayDetails(urlData.url);
-            if (ebayProductDetails) {
-              urlData.price = ebayProductDetails.price || urlData.price || "";
-              urlData.url = ebayLink(urlData.url);
+          // if (Number(urlData.source) == Number(ebaySource.id) && urlData.url) {
+          //   const ebayProductDetails = await getEbayDetails(urlData.url);
+          //   if (ebayProductDetails) {
+          //     urlData.price = ebayProductDetails.price || urlData.price || "";
+          //     urlData.url = ebayLink(urlData.url);
 
-              scrapedData.product_issues.ebay_link_invalid = false;
-            } else {
-              // Ebay URL is invalid
-              scrapedData.product_issues.ebay_link_invalid = true;
-            }
-          }
+          //     scrapedData.product_issues.ebay_link_invalid = false;
+          //   } else {
+          //     // Ebay URL is invalid
+          //     scrapedData.product_issues.ebay_link_invalid = true;
+          //   }
+          // }
           // Scrape ALIEXPRESS details
-          else if (
-            Number(urlData.source) == Number(aliExpressSource.id) &&
-            urlData.url
-          ) {
-            const aliExpressProductDetails = await getAliExpressDetails(
-              urlData.url
-            );
-            if (aliExpressProductDetails) {
-              urlData.price =
-                aliExpressProductDetails.price || urlData.price || "";
-              urlData.url =
-                aliExpressProductDetails.affiliateLink || urlData.url || "";
+          // else if (
+          //   Number(urlData.source) == Number(aliExpressSource.id) &&
+          //   urlData.url
+          // ) {
+          //   const aliExpressProductDetails = await getAliExpressDetails(
+          //     urlData.url
+          //   );
+          //   if (aliExpressProductDetails) {
+          //     urlData.price =
+          //       aliExpressProductDetails.price || urlData.price || "";
+          //     urlData.url =
+          //       aliExpressProductDetails.affiliateLink || urlData.url || "";
 
-              scrapedData.product_issues.aliexpress_link_invalid = false;
-            } else {
-              // AliExpress URL is invalid
-              scrapedData.product_issues.aliexpress_link_invalid = true;
-            }
-          }
+          //     scrapedData.product_issues.aliexpress_link_invalid = false;
+          //   } else {
+          //     // AliExpress URL is invalid
+          //     scrapedData.product_issues.aliexpress_link_invalid = true;
+          //   }
+          // }
 
           return urlData;
         })
@@ -140,14 +140,14 @@ const filterProductsWithProblems = (products) => {
     const productChanges = product.product_changes || [];
 
     // Check amazon_url
-    if (
-      !isAmazonLink(product.amazon_url) &&
-      productChanges.some(
-        ({ state }) => state && isAmazonLink(state.amazon_url)
-      )
-    ) {
-      return true;
-    }
+    // if (
+    //   !isAmazonLink(product.amazon_url) &&
+    //   productChanges.some(
+    //     ({ state }) => state && isAmazonLink(state.amazon_url)
+    //   )
+    // ) {
+    //   return true;
+    // }
 
     // Check url_list
     // Check if url_list is provided before but was removed unknowingly
