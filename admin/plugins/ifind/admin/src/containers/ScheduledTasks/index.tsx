@@ -23,8 +23,7 @@ const ScheduledTasks = () => {
   
 
   useEffect(() => {
-    
-    axios.post("https://164.90.181.113:8443/task/getTaskList").then(
+    axios.post("https://script.ifindilu.de/task/getTaskList").then(
       (response) => {
         setTasks(response.data.tasks);
         // offers.push(response.data)
