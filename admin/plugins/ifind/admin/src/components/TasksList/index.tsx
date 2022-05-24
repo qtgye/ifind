@@ -21,7 +21,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const onTaskActionClick = useCallback(
     (action, taskID) => {
       console.log("ontaskactionClick called from tasks");
-      console.log("task ID in TaskList :", taskID);
+      console.log("task ID in TaskList :", taskID.id);
       console.log("Action in TaskList : ", action);
       if (typeof onTaskAction === "function") {
         setTriggeredAction(action);
