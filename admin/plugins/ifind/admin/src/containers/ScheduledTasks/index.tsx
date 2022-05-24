@@ -71,8 +71,8 @@ const ScheduledTasks = () => {
   //     </div>
   //   </div>
   // );
-  console.log("Inside scheduled Task container ");
-  console.log("Value of tasks :", tasks);
+  // console.log("Inside scheduled Task container ");
+  // console.log("Value of tasks :", tasks);
   return(<div>
      <div className="container scheduled-tasks">
        <Header
