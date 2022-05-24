@@ -36,8 +36,9 @@ const ScheduledTasks = () => {
   // },[]);
 
   const onTaskAction = useCallback(
-    
+      
     (action, taskID) => {
+      console.log("ontaskAction called from container");
       switch (action) {
         case "start":
           startTask && startTask(taskID);
