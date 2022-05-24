@@ -174,23 +174,23 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   }, [tasks]);
 
   const headers: T_ColumnHeader = {
-    status: "Position",
+    status: "Status",
     name: "Task Name",
-    // frequency: "Frequency",
+    frequency: "Frequency",
     last_run: "Last Run (Server Time)",
     countdown: "Countdown",
     action: "Action",
-    order:"Order"
+    // order:"Order"
   };
 
   const rowsData: T_GenericRowData[] = tasks.map((task) => ({
     status: getTaskStatus(task),
     name: task.name,
-    // frequency: task.frequency,
+    frequency: task.frequency,
     last_run: formatLastRun(task.last_run),
     action: getTaskActions(task),
     countdown: task.countdown,
-    order:"",
+    // order:"",
   }));
 
   return <Table className="tasks-list" headers={headers} rows={rowsData} />;
