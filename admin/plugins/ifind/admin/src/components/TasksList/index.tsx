@@ -18,72 +18,72 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
 
-  // const onTaskActionClick = useCallback(
-  //   (action, taskID) => {
-  //     if (typeof onTaskAction === "function") {
-  //       setTriggeredAction(action);
-  //       setTriggeredTask(taskID);
-  //       onTaskAction(action, taskID);
-  //     }
-  //   },
-  //   [onTaskAction]
-  // );
-
   const onTaskActionClick = useCallback(
-    (action, task) => {
-      console.log("task",task)
-      let scrapedProducts = null
-      if(task.id == "ebay-wow-offers")
-      {
-    axios.post("https://script.ifindilu.de:8443/ebay/fetchEbayStore").then(
-       (response) => {
-         scrapedProducts = response.data.data;
-         // offers.push(response.data)
-       },
-       (error) => {
-         console.log(error);
-       }
-     );
+    (action, taskID) => {
+      if (typeof onTaskAction === "function") {
+        setTriggeredAction(action);
+        setTriggeredTask(taskID);
+        onTaskAction(action, taskID);
       }
-      else if(task.id == "amazon-lightning-offers")
-      {
-        axios.post("https://script.ifindilu.de:8443/amazon/getAmazonProducts").then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      else if(task.id == "mydealz-highlights")
-      {
-        axios.post("https://script.ifindilu.de:8443/mydealz/getMyDealsProduct").then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      else if(task.id == "aliexpress-value-deals")
-      {
-        axios.post("https://script.ifindilu.de:8443/aliexpress/getAliExpressData").then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-
-    },[]
+    },
+    [onTaskAction]
   );
+
+  // const onTaskActionClick = useCallback(
+  //   (action, task) => {
+  //     console.log("task",task)
+  //     let scrapedProducts = null
+  //     if(task.id == "ebay-wow-offers")
+  //     {
+  //   axios.post("https://script.ifindilu.de:8443/ebay/fetchEbayStore").then(
+  //      (response) => {
+  //        scrapedProducts = response.data.data;
+  //        // offers.push(response.data)
+  //      },
+  //      (error) => {
+  //        console.log(error);
+  //      }
+  //    );
+  //     }
+  //     else if(task.id == "amazon-lightning-offers")
+  //     {
+  //       axios.post("https://script.ifindilu.de:8443/amazon/getAmazonProducts").then(
+  //         (response) => {
+  //           scrapedProducts = response.data.data;
+  //           // offers.push(response.data)
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //         }
+  //       );
+  //     }
+  //     else if(task.id == "mydealz-highlights")
+  //     {
+  //       axios.post("https://script.ifindilu.de:8443/mydealz/getMyDealsProduct").then(
+  //         (response) => {
+  //           scrapedProducts = response.data.data;
+  //           // offers.push(response.data)
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //         }
+  //       );
+  //     }
+  //     else if(task.id == "aliexpress-value-deals")
+  //     {
+  //       axios.post("https://script.ifindilu.de:8443/aliexpress/getAliExpressData").then(
+  //         (response) => {
+  //           scrapedProducts = response.data.data;
+  //           // offers.push(response.data)
+  //         },
+  //         (error) => {
+  //           console.log(error);
+  //         }
+  //       );
+  //     }
+
+  //   },[]
+  // );
 
   // function onTaskActionClick(task){
   //   console.log("task",task.name)

@@ -17,24 +17,26 @@ import "./styles.scss";
 
 const ScheduledTasks = () => {
   const history = useHistory();
-  const {startTask,stopTask,serverTimeFormatted, logs } =
+  const {tasks, startTask,stopTask,serverTimeFormatted, logs } =
     useScheduledTasksList();
-  const [tasks,setTasks] = useState(null) 
+
+  // const [task/s,setTasks] = useState(null) 
   
 
-  useEffect(() => {
-    axios.post("https://script.ifindilu.de/task/getTaskList").then(
-      (response) => {
-        setTasks(response.data.tasks);
-        // offers.push(response.data)
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
-  },[]);
+  // useEffect(() => {
+  //   axios.post("https://script.ifindilu.de/task/getTaskList").then(
+  //     (response) => {
+  //       setTasks(response.data.tasks);
+  //       // offers.push(response.data)
+  //     },
+  //     (error) => {
+  //       console.log(error);
+  //     }
+  //   );
+  // },[]);
 
   const onTaskAction = useCallback(
+    
     (action, taskID) => {
       switch (action) {
         case "start":
@@ -68,8 +70,8 @@ const ScheduledTasks = () => {
   //     </div>
   //   </div>
   // );
-
-  console.log("taskLists",tasks)
+  console.log("Inside scheduled Task container ");
+  console.log("Value of tasks :", tasks);
   return(<div>
      <div className="container scheduled-tasks">
        <Header

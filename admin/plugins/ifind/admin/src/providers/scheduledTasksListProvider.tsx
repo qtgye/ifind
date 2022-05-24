@@ -7,6 +7,7 @@ import React, {
   useRef,
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
+import axios from 'axios';
 
 // Context
 export const ScheduledTasksListContext =
@@ -65,38 +66,111 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
 
+  // Existing Code : 
+
+  // const fetchTasksList = useCallback(async () => {
+  //   gqlFetch(tasksListsQuery)
+  //     .then((data) => {
+  //       if (data?.scheduledTasksList?.tasks) {
+  //         setTasks(data.scheduledTasksList.tasks);
+  //       }
+  //       if (data?.scheduledTasksList?.serverTimeUnix) {
+  //         setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
+  //       }
+  //       if (data?.scheduledTasksList?.serverTimeFormatted) {
+  //         setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
+  //       }
+  //       if (data?.scheduledTasksList?.logs) {
+  //         setLogs(data.scheduledTasksList.logs);
+  //       }
+  //     })
+  //     .catch((err) => err)
+  //     .finally(() => {
+  //       if ( isMountedRef.current ) {
+  //         window.setTimeout(() => fetchTasksList(), 1000);
+  //       }
+  //     });
+  // }, [tasksListsQuery, gqlFetch, isMountedRef]);
+
+
   const fetchTasksList = useCallback(async () => {
-    gqlFetch(tasksListsQuery)
-      .then((data) => {
-        if (data?.scheduledTasksList?.tasks) {
-          setTasks(data.scheduledTasksList.tasks);
-        }
-        if (data?.scheduledTasksList?.serverTimeUnix) {
-          setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
-        }
-        if (data?.scheduledTasksList?.serverTimeFormatted) {
-          setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
-        }
-        if (data?.scheduledTasksList?.logs) {
-          setLogs(data.scheduledTasksList.logs);
-        }
+    axios.post("https://script.ifindilu.de/task/getTaskList")
+      .then((response) => {
+        setTasks(response.data.tasks);
+        // offers.push(response.data)
       })
-      .catch((err) => err)
+      .catch((err) => console.log("error ", err))
       .finally(() => {
-        if ( isMountedRef.current ) {
+        if (isMountedRef.current) {
           window.setTimeout(() => fetchTasksList(), 1000);
         }
       });
-  }, [tasksListsQuery, gqlFetch, isMountedRef]);
+  }, [isMountedRef]);
+
+  // const triggerTask = useCallback(
+  //   (taskID, action) => {
+  //     gqlFetch(triggerTaskQuery, {
+  //       taskID,
+  //       action,
+  //     });
+  //   },
+  //   [useGQLFetch]
+  // );
 
   const triggerTask = useCallback(
     (taskID, action) => {
-      gqlFetch(triggerTaskQuery, {
-        taskID,
-        action,
-      });
+      let scrapedProducts = null
+      let body ={
+        taskID : taskID,
+        action : action
+      }
+      if (taskID == "ebay-wow-offers") {
+        axios.post("https://script.ifindilu.de/ebay/fetchEbayStore", body)
+        .then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else if (taskID == "amazon-lightning-offers") {
+        axios.post("https://script.ifindilu.de/amazon/getAmazonProducts").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else if (taskID == "mydealz-highlights") {
+        axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
+      else if (taskID == "aliexpress-value-deals") {
+        axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData").then(
+          (response) => {
+            scrapedProducts = response.data.data;
+            // offers.push(response.data)
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+      }
     },
-    [useGQLFetch]
+    []
   );
 
   const startTask = useCallback((taskID) => {
