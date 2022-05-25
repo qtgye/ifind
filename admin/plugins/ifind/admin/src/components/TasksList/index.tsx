@@ -106,7 +106,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   useEffect(() => {
     setTriggeredTask('');
     setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
-    console.log("/run/i.test(task.status", /run/i.test(task.status);
+    console.log("/run/i.test(task.status", /run/i.test(task.status));
   }, [tasks]);
 
   const headers: T_ColumnHeader = {
