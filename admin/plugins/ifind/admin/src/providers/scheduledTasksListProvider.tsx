@@ -140,7 +140,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         );
       }
       else if (taskID == "amazon-lightning-offers") {
-        axios.post("https://script.ifindilu.de/amazon/getAmazonProducts").then(
+        axios.post("https://script.ifindilu.de/amazon/getAmazonProducts" ,body).then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
@@ -151,7 +151,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         );
       }
       else if (taskID == "mydealz-highlights") {
-        axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct").then(
+        axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct", body).then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
@@ -162,7 +162,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         );
       }
       else if (taskID == "aliexpress-value-deals") {
-        axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData").then(
+        axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body).then(
           (response) => {
             scrapedProducts = response.data.data;
             // offers.push(response.data)
