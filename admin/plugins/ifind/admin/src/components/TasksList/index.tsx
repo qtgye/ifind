@@ -73,6 +73,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   );
 
   const getTaskStatus = useCallback<I_GetTaskStatusCallback>((task) => {
+    console.log("task Status : ",task.status);
     const status = (task.status || "stopped").toUpperCase();
     const state = /run/i.test(status) ? "running" : "stopped";
 

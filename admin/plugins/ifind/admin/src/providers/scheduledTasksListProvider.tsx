@@ -120,7 +120,6 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const triggerTask = useCallback(
     (taskID, action) => {
       console.log("TriggerTask Called");
-      console.log("taskId.id :", taskID.id);
       console.log("taskId : ", taskID);
       console.log("Action :", action);
       let scrapedProducts = null
@@ -128,7 +127,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         taskID : taskID,
         action : action
       }
-      if (taskID.id == "ebay-wow-offers") {
+      if (taskID == "ebay-wow-offers") {
         axios.post("https://script.ifindilu.de/ebay/fetchEbayStore", body)
         .then(
           (response) => {
@@ -140,7 +139,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
           }
         );
       }
-      else if (taskID.id == "amazon-lightning-offers") {
+      else if (taskID == "amazon-lightning-offers") {
         axios.post("https://script.ifindilu.de/amazon/getAmazonProducts").then(
           (response) => {
             scrapedProducts = response.data.data;
@@ -151,7 +150,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
           }
         );
       }
-      else if (taskID.id == "mydealz-highlights") {
+      else if (taskID == "mydealz-highlights") {
         axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct").then(
           (response) => {
             scrapedProducts = response.data.data;
@@ -162,7 +161,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
           }
         );
       }
-      else if (taskID.id == "aliexpress-value-deals") {
+      else if (taskID == "aliexpress-value-deals") {
         axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData").then(
           (response) => {
             scrapedProducts = response.data.data;
