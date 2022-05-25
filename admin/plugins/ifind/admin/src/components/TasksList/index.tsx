@@ -34,7 +34,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
+      console.log("task status in getTaskActions ;", task.status);
       const isRunning = /run/i.test(task.status || "");
+      console.log("isrunning in GettaskAction", isRunning);
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
       const label = isRunning ? "Stop" : "Run";
@@ -104,6 +106,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   useEffect(() => {
     setTriggeredTask('');
     setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
+    console.log("/run/i.test(task.status", /run/i.test(task.status);
   }, [tasks]);
 
   const headers: T_ColumnHeader = {

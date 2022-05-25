@@ -121,9 +121,9 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
     (taskID, action) => {
       console.log("TriggerTask Called");
       console.log("taskId : ", taskID);
-      console.log("Action :", action);
+      console.log("Action : ", action);
       let scrapedProducts = null
-      let body ={
+      let body = {
         taskID : taskID,
         action : action
       }
