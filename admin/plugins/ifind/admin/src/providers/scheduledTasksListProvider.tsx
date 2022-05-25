@@ -120,7 +120,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const triggerTask = useCallback(
     (taskID, action) => {
       console.log("TriggerTask Called");
-      console.log("taskId :", taskID.id);
+      console.log("taskId.id :", taskID.id);
+      console.log("taskId : ", taskID);
       console.log("Action :", action);
       let scrapedProducts = null
       let body ={
