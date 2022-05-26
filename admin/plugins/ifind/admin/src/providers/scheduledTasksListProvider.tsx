@@ -92,11 +92,11 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   //     });
   // }, [tasksListsQuery, gqlFetch, isMountedRef]);
 
-
   const fetchTasksList = useCallback(async () => {
-    axios.post("https://script.ifindilu.de/task/getTaskList")
+    await axios.post("https://script.ifindilu.de/task/getTaskList")
       .then((response) => {
         setTasks(response.data.tasks);
+        setLogs(response.data.logs); 
         // offers.push(response.data)
       })
       .catch((err) => console.log("error ", err))
@@ -121,31 +121,23 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
     (taskID, action) => {
       console.log("TriggerTask Called");
       console.log("taskId : ", taskID);
-      console.log("Action : ", action);
+      console.log("Action :", action);
       let scrapedProducts = null
-      let body = {
+      let body ={
         taskID : taskID,
         action : action
       }
-      axios.post("https://script.ifindilu.de/task/triggerTask", body)
-        .then((response) => {
-            console.log("Response received from api");
+      // if (taskID == "ebay-wow-offers") {
+        axios.post("https://script.ifindilu.de/task/triggerTask", body)
+        .then(
+          (response) => {
+             console.log("Response received from API");
+            // offers.push(response.data)
           },
           (error) => {
             console.log(error);
           }
         );
-      // if (taskID == "ebay-wow-offers") {
-      //   axios.post("https://script.ifindilu.de/ebay/fetchEbayStore", body)
-      //   .then(
-      //     (response) => {
-      //       scrapedProducts = response.data.data;
-      //       // offers.push(response.data)
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   );
       // }
       // else if (taskID == "amazon-lightning-offers") {
       //   axios.post("https://script.ifindilu.de/amazon/getAmazonProducts" ,body).then(
@@ -170,9 +162,10 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
       //   );
       // }
       // else if (taskID == "aliexpress-value-deals") {
-      //   axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body)
-      //   .then((response) => {
+      //   axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body).then(
+      //     (response) => {
       //       scrapedProducts = response.data.data;
+      //       // offers.push(response.data)
       //     },
       //     (error) => {
       //       console.log(error);

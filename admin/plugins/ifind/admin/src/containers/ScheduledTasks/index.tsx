@@ -88,6 +88,9 @@ const ScheduledTasks = () => {
         ]}
       />
       <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
+     <div className="scheduled-tasks__logs">
+      <LogsList logs={logs || []} title="Runner Logs" />
+      </div>
      </div>
   </div>)
 };
