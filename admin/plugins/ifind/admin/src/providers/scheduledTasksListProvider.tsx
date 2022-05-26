@@ -127,51 +127,58 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         taskID : taskID,
         action : action
       }
-      if (taskID == "ebay-wow-offers") {
-        axios.post("https://script.ifindilu.de/ebay/fetchEbayStore", body)
-        .then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
+      axios.post("https://script.ifindilu.de/task/triggerTask", body)
+        .then((response) => {
+            console.log("Response received from api");
           },
           (error) => {
             console.log(error);
           }
         );
-      }
-      else if (taskID == "amazon-lightning-offers") {
-        axios.post("https://script.ifindilu.de/amazon/getAmazonProducts" ,body).then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      else if (taskID == "mydealz-highlights") {
-        axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct", body).then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
-      else if (taskID == "aliexpress-value-deals") {
-        axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body).then(
-          (response) => {
-            scrapedProducts = response.data.data;
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-      }
+      // if (taskID == "ebay-wow-offers") {
+      //   axios.post("https://script.ifindilu.de/ebay/fetchEbayStore", body)
+      //   .then(
+      //     (response) => {
+      //       scrapedProducts = response.data.data;
+      //       // offers.push(response.data)
+      //     },
+      //     (error) => {
+      //       console.log(error);
+      //     }
+      //   );
+      // }
+      // else if (taskID == "amazon-lightning-offers") {
+      //   axios.post("https://script.ifindilu.de/amazon/getAmazonProducts" ,body).then(
+      //     (response) => {
+      //       scrapedProducts = response.data.data;
+      //       // offers.push(response.data)
+      //     },
+      //     (error) => {
+      //       console.log(error);
+      //     }
+      //   );
+      // }
+      // else if (taskID == "mydealz-highlights") {
+      //   axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct", body).then(
+      //     (response) => {
+      //       scrapedProducts = response.data.data;
+      //       // offers.push(response.data)
+      //     },
+      //     (error) => {
+      //       console.log(error);
+      //     }
+      //   );
+      // }
+      // else if (taskID == "aliexpress-value-deals") {
+      //   axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body)
+      //   .then((response) => {
+      //       scrapedProducts = response.data.data;
+      //     },
+      //     (error) => {
+      //       console.log(error);
+      //     }
+      //   );
+      // }
     },
     []
   );
