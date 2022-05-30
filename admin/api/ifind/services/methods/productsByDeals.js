@@ -33,7 +33,8 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     , agent: agent
     }, function (err, resp, body) {
       // ...
-      scheduledTasks = resp.data.tasks
+      // scheduledTasks = resp.data.tasks
+      console.log("response : ", resp);
       if(err) console.log("Error : err");
     });
 
