@@ -1,11 +1,18 @@
 const dealTypes = appRequire("api/ifind/deal-types");
 const offersCategories = appRequire("api/ifind/offers-categories");
+const axios = appRequire('axios').default;
 
 const PRODUCTS_PER_PAGE = 999999;
 
 module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
-  const scheduledTasks = await strapi.scheduledTasks.list();
+  // const scheduledTasks = await strapi.scheduledTasks.list();
+  const scheduledTasks = null
+  await axios.post("https://script.ifindilu.de/task/getTaskList")
+      .then((response) => {
+         scheduledTasks = response.data.tasks
+      })
+      .catch((err) => console.log("error ", err))
 
   const defaultOffersCategory = Object.keys(offersCategories).find(
     (categoryKey) => offersCategories[categoryKey].isDefault
