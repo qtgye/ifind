@@ -1,6 +1,7 @@
 const dealTypes = appRequire("api/ifind/deal-types");
 const offersCategories = appRequire("api/ifind/offers-categories");
 const axios = require('axios').default;
+const https = require('https');
 var request = require('request');
 var agentOptions;
 var agent;
