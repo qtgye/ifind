@@ -1,6 +1,6 @@
 const dealTypes = appRequire("api/ifind/deal-types");
 const offersCategories = appRequire("api/ifind/offers-categories");
-const axios = appRequire('axios').default;
+const axios = require('axios').default;
 
 const PRODUCTS_PER_PAGE = 999999;
 
