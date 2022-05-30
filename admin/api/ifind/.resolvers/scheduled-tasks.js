@@ -5,6 +5,7 @@ module.exports = {
     getTask ( id: String! ): Task
     scheduledTasksList: ScheduledTaskListPayload
     sheduledTasks ( command: String, id: String ): ScheduledTaskPayload
+    sheduledTasksHook ( hook: String! ): Boolean
   `,
   mutation: `
     triggerTask ( taskID: String, action: SCHEDULED_TASK_ACTION ): ScheduledTaskListPayload
@@ -26,6 +27,9 @@ module.exports = {
     async getTask(_, { id }) {
       return strapi.scheduledTasks.getTask(id);
     },
+    async sheduledTasksHook(_, {hook}) {
+      return strapi.services.ifind.sheduledTasksHook(hook);
+    }
   },
   resolveMutation: {
     async triggerTask(_, args) {
