@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
 import axios from 'axios';
-let taskList = null
 
 // Context
 export const ScheduledTasksListContext =
@@ -63,6 +62,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const gqlFetch = useGQLFetch();
   const isMountedRef = useRef(true);
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
+  localStorage.setItem("taskList",tasks)
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
@@ -96,7 +96,6 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const fetchTasksList = useCallback(async () => {
     await axios.post("https://script.ifindilu.de/task/getTaskList")
       .then((response) => {
-        taskList = response.data.tasks;
         setTasks(response.data.tasks);
         setLogs(response.data.logs); 
         // offers.push(response.data)
@@ -212,4 +211,3 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
 
 export const useScheduledTasksList = () =>
   useContext(ScheduledTasksListContext);
-export default taskList;
