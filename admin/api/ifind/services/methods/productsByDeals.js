@@ -132,8 +132,10 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
         const source = sources.find(({ name }) =>
           new RegExp(site, "i").test(name)
         );
-        console.log("Products -->", products);
-        console.log("TotalProducts -->", total_products);
+        // for(const product of products){
+        // console.log("Products -->", product.url_list);
+        // }
+        // console.log("TotalProducts -->", total_products);
         // Get last run data from scheduled task
         const matchedScheduledTask = scheduledTasks.find(
           ({ meta }) => meta && meta.deal_type === dealTypeKey
