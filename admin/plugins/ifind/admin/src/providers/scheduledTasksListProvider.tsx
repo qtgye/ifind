@@ -62,7 +62,6 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const gqlFetch = useGQLFetch();
   const isMountedRef = useRef(true);
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
-  localStorage.setItem("taskList",tasks)
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");

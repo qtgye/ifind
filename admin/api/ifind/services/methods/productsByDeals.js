@@ -21,13 +21,12 @@ const PRODUCTS_PER_PAGE = 999999;
 module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
   // const scheduledTasks = await strapi.scheduledTasks.list();
-   const scheduledTasks = localStorage.getItem("taskList")
-   
-    // await axios.post("https://script.ifindilu.de/task/getTaskList")
-    //   .then((response) => {
-    //      scheduledTasks = response.data.tasks
-    //   })
-    //   .catch((err) => console.log("error ", err.message))
+  const scheduledTasks = null
+    await axios.post("https://script.ifindilu.de/task/getTaskList")
+      .then((response) => {
+         scheduledTasks = response.data.tasks
+      })
+      .catch((err) => console.log("error ", err.message))
     // request({
     //   url: "https://script.ifindilu.de/task/getTaskList"
     // , method: 'POST'
@@ -43,7 +42,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     //       {
     //           "id": "amazon-lightning-offers",
     //           "name": "Amazon Lightning Offers",
-    //       //    "schedule": 3600000,
+    //           "schedule": 3600000,
     //           "next_run": 1653918361169,
     //           "status": null,
     //           "last_run": 1653914761273,
