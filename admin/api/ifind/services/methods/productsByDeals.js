@@ -1,8 +1,9 @@
 const dealTypes = appRequire("api/ifind/deal-types");
 const offersCategories = appRequire("api/ifind/offers-categories");
 // const offersCategories = appRequire(");
-const taskList = require("../../../../plugins/ifind/admin/src/providers/scheduledTasksListProvider")
-
+// const taskList = require("../../../../plugins/ifind/admin/src/providers/scheduledTasksListProvider")
+// const taskList = require("../../../../plugins/ifind/admin/src/providers/scheduledTasksListProvider")
+const fetch = require('node-fetch');
 const axios = require('axios').default;
 const https = require('https');
 var request = require('request');
@@ -24,7 +25,10 @@ const PRODUCTS_PER_PAGE = 999999;
 module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
   // const scheduledTasks = await strapi.scheduledTasks.list();
-  const scheduledTasks = taskList
+  // const scheduledTasks = taskList
+  const response = await fetch('https://script.ifindilu.de/task/getTaskList', {method: 'POST'});
+  console.log("response.json-->", response.json());
+  const scheduledTasks = await response.json();
     // await axios.post("https://script.ifindilu.de/task/getTaskList")
     //   .then((response) => {
     //      scheduledTasks = response.data.tasks
@@ -40,7 +44,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     //   console.log("response : ", resp);
     //   if(err) console.log("Error : err");
     // });
-    
+
   const defaultOffersCategory = Object.keys(offersCategories).find(
     (categoryKey) => offersCategories[categoryKey].isDefault
   );
