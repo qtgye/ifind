@@ -21,7 +21,8 @@ const PRODUCTS_PER_PAGE = 999999;
 module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const sources = await strapi.services.source.find();
   // const scheduledTasks = await strapi.scheduledTasks.list();
-  const scheduledTasks = null
+  // const scheduledTasks = null
+  let scheduledTasks = null;
     await axios.post("https://script.ifindilu.de/task/getTaskList")
       .then((response) => {
          scheduledTasks = response.data.tasks
