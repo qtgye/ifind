@@ -22,10 +22,12 @@ declare interface I_RawTask extends Partial<ScheduledTask> {
 
 declare interface I_ScheduledTasksProviderValue {
   tasks?: I_RawTask[];
+  isTaskAdded?: I_RawTask[];
   startTask?: (taskId: string) => any;
   stopTask?: (taskId: string) => any;
   serverTimeUnix?: number|string;
   serverTimeFormatted?: string;
+  limit?: number|string;
   logs?: I_LogEntry[];
 }
 

@@ -8,6 +8,7 @@ import {
   ScheduledTasksListProvider,
 } from "../../providers/scheduledTasksListProvider";
 import TasksList from "../../components/TasksList";
+import TasksControl from "../../components/TasksListControls";
 import FontAwesomeIcon from "../../components/FontAwesomeIcon";
 import LogsList from "../../components/LogsList";
 import axios from 'axios';
@@ -17,7 +18,7 @@ import "./styles.scss";
 
 const ScheduledTasks = () => {
   const history = useHistory();
-  const {tasks, startTask,stopTask,serverTimeFormatted, logs } =
+  const {tasks, startTask,stopTask,serverTimeFormatted, logs,isTaskAdded, limit } =
     useScheduledTasksList();
 
   // const [task/s,setTasks] = useState(null) 
@@ -76,7 +77,7 @@ const ScheduledTasks = () => {
   return(<div>
      <div className="container scheduled-tasks">
        <Header
-        title={{ label: "Scheduled Tasks" }}
+        title={{ label: "Execution Queue" }}
         actions={[
           {
             Component: () => (
@@ -87,7 +88,26 @@ const ScheduledTasks = () => {
           },
         ]}
       />
-      <TasksList tasks={tasks || []} onTaskAction={onTaskAction} />
+      <TasksList tasks={isTaskAdded || []} onTaskAction={onTaskAction} limit={limit || ""}/>
+     {/* <div className="scheduled-tasks__logs">
+      <LogsList logs={logs || []} title="Runner Logs" />
+      </div> */}
+     </div>
+     <div className="container scheduled-tasks">
+       <Header
+        title={{ label: "Task Controls" }}
+        actions={[
+          {
+            Component: () => (
+              <></>
+              // <div className="scheduled-tasks__server-time">
+              //   <strong>Server Time:&nbsp;</strong> {serverTimeFormatted} (UTC)
+              // </div>
+            ),
+          },
+        ]}
+      />
+      <TasksControl tasks={tasks || []} />
      <div className="scheduled-tasks__logs">
       <LogsList logs={logs || []} title="Runner Logs" />
       </div>

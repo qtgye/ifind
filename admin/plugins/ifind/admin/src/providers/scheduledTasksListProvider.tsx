@@ -8,6 +8,8 @@ import React, {
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
 import axios from 'axios';
+const moment = require("moment");
+
 
 // Context
 export const ScheduledTasksListContext =
@@ -65,6 +67,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
+  const [isTaskAdded, setIsTaskAdded] = useState<I_RawTask[]>([]);
+  const [limit, setLimit] = useState<string | number>("");
 
   // Existing Code : 
 
@@ -93,10 +97,18 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   // }, [tasksListsQuery, gqlFetch, isMountedRef]);
 
   const fetchTasksList = useCallback(async () => {
+
+    const serverTime = moment.utc();
+    const serverTimeUnix = String(serverTime.valueOf());
+    const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
+    setServerTimeFormatted(serverTimeFormatted);
     await axios.post("https://script.ifindilu.de/task/getTaskList")
+    // await axios.post("http://localhost:3000/task/getTaskList")
       .then((response) => {
         setTasks(response.data.tasks);
         setLogs(response.data.logs); 
+        setIsTaskAdded(response.data.isTaskAdded);
+        setLimit(response.data.limit);
         // offers.push(response.data)
       })
       .catch((err) => console.log("error ", err))
@@ -129,6 +141,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
       }
       // if (taskID == "ebay-wow-offers") {
         axios.post("https://script.ifindilu.de/task/triggerTask", body)
+        // axios.post("http://localhost:3000/task/triggerTask", body)
         .then(
           (response) => {
              console.log("Response received from API");
@@ -138,40 +151,6 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
             console.log(error);
           }
         );
-      // }
-      // else if (taskID == "amazon-lightning-offers") {
-      //   axios.post("https://script.ifindilu.de/amazon/getAmazonProducts" ,body).then(
-      //     (response) => {
-      //       scrapedProducts = response.data.data;
-      //       // offers.push(response.data)
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   );
-      // }
-      // else if (taskID == "mydealz-highlights") {
-      //   axios.post("https://script.ifindilu.de/mydealz/getMyDealsProduct", body).then(
-      //     (response) => {
-      //       scrapedProducts = response.data.data;
-      //       // offers.push(response.data)
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   );
-      // }
-      // else if (taskID == "aliexpress-value-deals") {
-      //   axios.post("https://script.ifindilu.de/aliexpress/getAliExpressData", body).then(
-      //     (response) => {
-      //       scrapedProducts = response.data.data;
-      //       // offers.push(response.data)
-      //     },
-      //     (error) => {
-      //       console.log(error);
-      //     }
-      //   );
-      // }
     },
     []
   );
@@ -201,6 +180,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         serverTimeUnix,
         serverTimeFormatted,
         logs,
+        isTaskAdded,
+        limit
       }}
     >
       {children}
