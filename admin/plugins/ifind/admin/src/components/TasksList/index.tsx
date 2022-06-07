@@ -200,7 +200,7 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
   return (
     <>
     <Limit limit = { limit || ""}/>
-  <Table className="tasks-list" headers={headers} rows={rowsData} />;
+  <Table className="tasks-list" headers={headers} rows={rowsData} />
     </>
   )
 };
