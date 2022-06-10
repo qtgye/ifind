@@ -103,7 +103,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
     const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
     setServerTimeFormatted(serverTimeFormatted);
     await axios.post("https://script.ifindilu.de/task/getTaskList")
-    // await axios.post("http://localhost:3000/task/getTaskList")
+    // await axios.post("https://script.ifindilu.de/task/getTaskList")
       .then((response) => {
         setTasks(response.data.tasks);
         setLogs(response.data.logs); 
@@ -130,18 +130,20 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   // );
 
   const triggerTask = useCallback(
-    (taskID, action) => {
+    (taskID,action,index) => {
       console.log("TriggerTask Called");
       console.log("taskId : ", taskID);
       console.log("Action :", action);
+      console.log("index:",index);
       let scrapedProducts = null
       let body ={
         taskID : taskID,
-        action : action
+        action : action,
+        position: index
       }
       // if (taskID == "ebay-wow-offers") {
         axios.post("https://script.ifindilu.de/task/triggerTask", body)
-        // axios.post("http://localhost:3000/task/triggerTask", body)
+        // axios.post("https://script.ifindilu.de/task/triggerTask", body)
         .then(
           (response) => {
              console.log("Response received from API");
@@ -155,12 +157,12 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
     []
   );
 
-  const startTask = useCallback((taskID) => {
-    triggerTask(taskID, "start");
+  const startTask = useCallback((taskID,index) => {
+    triggerTask(taskID, "start", index);
   }, []);
 
-  const stopTask = useCallback((taskID) => {
-    triggerTask(taskID, "stop");
+  const stopTask = useCallback((taskID,index) => {
+    triggerTask(taskID, "stop",index);
   }, []);
 
   useEffect(() => {

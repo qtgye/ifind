@@ -17,12 +17,36 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
-  const onTaskActionClick = useCallback(
-    (action, taskID) => {
+  // const onTaskActionClick = useCallback(
+  //   (action, taskID) => {
+  //     if (typeof onTaskAction === "function") {
+  //       setTriggeredAction(action);
+  //       setTriggeredTask(taskID);
+  //       onTaskAction(action, taskID);
+  //     }
+  //   },
+  //   [onTaskAction]
+  // );
+
+  const onTaskActionRun = useCallback(
+    (taskID,index) => {
+      const action = "start"
       if (typeof onTaskAction === "function") {
         setTriggeredAction(action);
         setTriggeredTask(taskID);
-        onTaskAction(action, taskID);
+        onTaskAction(action,taskID,index);
+      }
+    },
+    [onTaskAction]
+  );
+
+  const onTaskActionStop = useCallback(
+    (taskID,index) => {
+      const action = "stop"
+      if (typeof onTaskAction === "function") {
+        setTriggeredAction(action);
+        setTriggeredTask(taskID);
+        onTaskAction(action,taskID,index);
       }
     },
     [onTaskAction]
@@ -61,7 +85,7 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
   }
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
-    (task) => {
+    (task,index) => {
       console.log("task status in getTaskActions ;", task.status);
       const isRunning = /run/i.test(task.status || "");
       console.log("isrunning in GettaskAction", isRunning);
@@ -70,7 +94,7 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
       const label = isRunning ? "Stop" : "Run";
       let iconPulse = false;
       let icon = isRunning ? "stop" : "play";
-      let isDisabled = someTaskRuns && !isRunning ? true : false;
+      let isDisabled = isRunning ? true : false;
       if (triggeredTask === task.id) {
         isDisabled = true;
         icon = "spinner";
@@ -81,24 +105,23 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
           <Button
             disabled={isDisabled}
             color={color}
-            onClick={() => onTaskActionClick(buttonAction, task.id)}
+            onClick={() => onTaskActionRun(task.id,index)}
           >
-            <FontAwesomeIcon icon={icon} pulse={iconPulse} /> {label}
+            <FontAwesomeIcon icon="Run" pulse={iconPulse} />Start
           </Button>
-          {/* <ButtonLink
-            routerLink
-            href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
-            color={E_ButtonLinkColor.secondary}
-            title="Show Logs"
+          <Button
+            color="delete"
+            onClick={() => onTaskActionStop(task.id,index)}
           >
-            <FontAwesomeIcon icon="terminal" />
-            <span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs` }} />
-          </ButtonLink> */}
+            <FontAwesomeIcon icon="stop" pulse={iconPulse} />Stop
+          </Button>
+         
         </div>
       );
     },
     [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
   );
+
   const getOrderActions = useCallback<I_GetTaskActionsCallback>(
     (index) => {
       // console.log("task status in getTaskActions ;", task.status);
@@ -181,18 +204,18 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
     name: task.name,
     frequency: task.frequency,
     last_run: formatLastRun(task.last_run),
-    action: task.hasModule ? getTaskActions(task) : "-",
+    action: task.hasModule ? getTaskActions(task,index) : "-",
     // countdown: task.countdown,
     order: "",
   })
   :
   ({
-    status: '',
+    status: getTaskStatus(task),
     position: (index+1),
     name: task.name,
     frequency: task.frequency,
     last_run: formatLastRun(task.last_run),
-    action: "-",
+    action: task.hasModule ? getTaskActions(task,index) : "-",
     // countdown: task.countdown,
     order:  getOrderActions(index),
   })  

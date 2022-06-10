@@ -52,7 +52,7 @@ function Limit(props) {
                 placeholder="Update Queue Limit"
                 type="number"
                 max={50}
-                // value={val}
+                value={limit}
                 style={{
                     display: 'inline-block',
                     width: '50%',

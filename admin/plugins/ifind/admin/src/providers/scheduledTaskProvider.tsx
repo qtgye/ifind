@@ -50,7 +50,7 @@ export const ScheduledTaskProvider = ({
     }
     // if (taskID == "ebay-wow-offers") {
       axios.post("https://script.ifindilu.de/task/getTaskLog", body)
-      // axios.post("http://localhost:3000/task/getTaskLog", body)
+      // axios.post("https://script.ifindilu.de/task/getTaskLog", body)
       .then(
         (response) => {
             response && setTask(response.data);
