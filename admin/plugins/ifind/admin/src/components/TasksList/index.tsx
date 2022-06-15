@@ -92,7 +92,8 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
       console.log("isrunning in GettaskAction", isRunning);
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
-      const label = isRunning ? "Stop" : "Run";
+      const label = isRunning ? "Run" : "Ready";
+      const label2 = isRunning ? "Stop" : "Remove";
       let iconPulse = false;
       let icon = isRunning ? "stop" : "play";
       let isDisabled = isRunning ? true : false;
@@ -108,13 +109,13 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
             color={color}
             onClick={() => onTaskActionRun(task.id,index)}
           >
-            <FontAwesomeIcon icon="Run" pulse={iconPulse} />Start
+            <FontAwesomeIcon icon="Run" pulse={iconPulse} />{label}
           </Button>
           <Button
             color="delete"
             onClick={() => onTaskActionStop(task.id,index)}
           >
-            <FontAwesomeIcon icon="stop" pulse={iconPulse} />Stop
+            <FontAwesomeIcon icon="stop" pulse={iconPulse} />{label2}
           </Button>
          
         </div>
