@@ -4,6 +4,7 @@ import { Button } from "@buffetjs/core";
 import { generatePluginLink } from "../../helpers/url";
 import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import Limit from "../Limit";
+import Parallel from "../Parallel";
 import axios from 'axios';
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
@@ -13,7 +14,7 @@ export type I_GetTaskActionsCallback = (
 ) => JSX.Element | JSX.Element[];
 export type I_GetTaskStatusCallback = (task: I_RawTask) => JSX.Element;
 // TaskList Component
-const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
+const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
@@ -222,8 +223,9 @@ const TasksList = ({ tasks, onTaskAction, limit }: TasksListProps) => {
   );
   return (
     <>
-    <Limit limit = { limit || ""}/>
-  <Table className="tasks-list" headers={headers} rows={rowsData} />
+    <Parallel parallel = { parallel || ""}/><br></br>
+    <Limit limit = { limit || ""}/><br></br>
+    <Table className="tasks-list" headers={headers} rows={rowsData} />
     </>
   )
 };

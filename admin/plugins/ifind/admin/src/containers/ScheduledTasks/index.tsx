@@ -18,7 +18,7 @@ import "./styles.scss";
 
 const ScheduledTasks = () => {
   const history = useHistory();
-  const {tasks, startTask,stopTask,serverTimeFormatted, logs,isTaskAdded, limit } =
+  const {tasks, startTask,stopTask,serverTimeFormatted, logs,isTaskAdded, limit, parallel } =
     useScheduledTasksList();
 
   // const [task/s,setTasks] = useState(null) 
@@ -88,7 +88,7 @@ const ScheduledTasks = () => {
           },
         ]}
       />
-      <TasksList tasks={isTaskAdded || []} onTaskAction={onTaskAction} limit={limit || ""}/>
+      <TasksList tasks={isTaskAdded || []} onTaskAction={onTaskAction} limit={limit || ""} parallel={parallel || ""}/>
      {/* <div className="scheduled-tasks__logs">
       <LogsList logs={logs || []} title="Runner Logs" />
       </div> */}

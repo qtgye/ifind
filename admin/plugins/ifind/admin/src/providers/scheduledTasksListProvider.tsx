@@ -69,6 +69,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
   const [isTaskAdded, setIsTaskAdded] = useState<I_RawTask[]>([]);
   const [limit, setLimit] = useState<string | number>("");
+  const [parallel, setParallel] = useState<string | number>("");
+
 
   // Existing Code : 
 
@@ -109,6 +111,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         setLogs(response.data.logs); 
         setIsTaskAdded(response.data.isTaskAdded);
         setLimit(response.data.limit);
+        setParallel(response.data.parallel);
+
         // offers.push(response.data)
       })
       .catch((err) => console.log("error ", err))
@@ -183,7 +187,8 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         serverTimeFormatted,
         logs,
         isTaskAdded,
-        limit
+        limit,
+        parallel
       }}
     >
       {children}

@@ -28,6 +28,7 @@ declare interface I_ScheduledTasksProviderValue {
   serverTimeUnix?: number|string;
   serverTimeFormatted?: string;
   limit?: number|string;
+  parallel?: number|String;
   logs?: I_LogEntry[];
 }
 
