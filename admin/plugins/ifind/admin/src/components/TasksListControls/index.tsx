@@ -7,7 +7,7 @@ import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 import axios from 'axios';
 import "./styles.scss";
-let value = 0
+let value : number = 0
 let priorityValue : number = 0;
 export type I_GetTaskActionsCallback = (
   task: I_RawTask
@@ -22,7 +22,8 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   // This function is called when the input changes
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("sardeep function")
-    value = event.target.value;
+    if(parseInt(event.target.value) < 1) event.target.value = "1"
+    value = parseInt(event.target.value);
   };
 
 
