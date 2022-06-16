@@ -37,7 +37,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   };
 
 
-  const priorityChange(e: React.ChangeEvent<HTMLInputElement>) => {
+  const priorityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log("Inside priority change handlers");
     if(parseInt(e.target.value) > 10) e.target.value = "10";
     if(parseInt(e.target.value)<1) e.target.value = "1";
