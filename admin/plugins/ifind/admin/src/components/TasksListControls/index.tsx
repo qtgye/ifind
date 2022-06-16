@@ -8,7 +8,7 @@ import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 import axios from 'axios';
 import "./styles.scss";
 let value = 0
-let priorityValue = 0
+let priorityValue : number = 0;
 export type I_GetTaskActionsCallback = (
   task: I_RawTask
 ) => JSX.Element | JSX.Element[];
@@ -24,14 +24,26 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     console.log("sardeep function")
     value = event.target.value;
   };
+
+
+
   const inputHandler2 = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("sardeep function")
       if(event.target.value>10)
       {
-        event.target.value = 10;
-        priorityValue = event.target.value;
+        event.target.value = "10";
+        priorityValue = parseInt(event.target.value);
       }
   };
+
+
+  const priorityChange(e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log("Inside priority change handlers");
+    if(parseInt(e.target.value) > 10) e.target.value = "10";
+    if(parseInt(e.target.value)<1) e.target.value = "1";
+      priorityValue = parseInt(e.target.value);
+  }
+
   const setTextfield = (task,value) => {
     console.log("Minutes set---->", value);
     const taskID = task.id
@@ -61,7 +73,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
         (error) => {
           console.log(error)
         })
+      priorityValue = "";
   }
+ 
   console.log("value---->",value);
   const onTaskActionClick = useCallback(
     (action, taskID) => {
@@ -207,7 +221,8 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
             //   setLimit(value);
             // }}
             name="input"
-            onInput={inputHandler2}
+            // onInput={inputHandler2}
+            onChange={priorityChange}
             placeholder="Add Minute"
             type="number"
             max={10}
