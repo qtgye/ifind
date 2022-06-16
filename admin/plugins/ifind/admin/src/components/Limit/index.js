@@ -47,6 +47,8 @@ function Limit(props) {
                 onChange={({ target: { value } }) => {
                     if(value>50)
                     {value = 50;}
+                    if(value<1)
+                    {value = 1;}
                     setLimit(value);
                 }}
                 placeholder="Update Queue Limit"

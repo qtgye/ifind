@@ -47,6 +47,8 @@ function Limit(props) {
                 onChange={({ target: { value } }) => {
                     if(value>4)
                     {value = 4;}
+                    if(value<1)
+                    {value = 1};
                     setParallalValue(value);
                 }}
                 placeholder="Update Parallel Run"
