@@ -314,7 +314,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const headers: T_ColumnHeader = {
     status: "Id",
     name: "Tasks",
-    last_run: "Join the Queue",
+    joinQueue: "Join the Queue",
     frequency: "Frequency",
     // priority: "Priority",
     countdown: "Countdown",
@@ -328,14 +328,14 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     // status: getTaskStatus(task),
     status: (index + 1),
     name: task.name,
-    last_run: task.hasModule ? getQueueActions(task) : "-",
+    joinQueue: task.hasModule ? getQueueActions(task) : "-",
     frequency: task.frequency,
     priority: task.priority,
     action: task.hasModule ? getTaskActions(task) : "-",
     countdown: task.isReady == "Ready" ? task.isReady : task.countdown,
     updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
     updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
-    affiliate: task.id
+    last_run: formatLastRun(task.last_run),
   }));
   return <TableControls className="tasks-list" headers={headers} rows={rowsData} />;
 };
