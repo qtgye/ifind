@@ -322,7 +322,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     priority:"Priority",
     updatePriority: "Update Priority",
     action: "Logs",
-    affiliate: "Affiliate ID",
+    last_run: "Last Run",
   };
   const rowsData: T_GenericRowData[] = tasks.map((task, index) => ({
     // status: getTaskStatus(task),
