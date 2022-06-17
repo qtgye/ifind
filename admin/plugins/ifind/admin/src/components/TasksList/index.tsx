@@ -92,8 +92,8 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
       console.log("isrunning in GettaskAction", isRunning);
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
-      const label = isRunning ? "Run" : "Ready";
-      const label2 = isRunning ? "Stop" : "Remove";
+      const label = "Run";
+      const label2 = "Stop";
       let iconPulse = false;
       let icon = isRunning ? "stop" : "play";
       let isDisabled = isRunning ? true : false;
