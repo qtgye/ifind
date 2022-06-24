@@ -22,7 +22,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   // This function is called when the input changes
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("sardeep function")
-    if(parseInt(event.target.value) < 1) event.target.value = "1"
+    if(parseInt(event.target.value) < 0) event.target.value = "0  "
     value = parseInt(event.target.value);
   };
 
@@ -329,10 +329,10 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     status: (index + 1),
     name: task.name,
     joinQueue: task.hasModule ? getQueueActions(task) : "-",
-    frequency: task.frequency,
+    frequency:  task.countdown !== "NaN:NaN:NaN:NaN" ? task.frequency : "0",
     priority: task.priority,
     action: task.hasModule ? getTaskActions(task) : "-",
-    countdown: task.isReady == "Ready" ? task.isReady : task.countdown,
+    countdown: task.isReady == "Ready" ? task.isReady : (task.countdown== "NaN:NaN:NaN:NaN" ? "Stopped" : task.countdown),
     updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
     updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
     last_run: formatLastRun(task.last_run),
