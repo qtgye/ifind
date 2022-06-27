@@ -29,7 +29,6 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
       })
       .catch((err) => console.log("error ", err.message))
 
-  console.log("scheduledTasks",scheduledTasks)
   
 
   const defaultOffersCategory = Object.keys(offersCategories).find(
@@ -37,7 +36,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   );
 
   console.log("defaultOffersCategory",defaultOffersCategory)
-  const offerCategory = offer_categorys
+  const offerCategory = offer_category
     ? offersCategories[offer_category]
     : offersCategories[defaultOffersCategory];
   const selectedDealTypes = offerCategory
@@ -95,7 +94,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
             last_run,
             nav_label,
             nav_icon,
-          },
+          },        
           products,
           total_products,
         };
