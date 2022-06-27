@@ -28,12 +28,16 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
          scheduledTasks = response.data.tasks
       })
       .catch((err) => console.log("error ", err.message))
+
+  console.log("scheduledTasks",scheduledTasks)
   
 
   const defaultOffersCategory = Object.keys(offersCategories).find(
     (categoryKey) => offersCategories[categoryKey].isDefault
   );
-  const offerCategory = offer_category
+
+  console.log("defaultOffersCategory",defaultOffersCategory)
+  const offerCategory = offer_categorys
     ? offersCategories[offer_category]
     : offersCategories[defaultOffersCategory];
   const selectedDealTypes = offerCategory
@@ -78,6 +82,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
           ({ meta }) => meta && meta.deal_type === dealTypeKey
         );
 
+        console.log("matchedScheduledTask",matchedScheduledTask)
         const last_run = matchedScheduledTask
           ? matchedScheduledTask.last_run
           : null;
