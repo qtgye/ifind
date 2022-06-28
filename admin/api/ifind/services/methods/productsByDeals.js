@@ -26,10 +26,11 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     await axios.post("https://script.ifindilu.de/task/getTaskList")
       .then((response) => {
          scheduledTasks = response.data.tasks
+         
       })
       .catch((err) => console.log("error ", err.message))
 
-  
+  console.log("scheduledTasks : ", scheduledTasks);
 
   const defaultOffersCategory = Object.keys(offersCategories).find(
     (categoryKey) => offersCategories[categoryKey].isDefault
@@ -77,6 +78,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
         // }
         // console.log("TotalProducts -->", total_products);
         // Get last run data from scheduled task
+        console.log("scheduledTasks at line 81", scheduledTasks);
         const matchedScheduledTask = scheduledTasks.find(
           ({ meta }) => meta && meta.deal_type === dealTypeKey
         );
