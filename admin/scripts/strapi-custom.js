@@ -26,6 +26,9 @@ if ( process.argv.includes('watch-plugin') ) {
   fs.rmdirSync(cache, rmOptions);
 }
 
+// Disable certificate check due to Node's behavior
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
+
 
 /**
  * Ensure Category API's icon field is populated with the IFIND icons package
