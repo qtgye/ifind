@@ -6,8 +6,6 @@ var request = require("request");
 
 const ENV = require('dotenv').config().parsed || {};
 
-console.log({ ENV });
-
 var agentOptions;
 var agent;
 ("use strict");

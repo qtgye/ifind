@@ -7,9 +7,8 @@ import React, {
   useRef,
 } from "react";
 import { useGQLFetch } from "../helpers/gqlFetch";
-import axios from 'axios';
+import axios from "axios";
 const moment = require("moment");
-
 
 // Context
 export const ScheduledTasksListContext =
@@ -59,10 +58,37 @@ mutation TriggerTask (
 }
 `;
 
+export const useScriptsServerUrl = () => {
+  const scriptsServer = useRef();
+
+  return async (path = "/") => {
+    let baseURL = "";
+
+    if (scriptsServer.current) {
+      baseURL = scriptsServer.current;
+    } else {
+      console.log("Fetching Scripts Server URL...");
+      const {
+        data: {
+          data: { env },
+        },
+      } = await axios.post("/graphql", {
+        query: `query { env { SCIPTS_SERVER_URL } }`,
+      });
+
+      scriptsServer.current = env.SCIPTS_SERVER_URL;
+      baseURL = env.SCIPTS_SERVER_URL;
+    }
+
+    return [baseURL.replace(/\/+$/, ""), path.replace(/^\/+/, "")].join("/");
+  };
+};
+
 // Provider
 export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const gqlFetch = useGQLFetch();
   const isMountedRef = useRef(true);
+  const getScriptsServerUrl = useScriptsServerUrl();
   const [tasks, setTasks] = useState<I_RawTask[]>([]);
   const [logs, setLogs] = useState<I_LogEntry[]>([]);
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
@@ -71,44 +97,19 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [limit, setLimit] = useState<string | number>("");
   const [parallel, setParallel] = useState<string | number>("");
 
-
-  // Existing Code : 
-
-  // const fetchTasksList = useCallback(async () => {
-  //   gqlFetch(tasksListsQuery)
-  //     .then((data) => {
-  //       if (data?.scheduledTasksList?.tasks) {
-  //         setTasks(data.scheduledTasksList.tasks);
-  //       }
-  //       if (data?.scheduledTasksList?.serverTimeUnix) {
-  //         setServerTimeUnix(data.scheduledTasksList.serverTimeUnix);
-  //       }
-  //       if (data?.scheduledTasksList?.serverTimeFormatted) {
-  //         setServerTimeFormatted(data.scheduledTasksList.serverTimeFormatted);
-  //       }
-  //       if (data?.scheduledTasksList?.logs) {
-  //         setLogs(data.scheduledTasksList.logs);
-  //       }
-  //     })
-  //     .catch((err) => err)
-  //     .finally(() => {
-  //       if ( isMountedRef.current ) {
-  //         window.setTimeout(() => fetchTasksList(), 1000);
-  //       }
-  //     });
-  // }, [tasksListsQuery, gqlFetch, isMountedRef]);
-
   const fetchTasksList = useCallback(async () => {
-
     const serverTime = moment.utc();
     const serverTimeUnix = String(serverTime.valueOf());
     const serverTimeFormatted = serverTime.format("YYYY-MMM-DD HH:mm:ss");
     setServerTimeFormatted(serverTimeFormatted);
-    await axios.post("https://script.ifindilu.de/task/getTaskList")
-    // await axios.post("https://script.ifindilu.de/task/getTaskList")
+
+    const url = await getScriptsServerUrl("/task/getTaskList");
+
+    await axios
+      .post(url)
       .then((response) => {
         setTasks(response.data.tasks);
-        setLogs(response.data.logs); 
+        setLogs(response.data.logs);
         setIsTaskAdded(response.data.isTaskAdded);
         setLimit(response.data.limit);
         setParallel(response.data.parallel);
@@ -121,52 +122,43 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
           window.setTimeout(() => fetchTasksList(), 1000);
         }
       });
-  }, [isMountedRef]);
+  }, [isMountedRef, getScriptsServerUrl]);
 
-  // const triggerTask = useCallback(
-  //   (taskID, action) => {
-  //     gqlFetch(triggerTaskQuery, {
-  //       taskID,
-  //       action,
-  //     });
-  //   },
-  //   [useGQLFetch]
-  // );
+  const triggerTask = useCallback(async (taskID, action, index) => {
+    console.log("TriggerTask Called");
+    console.log("taskId : ", taskID);
+    console.log("Action :", action);
+    console.log("index:", index);
+    let scrapedProducts = null;
 
-  const triggerTask = useCallback(
-    (taskID,action,index) => {
-      console.log("TriggerTask Called");
-      console.log("taskId : ", taskID);
-      console.log("Action :", action);
-      console.log("index:",index);
-      let scrapedProducts = null
-      let body ={
-        taskID : taskID,
-        action : action,
-        position: index
-      }
-      // if (taskID == "ebay-wow-offers") {
-        axios.post("https://script.ifindilu.de/task/triggerTask", body)
-        // axios.post("https://script.ifindilu.de/task/triggerTask", body)
-        .then(
-          (response) => {
-             console.log("Response received from API");
-            // offers.push(response.data)
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
-    },
-    []
-  );
+    const url = await getScriptsServerUrl("/task/triggerTask");
 
-  const startTask = useCallback((taskID,index) => {
+    let body = {
+      taskID: taskID,
+      action: action,
+      position: index,
+    };
+    // if (taskID == "ebay-wow-offers") {
+    axios
+      .post(url, body)
+      // axios.post("https://script.ifindilu.de/task/triggerTask", body)
+      .then(
+        (response) => {
+          console.log("Response received from API");
+          // offers.push(response.data)
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }, []);
+
+  const startTask = useCallback((taskID, index) => {
     triggerTask(taskID, "start", index);
   }, []);
 
-  const stopTask = useCallback((taskID,index) => {
-    triggerTask(taskID, "stop",index);
+  const stopTask = useCallback((taskID, index) => {
+    triggerTask(taskID, "stop", index);
   }, []);
 
   useEffect(() => {
@@ -174,7 +166,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
 
     return () => {
       isMountedRef.current = false;
-    }
+    };
   }, []);
 
   return (
@@ -188,7 +180,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         logs,
         isTaskAdded,
         limit,
-        parallel
+        parallel,
       }}
     >
       {children}

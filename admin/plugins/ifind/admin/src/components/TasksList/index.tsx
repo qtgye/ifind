@@ -54,7 +54,7 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
   );
 
   const onClickUp = (index) => {
-    console.log("Minutes set---->", index);
+    // console.log("Minutes set---->", index);
     let body = {
       position:index,
       action:"up"
@@ -70,14 +70,14 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
   }
 
   const onClickDown = (index) => {
-    console.log("Minutes set---->", index);
+    // console.log("Minutes set---->", index);
     let body = {
       position: index,
       action:"down"
     }
     axios.post('https://script.ifindilu.de/update/position', body)
       .then((response) => {
-        console.log("response -->", response.data);
+        // console.log("response -->", response.data);
       },
         (error) => {
           console.log(error)
@@ -87,9 +87,9 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task,index) => {
-      console.log("task status in getTaskActions ;", task.status);
+      // console.log("task status in getTaskActions ;", task.status);
       const isRunning = /run/i.test(task.status || "");
-      console.log("isrunning in GettaskAction", isRunning);
+      // console.log("isrunning in GettaskAction", isRunning);
       const color = isRunning ? "delete" : "primary";
       const buttonAction = isRunning ? "stop" : "start";
       const label = "Start";
@@ -162,7 +162,7 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
     [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
   );
   const getTaskStatus = useCallback<I_GetTaskStatusCallback>((task) => {
-    console.log("task Status : ",task.status);
+    // console.log("task Status : ",task.status);
     const status = (task.status || "stopped").toUpperCase();
     const state = /run/i.test(status) ? "running" : "stopped";
     return (
