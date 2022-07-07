@@ -76,8 +76,8 @@ export const useScriptsServerUrl = () => {
         query: `query { env { SCIPTS_SERVER_URL } }`,
       });
 
-      scriptsServer.current = env.SCIPTS_SERVER_URL;
-      baseURL = env.SCIPTS_SERVER_URL;
+      scriptsServer.current = env.SCRIPTS_SERVER_URL;
+      baseURL = env.SCRIPTS_SERVER_URL;
     }
 
     return [baseURL.replace(/\/+$/, ""), path.replace(/^\/+/, "")].join("/");
