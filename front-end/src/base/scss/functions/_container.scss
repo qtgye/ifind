@@ -1,6 +1,0 @@
-@function container-margin($breakpoint: all) {
-  @if (map-has-key($container-margins, $breakpoint)) {
-    @return map-get($container-margins, $breakpoint);
-  }
-  @return 0;
-}
