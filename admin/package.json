@@ -47,6 +47,7 @@
     "axios": "^0.24.0",
     "browser-sync": "^2.27.7",
     "chokidar": "^3.5.2",
+    "dotenv": "^16.0.1",
     "ebay-oauth-nodejs-client": "^1.2.1",
     "form-data": "^0.2.0",
     "fs": "0.0.1-security",

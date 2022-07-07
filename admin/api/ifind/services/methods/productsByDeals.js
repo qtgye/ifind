@@ -3,6 +3,11 @@ const offersCategories = appRequire("api/ifind/offers-categories");
 const axios = require("axios").default;
 const https = require("https");
 var request = require("request");
+
+const ENV = require('dotenv').config().parsed || {};
+
+console.log({ ENV });
+
 var agentOptions;
 var agent;
 ("use strict");
