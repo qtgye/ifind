@@ -41,6 +41,8 @@ export type T_ProductWhereFilterKeys =
   | "website_tab"
   | "deal_type";
 
+const DEFAULT_WEBSITE_TAB = 'home';
+
 const ProductFragment = `
 fragment ProductFragment on Product {
   id
@@ -135,7 +137,7 @@ export const ProductsListProvider = memo(({ children }) => {
     category: searchParams?.category || "",
     search: searchParams?.search || "",
     status: searchParams?.status || "published",
-    tab: searchParams?.tab || "product_comparison",
+    tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
     dealType: searchParams?.deal_type || "",
   });
 
@@ -246,7 +248,7 @@ export const ProductsListProvider = memo(({ children }) => {
       category: searchParams?.category || "",
       search: searchParams?.search || "",
       status: searchParams?.status || "published",
-      tab: searchParams?.tab || "product_comparison",
+      tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
       dealType: searchParams?.deal_type || "",
     });
     setSearchTerm(searchParams.search);
