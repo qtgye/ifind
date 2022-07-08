@@ -186,7 +186,7 @@ declare global {
     DATABASE_NAME?: string;
     DATABASE_USERNAME?: string;
     DATABASE_PASSWORD?: string;
-    SCIPTS_SERVER_URL?: string;
+    SCRIPTS_SERVER_URL?: string;
   }
   
   export interface PageData {
@@ -4763,7 +4763,7 @@ declare global {
     DATABASE_NAME?: EnvTypeToDATABASE_NAMEResolver<TParent>;
     DATABASE_USERNAME?: EnvTypeToDATABASE_USERNAMEResolver<TParent>;
     DATABASE_PASSWORD?: EnvTypeToDATABASE_PASSWORDResolver<TParent>;
-    SCIPTS_SERVER_URL?: EnvTypeToSCIPTS_SERVER_URLResolver<TParent>;
+    SCRIPTS_SERVER_URL?: EnvTypeToSCRIPTS_SERVER_URLResolver<TParent>;
   }
   
   export interface EnvTypeToHOSTResolver<TParent = any, TResult = any> {
@@ -4798,7 +4798,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface EnvTypeToSCIPTS_SERVER_URLResolver<TParent = any, TResult = any> {
+  export interface EnvTypeToSCRIPTS_SERVER_URLResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

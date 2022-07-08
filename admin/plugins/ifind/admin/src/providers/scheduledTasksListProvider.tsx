@@ -73,7 +73,7 @@ export const useScriptsServerUrl = () => {
           data: { env },
         },
       } = await axios.post("/graphql", {
-        query: `query { env { SCIPTS_SERVER_URL } }`,
+        query: `query { env { SCRIPTS_SERVER_URL } }`,
       });
 
       scriptsServer.current = env.SCRIPTS_SERVER_URL;
