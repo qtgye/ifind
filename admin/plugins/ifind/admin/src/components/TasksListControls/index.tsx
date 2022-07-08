@@ -82,7 +82,6 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     priorityValue = "";
   };
 
-  console.log("value---->", value);
   const onTaskActionClick = useCallback(async (action, taskID) => {
     // if (typeof onTaskAction === "function") {
     //   setTriggeredAction(action);
