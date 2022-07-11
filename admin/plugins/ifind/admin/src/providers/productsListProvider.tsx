@@ -42,6 +42,7 @@ export type T_ProductWhereFilterKeys =
   | "deal_type";
 
 const DEFAULT_WEBSITE_TAB = 'home';
+const DEFAULT_DEAL_TYPE = 'aliexpress_value_deals';
 
 const ProductFragment = `
 fragment ProductFragment on Product {
@@ -127,7 +128,7 @@ export const ProductsListProvider = memo(({ children }) => {
   const [searchTerm, setSearchTerm] = useState(searchParams.search);
   const [status, setStatus] = useState(searchParams.status);
   const [tab, setTab] = useState(searchParams.tab);
-  const [dealType, setDealType] = useState(searchParams.deal_type);
+  const [dealType, setDealType] = useState(searchParams.deal_type || DEFAULT_DEAL_TYPE);
 
   const [listOptions, setListOptions] = useState<I_ListOptions>({
     sortBy: searchParams?.sort_by || "id", // Product field
@@ -138,7 +139,7 @@ export const ProductsListProvider = memo(({ children }) => {
     search: searchParams?.search || "",
     status: searchParams?.status || "published",
     tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
-    dealType: searchParams?.deal_type || "",
+    dealType: searchParams?.deal_type || DEFAULT_DEAL_TYPE,
   });
 
   const [totalPages, setTotalPages] = useState(1);
@@ -190,6 +191,8 @@ export const ProductsListProvider = memo(({ children }) => {
       window.setTimeout(async () => {
         setLoading(true);
         const data = await gqlFetch(queryOptions.query, queryOptions.variables);
+
+        console.log(queryOptions.variables);
 
         if (data?.productsList) {
           setProductsListData(data.productsList);
@@ -249,7 +252,7 @@ export const ProductsListProvider = memo(({ children }) => {
       search: searchParams?.search || "",
       status: searchParams?.status || "published",
       tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
-      dealType: searchParams?.deal_type || "",
+      dealType: searchParams?.deal_type || DEFAULT_DEAL_TYPE,
     });
     setSearchTerm(searchParams.search);
     setStatus(searchParams.status);
