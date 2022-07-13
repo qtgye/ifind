@@ -180,12 +180,13 @@ declare global {
   export interface EnvType {
     HOST?: string;
     PORT?: string;
-    BROWSER?: string;
+    WS_HOST?: string;
     DATABASE_HOST?: string;
     DATABASE_PORT?: string;
     DATABASE_NAME?: string;
     DATABASE_USERNAME?: string;
     DATABASE_PASSWORD?: string;
+    TORRC_PATH?: string;
     SCRIPTS_SERVER_URL?: string;
   }
   
@@ -4757,12 +4758,13 @@ declare global {
   export interface EnvTypeTypeResolver<TParent = any> {
     HOST?: EnvTypeToHOSTResolver<TParent>;
     PORT?: EnvTypeToPORTResolver<TParent>;
-    BROWSER?: EnvTypeToBROWSERResolver<TParent>;
+    WS_HOST?: EnvTypeToWS_HOSTResolver<TParent>;
     DATABASE_HOST?: EnvTypeToDATABASE_HOSTResolver<TParent>;
     DATABASE_PORT?: EnvTypeToDATABASE_PORTResolver<TParent>;
     DATABASE_NAME?: EnvTypeToDATABASE_NAMEResolver<TParent>;
     DATABASE_USERNAME?: EnvTypeToDATABASE_USERNAMEResolver<TParent>;
     DATABASE_PASSWORD?: EnvTypeToDATABASE_PASSWORDResolver<TParent>;
+    TORRC_PATH?: EnvTypeToTORRC_PATHResolver<TParent>;
     SCRIPTS_SERVER_URL?: EnvTypeToSCRIPTS_SERVER_URLResolver<TParent>;
   }
   
@@ -4774,7 +4776,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface EnvTypeToBROWSERResolver<TParent = any, TResult = any> {
+  export interface EnvTypeToWS_HOSTResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -4795,6 +4797,10 @@ declare global {
   }
   
   export interface EnvTypeToDATABASE_PASSWORDResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface EnvTypeToTORRC_PATHResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
