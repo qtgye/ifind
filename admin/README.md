@@ -11,7 +11,10 @@ A quick description of your strapi application
 
 1. Copy `.env.example` into `.env` and update the variables accordingly.  
     > MYSQL variables are provided for local development. Production variables will be different.
-2. Run `docker compose up -d` to start the mysql server. This can take a while only on the first time.
+2. Edit permission for the scripts:  
+    - `chmod +x ./scripts/start.sh`  
+    - `chmod +x ./scripts/docker-exec.sh`  
+2. Run `./scripts/start.sh` to start the mysql server. This can take a while only on the first time.
 3. Install dependencies: `npm install`.  
 4. Run the admin server: `npm run develop`.  
 
