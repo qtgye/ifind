@@ -4,4 +4,16 @@
     justify-content: flex-end;
     margin-bottom: 15px;
   }
+
+  &__error {
+    color: orangered;
+    border: 1px solid orange;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 50px;
+
+    &-icon {
+      margin-right: 10px;
+    }
+  }
 }

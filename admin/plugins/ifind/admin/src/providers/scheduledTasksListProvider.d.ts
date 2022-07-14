@@ -30,6 +30,7 @@ declare interface I_ScheduledTasksProviderValue {
   limit?: number|string;
   parallel?: number|String;
   logs?: I_LogEntry[];
+  error?: string;
 }
 
 declare interface I_ComponentProps {

@@ -96,6 +96,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [isTaskAdded, setIsTaskAdded] = useState<I_RawTask[]>([]);
   const [limit, setLimit] = useState<string | number>("");
   const [parallel, setParallel] = useState<string | number>("");
+  const [error, setError] = useState<string>("");
 
   const fetchTasksList = useCallback(async () => {
     const serverTime = moment.utc();
@@ -113,10 +114,15 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         setIsTaskAdded(response.data.isTaskAdded);
         setLimit(response.data.limit);
         setParallel(response.data.parallel);
-
-        // offers.push(response.data)
+        setError('');
       })
-      .catch((err) => console.log("error ", err))
+      .catch((err) => {
+        setTasks([]);
+        setLogs([]);
+        setError(err.message);
+        console.log("error ", err)
+        console.dir(err);
+      })
       .finally(() => {
         if (isMountedRef.current) {
           window.setTimeout(() => fetchTasksList(), 1000);
@@ -181,6 +187,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         isTaskAdded,
         limit,
         parallel,
+        error,
       }}
     >
       {children}
