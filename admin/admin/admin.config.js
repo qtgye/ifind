@@ -80,6 +80,22 @@ module.exports = {
       '@custom-types': path.resolve(PROJECT_ROOT, 'types'),
     }
 
+    // Add your variable using the DefinePlugin
+    // Admin FE can then have access to ENV global object.
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        //All your custom ENVs that you want to use in frontend
+        ENV: JSON.stringify(Object.entries(process.env).reduce((customEnv, [key, value]) => {
+          // Expose only selected custom variables
+          if ( /^(SCRIPTS_SERVER_URL)$/i.test(key) ) {
+            customEnv[key] = value;
+          }
+
+          return customEnv;
+        }, {})),
+      })
+    );
+
     return config;
   },
 };

@@ -6,9 +6,10 @@ import React, {
   useContext,
   useRef,
 } from "react";
+const moment = require("moment");
 import { useGQLFetch } from "../helpers/gqlFetch";
 import axios from "axios";
-const moment = require("moment");
+import { post, scriptsServerUrl } from '../helpers/scripts-server/request';
 
 // Context
 export const ScheduledTasksListContext =
@@ -59,29 +60,7 @@ mutation TriggerTask (
 `;
 
 export const useScriptsServerUrl = () => {
-  const scriptsServer = useRef();
-
-  return async (path = "/") => {
-    let baseURL = "";
-
-    if (scriptsServer.current) {
-      baseURL = scriptsServer.current;
-    } else {
-      console.log("Fetching Scripts Server URL...");
-      const {
-        data: {
-          data: { env },
-        },
-      } = await axios.post("/graphql", {
-        query: `query { env { SCRIPTS_SERVER_URL } }`,
-      });
-
-      scriptsServer.current = env.SCRIPTS_SERVER_URL;
-      baseURL = env.SCRIPTS_SERVER_URL;
-    }
-
-    return [baseURL.replace(/\/+$/, ""), path.replace(/^\/+/, "")].join("/");
-  };
+  return scriptsServerUrl;
 };
 
 // Provider
@@ -119,9 +98,9 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
       .catch((err) => {
         setTasks([]);
         setLogs([]);
+        setIsTaskAdded([]);
         setError(err.message);
-        console.log("error ", err)
-        console.dir(err);
+        console.log("error ", err);
       })
       .finally(() => {
         if (isMountedRef.current) {
@@ -137,17 +116,13 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
     console.log("index:", index);
     let scrapedProducts = null;
 
-    const url = await getScriptsServerUrl("/task/triggerTask");
-
     let body = {
       taskID: taskID,
       action: action,
       position: index,
     };
-    // if (taskID == "ebay-wow-offers") {
-    axios
-      .post(url, body)
-      // axios.post("https://script.ifindilu.de/task/triggerTask", body)
+
+    post("/task/triggerTask", body)
       .then(
         (response) => {
           console.log("Response received from API");

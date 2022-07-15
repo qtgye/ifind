@@ -5,19 +5,34 @@ import { generatePluginLink } from "../../helpers/url";
 import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import Limit from "../Limit";
 import Parallel from "../Parallel";
-import axios from 'axios';
+import axios from "axios";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 import "./styles.scss";
+
 export type I_GetTaskActionsCallback = (
   task: I_RawTask
 ) => JSX.Element | JSX.Element[];
+
+export interface TasksInQueue extends I_RawTask {
+  isTriggered?: boolean;
+}
+
 export type I_GetTaskStatusCallback = (task: I_RawTask) => JSX.Element;
 // TaskList Component
-const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
+const TasksList = ({
+  tasks,
+  onTaskAction,
+  limit,
+  parallel,
+}: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
+  const [tasksInQueue, setTasksInQueue] = useState<TasksInQueue[]>(tasks);
+
+  console.log({ tasks });
+
   // const onTaskActionClick = useCallback(
   //   (action, taskID) => {
   //     if (typeof onTaskAction === "function") {
@@ -30,24 +45,24 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
   // );
 
   const onTaskActionRun = useCallback(
-    (taskID,index) => {
-      const action = "start"
+    (taskID, index) => {
+      const action = "start";
       if (typeof onTaskAction === "function") {
         setTriggeredAction(action);
         setTriggeredTask(taskID);
-        onTaskAction(action,taskID,index);
+        onTaskAction(action, taskID, index);
       }
     },
     [onTaskAction]
   );
 
   const onTaskActionStop = useCallback(
-    (taskID,index) => {
-      const action = "stop"
+    (taskID, index) => {
+      const action = "stop";
       if (typeof onTaskAction === "function") {
         setTriggeredAction(action);
         setTriggeredTask(taskID);
-        onTaskAction(action,taskID,index);
+        onTaskAction(action, taskID, index);
       }
     },
     [onTaskAction]
@@ -56,37 +71,37 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
   const onClickUp = (index) => {
     // console.log("Minutes set---->", index);
     let body = {
-      position:index,
-      action:"up"
-    }
-    axios.post('https://script.ifindilu.de/update/position', body)
-      .then((response) => {
+      position: index,
+      action: "up",
+    };
+    axios.post("https://script.ifindilu.de/update/position", body).then(
+      (response) => {
         console.log("response -->", response.data);
       },
-        (error) => {
-          console.log(error)
-        })
-
-  }
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
   const onClickDown = (index) => {
     // console.log("Minutes set---->", index);
     let body = {
       position: index,
-      action:"down"
-    }
-    axios.post('https://script.ifindilu.de/update/position', body)
-      .then((response) => {
+      action: "down",
+    };
+    axios.post("https://script.ifindilu.de/update/position", body).then(
+      (response) => {
         // console.log("response -->", response.data);
       },
-        (error) => {
-          console.log(error)
-        })
-
-  }
+      (error) => {
+        console.log(error);
+      }
+    );
+  };
 
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
-    (task,index) => {
+    (task, index) => {
       // console.log("task status in getTaskActions ;", task.status);
       const isRunning = /run/i.test(task.status || "");
       // console.log("isrunning in GettaskAction", isRunning);
@@ -97,34 +112,37 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
       let iconPulse = false;
       let icon = isRunning ? "stop" : "play";
       let isDisabled = isRunning ? true : false;
+
       if (triggeredTask === task.id) {
         isDisabled = true;
         icon = "spinner";
         iconPulse = true;
       }
+
       return (
         <div className="tasks-list__actions">
           <Button
             disabled={isDisabled}
             color={color}
-            onClick={() => onTaskActionRun(task.id,index)}
+            onClick={() => onTaskActionRun(task.id, index)}
           >
-            <FontAwesomeIcon icon="Run" pulse={iconPulse} />{label}
+            <FontAwesomeIcon icon="Run" pulse={iconPulse} />
+            {label}
           </Button>
           <Button
             color="delete"
-            onClick={() => onTaskActionStop(task.id,index)}
+            onClick={() => onTaskActionStop(task.id, index)}
           >
-            <FontAwesomeIcon icon="stop" pulse={iconPulse} />{label2}
+            <FontAwesomeIcon icon="stop" pulse={iconPulse} />
+            {label2}
           </Button>
-         
         </div>
       );
     },
     [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
   );
 
-  const getOrderActions = useCallback<I_GetTaskActionsCallback>(
+  const getOrderActions = useCallback(
     (index) => {
       // console.log("task status in getTaskActions ;", task.status);
       // const isRunning = /run/i.test(task.status || "");
@@ -147,14 +165,20 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
             color="secondary"
             onClick={() => onClickUp(index)}
           > */}
-          <FontAwesomeIcon icon="arrow-alt-circle-up" onClick={() => onClickUp(index)} /> 
+          <FontAwesomeIcon
+            icon="arrow-alt-circle-up"
+            onClick={() => onClickUp(index)}
+          />
           {/* </Button> */}
           {/* <Button
             // disabled={isDisabled}
             color="secondary"
             onClick={() => onClickDown(index)}
           > */}
-            <FontAwesomeIcon icon="arrow-alt-circle-down" onClick={() => onClickDown(index)} />
+          <FontAwesomeIcon
+            icon="arrow-alt-circle-down"
+            onClick={() => onClickDown(index)}
+          />
           {/* </Button> */}
         </div>
       );
@@ -180,15 +204,19 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
     const utcTimeFormatted = lastRunTime.utc().format("YYYY-MMM-DD HH:mm:ss");
     return <div>{utcTimeFormatted} (UTC)</div>;
   }, []);
+
   useEffect(() => {
     setTriggeredAction("");
     setTriggeredTask("");
   }, [someTaskRuns]);
+
   useEffect(() => {
-    setTriggeredTask('');
+    setTriggeredTask("");
     setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
+    setTasksInQueue(tasks);
     // console.log("/run/i.test(task.status", /run/i.test(task.status));
   }, [tasks]);
+  
   const headers: T_ColumnHeader = {
     position: "Position",
     name: "Task Name",
@@ -196,38 +224,40 @@ const TasksList = ({ tasks, onTaskAction, limit, parallel}: TasksListProps) => {
     last_run: "Last Run (Server Time)",
     // countdown: "Countdown",
     action: "Action",
-    order:"Order"
+    order: "Order",
   };
-  const rowsData: T_GenericRowData[] = tasks.map((task,index) => 
-  index == 0 ?
-  ({
-    status: getTaskStatus(task),
-    position: (index+1),
-    name: task.name,
-    frequency: task.frequency,
-    last_run: formatLastRun(task.last_run),
-    action: task.hasModule ? getTaskActions(task,index) : "-",
-    // countdown: task.countdown,
-    order: "",
-  })
-  :
-  ({
-    status: getTaskStatus(task),
-    position: (index+1),
-    name: task.name,
-    frequency: task.frequency,
-    last_run: formatLastRun(task.last_run),
-    action: task.hasModule ? getTaskActions(task,index) : "-",
-    // countdown: task.countdown,
-    order:  getOrderActions(index),
-  })  
+
+  const rowsData: T_GenericRowData[] = tasksInQueue.map((task, index) =>
+    index == 0
+      ? {
+          status: getTaskStatus(task),
+          position: index + 1,
+          name: task.name,
+          frequency: task.frequency,
+          last_run: formatLastRun(task.last_run),
+          action: task.hasModule ? getTaskActions(task) : "-",
+          // countdown: task.countdown,
+          order: "",
+        }
+      : {
+          status: getTaskStatus(task),
+          position: index + 1,
+          name: task.name,
+          frequency: task.frequency,
+          last_run: formatLastRun(task.last_run),
+          action: task.hasModule ? getTaskActions(task) : "-",
+          // countdown: task.countdown,
+          order: getOrderActions(index),
+        }
   );
   return (
     <>
-    <Parallel parallel = { parallel || ""}/><br></br>
-    <Limit limit = { limit || ""}/><br></br>
-    <Table className="tasks-list" headers={headers} rows={rowsData} />
+      <Parallel parallel={parallel || ""} />
+      <br></br>
+      <Limit limit={limit || ""} />
+      <br></br>
+      <Table className="tasks-list" headers={headers} rows={rowsData} />
     </>
-  )
+  );
 };
 export default TasksList;

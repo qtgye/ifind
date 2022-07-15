@@ -10,6 +10,8 @@ import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 import axios from "axios";
 
+import { post } from "../../helpers/scripts-server/request";
+
 import { useScriptsServerUrl } from "../../providers/scheduledTasksListProvider";
 
 import "./styles.scss";
@@ -83,25 +85,22 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   };
 
   const onTaskActionClick = useCallback(async (action, taskID) => {
-    // if (typeof onTaskAction === "function") {
-    //   setTriggeredAction(action);
-    //   setTriggeredTask(taskID);
-    //   onTaskAction(action, taskID);
-    // }
     let body = {
       taskID: taskID,
     };
-    // if (taskID == "ebay-wow-offers") {
-    // axios.post("https://script.ifindilu.de/task/getTaskLog", body)
-    axios.post(await getScriptsServerUrl("/task/addTask"), body).then(
-      (response) => {
-        console.log(response.data);
-        // offers.push(response.data)
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+
+    switch (action) {
+      case "start":
+        post("/task/addTask", body)
+          .then((data) => {
+            console.log(data);
+            // offers.push(response.data)
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        break;
+    }
   }, []);
   const getTaskActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
