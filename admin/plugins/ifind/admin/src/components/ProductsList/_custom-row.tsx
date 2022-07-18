@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import moment from "moment";
 
 import { generatePluginLink } from "../../helpers/url";
 
@@ -47,13 +48,19 @@ const CustomRow = ({
         <Link to={generatePluginLink(`products/${id}`)}>{category}</Link>
       </td>
       <td>
-        <Link to={generatePluginLink(`products/${id}`)} className='products-list__date'>
-          {created_at.slice(0, 10)}
+        <Link
+          to={generatePluginLink(`products/${id}`)}
+          className="products-list__date"
+        >
+          {moment.utc(created_at).format("YYYY-MM-DD HH:mm")}
         </Link>
       </td>
       <td>
-        <Link to={generatePluginLink(`products/${id}`)} className='products-list__date'>
-          {updated_at.slice(0, 10)}
+        <Link
+          to={generatePluginLink(`products/${id}`)}
+          className="products-list__date"
+        >
+          {moment.utc(updated_at).format("YYYY-MM-DD HH:mm")}
         </Link>
       </td>
       <td>

@@ -31,8 +31,6 @@ const TasksList = ({
   const [triggeredAction, setTriggeredAction] = useState<string>("");
   const [tasksInQueue, setTasksInQueue] = useState<TasksInQueue[]>(tasks);
 
-  console.log({ tasks });
-
   // const onTaskActionClick = useCallback(
   //   (action, taskID) => {
   //     if (typeof onTaskAction === "function") {
