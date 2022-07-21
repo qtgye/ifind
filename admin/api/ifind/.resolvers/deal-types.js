@@ -16,7 +16,6 @@ module.exports = {
       return await strapi.services.ifind.deleteProductsByDeals(args);
     },
     async addProductsByDeals(_, args) {
-      console.log({ strapi });
       return await strapi.services.ifind.addProductsByDeals(args);
     }
   },

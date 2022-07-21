@@ -2,6 +2,7 @@ declare interface I_LogEntry {
   date_time: string;
   type: string;
   message: string;
+  timestamp: number;
 }
 declare interface I_BackgroundProcessRouteParam {
   backgroundProcess: string;

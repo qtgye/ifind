@@ -12,7 +12,8 @@ const LogsList = ({ logs, title = "Logs" }: T_LogsListProps) => {
   const [logsList, setLogsList] = useState<I_LogEntry[]>([]);
 
   useEffect(() => {
-    setLogsList([...logs.reverse()]);
+    logs.sort((logA, logB) => logA.timestamp > logB.timestamp ? -1 : 1);
+    setLogsList([...logs]);
   }, [logs]);
 
   return (

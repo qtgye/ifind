@@ -15,6 +15,7 @@ module.exports = `
   }
 
   type TaskLogEntry {
+    timestamp: String
     date_time: String
     type: String
     message: String

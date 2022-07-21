@@ -109,6 +109,7 @@ declare global {
   }
   
   export interface TaskLogEntry {
+    timestamp?: string;
     date_time?: string;
     type?: string;
     message?: string;
@@ -4577,9 +4578,14 @@ declare global {
   }
   
   export interface TaskLogEntryTypeResolver<TParent = any> {
+    timestamp?: TaskLogEntryToTimestampResolver<TParent>;
     date_time?: TaskLogEntryToDate_timeResolver<TParent>;
     type?: TaskLogEntryToTypeResolver<TParent>;
     message?: TaskLogEntryToMessageResolver<TParent>;
+  }
+  
+  export interface TaskLogEntryToTimestampResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface TaskLogEntryToDate_timeResolver<TParent = any, TResult = any> {

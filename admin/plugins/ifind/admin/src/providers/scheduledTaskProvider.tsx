@@ -15,6 +15,7 @@ query GetScheduledTask ( $task: String! ) {
   getTask(id: $task ) {
     name
     logs {
+      timestamp
       date_time
       type
       message
