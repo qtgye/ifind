@@ -36,13 +36,9 @@ export const ScheduledTaskProvider = ({
   const [task, setTask] = useState<Task>();
 
   const getTask = useCallback(async () => {
-    let body = {
-      taskID: taskID,
-    };
-    axios.post(await getScriptsServerUrl("/task/getTaskLog"), body).then(
+    axios.get(await getScriptsServerUrl(`/task/logs?task=${taskID}&after=`)).then(
       (response) => {
-        response && setTask(response.data);
-        console.log(response.data);
+        response && setTask(response.data.data);
       },
       (error) => {
         console.log(error);
