@@ -1,6 +1,8 @@
 import React, { ReactNode, useCallback } from "react";
 import Row, { T_Column, I_RowProps } from "./row";
 
+import './styles.scss';
+
 export type T_ColumnHeader = {
   [key: string]: ReactNode|string
 };
