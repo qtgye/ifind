@@ -12,7 +12,7 @@ const LogsList = ({ logs, title = "Logs" }: T_LogsListProps) => {
   const [logsList, setLogsList] = useState<I_LogEntry[]>([]);
 
   useEffect(() => {
-    logs.sort((logA, logB) => logA.timestamp > logB.timestamp ? -1 : 1);
+    logs.sort((logA, logB) => logA.timestamp > logB.timestamp ? 1 : -1);
     setLogsList([...logs]);
   }, [logs]);
 
@@ -22,7 +22,7 @@ const LogsList = ({ logs, title = "Logs" }: T_LogsListProps) => {
       <div className="logs__entries">
         {logsList?.length &&
           logsList.map((props: I_LogEntry) => (
-            <LogEntry key={props.date_time + props.message} {...props} />
+            <LogEntry key={props.timestamp} {...props} />
           ))}
       </div>
     </div>
