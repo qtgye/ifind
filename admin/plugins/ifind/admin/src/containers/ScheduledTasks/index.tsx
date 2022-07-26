@@ -8,6 +8,7 @@ import {
   ScheduledTasksListProvider,
 } from "../../providers/scheduledTasksListProvider";
 import TasksList from "../../components/TasksList";
+import Queue from "../../components/Queue";
 import TasksControl from "../../components/TasksListControls";
 import FontAwesomeIcon from "../../components/FontAwesomeIcon";
 import LogsList from "../../components/LogsList";
@@ -16,7 +17,7 @@ import LogsList from "../../components/LogsList";
 import "./styles.scss";
 
 const ScheduledTasks = () => {
-  const {tasks, startTask,stopTask,serverTimeFormatted, logs,isTaskAdded, limit, parallel, error } =
+  const {tasks, startTask,stopTask,serverTimeFormatted, logs,isTaskAdded, limit, parallel, error, queue } =
     useScheduledTasksList();
 
   const onTaskAction = useCallback(
@@ -55,7 +56,7 @@ const ScheduledTasks = () => {
           <FontAwesomeIcon icon='exclamation-circle' className='scheduled-tasks__error-icon' />{error}
         </div>
       ): ''}
-      <TasksList tasks={isTaskAdded || []} onTaskAction={onTaskAction} limit={limit || ""} parallel={parallel || ""}/>
+      <Queue items={queue || []} onQueueItemAction={onTaskAction} limit={limit || ""} parallel={parallel || ""}/>
      {/* <div className="scheduled-tasks__logs">
       <LogsList logs={logs || []} title="Runner Logs" />
       </div> */}

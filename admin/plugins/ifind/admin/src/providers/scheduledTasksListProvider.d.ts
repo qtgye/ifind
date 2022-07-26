@@ -20,15 +20,23 @@ declare interface I_RawTask extends Partial<ScheduledTask> {
   last_run: string;
 }
 
+declare interface I_QueueItem {
+  id: String;
+  requestedForStart: Boolean;
+  running: Boolean;
+  task: I_RawTask;
+}
+
 declare interface I_ScheduledTasksProviderValue {
   tasks?: I_RawTask[];
   isTaskAdded?: I_RawTask[];
+  queue?: I_QueueItem[];
   startTask?: (taskId: string) => any;
   stopTask?: (taskId: string) => any;
-  serverTimeUnix?: number|string;
+  serverTimeUnix?: number | string;
   serverTimeFormatted?: string;
-  limit?: number|string;
-  parallel?: number|String;
+  limit?: number | string;
+  parallel?: number | String;
   logs?: I_LogEntry[];
   error?: string;
 }

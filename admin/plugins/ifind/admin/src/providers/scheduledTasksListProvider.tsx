@@ -73,6 +73,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [serverTimeUnix, setServerTimeUnix] = useState<string | number>("");
   const [serverTimeFormatted, setServerTimeFormatted] = useState<string>("");
   const [isTaskAdded, setIsTaskAdded] = useState<I_RawTask[]>([]);
+  const [queue, setQueue] = useState<I_QueueItem[]>([]);
   const [limit, setLimit] = useState<string | number>("");
   const [parallel, setParallel] = useState<string | number>("");
   const [error, setError] = useState<string>("");
@@ -93,12 +94,14 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         setIsTaskAdded(response.data.isTaskAdded);
         setLimit(response.data.limit);
         setParallel(response.data.parallel);
+        setQueue(response.data.queue);
         setError('');
       })
       .catch((err) => {
         setTasks([]);
         setLogs([]);
         setIsTaskAdded([]);
+        setQueue([]);
         setError(err.message);
         console.log("error ", err);
       })
@@ -163,6 +166,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         limit,
         parallel,
         error,
+        queue,
       }}
     >
       {children}

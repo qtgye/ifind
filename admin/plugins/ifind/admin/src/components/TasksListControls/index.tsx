@@ -141,6 +141,8 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   );
   const getUpdateTimeActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
+      return <span>( WIP )</span>
+
       // const isRunning = /run/i.test(task.status || "");
       const color = "primary";
       // const buttonAction = isRunning ? "stop" : "start";
@@ -191,6 +193,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   );
   const getUpdatePriority = useCallback<I_GetTaskActionsCallback>(
     (task) => {
+      return <span>( WIP )</span>
       // const isRunning = /run/i.test(task.status || "");
       const color = "primary";
       // const buttonAction = isRunning ? "stop" : "start";
@@ -247,6 +250,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   );
   const getQueueActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
+      return <span>( WIP )</span>;
+
+
       const isRunning = /run/i.test(task.status || "");
       // const color = isRunning ? "delete" : "primary";
       const color = "primary";
@@ -324,19 +330,18 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     action: "Logs",
     last_run: "Last Run",
   };
+  
   const rowsData: T_GenericRowData[] = tasks.map((task, index) => ({
     // status: getTaskStatus(task),
     status: index + 1,
     name: task.name,
     joinQueue: task.hasModule ? getQueueActions(task) : "-",
-    frequency: task.countdown !== "NaN:NaN:NaN:NaN" ? task.frequency : "0",
+    frequency: task.frequency ||  "-",
     priority: task.priority,
     action: task.hasModule ? getTaskActions(task) : "-",
     countdown:
-      task.isReady == "Ready"
-        ? task.isReady
-        : task.countdown == "NaN:NaN:NaN:NaN"
-        ? "Stopped"
+      task.isReady
+        ? 'READY'
         : task.countdown,
     updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
     updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
