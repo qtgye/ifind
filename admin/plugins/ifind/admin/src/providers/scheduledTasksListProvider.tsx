@@ -76,6 +76,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
   const [queue, setQueue] = useState<I_QueueItem[]>([]);
   const [limit, setLimit] = useState<string | number>("");
   const [parallel, setParallel] = useState<string | number>("");
+  const [full, setFull] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
   const fetchTasksList = useCallback(async () => {
@@ -95,6 +96,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         setLimit(response.data.limit);
         setParallel(response.data.parallel);
         setQueue(response.data.queue);
+        setFull(response.data.full || false);
         setError('');
       })
       .catch((err) => {
@@ -102,6 +104,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         setLogs([]);
         setIsTaskAdded([]);
         setQueue([]);
+        setFull(false);
         setError(err.message);
         console.log("error ", err);
       })
@@ -167,6 +170,7 @@ export const ScheduledTasksListProvider = ({ children }: I_ComponentProps) => {
         parallel,
         error,
         queue,
+        full
       }}
     >
       {children}

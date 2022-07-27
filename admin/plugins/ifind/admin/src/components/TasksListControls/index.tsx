@@ -1,6 +1,8 @@
 import moment from "moment";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@buffetjs/core";
+import axios from "axios";
+
 import { generatePluginLink } from "../../helpers/url";
 import TableControls, {
   T_ColumnHeader,
@@ -8,11 +10,9 @@ import TableControls, {
 } from "../TableControls";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
-import axios from "axios";
-
-import { post } from "../../helpers/scripts-server/request";
-
 import { useScriptsServerUrl } from "../../providers/scheduledTasksListProvider";
+
+import AddTaskAction from './AddTaskAction';
 
 import "./styles.scss";
 let value: number = 0;
@@ -27,6 +27,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
+  const [rows, setRows] = useState<T_GenericRowData[]>([]);
   // const [value, setValue] = useState<number>(0);
   // This function is called when the input changes
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,14 +92,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
 
     switch (action) {
       case "start":
-        post("/task/addTask", body)
-          .then((data) => {
-            console.log(data);
-            // offers.push(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+        
         break;
     }
   }, []);
@@ -118,13 +112,6 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       }
       return (
         <div className="tasks-list__actions">
-          {/* <Button
-            disabled={isDisabled}
-            color={color}
-            onClick={() => onTaskActionClick(buttonAction, task.id)}
-          >
-            <FontAwesomeIcon icon={icon} pulse={iconPulse} /> {label}
-          </Button> */}
           <ButtonLink
             routerLink
             href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
@@ -317,12 +304,32 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     setTriggeredTask("");
     setSomeTaskRuns(tasks.some((task) => /run/i.test(task.status)));
   }, [tasks]);
+
+  useEffect(() => {
+    const rowsData: T_GenericRowData[] = tasks.map((task, index) => ({
+      status: index + 1,
+      name: task.name,
+      joinQueue: <AddTaskAction task={task.id || ''} />,
+      frequency: task.frequency ||  "-",
+      priority: task.priority,
+      action: task.hasModule ? getTaskActions(task) : "-",
+      countdown:
+        task.isReady
+          ? 'READY'
+          : task.countdown,
+      updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
+      updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
+      last_run: formatLastRun(task.last_run),
+    }));
+
+    setRows(rowsData);
+  }, [tasks]);
+
   const headers: T_ColumnHeader = {
     status: "Id",
     name: "Tasks",
-    joinQueue: "Join the Queue",
+    joinQueue: "Queue Actions",
     frequency: "Frequency",
-    // priority: "Priority",
     countdown: "Countdown",
     updateTime: "Update Countdown",
     priority: "Priority",
@@ -330,25 +337,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     action: "Logs",
     last_run: "Last Run",
   };
-  
-  const rowsData: T_GenericRowData[] = tasks.map((task, index) => ({
-    // status: getTaskStatus(task),
-    status: index + 1,
-    name: task.name,
-    joinQueue: task.hasModule ? getQueueActions(task) : "-",
-    frequency: task.frequency ||  "-",
-    priority: task.priority,
-    action: task.hasModule ? getTaskActions(task) : "-",
-    countdown:
-      task.isReady
-        ? 'READY'
-        : task.countdown,
-    updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
-    updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
-    last_run: formatLastRun(task.last_run),
-  }));
+
   return (
-    <TableControls className="tasks-list" headers={headers} rows={rowsData} />
+    <TableControls className="tasks-list" headers={headers} rows={rows} />
   );
 };
 export default TasksList;

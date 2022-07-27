@@ -39,6 +39,7 @@ declare interface I_ScheduledTasksProviderValue {
   parallel?: number | String;
   logs?: I_LogEntry[];
   error?: string;
+  full?: boolean;
 }
 
 declare interface I_ComponentProps {

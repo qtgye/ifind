@@ -36,6 +36,8 @@ module.exports = `
     next_run: Float
     countdown: String
     last_run: Float
+    priority: Int
+    isReady: Boolean
 
     # Computed values
     hasModule: Boolean

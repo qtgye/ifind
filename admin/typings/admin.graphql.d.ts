@@ -130,6 +130,8 @@ declare global {
     next_run?: number;
     countdown?: string;
     last_run?: number;
+    priority?: number;
+    isReady?: boolean;
     
     /**
      * Computed values
@@ -4631,6 +4633,8 @@ declare global {
     next_run?: ScheduledTaskToNext_runResolver<TParent>;
     countdown?: ScheduledTaskToCountdownResolver<TParent>;
     last_run?: ScheduledTaskToLast_runResolver<TParent>;
+    priority?: ScheduledTaskToPriorityResolver<TParent>;
+    isReady?: ScheduledTaskToIsReadyResolver<TParent>;
     hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
     canRun?: ScheduledTaskToCanRunResolver<TParent>;
   }
@@ -4660,6 +4664,14 @@ declare global {
   }
   
   export interface ScheduledTaskToLast_runResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToPriorityResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToIsReadyResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
