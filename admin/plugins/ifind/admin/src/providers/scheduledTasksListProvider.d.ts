@@ -21,10 +21,12 @@ declare interface I_RawTask extends Partial<ScheduledTask> {
 }
 
 declare interface I_QueueItem {
-  id: String;
-  requestedForStart: Boolean;
-  running: Boolean;
+  id: string;
+  requestedForStart: boolean;
+  running: boolean;
+  canRun: boolean;
   task: I_RawTask;
+  busy: boolean;
 }
 
 declare interface I_ScheduledTasksProviderValue {

@@ -309,7 +309,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     const rowsData: T_GenericRowData[] = tasks.map((task, index) => ({
       status: index + 1,
       name: task.name,
-      joinQueue: <AddTaskAction task={task.id || ''} />,
+      joinQueue: <AddTaskAction task={task} />,
       frequency: task.frequency ||  "-",
       priority: task.priority,
       action: task.hasModule ? getTaskActions(task) : "-",

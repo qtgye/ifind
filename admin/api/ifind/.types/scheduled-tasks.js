@@ -38,10 +38,11 @@ module.exports = `
     last_run: Float
     priority: Int
     isReady: Boolean
+    running: Boolean
+    requestedForRun: Boolean
 
     # Computed values
     hasModule: Boolean
-    canRun: Boolean
   }
 
   enum SCHEDULED_TASK_ACTION {

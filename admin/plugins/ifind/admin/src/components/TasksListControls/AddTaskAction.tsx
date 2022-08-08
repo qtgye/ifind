@@ -12,7 +12,7 @@ const AddTaskAction = ({ task }: AddTaskActionProps) => {
   const addTask = useCallback(() => {
     setIsBusy(true);
 
-    post("/queue/add", { task })
+    post("/queue/add", { task: task.id })
       .then((data) => {
         console.log(data);
       })
@@ -21,6 +21,8 @@ const AddTaskAction = ({ task }: AddTaskActionProps) => {
       })
       .finally(() => setIsBusy(false));
   }, [task]);
+
+
 
   useEffect(() => {
     setIsDisabled(full || false);

@@ -15,6 +15,10 @@
     display: flex;
     align-items: center;
     column-gap: 5px;
+
+    svg:is(.svg-inline--fa) {
+      margin-right: 0 !important;
+    }
   }
 
   &__task-schedule-local {

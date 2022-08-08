@@ -4,5 +4,5 @@ declare interface TasksListProps {
 }
 
 declare interface AddTaskActionProps {
-  task: string;
+  task: I_RawTask;
 }

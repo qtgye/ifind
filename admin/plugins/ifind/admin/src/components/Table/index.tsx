@@ -46,9 +46,10 @@ const Table: T_Table = ({ headers = {}, rows = [], className = "" }: I_TableProp
           {columnHeaders}
         </tr>
       </thead>
-      <tbody>{rows.map((rowData) => (
+      <tbody>{rows.map((rowData, index) => (
         <Row
           columns={rowDataToColumns(rowData)}
+          key={rowData.key || index}
         />
       ))}</tbody>
     </table>

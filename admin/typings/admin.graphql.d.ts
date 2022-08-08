@@ -132,12 +132,13 @@ declare global {
     last_run?: number;
     priority?: number;
     isReady?: boolean;
+    running?: boolean;
+    requestedForRun?: boolean;
     
     /**
      * Computed values
      */
     hasModule?: boolean;
-    canRun?: boolean;
   }
   
   export const enum SCHEDULED_TASK_ACTION {
@@ -4635,8 +4636,9 @@ declare global {
     last_run?: ScheduledTaskToLast_runResolver<TParent>;
     priority?: ScheduledTaskToPriorityResolver<TParent>;
     isReady?: ScheduledTaskToIsReadyResolver<TParent>;
+    running?: ScheduledTaskToRunningResolver<TParent>;
+    requestedForRun?: ScheduledTaskToRequestedForRunResolver<TParent>;
     hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
-    canRun?: ScheduledTaskToCanRunResolver<TParent>;
   }
   
   export interface ScheduledTaskToIdResolver<TParent = any, TResult = any> {
@@ -4675,11 +4677,15 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ScheduledTaskToHasModuleResolver<TParent = any, TResult = any> {
+  export interface ScheduledTaskToRunningResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ScheduledTaskToCanRunResolver<TParent = any, TResult = any> {
+  export interface ScheduledTaskToRequestedForRunResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToHasModuleResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

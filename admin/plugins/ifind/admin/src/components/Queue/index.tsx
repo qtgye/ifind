@@ -1,13 +1,12 @@
 import moment from "moment";
-import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "@buffetjs/core";
-import { generatePluginLink } from "../../helpers/url";
-import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
-import Limit from "../Limit";
-import Parallel from "../Parallel";
 import axios from "axios";
+import React, { useCallback, useEffect, useState } from "react";
+
+import { post } from "../../helpers/scripts-server/request";
+import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import FontAwesomeIcon from "../FontAwesomeIcon";
-import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
+import QueueItemActions from "./QueueItemActions";
+
 import "./styles.scss";
 
 // TaskList Component
@@ -68,50 +67,6 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
     );
   }, []);
 
-  const getTaskActions = useCallback(
-    (task) => {
-      // console.log("task status in getTaskActions ;", task.status);
-      const isRunning = /run/i.test(task.status || "");
-      // console.log("isrunning in GettaskAction", isRunning);
-      const color = isRunning ? "delete" : "primary";
-      const buttonAction = isRunning ? "stop" : "start";
-      const label = "Start";
-      const label2 = "Stop";
-      let iconPulse = false;
-      let icon = isRunning ? "stop" : "play";
-      let isDisabled = isRunning ? true : false;
-
-      // if (triggeredTask === task.id) {
-      //   isDisabled = true;
-      //   icon = "spinner";
-      //   iconPulse = true;
-      // }
-
-      return (
-        <div className="queue__actions">
-          <Button
-            disabled={isDisabled}
-            color={color}
-            // onClick={() => onTaskActionRun(task.id, index)}
-          >
-            <FontAwesomeIcon icon="Run" pulse={iconPulse} />
-            {label}
-          </Button>
-          <Button
-            color="delete"
-            // onClick={() => onTaskActionStop(task.id, index)}
-          >
-            <FontAwesomeIcon icon="stop" pulse={iconPulse} />
-            {label2}
-          </Button>
-        </div>
-      );
-    },
-    [
-      // someTaskRuns, onTaskAction, triggeredTask, triggeredAction
-    ]
-  );
-
   const getOrderActions = useCallback(
     (index) => {
       // console.log("task status in getTaskActions ;", task.status);
@@ -162,9 +117,7 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
     const status = (task.status || "stopped").toUpperCase();
     const state = /run/i.test(status) ? "running" : "stopped";
     return (
-      <span className={`queue__status queue__status--${state}`}>
-        {status}
-      </span>
+      <span className={`queue__status queue__status--${state}`}>{status}</span>
     );
   }, []);
 
@@ -172,9 +125,7 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
     const state = isRunning ? "running" : "stopped";
 
     return (
-      <span className={`queue__status queue__status--${state}`}>
-        {state}
-      </span>
+      <span className={`queue__status queue__status--${state}`}>{state}</span>
     );
   }, []);
 
@@ -187,33 +138,24 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
     return <div>{utcTimeFormatted} (UTC)</div>;
   }, []);
 
+  const onAction = useCallback((actionType: "start" | "stop", item: string) => {
+    post(`/queue/${actionType}`, { item });
+  }, []);
+
   const [rows, setRows] = useState<T_GenericRowData[]>([]);
 
   useEffect(() => {
-    const rowsData: T_GenericRowData[] = items.map(
-      ({ running, task, id }, index) =>
-        index == 0
-          ? {
-              id,
-              status: formatStatus(running),
-              position: index + 1,
-              name: task.name,
-              frequency: task.frequency,
-              last_run: formatLastRun(task.last_run),
-              action: task.hasModule ? getTaskActions(task) : "-",
-              order: "",
-            }
-          : {
-              id,
-              status: formatStatus(running),
-              position: index + 1,
-              name: task.name,
-              frequency: task.frequency,
-              last_run: formatLastRun(task.last_run),
-              action: task.hasModule ? getTaskActions(task) : "-",
-              order: getOrderActions(index),
-            }
-    );
+    const rowsData: T_GenericRowData[] = items.map((item, index) => ({
+      key: item.id,
+      id: item.id,
+      status: formatStatus(item.running),
+      position: index + 1,
+      name: item.task.name,
+      frequency: item.task.frequency,
+      last_run: formatLastRun(item.task.last_run),
+      action: <QueueItemActions {...item} onAction={onAction} />,
+      order: "",
+    }));
 
     setRows(rowsData);
   }, [items]);
