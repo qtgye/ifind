@@ -3,16 +3,15 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@buffetjs/core";
 import axios from "axios";
 
-import { generatePluginLink } from "../../helpers/url";
 import TableControls, {
   T_ColumnHeader,
   T_GenericRowData,
 } from "../TableControls";
 import FontAwesomeIcon from "../FontAwesomeIcon";
-import ButtonLink, { E_ButtonLinkColor } from "../ButtonLink";
 import { useScriptsServerUrl } from "../../providers/scheduledTasksListProvider";
 
 import AddTaskAction from './AddTaskAction';
+import TaskLogsLink from './TaskLogsLink';
 
 import "./styles.scss";
 let value: number = 0;
@@ -96,36 +95,6 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
         break;
     }
   }, []);
-  const getTaskActions = useCallback<I_GetTaskActionsCallback>(
-    (task) => {
-      const isRunning = /run/i.test(task.status || "");
-      const color = isRunning ? "delete" : "primary";
-      const buttonAction = isRunning ? "stop" : "start";
-      const label = isRunning ? "Stop" : "Run";
-      let iconPulse = false;
-      let icon = isRunning ? "stop" : "play";
-      let isDisabled = someTaskRuns && !isRunning ? true : false;
-      if (triggeredTask === task.id) {
-        isDisabled = true;
-        icon = "spinner";
-        iconPulse = true;
-      }
-      return (
-        <div className="tasks-list__actions">
-          <ButtonLink
-            routerLink
-            href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
-            color={E_ButtonLinkColor.secondary}
-            title="Show Logs"
-          >
-            <FontAwesomeIcon icon="terminal" />
-            <span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs` }} />
-          </ButtonLink>
-        </div>
-      );
-    },
-    [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
-  );
   const getUpdateTimeActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
       return <span>( WIP )</span>
@@ -312,7 +281,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       joinQueue: <AddTaskAction task={task} />,
       frequency: task.frequency ||  "-",
       priority: task.priority,
-      action: task.hasModule ? getTaskActions(task) : "-",
+      action: <TaskLogsLink task={task.id as string} />,
       countdown:
         task.isReady
           ? 'READY'
@@ -328,7 +297,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const headers: T_ColumnHeader = {
     status: "Id",
     name: "Tasks",
-    joinQueue: "Queue Actions",
+    joinQueue: "Actions",
     frequency: "Frequency",
     countdown: "Countdown",
     updateTime: "Update Countdown",

@@ -13,6 +13,7 @@ $buffetjs-red: rgb(246, 77, 10);
   --hover-border-color: var(--hover-bg-color);
   display: inline-flex;
   justify-content: center;
+  position: relative;
   align-items: center;
   border-width: 1px;
   border-radius: 2px;
@@ -21,6 +22,43 @@ $buffetjs-red: rgb(246, 77, 10);
   min-height: 30px;
   background-color: var(--bg-color);
   border-color: var(--border-color);
+
+  &:hover {
+    .button-link__tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &__tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: gray;
+    padding: 5px 10px;
+    font-size: .8em;
+    color: white;
+    opacity: 0;
+    visibility: hidden;
+    transition: all .15s ease-out;
+    min-width: 100px;
+    margin-top: 10px;
+    z-index: 100;
+    word-break: none;
+    pointer-events: none;
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -10px);
+      border-bottom: 10px solid gray;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+  }
 
   &:link,
   &:active,

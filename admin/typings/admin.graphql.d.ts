@@ -139,6 +139,7 @@ declare global {
      * Computed values
      */
     hasModule?: boolean;
+    canQueue?: boolean;
   }
   
   export const enum SCHEDULED_TASK_ACTION {
@@ -4639,6 +4640,7 @@ declare global {
     running?: ScheduledTaskToRunningResolver<TParent>;
     requestedForRun?: ScheduledTaskToRequestedForRunResolver<TParent>;
     hasModule?: ScheduledTaskToHasModuleResolver<TParent>;
+    canQueue?: ScheduledTaskToCanQueueResolver<TParent>;
   }
   
   export interface ScheduledTaskToIdResolver<TParent = any, TResult = any> {
@@ -4686,6 +4688,10 @@ declare global {
   }
   
   export interface ScheduledTaskToHasModuleResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ScheduledTaskToCanQueueResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

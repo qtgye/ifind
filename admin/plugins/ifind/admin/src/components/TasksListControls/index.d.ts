@@ -6,3 +6,7 @@ declare interface TasksListProps {
 declare interface AddTaskActionProps {
   task: I_RawTask;
 }
+
+declare interface TaskLogsLinkProps {
+  task: string;
+}

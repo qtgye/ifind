@@ -6,6 +6,7 @@ import { post } from "../../helpers/scripts-server/request";
 import Table, { T_ColumnHeader, T_GenericRowData } from "../Table";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import QueueItemActions from "./QueueItemActions";
+import TaskLogsLink from "../TasksListControls/TaskLogsLink";
 
 import "./styles.scss";
 
@@ -155,6 +156,9 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
       last_run: formatLastRun(item.task.last_run),
       action: <QueueItemActions {...item} onAction={onAction} />,
       order: "",
+      props: {
+        className: item.running ? "queue__row--running" : "",
+      },
     }));
 
     setRows(rowsData);
@@ -178,7 +182,7 @@ const Queue = ({ onQueueItemAction, items }: QueueProps) => {
     status: "Status",
     last_run: "Last Run (Server Time)",
     // countdown: "Countdown",
-    action: "Action",
+    action: "Actions",
     order: "Order",
   };
 

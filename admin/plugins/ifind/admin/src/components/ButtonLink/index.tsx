@@ -16,7 +16,20 @@ export enum E_ButtonLinkColor {
 export interface I_ButtonLinkProps extends AnchorHTMLAttributes<any> {
   color?: E_ButtonLinkColor;
   routerLink?: boolean;
+  tooltip?: string;
 }
+
+export interface I_ButtonLinkTooltipProps {
+  tooltip: string;
+}
+
+const ButtonLinkTooltip = ({ tooltip }: I_ButtonLinkProps) => {
+  return tooltip ? (
+    <div className="button-link__tooltip">{tooltip}</div>
+  ) : (
+    <></>
+  );
+};
 
 // COMPONENT
 const ButtonLink = ({
@@ -24,6 +37,7 @@ const ButtonLink = ({
   color = E_ButtonLinkColor.primary,
   children = null,
   routerLink,
+  title,
   ...props
 }: I_ButtonLinkProps): JSX.Element => {
   const className = ["button-link", `button-link--${color}`];
@@ -31,10 +45,12 @@ const ButtonLink = ({
   return routerLink ? (
     <Link to={href} className={className.join(" ")} {...props}>
       {children}
+      <ButtonLinkTooltip tooltip={title} />
     </Link>
   ) : (
     <a href={href} className={className.join(" ")} {...props}>
       {children}
+      <ButtonLinkTooltip tooltip={title} />
     </a>
   );
 };

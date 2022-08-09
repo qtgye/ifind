@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Button } from "@buffetjs/core";
+import Button from "../Button";
 import FontAwesomeIcon from "../FontAwesomeIcon";
+import TaskLogsLink from "../TasksListControls/TaskLogsLink";
 
 const QueueItemActions = ({
   running,
@@ -8,6 +9,7 @@ const QueueItemActions = ({
   canRun,
   onAction,
   busy,
+  task,
 }: QueueItemActionsProps) => {
   const buttonAction = running ? "stop" : "start";
   const color = running ? "delete" : "primary";
@@ -33,9 +35,15 @@ const QueueItemActions = ({
 
   return (
     <div className="queue__actions">
-      <Button disabled={isDisabled} color={color} onClick={onClick}>
+      <Button
+        disabled={isDisabled}
+        color={color}
+        onClick={onClick}
+        title={`${buttonAction} action ${task.id}`}
+      >
         <FontAwesomeIcon icon={icon} pulse={isBusy} />
       </Button>
+      {running ? <TaskLogsLink task={task.id as string} /> : ""}
     </div>
   );
 };

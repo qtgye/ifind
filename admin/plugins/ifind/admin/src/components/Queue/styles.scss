@@ -25,6 +25,12 @@
     color: gray;
   }
 
+  &__row {
+    &--running {
+      background-color: rgba(green, .1);
+    }
+  }
+
   .table-row {
     td {
       vertical-align: middle;

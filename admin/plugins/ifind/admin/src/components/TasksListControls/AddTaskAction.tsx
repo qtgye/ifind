@@ -6,7 +6,7 @@ import { useScheduledTasksList } from "../../providers/scheduledTasksListProvide
 
 const AddTaskAction = ({ task }: AddTaskActionProps) => {
   const { full } = useScheduledTasksList();
-  const [isDisabled, setIsDisabled] = useState(full || false);
+  const [isDisabled, setIsDisabled] = useState(full || !task.canQueue || false);
   const [isBusy, setIsBusy] = useState(false);
 
   const addTask = useCallback(() => {
@@ -22,11 +22,9 @@ const AddTaskAction = ({ task }: AddTaskActionProps) => {
       .finally(() => setIsBusy(false));
   }, [task]);
 
-
-
   useEffect(() => {
-    setIsDisabled(full || false);
-  }, [full]);
+    setIsDisabled(full || !task.canQueue || false);
+  }, [full, task]);
 
   return (
     <div className="tasks-list__actions">
@@ -34,9 +32,9 @@ const AddTaskAction = ({ task }: AddTaskActionProps) => {
         color={isDisabled ? "cancel" : "primary"}
         onClick={addTask}
         disabled={isDisabled || isBusy}
+        title='Add to queue'
       >
-        <FontAwesomeIcon icon="play" />
-        Add
+        <FontAwesomeIcon icon="plus" />
       </Button>
     </div>
   );

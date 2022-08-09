@@ -43,6 +43,7 @@ module.exports = `
 
     # Computed values
     hasModule: Boolean
+    canQueue: Boolean
   }
 
   enum SCHEDULED_TASK_ACTION {
