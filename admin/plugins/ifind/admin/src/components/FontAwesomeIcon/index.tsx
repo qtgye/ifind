@@ -1,13 +1,14 @@
-import React, { FunctionComponent } from 'react';
-import { FontAwesomeIcon as Icon } from '@fortawesome/react-fontawesome';
-import { IconName } from '@fortawesome/fontawesome-common-types';
+import React from "react";
+import {
+  FontAwesomeIcon as Icon,
+  FontAwesomeIconProps,
+} from "@fortawesome/react-fontawesome";
+import { IconName } from "@fortawesome/fontawesome-common-types";
 
-interface FAIconProps {
-  icon : IconName
+interface FAIconProps extends FontAwesomeIconProps {
+  icon: IconName;
 }
 
-const FontAwesomeIcon: FunctionComponent<any> = (props: FAIconProps) => (
-  <Icon {...props} />
-);
+const FontAwesomeIcon = (props: FAIconProps) => <Icon {...props} />;
 
 export default FontAwesomeIcon;

@@ -32,6 +32,10 @@
   }
 
   .table-row {
+    &:hover {
+      background-color: rgba(silver, .1);
+    }
+
     td {
       vertical-align: middle;
     }

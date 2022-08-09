@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useParams } from "react-router-dom";
 import { useGQLFetch } from "../helpers/gqlFetch";
+import { post } from "../helpers/scripts-server/request";
 import { useScriptsServerUrl } from "../providers/scheduledTasksListProvider";
 import axios from "axios";
 
@@ -46,6 +47,11 @@ export const ScheduledTaskProvider = ({
     );
   }, []);
 
+  const updateTask = useCallback(async (taskID, newData) => {
+    const data = await post(`/task/update?task=${taskID}`, newData);
+    console.log({ updatedTask: data });
+  }, [])
+
   const refetch = useCallback(() => {
     getTask();
   }, [getTask]);
@@ -57,7 +63,7 @@ export const ScheduledTaskProvider = ({
   }, [taskID]);
 
   return (
-    <ScheduledTaskContext.Provider value={{ task, refetch }}>
+    <ScheduledTaskContext.Provider value={{ task, updateTask, refetch }}>
       {children}
     </ScheduledTaskContext.Provider>
   );

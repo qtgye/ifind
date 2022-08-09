@@ -4,12 +4,11 @@ import { HTMLProps, PropsWithChildren } from "react";
 import { Button as _Button } from "@buffetjs/core";
 import "./styles.scss";
 
-declare interface ButtonProps
+export interface ButtonProps
   extends PropsWithChildren<any>,
     HTMLProps<HTMLButtonElement> {
-  disabled: boolean;
-  color: string;
-  onClick: (args: any) => any;
+  disabled?: boolean;
+  color?: string;
   title?: string;
 }
 

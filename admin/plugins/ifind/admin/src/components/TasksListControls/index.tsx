@@ -7,11 +7,11 @@ import TableControls, {
   T_ColumnHeader,
   T_GenericRowData,
 } from "../TableControls";
-import FontAwesomeIcon from "../FontAwesomeIcon";
+import TaskCountdown from "./TaskCountdown";
 import { useScriptsServerUrl } from "../../providers/scheduledTasksListProvider";
 
-import AddTaskAction from './AddTaskAction';
-import TaskLogsLink from './TaskLogsLink';
+import AddTaskAction from "./AddTaskAction";
+import TaskLogsLink from "./TaskLogsLink";
 
 import "./styles.scss";
 let value: number = 0;
@@ -91,13 +91,12 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
 
     switch (action) {
       case "start":
-        
         break;
     }
   }, []);
   const getUpdateTimeActions = useCallback<I_GetTaskActionsCallback>(
     (task) => {
-      return <span>( WIP )</span>
+      return <span>( WIP )</span>;
 
       // const isRunning = /run/i.test(task.status || "");
       const color = "primary";
@@ -149,7 +148,7 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   );
   const getUpdatePriority = useCallback<I_GetTaskActionsCallback>(
     (task) => {
-      return <span>( WIP )</span>
+      return <span>( WIP )</span>;
       // const isRunning = /run/i.test(task.status || "");
       const color = "primary";
       // const buttonAction = isRunning ? "stop" : "start";
@@ -204,58 +203,6 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     },
     [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
   );
-  const getQueueActions = useCallback<I_GetTaskActionsCallback>(
-    (task) => {
-      return <span>( WIP )</span>;
-
-
-      const isRunning = /run/i.test(task.status || "");
-      // const color = isRunning ? "delete" : "primary";
-      const color = "primary";
-      const buttonAction = isRunning ? "stop" : "start";
-      const label = "ADD";
-      let iconPulse = false;
-      // let icon = isRunning ? "stop" : "play";
-      let icon = "play";
-      // let isDisabled = someTaskRuns && !isRunning ? true : false;
-      // if (triggeredTask === task.id) {
-      //   isDisabled = true;
-      //   icon = "spinner";
-      //   iconPulse = true;
-      // }
-      return (
-        <div className="tasks-list__actions">
-          <Button
-            // disabled={isDisabled}
-            color={color}
-            onClick={() => onTaskActionClick(buttonAction, task.id)}
-          >
-            <FontAwesomeIcon icon={icon} pulse={iconPulse} />
-            {label}
-          </Button>
-          {/* <ButtonLink
-            routerLink
-            href={generatePluginLink(`/scheduled-task/${task.id}`, null, false)}
-            color={E_ButtonLinkColor.secondary}
-            title="Show Logs"
-          >
-            <FontAwesomeIcon icon="terminal" />
-            <span dangerouslySetInnerHTML={{ __html: `&nbsp;Logs` }} />
-          </ButtonLink> */}
-        </div>
-      );
-    },
-    [someTaskRuns, onTaskAction, triggeredTask, triggeredAction]
-  );
-  const getTaskStatus = useCallback<I_GetTaskStatusCallback>((task) => {
-    const status = (task.status || "stopped").toUpperCase();
-    const state = /run/i.test(status) ? "running" : "stopped";
-    return (
-      <span className={`tasks-list__status tasks-list__status--${state}`}>
-        {status}
-      </span>
-    );
-  }, []);
   const formatLastRun = useCallback((lastRunUnix) => {
     if (!lastRunUnix) {
       return "";
@@ -279,14 +226,10 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       status: index + 1,
       name: task.name,
       joinQueue: <AddTaskAction task={task} />,
-      frequency: task.frequency ||  "-",
+      frequency: task.frequency || "-",
       priority: task.priority,
       action: <TaskLogsLink task={task.id as string} />,
-      countdown:
-        task.isReady
-          ? 'READY'
-          : task.countdown,
-      updateTime: task.hasModule ? getUpdateTimeActions(task) : "-",
+      countdown: <TaskCountdown task={task} />,
       updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
       last_run: formatLastRun(task.last_run),
     }));
@@ -300,15 +243,12 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     joinQueue: "Actions",
     frequency: "Frequency",
     countdown: "Countdown",
-    updateTime: "Update Countdown",
     priority: "Priority",
     updatePriority: "Update Priority",
     action: "Logs",
     last_run: "Last Run",
   };
 
-  return (
-    <TableControls className="tasks-list" headers={headers} rows={rows} />
-  );
+  return <TableControls className="tasks-list" headers={headers} rows={rows} />;
 };
 export default TasksList;

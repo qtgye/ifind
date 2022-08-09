@@ -1,4 +1,16 @@
 .tasks-list {
+  th {
+    white-space: nowrap;
+  }
+
+  tbody {
+    tr {
+      &:hover {
+        background-color: rgba(silver, .1);
+      }
+    }
+  }
+
   &__status {
     &--running {
       color: green;
@@ -15,7 +27,7 @@
     column-gap: 5px;
 
     button {
-      > svg {
+      >svg {
         margin-right: 0;
       }
     }
@@ -28,6 +40,46 @@
   .table-row {
     td {
       vertical-align: middle;
+    }
+  }
+
+  .task-countdown {
+    &--busy {
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    &__counter-view {
+      display: flex;
+      align-items: center;
+    }
+
+    &__edit-view {
+      input {
+        width: calc(3ch + 40px);
+        margin-right: 10px;
+      }
+    }
+
+    &__edit {
+      margin-left: 10px;
+    }
+
+    &__apply {
+      margin-left: 10px;
+    }
+
+    .input-block {
+      margin-top: 0;
+    }
+
+    input {
+      width: calc(3ch + 40px);
+      margin-right: 10px;
+    }
+
+    svg {
+      margin-right: 0 !important;
     }
   }
 }
