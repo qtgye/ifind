@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "@buffetjs/core";
+import Button from "../Button";
 import FontAwesomeIcon from "../FontAwesomeIcon";
 import { post } from "../../helpers/scripts-server/request";
 import { useScheduledTasksList } from "../../providers/scheduledTasksListProvider";
