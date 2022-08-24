@@ -1,7 +1,8 @@
 declare interface ScheduledTaskContextData {
   task?: Task;
   refetch?: () => void;
-  updateTask: (taskID: Task["id"], enwData: Partial<Task>) => void;
+  updateTask: (taskID: Task["id"], newData: Partial<Task>) => void;
+  updatePriority: (taskID: Task["id"], newPriority: number) => void;
 }
 
 declare interface ScheduledTaskRouteParams {

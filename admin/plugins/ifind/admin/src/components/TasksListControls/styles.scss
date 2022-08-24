@@ -82,4 +82,49 @@
       margin-right: 0 !important;
     }
   }
+
+  .task-priority {
+    &--busy {
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: .5;
+    }
+
+    &__priority-view {
+      display: flex;
+      align-items: center;
+    }
+
+    &__edit-view {
+      input {
+        width: calc(3ch + 40px);
+        margin-right: 10px;
+      }
+    }
+
+    &__edit {
+      margin-left: 10px;
+    }
+
+    &__apply {
+      margin-left: 10px;
+    }
+
+    .input-block {
+      margin-top: 0;
+    }
+
+    input {
+      width: calc(3ch + 40px);
+      margin-right: 10px;
+    }
+
+    svg {
+      margin-right: 0 !important;
+    }
+  }
 }

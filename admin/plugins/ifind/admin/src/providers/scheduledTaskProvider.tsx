@@ -26,12 +26,11 @@ query GetScheduledTask ( $task: String! ) {
 }
 `;
 
-export const ScheduledTaskContext = createContext<ScheduledTaskContextData>({});
+export const ScheduledTaskContext = createContext<Partial<ScheduledTaskContextData>>({});
 
 export const ScheduledTaskProvider = ({
   children,
 }: React.PropsWithChildren<any>) => {
-  const gqlFetch = useGQLFetch();
   const getScriptsServerUrl = useScriptsServerUrl();
   const { taskID } = useParams<ScheduledTaskRouteParams>();
   const [task, setTask] = useState<Task>();
@@ -48,9 +47,13 @@ export const ScheduledTaskProvider = ({
   }, []);
 
   const updateTask = useCallback(async (taskID, newData) => {
-    const data = await post(`/task/update?task=${taskID}`, newData);
-    console.log({ updatedTask: data });
-  }, [])
+    await post(`/task/update?task=${taskID}`, newData);
+  }, []);
+
+  const updatePriority = useCallback(async (taskID, newPriority) => {
+    console.log('updating priority', taskID, newPriority);
+    await post(`/task/priority?task=${taskID}`, {priority: newPriority});
+  }, []);
 
   const refetch = useCallback(() => {
     getTask();
@@ -63,7 +66,7 @@ export const ScheduledTaskProvider = ({
   }, [taskID]);
 
   return (
-    <ScheduledTaskContext.Provider value={{ task, updateTask, refetch }}>
+    <ScheduledTaskContext.Provider value={{ task, updateTask, updatePriority, refetch }}>
       {children}
     </ScheduledTaskContext.Provider>
   );

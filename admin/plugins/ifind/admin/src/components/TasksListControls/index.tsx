@@ -8,6 +8,7 @@ import TableControls, {
   T_GenericRowData,
 } from "../TableControls";
 import TaskCountdown from "./TaskCountdown";
+import TaskPriority from "./TaskPriority";
 import { useScriptsServerUrl } from "../../providers/scheduledTasksListProvider";
 
 import AddTaskAction from "./AddTaskAction";
@@ -26,7 +27,9 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
   const [someTaskRuns, setSomeTaskRuns] = useState<boolean>(false);
   const [triggeredTask, setTriggeredTask] = useState<string>("");
   const [triggeredAction, setTriggeredAction] = useState<string>("");
+  const [taskPriorityEditView, setTaskPriorityEditView] = useState<string>("");
   const [rows, setRows] = useState<T_GenericRowData[]>([]);
+
   // const [value, setValue] = useState<number>(0);
   // This function is called when the input changes
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -227,15 +230,14 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
       name: task.name,
       joinQueue: <AddTaskAction task={task} />,
       frequency: task.frequency || "-",
-      priority: task.priority,
+      priority: <TaskPriority task={task} max={tasks.length} onEditView={setTaskPriorityEditView} enabled={!taskPriorityEditView || taskPriorityEditView === task.id} />,
       action: <TaskLogsLink task={task.id as string} />,
       countdown: <TaskCountdown task={task} />,
-      updatePriority: task.hasModule ? getUpdatePriority(task) : "-",
       last_run: formatLastRun(task.last_run),
     }));
 
     setRows(rowsData);
-  }, [tasks]);
+  }, [tasks, taskPriorityEditView]);
 
   const headers: T_ColumnHeader = {
     status: "Id",
@@ -244,7 +246,6 @@ const TasksList = ({ tasks, onTaskAction }: TasksListProps) => {
     frequency: "Frequency",
     countdown: "Countdown",
     priority: "Priority",
-    updatePriority: "Update Priority",
     action: "Logs",
     last_run: "Last Run",
   };
