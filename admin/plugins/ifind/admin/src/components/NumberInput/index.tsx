@@ -41,12 +41,16 @@ const NumberInput = ({
     }: Parameters<ChangeEventHandler<HTMLInputElement>>[0]) => {
       const numberValue = Number(value);
 
+      console.log({ numberValue, max, min });
+
       switch (true) {
         case max && numberValue > max:
           alert(`Input must not be larger than ${max}`);
+          console.log('too high');
           break;
         case min && numberValue < min:
           alert(`Input must not be lower than ${min}`);
+          console.log('too low');
           break;
         default:
       }
