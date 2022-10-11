@@ -1,9 +1,4 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  ChangeEventHandler,
-} from "react";
+import React, { useCallback, ChangeEventHandler } from "react";
 import PropTypes from "prop-types";
 import { Label, InputText } from "@buffetjs/core";
 
@@ -40,6 +35,27 @@ const NumberInput = ({
 }: NumberInputProps) => {
   const classNames = [className, "text-input"].join(" ");
 
+  const onInputChange = useCallback(
+    ({
+      target: { value },
+    }: Parameters<ChangeEventHandler<HTMLInputElement>>[0]) => {
+      const numberValue = Number(value);
+
+      switch (true) {
+        case max && numberValue > max:
+          alert(`Input must not be larger than ${max}`);
+          break;
+        case min && numberValue < min:
+          alert(`Input must not be lower than ${min}`);
+          break;
+        default:
+      }
+
+      typeof onChange === "function" && onChange(Number(value));
+    },
+    [onChange, min, max]
+  );
+
   return (
     <InputBlock className={classNames} error={error}>
       {label ? <Label htmlFor={id}>{label}</Label> : ""}
@@ -50,11 +66,7 @@ const NumberInput = ({
         id={id}
         value={value}
         disabled={disabled}
-        onChange={({
-          target: { value },
-        }: Parameters<ChangeEventHandler<HTMLInputElement>>[0]) =>
-          typeof onChange === "function" && onChange(Number(value))
-        }
+        onChange={onInputChange}
         max={max}
         min={min}
         size={size}

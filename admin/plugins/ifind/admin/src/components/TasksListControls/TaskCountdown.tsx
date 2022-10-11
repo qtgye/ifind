@@ -40,7 +40,7 @@ const EditView = ({ onSave }: EditViewProps) => {
         name="next_run"
         value={minutesAdjust}
         onChange={onChange}
-        max={null}
+        max={1440 /* One day */}
         min={null}
         size={3}
       />
