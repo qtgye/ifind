@@ -54,7 +54,7 @@ jobs:
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
-          rm-rf node_modules && \
+          rm -rf node_modules && \
           npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
 
           echo "/=============================/" && \
