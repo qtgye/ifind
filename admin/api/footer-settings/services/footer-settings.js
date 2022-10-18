@@ -1,5 +1,6 @@
 'use strict';
 
+require('../../../helpers/customGlobals');
 const filterByLanguage = appRequire('helpers/filterByLanguage');
 
 /**

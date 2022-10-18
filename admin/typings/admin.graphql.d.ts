@@ -185,14 +185,14 @@ declare global {
   export interface EnvType {
     HOST?: string;
     PORT?: string;
-    WS_HOST?: string;
+    BROWSER?: string;
     DATABASE_HOST?: string;
     DATABASE_PORT?: string;
     DATABASE_NAME?: string;
     DATABASE_USERNAME?: string;
     DATABASE_PASSWORD?: string;
-    TORRC_PATH?: string;
     SCRIPTS_SERVER_URL?: string;
+    ENV?: string;
   }
   
   export interface PageData {
@@ -4788,14 +4788,14 @@ declare global {
   export interface EnvTypeTypeResolver<TParent = any> {
     HOST?: EnvTypeToHOSTResolver<TParent>;
     PORT?: EnvTypeToPORTResolver<TParent>;
-    WS_HOST?: EnvTypeToWS_HOSTResolver<TParent>;
+    BROWSER?: EnvTypeToBROWSERResolver<TParent>;
     DATABASE_HOST?: EnvTypeToDATABASE_HOSTResolver<TParent>;
     DATABASE_PORT?: EnvTypeToDATABASE_PORTResolver<TParent>;
     DATABASE_NAME?: EnvTypeToDATABASE_NAMEResolver<TParent>;
     DATABASE_USERNAME?: EnvTypeToDATABASE_USERNAMEResolver<TParent>;
     DATABASE_PASSWORD?: EnvTypeToDATABASE_PASSWORDResolver<TParent>;
-    TORRC_PATH?: EnvTypeToTORRC_PATHResolver<TParent>;
     SCRIPTS_SERVER_URL?: EnvTypeToSCRIPTS_SERVER_URLResolver<TParent>;
+    ENV?: EnvTypeToENVResolver<TParent>;
   }
   
   export interface EnvTypeToHOSTResolver<TParent = any, TResult = any> {
@@ -4806,7 +4806,7 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface EnvTypeToWS_HOSTResolver<TParent = any, TResult = any> {
+  export interface EnvTypeToBROWSERResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -4830,11 +4830,11 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface EnvTypeToTORRC_PATHResolver<TParent = any, TResult = any> {
+  export interface EnvTypeToSCRIPTS_SERVER_URLResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface EnvTypeToSCRIPTS_SERVER_URLResolver<TParent = any, TResult = any> {
+  export interface EnvTypeToENVResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

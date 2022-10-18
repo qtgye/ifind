@@ -12,7 +12,12 @@ module.exports = (strapi) => {
         // Always export admin types when Strapi is loaded,
         // In order for external consuming modules to always have the
         // updated admin types
-        setTimeout(generateAdminTypes, 3000);
+        setTimeout(() => {
+          generateAdminTypes();
+
+          // Useful for detecting strapi init when forked as a child process
+          console.log('strapi-after-init');
+        }, 3000);
       }
     },
   };
