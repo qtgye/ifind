@@ -4,6 +4,7 @@ import fetch from "cross-fetch";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED="0";
 
 const gqlFetch: gqlFetchType = async (query, variables = {}) => {
+  console.log('process.env.NEXT_PUBLIC_ADMIN_API_ROOT', process.env.NEXT_PUBLIC_ADMIN_API_ROOT);
   return fetch(`${process.env.NEXT_PUBLIC_ADMIN_API_ROOT}`, {
     method: "POST",
     headers: {
