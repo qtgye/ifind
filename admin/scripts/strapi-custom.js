@@ -28,9 +28,7 @@ const cleanOutputFolders = () => {
   const cache = resolveApp(".cache");
   const rmOptions = { recursive: true, force: true };
 
-  console.log("Cleaning out build folder...");
-
-  console.log("Removing build and cache folders...");
+  console.info("Removing build and cache folders...");
   fs.rmdirSync(build, rmOptions);
   fs.rmdirSync(cache, rmOptions);
 };
@@ -80,8 +78,6 @@ const createStrapiInstance = (serveAdminPanel = false) =>
 const strapiProcess = async () => {
   const strapiPath = require.resolve(strapiBin);
 
-  preBuild();
-
   await new Promise(resolve => setTimeout(resolve, 1000));
 
   const strapiChildProcess = childProcess.fork(strapiPath, processArgs, {
@@ -107,8 +103,10 @@ const strapiProcess = async () => {
       restartingStrapi = false;
 
       // Ensure process is killed
-      console.log("Force-killing process");
+      console.info("Force-killing process");
       strapiChildProcess.kill("SIGKILL");
+
+      preBuild();
 
       // Spawn a new process
       strapiProcess();
@@ -139,8 +137,8 @@ const strapiProcess = async () => {
           "all",
           debounce((event, path) => {
             if (/change|unlink/.test(event)) {
-              console.log(`Change detected on file: ${path}`.cyan);
-              console.log(`Restarting Strapi process...`.cyan);
+              console.info(`Change detected on file: ${path}`.cyan);
+              console.info(`Restarting Strapi process...`.cyan);
               restartingStrapi = true;
 
               // Kill current process if any,
@@ -154,7 +152,7 @@ const strapiProcess = async () => {
           }, 1000)
         );
 
-        console.log("Watching files for changes...".green);
+        console.info("Watching files for changes...".green);
         break;
 
       default:
@@ -184,13 +182,17 @@ const preBuild = () => {
 }
 
 if (args._.some((command) => strapiNativeCommands.includes(command))) {
+  const command = args._.find((command) => strapiNativeCommands.includes(command));
+
+  if ( /develop/.test(command) ) {
+    preBuild();
+  }
+
   if (/dev|local/.test(process.env.ENV)) {
     watchStrapiProcess();
   } else {
-    preBuild();
     require(strapiBin);
   }
 } else {
-  preBuild();
   module.exports = createStrapiInstance;
 }
