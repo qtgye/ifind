@@ -1,4 +1,6 @@
 import { useEffect, useRef, useCallback, useState, MouseEvent } from "react";
+import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { dateTime } from "ifind-utils";
 import { useGlobalState } from "providers/globalStateContext";
 import ProductDealCard from "components/ProductDealCard";
@@ -9,6 +11,8 @@ import { updatedTime, loadMoreButton } from "./translations";
 
 const INITIAL_PRODUCTS_IN_VIEW = 20;
 const PRODUCTS_PER_LOAD = 12;
+
+dayjs.extend(utc);
 
 const ProductDealsGrid: ProductDealsGridComponent = ({
   products,
@@ -21,6 +25,7 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   const [productsInView, setProductsInView] = useState<Product[]>(
     products.slice(0, INITIAL_PRODUCTS_IN_VIEW)
   );
+  const [lastUpdated, setLastUpdated] = useState(0);
 
   const translationArrayToMap = useCallback(
     (
@@ -53,6 +58,16 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   );
 
   useEffect(() => {
+    const [mostRecentProduct] = products.sort((productA, productB) =>
+      productA.created_at > productB.created_at ? -1 : 1
+    );
+
+    if (mostRecentProduct) {
+      setLastUpdated(dayjs.utc(mostRecentProduct.created_at).valueOf());
+    }
+  }, [products]);
+
+  useEffect(() => {
     if (dealTypeName === "amazon_flash_offers") {
       return window.scrollTo({
         top: 0,
@@ -80,11 +95,11 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
     >
       <div className="product-deals-grid__heading">
         {translate(translationArrayToMap(deal_type.label || []))}
-        <RenderIf condition={deal_type.last_run ? true : false}>
+        <RenderIf condition={lastUpdated ? true : false}>
           <aside className="product-deals-grid__update-time">
             {translate(updatedTime, {
               TIME: dateTime.formatGranularTime(
-                Date.now() - Number(deal_type.last_run),
+                dayjs.utc().valueOf() - Number(lastUpdated),
                 true,
                 true
               ),

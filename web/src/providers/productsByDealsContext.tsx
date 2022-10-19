@@ -57,6 +57,7 @@ export const getProductsByDeals = async (offer_id: string = "") =>
         deal_type
         deal_merchant
         deal_quantity_available_percent
+        created_at
         image
         url_list {
           source {
