@@ -1,3 +1,5 @@
+const env = process.env;
+
 module.exports = {
   query: `
     prerendererLogs: [PrerendererLogEntry]
@@ -12,6 +14,13 @@ module.exports = {
   },
   resolveMutation: {
     async prerenderer(_, { command }) {
+
+      // Disable prerendering service in development
+      if ( /dev|local/.test(env.ENV) ) {
+        console.info('Prerendering endpoint is disabled in development enviroment.');
+        return true;
+      }
+
       switch (command) {
         case "start":
           await strapi.prerenderer.start();
