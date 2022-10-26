@@ -111,5 +111,8 @@
   "_moduleAliases": {
     "@custom-types": "types",
     "@scripts": "scripts"
+  },
+  "resolutions": {
+    "graphql": "14.7.0"
   }
 }

@@ -29,8 +29,11 @@ const cleanOutputFolders = () => {
   const rmOptions = { recursive: true, force: true };
 
   console.info("Removing build and cache folders...");
-  fs.rmdirSync(build, rmOptions);
-  fs.rmdirSync(cache, rmOptions);
+  [build, cache].forEach((dirPath) => {
+    if (fs.existsSync(dirPath)) {
+      fs.rmdirSync(dirPath, rmOptions);
+    }
+  });
 };
 
 const loadIcons = () => {
@@ -78,7 +81,7 @@ const createStrapiInstance = (serveAdminPanel = false) =>
 const strapiProcess = async () => {
   const strapiPath = require.resolve(strapiBin);
 
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const strapiChildProcess = childProcess.fork(strapiPath, processArgs, {
     stdio: "pipe",
@@ -117,11 +120,10 @@ const strapiProcess = async () => {
     const dataString = data.toString();
 
     switch (true) {
-      case (/strapi-after-init/.test(dataString) && !watchingFiles):
+      case /strapi-after-init/.test(dataString) && !watchingFiles:
         watchingFiles = true;
 
-        // START WATCHER
-        const watcher = chokidar.watch([
+        const paths = [
           path.resolve(
             process.cwd(),
             "{admin,api,components,config,extensions,helpers,hooks,prerenderer,scheduled-tasks}/**/*.{js,jsx,ts,tsx}"
@@ -131,7 +133,12 @@ const strapiProcess = async () => {
             "plugins/{icons,ifind,strapi-icons}/**/*.{js,jsx,ts,tsx}"
           ),
           path.resolve(process.cwd(), "index.js"),
-        ]);
+        ];
+
+        // START WATCHER
+        const watcher = chokidar.watch(paths, {
+          usePolling: true,
+        });
 
         watcher.on(
           "all",
@@ -143,7 +150,7 @@ const strapiProcess = async () => {
 
               // Kill current process if any,
               // or spawn a new one
-              if ( strapiForkedProcess?.running ) {
+              if (strapiForkedProcess?.running) {
                 strapiForkedProcess.kill("SIGINT");
               } else {
                 strapiProcess();
@@ -179,12 +186,14 @@ const preBuild = () => {
   // Load icons
   loadIcons();
   loadCategoryIcons();
-}
+};
 
 if (args._.some((command) => strapiNativeCommands.includes(command))) {
-  const command = args._.find((command) => strapiNativeCommands.includes(command));
+  const command = args._.find((command) =>
+    strapiNativeCommands.includes(command)
+  );
 
-  if ( /develop/.test(command) ) {
+  if (/develop/.test(command)) {
     preBuild();
   }
 
