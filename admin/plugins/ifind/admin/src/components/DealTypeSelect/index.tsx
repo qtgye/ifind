@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, FormEvent } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Select, Label } from "@buffetjs/core";
 import InputBlock from "../InputBlock";
-const dealTypes: DealTypesConfig = require('../../../../../../api/ifind/deal-types');
+import { useDealType } from "../../providers/dealTypeProvider";
 
 import "./styles.scss";
 
@@ -29,20 +29,9 @@ const DealTypeSelect = ({
   error,
   label,
 }: T_DealTypeSelectProps): JSX.Element => {
+  const { dealTypes } = useDealType();
   const [inputValue, setInputValue] = useState<string>(value);
-  const options: I_DealTypeOption[] = Object.entries(dealTypes).map(([ dealType, dealData ]) => ({
-    value: dealType,
-    label: dealData.label.find(({ language }) => language === 'en')?.label || ''
-  }));
-  
-  [
-    { value: "amazon_flash_offers", label: "Amazon Flash Offers" },
-    { value: "ebay_wow_offers", label: "Ebay Wow Offers" },
-    {
-      value: "aliexpress_value_deals",
-      label: "AliExpress Super Value Deals",
-    },
-  ];
+  const [options, setOptions] = useState<I_DealTypeOption[]>([]);
 
   const onSelect = useCallback(
     (label: string) => {
@@ -59,12 +48,23 @@ const DealTypeSelect = ({
     [onChange, options]
   );
 
+  console.log({ options });
+
   useEffect(() => {
     const matchedOption = options.find(
       ({ value: optionValue }) => optionValue === value
     );
     setInputValue(matchedOption?.label || "");
   }, [value, options]);
+
+  useEffect(() => {
+    const options: I_DealTypeOption[] = Object.entries(dealTypes).map(([ dealType, dealData ]) => ({
+      value: dealType,
+      label: dealData.label.find(({ language }) => language === 'en')?.label || ''
+    }));
+
+    setOptions(options);
+  }, [dealTypes])
 
   return (
     <InputBlock

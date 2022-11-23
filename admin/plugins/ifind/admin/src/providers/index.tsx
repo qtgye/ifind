@@ -9,6 +9,7 @@ import { GlobalContextProvider } from "./globalProvider";
 import { AdminUserProvider } from "./adminUserProvider";
 import { LanguageProvider } from "./languageProvider";
 import { ProductAttributesProvider } from "./productAttributesProvider";
+import { DealTypeProvider } from "./dealTypeProvider";
 import { TagsProvider } from "./tagsProvider";
 
 interface Props {
@@ -23,11 +24,13 @@ const Providers: FunctionComponent<Props> = ({ children }: Props) => {
           <LanguageProvider>
             <SourceRegionProvider>
               <TagsProvider>
-                <ProductAttributesProvider>
-                  <CategoriesListingProvider>
-                    <DragAndDropProvider>{children}</DragAndDropProvider>
-                  </CategoriesListingProvider>
-                </ProductAttributesProvider>
+                <DealTypeProvider>
+                  <ProductAttributesProvider>
+                    <CategoriesListingProvider>
+                      <DragAndDropProvider>{children}</DragAndDropProvider>
+                    </CategoriesListingProvider>
+                  </ProductAttributesProvider>
+                </DealTypeProvider>
               </TagsProvider>
             </SourceRegionProvider>
           </LanguageProvider>
