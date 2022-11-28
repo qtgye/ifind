@@ -12,6 +12,7 @@ module.exports = {
       status: String
       website_tab: String
       deal_type: String
+      deal_category: String
     }
     type ProductsListPayload {
       count: Int
@@ -49,24 +50,35 @@ module.exports = {
   resolver: {
     Query: {
       async productDetails(_, args) {
-        return await strapi.services.product.getProductDetails(args.id, args.language);
+        return await strapi.services.product.getProductDetails(
+          args.id,
+          args.language
+        );
       },
       async productComparisonList(_, args) {
-        return await strapi.services.product.productComparisonList(args.language, args.root);
+        return await strapi.services.product.productComparisonList(
+          args.language,
+          args.root
+        );
       },
       async productsList(_, args) {
         return await strapi.services.product.productsList(args);
       },
       async categoryProducts(_, args) {
-        return await strapi.services.product.categoryProducts(args.language, args.categories, args.includeDescendants);
+        return await strapi.services.product.categoryProducts(
+          args.language,
+          args.categories,
+          args.includeDescendants
+        );
       },
       async giftIdeas(_, args) {
         return await strapi.services.product.giftIdeas(args);
-      }
+      },
     },
     Mutation: {
       async addProductClick(_, args) {
-        const updatedProductClicks = await strapi.services.product.addProductClick(args.id);
+        const updatedProductClicks =
+          await strapi.services.product.addProductClick(args.id);
         return updatedProductClicks;
       },
       async fixProducts() {
@@ -74,15 +86,16 @@ module.exports = {
         return {
           count: updatedProducts.length,
           products: updatedProducts,
-        }
+        };
       },
       async updateProductLinks() {
-        const updatedProducts = await strapi.services.product.updateProductLinks();
+        const updatedProducts =
+          await strapi.services.product.updateProductLinks();
         return {
           count: updatedProducts.length,
           products: updatedProducts,
-        }
-      }
-    }
-  }
+        };
+      },
+    },
+  },
 };

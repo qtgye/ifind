@@ -27,6 +27,7 @@ declare interface DealTypeConfig {
     icon: string;
   };
   label: DealTypeLabel[];
+  deal_category: string;
 }
 
 declare interface DealType extends DealTypeConfig {
@@ -47,19 +48,21 @@ export const DealTypeProvider = ({
   const [dealTypes, setDealTypes] = useState<DealType[]>([]);
 
   useEffect(() => {
-    get("/dealType").then(
-      ({ data }: { data: { [key: string]: DealTypeConfig } }) => {
-        return Object.entries(data).reduce((dealTypes: DealType[], [id, data]) => {
-          dealTypes.push({
-            id,
-            ...data,
-          });
+    get("/dealType")
+      .then(({ data }: { data: { [key: string]: DealTypeConfig } }) => {
+        return Object.entries(data).reduce(
+          (dealTypes: DealType[], [id, data]) => {
+            dealTypes.push({
+              id,
+              ...data,
+            });
 
-          return dealTypes;
-        }, []);
-      }
-    )
-    .then(dealTypes => setDealTypes(dealTypes));
+            return dealTypes;
+          },
+          []
+        );
+      })
+      .then((dealTypes) => setDealTypes(dealTypes));
   }, []);
 
   return (

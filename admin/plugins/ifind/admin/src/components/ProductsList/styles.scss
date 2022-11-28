@@ -32,7 +32,7 @@
 
   &__date {
     white-space: nowrap;
-    font-size: .8em;
+    font-size: 0.8em;
   }
 
   &__product-actions {
@@ -57,8 +57,15 @@
     }
   }
 
-  &__tab-options {
+  &__category-options {
     margin-left: auto;
+
+    .deal-category-select {
+      display: flex;
+      align-items: center;
+      flex-wrap: nowrap;
+      margin-top: 0;
+    }
   }
 
   &__deal-type-options {
@@ -87,7 +94,7 @@
     margin-bottom: 20px;
   }
 
-  &__bulk-controls{
+  &__bulk-controls {
     margin-right: auto;
   }
 
@@ -120,7 +127,7 @@
   &__filters {
     background-color: #fff;
     margin-bottom: 20px;
-    box-shadow: 0 0 3px rgba(black, .1);
+    box-shadow: 0 0 3px rgba(black, 0.1);
   }
 
   table {

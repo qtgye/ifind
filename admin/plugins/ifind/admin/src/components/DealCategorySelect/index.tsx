@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Select, Label } from "@buffetjs/core";
 import InputBlock from "../InputBlock";
-import { useDealType } from "../../providers/dealTypeProvider";
 import { useDealCategory } from "../../providers/dealCategoryProvider";
-import { useProductsList } from "../../providers/productsListProvider";
 
 import "./styles.scss";
 
-export interface I_DealTypeOption {
+export interface I_DealCategoryOption {
   value: string;
   label: string;
 }
 
-export type T_DealTypeSelectProps = {
+export type T_DealCategorySelectProps = {
   value: string;
   onChange: (dealType: string) => any;
   error?: string;
@@ -22,7 +20,7 @@ export type T_DealTypeSelectProps = {
   className?: string;
 };
 
-const DealTypeSelect = ({
+const DealCategorySelect = ({
   value = "",
   onChange,
   id,
@@ -30,12 +28,10 @@ const DealTypeSelect = ({
   className,
   error,
   label,
-}: T_DealTypeSelectProps): JSX.Element => {
-  const { dealTypes } = useDealType();
+}: T_DealCategorySelectProps): JSX.Element => {
   const { dealCategories } = useDealCategory();
-  const { dealCategory } = useProductsList();
   const [inputValue, setInputValue] = useState<string>(value);
-  const [options, setOptions] = useState<I_DealTypeOption[]>([]);
+  const [options, setOptions] = useState<I_DealCategoryOption[]>([]);
 
   const onSelect = useCallback(
     (label: string) => {
@@ -60,24 +56,19 @@ const DealTypeSelect = ({
   }, [value, options]);
 
   useEffect(() => {
-    // Extract deal types with matching deal category
-    const filteredDealTypes = dealTypes.filter(
-      ({ deal_category = "" }) => deal_category === dealCategory
-    );
-
-    const options: I_DealTypeOption[] = filteredDealTypes.map(
+    const options: I_DealCategoryOption[] = dealCategories.map(
       ({ id, label }) => ({
-        value: id,
+        value: id as string,
         label: label.find(({ language }) => language === "en")?.label || "",
       })
     );
 
     setOptions(options);
-  }, [dealTypes, dealCategory]);
+  }, [dealCategories]);
 
   return (
     <InputBlock
-      className={["deal-type-select"]
+      className={["deal-category-select"]
         .concat(className || "")
         .filter(Boolean)
         .join(" ")}
@@ -99,4 +90,4 @@ const DealTypeSelect = ({
   );
 };
 
-export default DealTypeSelect;
+export default DealCategorySelect;
