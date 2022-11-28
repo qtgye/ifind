@@ -1601,7 +1601,7 @@ declare global {
     image: string;
     region?: Region;
     source?: Source;
-    website_tab: string;
+    website_tab?: string;
     url_list?: Array<ComponentAtomsUrlWithType | null>;
     details_html?: string;
     attrs_rating?: Array<ComponentAtomsProductAttrRating | null>;
@@ -1867,7 +1867,7 @@ declare global {
     image: string;
     region?: string;
     source?: string;
-    website_tab: string;
+    website_tab?: string;
     url_list?: Array<ComponentAtomsUrlWithTypeInput | null>;
     details_html?: string;
     attrs_rating?: Array<ComponentAtomsProductAttrRatingInput | null>;

@@ -6,10 +6,9 @@ import React, {
   useCallback,
   memo,
 } from "react";
-import { useLocation } from "react-router-dom";
-import { useQuery } from "../helpers/query";
 import { useGQLFetch } from "../helpers/gqlFetch";
-import { getSearchParams, useSearchParams } from "../helpers/url";
+import { useSearchParams } from "../helpers/url";
+import { useDealType } from "./dealTypeProvider";
 
 import { I_Product } from "./productProvider";
 
@@ -55,8 +54,6 @@ export type T_ProductWhereFilterKeys =
   | "website_tab"
   | "deal_type";
 
-const DEFAULT_WEBSITE_TAB = "home";
-const DEFAULT_DEAL_TYPE = "aliexpress_value_deals";
 const DEFAULT_DEAL_CATEGORY = "warehouse";
 
 const ProductFragment = `
@@ -138,6 +135,7 @@ export const ProductsListContext = createContext<I_ProductListProviderValues>(
 export const ProductsListProvider = memo(({ children }) => {
   const gqlFetch = useGQLFetch();
   const searchParams = useSearchParams<I_ProductListSearchParams>();
+  const { dealTypes } = useDealType();
   const [loading, setLoading] = useState(false);
   const [requestTimeout, setRequestTimeout] = useState<number>();
   const [searchTerm, setSearchTerm] = useState(searchParams.search);
@@ -151,8 +149,7 @@ export const ProductsListProvider = memo(({ children }) => {
     category: searchParams?.category || "",
     search: searchParams?.search || "",
     status: searchParams?.status || "published",
-    tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
-    dealType: searchParams?.deal_type || DEFAULT_DEAL_TYPE,
+    dealType: searchParams?.deal_type || "0",
     dealCategory: searchParams?.deal_category || DEFAULT_DEAL_CATEGORY,
   });
 
@@ -176,7 +173,6 @@ export const ProductsListProvider = memo(({ children }) => {
       category,
       search,
       status,
-      website_tab,
       deal_type,
       deal_category,
     }) => {
@@ -188,11 +184,8 @@ export const ProductsListProvider = memo(({ children }) => {
         search,
         status,
         deal_category,
+        deal_type,
       };
-
-      if (website_tab === "home") {
-        where.deal_type = deal_type;
-      }
 
       return { limit, start, sort, where };
     },
@@ -200,24 +193,31 @@ export const ProductsListProvider = memo(({ children }) => {
   );
 
   const refresh = useCallback(() => {
-    clearTimeout(requestTimeout);
+    if (queryOptions.variables?.where?.deal_type) {
+      clearTimeout(requestTimeout);
 
-    setRequestTimeout(
-      window.setTimeout(async () => {
-        setLoading(true);
-        const data = await gqlFetch(queryOptions.query, queryOptions.variables);
+      setRequestTimeout(
+        window.setTimeout(async () => {
+          setLoading(true);
+          const data = await gqlFetch(
+            queryOptions.query,
+            queryOptions.variables
+          );
 
-        if (data?.productsList) {
-          setProductsListData(data.productsList);
-        }
-        setLoading(false);
-      }, 300)
-    );
+          if (data?.productsList) {
+            setProductsListData(data.productsList);
+          }
+          setLoading(false);
+        }, 300)
+      );
+    } else {
+      setProductsListData([]);
+    }
   }, [queryOptions, requestTimeout]);
 
   const deleteProducts = useCallback((productIDs) => {
     return gqlFetch(_deleteProductsMutation(productIDs)).then((data) =>
-      console.log({ data })
+      console.info({ data })
     );
   }, []);
 
@@ -257,21 +257,28 @@ export const ProductsListProvider = memo(({ children }) => {
   }, [queryOptions]);
 
   useEffect(() => {
-    setListOptions({
-      page: Number(searchParams?.page || 1),
-      pageSize: Number(searchParams?.page_size || 10),
-      sortBy: searchParams?.sort_by || "id",
-      sortOrder: searchParams?.order || "desc",
-      category: searchParams?.category || "",
-      search: searchParams?.search || "",
-      status: searchParams?.status || "published",
-      tab: searchParams?.tab || DEFAULT_WEBSITE_TAB,
-      dealType: searchParams?.deal_type || DEFAULT_DEAL_TYPE,
-      dealCategory: searchParams?.deal_category || DEFAULT_DEAL_CATEGORY,
-    });
-    setSearchTerm(searchParams.search);
-    setStatus(searchParams.status);
-  }, [searchParams]);
+    if (searchParams.deal_type || dealTypes?.length) {
+      const dealCategory = searchParams?.deal_category || DEFAULT_DEAL_CATEGORY;
+      const dealType =
+        searchParams.deal_type ||
+        dealTypes.find(({ deal_category }) => deal_category === dealCategory)
+          ?.id;
+
+      setListOptions({
+        page: Number(searchParams?.page || 1),
+        pageSize: Number(searchParams?.page_size || 10),
+        sortBy: searchParams?.sort_by || "id",
+        sortOrder: searchParams?.order || "desc",
+        category: searchParams?.category || "",
+        search: searchParams?.search || "",
+        status: searchParams?.status || "published",
+        dealType,
+        dealCategory,
+      });
+      setSearchTerm(searchParams.search);
+      setStatus(searchParams.status);
+    }
+  }, [searchParams, dealTypes]);
 
   return (
     <ProductsListContext.Provider

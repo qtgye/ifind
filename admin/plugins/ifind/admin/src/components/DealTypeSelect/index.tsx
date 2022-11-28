@@ -32,7 +32,6 @@ const DealTypeSelect = ({
   label,
 }: T_DealTypeSelectProps): JSX.Element => {
   const { dealTypes } = useDealType();
-  const { dealCategories } = useDealCategory();
   const { dealCategory } = useProductsList();
   const [inputValue, setInputValue] = useState<string>(value);
   const [options, setOptions] = useState<I_DealTypeOption[]>([]);

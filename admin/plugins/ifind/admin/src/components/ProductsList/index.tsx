@@ -7,6 +7,7 @@ import { Select, Label } from "@buffetjs/core";
 import { useSourceRegion } from "../../providers/sourceRegionProvider";
 import { useProductsList } from "../../providers/productsListProvider";
 import { useGlobal } from "../../providers/globalProvider";
+import { useDealType } from "../../providers/dealTypeProvider";
 import { generatePluginLink } from "../../helpers/url";
 
 import Pagination from "../Pagination";
@@ -28,6 +29,7 @@ const ProductsList = () => {
   const history = useHistory();
   const { setIsLoading } = useGlobal();
   const { sources } = useSourceRegion();
+  const { dealTypes } = useDealType();
   const {
     products,
     loading,
@@ -139,7 +141,7 @@ const ProductsList = () => {
 
   // Process raw products data to match table data
   const processProducts = useCallback(
-    (rawProducts) => {
+    (rawProducts = []) => {
       return rawProducts.map((product) => ({
         ...product,
         urlType: getUrlType(product.source, product.region),
@@ -198,10 +200,23 @@ const ProductsList = () => {
   }, []);
 
   // Callback for selected deal_category
-  const onDealCategorySelect = useCallback((deal_category) => {
-    console.log({ deal_category });
-    history.push(generatePluginLink("", { deal_category, page: 1 }));
-  }, []);
+  const onDealCategorySelect = useCallback(
+    (deal_category) => {
+      // Get default dealType for this dealCategory
+      const dealType = dealTypes.find(
+        ({ deal_category: dealCategory }) => dealCategory === deal_category
+      );
+
+      history.push(
+        generatePluginLink("", {
+          deal_category,
+          deal_type: dealType?.id,
+          page: 1,
+        })
+      );
+    },
+    [dealTypes]
+  );
 
   // Callback for selected deal_type
   const onDealTypeSelect = useCallback((deal_type) => {
@@ -250,18 +265,14 @@ const ProductsList = () => {
             label="Deal Category"
           />
         </div>
-        {tab === "home" ? (
-          <div className="products-list__deal-type-options">
-            <DealTypeSelect
-              className="products-list__deal-type-select"
-              value={dealType || ""}
-              onChange={onDealTypeSelect}
-              label="Deal Type"
-            />
-          </div>
-        ) : (
-          ""
-        )}
+        <div className="products-list__deal-type-options">
+          <DealTypeSelect
+            className="products-list__deal-type-select"
+            value={dealType || ""}
+            onChange={onDealTypeSelect}
+            label="Deal Type"
+          />
+        </div>
       </div>
       <div className="products-list__controls">
         <div className="products-list__bulk-controls">

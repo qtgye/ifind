@@ -43,7 +43,7 @@
     },
     "website_tab": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "url_list": {
       "type": "component",

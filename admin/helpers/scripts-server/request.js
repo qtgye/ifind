@@ -1,4 +1,5 @@
-const axios = require('axios');
+const axios = require("axios");
+const ENV = process.env;
 
 const scriptsServerUrl = (path = "/") =>
   [
@@ -18,7 +19,17 @@ const post = async (path = "/", data = {}) => {
   );
 };
 
+const get = async (path = "/") => {
+  return axios.get(scriptsServerUrl(path)).then(
+    ({ data }) => data,
+    (error) => {
+      throw error;
+    }
+  );
+};
+
 module.exports = {
   scriptsServerUrl,
   post,
+  get,
 };
