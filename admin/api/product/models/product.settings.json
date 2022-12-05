@@ -41,10 +41,6 @@
       "via": "products",
       "model": "source"
     },
-    "website_tab": {
-      "type": "string",
-      "required": false
-    },
     "url_list": {
       "type": "component",
       "repeatable": true,
@@ -137,6 +133,9 @@
       "default": "none"
     },
     "deal_type": {
+      "type": "string"
+    },
+    "website_tab": {
       "type": "string"
     }
   }
