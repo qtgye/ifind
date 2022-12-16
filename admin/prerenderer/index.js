@@ -28,8 +28,8 @@ class Prerenderer {
     LOGGER.log("Prerenderer initialized".magenta.bold);
   }
 
-  /**@return {Promise<Prerenderer>} */
-  async start() {
+  /**@return {Prerenderer} */
+  start() {
     this.stop();
 
     this.prerenderProcess = childProcess.fork(prerenderScript, [], {
@@ -39,20 +39,21 @@ class Prerenderer {
 
     this.prerenderProcess.stdout.on("data", (data) => {
       const message = data.toString().replace(/(^\s+|\s+$)/g, "");
-      // LOGGER.log(message, "INFO");
-      // console.log(message);
       this.#eventEmitter.emit("log", message);
     });
 
     this.prerenderProcess.stderr.on("data", (data) => {
       const message = data.toString().replace(/(^\s+|\s+$)/g, "");
-      // LOGGER.log(message, "ERROR");
-      // console.log(message);
       this.#eventEmitter.emit("error", message);
     });
 
-    this.prerenderProcess.on("exit", () => {
-      this.#eventEmitter.emit("exit");
+    this.prerenderProcess.on("error", (error) => {
+      console.log("prerender script error:", error);
+      // this.#eventEmitter.emit("error", message);
+    });
+
+    this.prerenderProcess.on("exit", (exitCode) => {
+      this.#eventEmitter.emit("exit", exitCode);
     });
 
     return this;
@@ -67,7 +68,8 @@ class Prerenderer {
   }
 
   stop() {
-    this.prerenderProcess?.kill("SIGINT");
+    const oldProcess = this.prerenderProcess;
+    oldProcess?.kill("SIGINT");
   }
 
   async getLogs() {
