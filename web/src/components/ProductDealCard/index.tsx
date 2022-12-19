@@ -4,7 +4,7 @@ import dealTypes from "config/deal-types";
 import PercentCircle from "components/PercentCircle";
 import RatingWarps from "components/RatingWarps";
 
-
+import { useProductsByDeals } from "providers/productsByDealsContext";
 
 const ProductDealCard: ProductDealCardComponent = ({
   id,
@@ -22,6 +22,8 @@ const ProductDealCard: ProductDealCardComponent = ({
   onClick,
   additional_info = "stocks_available",
 }) => {
+  const { productsByDeals = [] } = useProductsByDeals();
+  const [dealTypeData, setDealTypeData] = useState<DealType>();
   const [productURL, setProductURL] = useState<string>("");
   const [productPrice, setProductPrice] = useState<string | null>(null);
   const [originalPrice, setOriginalPrice] = useState<number>();
@@ -42,15 +44,10 @@ const ProductDealCard: ProductDealCardComponent = ({
       setStockPercent(quantity_available_percent);
     } else {
       // Determine url and price according to product.deal_type
-      const [dealKey, dealData] =
-        Object.entries(dealTypes as DealTypeSiteMap).find(
-          ([key, deal]) => deal.site === deal_merchant || key === deal_type
-        ) || [];
-
-      if (dealKey) {
+      if (dealTypeData) {
         const matchedOtherSiteDetails = url_list?.find((otherSiteDetails) =>
-          new RegExp(dealData?.site || "no-match-name", "i").test(
-            otherSiteDetails?.source?.name || ""
+          new RegExp(dealTypeData?.site || "no-match-name", "i").test(
+            dealTypeData.site as string
           )
         );
 
@@ -72,6 +69,7 @@ const ProductDealCard: ProductDealCardComponent = ({
     price_original,
     discount_percent,
     quantity_available_percent,
+    dealTypeData,
   ]);
 
   const onCardClick = useCallback(
@@ -93,8 +91,23 @@ const ProductDealCard: ProductDealCardComponent = ({
   );
 
   useEffect(() => {
-    getProductDetails();
-  }, [deal_type, getProductDetails]);
+    if (dealTypeData) {
+      getProductDetails();
+    }
+  }, [deal_type, getProductDetails, dealTypeData]);
+
+  useEffect(() => {
+    // Get matching dealType for this product
+    if (productsByDeals.length) {
+      const matchedDealType = productsByDeals.find(
+        ({ deal_type: dealType }) => dealType.id === deal_type
+      );
+
+      if (matchedDealType) {
+        setDealTypeData(matchedDealType.deal_type);
+      }
+    }
+  }, [productsByDeals, deal_type]);
 
   return (
     <a

@@ -22,7 +22,7 @@ export const getSearchParams = () => {
   return mapSearchParam();
 }
 
-export const useSearchParams = (): {[key: string]: any} => {
+export const useSearchParams = <SearchParamType>(): Partial<SearchParamType> => {
   const { search } = useLocation();
   const [ searchParams, setSearchParams ] = useState(getSearchParams());
 

@@ -1,10 +1,18 @@
-const dealTypes = appRequire("api/ifind/deal-types");
+// const dealTypes = appRequire("api/ifind/deal-types");
 const offersCategories = appRequire("api/ifind/offers-categories");
+
+const {
+  all: getAllDealCategories,
+} = require("../../../../helpers/scripts-server/deal-categories");
+const {
+  all: getAllDealTypes,
+} = require("../../../../helpers/scripts-server/deal-types");
+
 const axios = require("axios").default;
 const https = require("https");
 var request = require("request");
 
-const ENV = require('dotenv').config().parsed || {};
+const ENV = require("dotenv").config().parsed || {};
 
 var agentOptions;
 var agent;
@@ -22,23 +30,26 @@ agent = new https.Agent(agentOptions);
 const PRODUCTS_PER_PAGE = 999999;
 
 module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
-  const sources = await strapi.services.source.find();
-  let scheduledTasks = null;
+  const [dealTypes, dealCategories, scheduledTasks, sources] =
+    await Promise.all([
+      getAllDealTypes(),
+      getAllDealCategories(),
+      axios
+        .post("https://script.ifindilu.de/task/getTaskList")
+        .then(({ data }) => data.tasks)
+        .catch((err) => console.log("error ", err.message)),
+      strapi.services.source.find(),
+    ]);
 
-  await axios
-    .post("https://script.ifindilu.de/task/getTaskList")
-    .then((response) => {
-      scheduledTasks = response.data.tasks;
-    })
-    .catch((err) => console.log("error ", err.message));
-
-  const defaultOffersCategory = Object.keys(offersCategories).find(
-    (categoryKey) => offersCategories[categoryKey].isDefault
-  );
+  /**@return {string} */
+  const defaultOffersCategory =
+    Object.keys(dealCategories).find(
+      (categoryKey) => dealCategories[categoryKey].isDefault
+    ) || "";
 
   const offerCategory = offer_category
-    ? offersCategories[offer_category]
-    : offersCategories[defaultOffersCategory];
+    ? dealCategories[offer_category]
+    : dealCategories[defaultOffersCategory];
   const selectedDealTypes = offerCategory
     ? offerCategory.dealTypes.reduce((dealTypesMap, dealTypeKey) => {
         dealTypesMap[dealTypeKey] = dealTypes[dealTypeKey];
@@ -53,7 +64,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
   const productsByDeals = await Promise.all(
     Object.entries(selectedDealTypes)
       .filter(([dealTypeKey]) => (deal_type ? dealTypeKey === deal_type : true))
-      .map(async ([dealTypeKey, { site, label, nav_label, nav_icon }]) => {
+      .map(async ([dealTypeKey, { site, label, nav_label, nav_icon, id }]) => {
         const [products, total_products] = await Promise.all([
           strapi.services.product.find({
             deal_type: dealTypeKey,
@@ -86,6 +97,8 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
             last_run,
             nav_label,
             nav_icon,
+            site,
+            id,
           },
           products,
           total_products,

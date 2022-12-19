@@ -3,7 +3,9 @@
 // const createAmazonScraper = require("./amazon/amazonProductScraper");
 // const { getDetailsFromURL: getEbayDetails, ebayLink } = require("./ebay");
 // const { getDetailsFromURL: getAliExpressDetails } = require("./aliexpress");
+const { get } = require("./scripts-server/request");
 const dealTypesConfig = require("../api/ifind/deal-types");
+const dealTypesPromise = get("/dealType").then(({ data }) => data);
 
 const getProductDetails = async (
   productData,
@@ -35,7 +37,6 @@ const getProductDetails = async (
       //   console.error(err);
       //   await screenshotPageError(productURL);
       // }
-
       // const scrapedDetails = await amazonProductScraper.scrapeProduct(
       //   productURL,
       //   "de",
@@ -44,7 +45,6 @@ const getProductDetails = async (
       // Object.entries(scrapedDetails).forEach(([key, value]) => {
       //   scrapedData[key] = value;
       // });
-
       // Apply amazon affiliate link
       // scrapedData.amazon_url = amazonLink(productData.amazon_url);
     })(),
@@ -182,7 +182,7 @@ const hasInvalidRating = (product) =>
   );
 
 // Extracts the appropriate deal-specific data for a product
-const extractProductDealData = (product) => {
+const extractProductDealData = async (product) => {
   const {
     deal_type,
     price,
@@ -191,9 +191,9 @@ const extractProductDealData = (product) => {
     quantity_available_percent,
     url_list,
   } = product;
-  const matchedDealTypeConfig = dealTypesConfig[deal_type];
+  const matchedDealTypeConfig = dealTypesPromise[deal_type];
 
-  if ( !matchedDealTypeConfig ) {
+  if (!matchedDealTypeConfig) {
     return null;
   }
 

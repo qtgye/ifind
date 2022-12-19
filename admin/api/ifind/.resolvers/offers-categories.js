@@ -1,5 +1,4 @@
-const offersCategories = require("../offers-categories");
-const offersCategoriesOrder = require("../config/offers-categories-order");
+const { all } = require("../../../helpers/scripts-server/deal-categories");
 
 module.exports = {
   query: `
@@ -7,10 +6,9 @@ module.exports = {
     `,
   resolveQuery: {
     async offersCategories() {
-      return offersCategoriesOrder.map((offerCategoryID) => ({
-        id: offerCategoryID,
-        ...offersCategories[offerCategoryID],
-      }));
+      const dealCategories = await all();
+
+      return Object.values(dealCategories);
     },
   },
 };

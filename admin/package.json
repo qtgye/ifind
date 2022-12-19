@@ -37,6 +37,7 @@
     "@ckeditor/ckeditor5-build-classic": "^27.1.0",
     "@ckeditor/ckeditor5-react": "^3.0.2",
     "@reduxjs/toolkit": "^1.6.1",
+    "@types/axios": "^0.14.0",
     "@types/fs-extra": "^9.0.12",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",

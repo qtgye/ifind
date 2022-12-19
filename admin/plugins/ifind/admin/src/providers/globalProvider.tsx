@@ -1,7 +1,10 @@
-import React, { createContext, useState, useContext } from "react";
-
-export interface I_GlobalProviderProps
-  extends React.PropsWithChildren<JSX.Element> {}
+import React, {
+  createContext,
+  useState,
+  useContext,
+  PropsWithChildren,
+  ReactNode,
+} from "react";
 
 export interface I_GlobalProviderContext {
   isLoading?: boolean;
@@ -10,11 +13,15 @@ export interface I_GlobalProviderContext {
 
 export const GlobalContext = createContext<I_GlobalProviderContext>({});
 
-export const GlobalContextProvider = ({ children }: I_GlobalProviderProps) => {
+export const GlobalContextProvider = ({
+  children,
+}: PropsWithChildren<ReactNode>) => {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <GlobalContext.Provider value={{ isLoading, setIsLoading } as I_GlobalProviderContext}>
+    <GlobalContext.Provider
+      value={{ isLoading, setIsLoading } as I_GlobalProviderContext}
+    >
       {children}
     </GlobalContext.Provider>
   );

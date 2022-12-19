@@ -41,10 +41,6 @@
       "via": "products",
       "model": "source"
     },
-    "website_tab": {
-      "type": "string",
-      "required": true
-    },
     "url_list": {
       "type": "component",
       "repeatable": true,
@@ -97,17 +93,6 @@
       "repeatable": false,
       "component": "atoms.product-issues"
     },
-    "deal_type": {
-      "type": "enumeration",
-      "enum": [
-        "none",
-        "aliexpress_value_deals",
-        "amazon_flash_offers",
-        "ebay_wow_offers",
-        "mydealz_highlights"
-      ],
-      "default": "none"
-    },
     "quantity_available_percent": {
       "type": "decimal"
     },
@@ -146,6 +131,12 @@
         "warehouse"
       ],
       "default": "none"
+    },
+    "deal_type": {
+      "type": "string"
+    },
+    "website_tab": {
+      "type": "string"
     }
   }
 }

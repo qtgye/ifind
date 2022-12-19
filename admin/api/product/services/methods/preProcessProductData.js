@@ -98,14 +98,14 @@ module.exports = async (data, id) => {
 
   // If the product is a deal, compute for the additional deal-specific data
   if (!/none/i.test(data.deal_type)) {
-    const dealData = extractProductDealData(data);
+    const dealData = await extractProductDealData(data);
 
-    if ( dealData ) {
+    if (dealData) {
       if (dealData.quantity_available_percent) {
-        data.deal_quantity_available_percent = dealData.quantity_available_percent;
+        data.deal_quantity_available_percent =
+          dealData.quantity_available_percent;
       }
     }
-
   }
 
   // Change product status to Draft if some issues arised from the scraper

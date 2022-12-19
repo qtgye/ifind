@@ -1,8 +1,12 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  PropsWithChildren,
+  ReactNode,
+} from "react";
 import { useQuery } from "../helpers/query";
-
-export interface I_SourceRegionProviderProps
-  extends React.PropsWithChildren<JSX.Element> {}
 
 const sourcesRegionsQuery = `
   query {
@@ -33,7 +37,7 @@ export const SourceRegionContext = createContext<I_SourceRegionContext>({});
 
 export const SourceRegionProvider = ({
   children,
-}: I_SourceRegionProviderProps) => {
+}: PropsWithChildren<ReactNode>) => {
   const [sources, setSources] = useState<{ [key: string]: any }[]>([]);
   const [regions, setRegions] = useState<{ [key: string]: any }[]>([]);
   const { data, loading, error } = useQuery(sourcesRegionsQuery);

@@ -7,6 +7,7 @@ import { Select, Label } from "@buffetjs/core";
 import { useSourceRegion } from "../../providers/sourceRegionProvider";
 import { useProductsList } from "../../providers/productsListProvider";
 import { useGlobal } from "../../providers/globalProvider";
+import { useDealType } from "../../providers/dealTypeProvider";
 import { generatePluginLink } from "../../helpers/url";
 
 import Pagination from "../Pagination";
@@ -14,8 +15,8 @@ import SortControls from "../SortControls";
 import ProductFilters from "../ProductFilters";
 import TextInput from "../TextInput";
 import ProductStatusOptions from "../ProductStatusOptions";
-import WebsiteTabSelect from "../WebsiteTabSelect";
 import DealTypeSelect from "../DealTypeSelect";
+import DealCategorySelect from "../DealCategorySelect";
 import CustomRow from "./_custom-row";
 import ProductThumbnail from "./_product-thumbnail";
 import headers from "./_table-headers";
@@ -28,6 +29,7 @@ const ProductsList = () => {
   const history = useHistory();
   const { setIsLoading } = useGlobal();
   const { sources } = useSourceRegion();
+  const { dealTypes } = useDealType();
   const {
     products,
     loading,
@@ -35,6 +37,7 @@ const ProductsList = () => {
     searchTerm,
     tab,
     dealType,
+    dealCategory,
     // Values
     pageSize,
     sortBy,
@@ -42,9 +45,11 @@ const ProductsList = () => {
     totalPages,
     status,
   } = useProductsList();
-  const [rows, setRows] = useState<{[key: string]: any}[]>([]); // Processed products
+  const [rows, setRows] = useState<{ [key: string]: any }[]>([]); // Processed products
   const [allSelected, setAllSelected] = useState(false);
-  const [selectedItems, setSelectedItems] = useState<{[key: string]: any}[]>([]);
+  const [selectedItems, setSelectedItems] = useState<{ [key: string]: any }[]>(
+    []
+  );
   const [isFiltersVisible, setIsFiltersVisible] = useState(false);
   const [searchInput, setSearchInput] = useState(searchTerm);
   const [searchTermTimeout, setSearchTermTimeout] = useState<number>();
@@ -136,7 +141,7 @@ const ProductsList = () => {
 
   // Process raw products data to match table data
   const processProducts = useCallback(
-    (rawProducts) => {
+    (rawProducts = []) => {
       return rawProducts.map((product) => ({
         ...product,
         urlType: getUrlType(product.source, product.region),
@@ -194,23 +199,29 @@ const ProductsList = () => {
     history.push(generatePluginLink("", { status, page: 1 }));
   }, []);
 
-  // Callback for selected website tab
-  const onWebsiteTabSelect = useCallback((tab) => {
-    const params: { [key: string]: any } = { tab, page: 1 };
+  // Callback for selected deal_category
+  const onDealCategorySelect = useCallback(
+    (deal_category) => {
+      // Get default dealType for this dealCategory
+      const dealType = dealTypes.find(
+        ({ deal_category: dealCategory }) => dealCategory === deal_category
+      );
 
-    // When home tab is selected,
-    // Use default deal_type of amazon flash offers
-    if (tab === "home") {
-      params.deal_type = "amazon_flash_offers";
-    }
-
-    history.push(generatePluginLink("", params));
-  }, []);
+      history.push(
+        generatePluginLink("", {
+          deal_category,
+          deal_type: dealType?.id,
+          page: 1,
+        })
+      );
+    },
+    [dealTypes]
+  );
 
   // Callback for selected deal_type
   const onDealTypeSelect = useCallback((deal_type) => {
     history.push(generatePluginLink("", { deal_type, page: 1 }));
-  }, [])
+  }, []);
 
   useEffect(() => {
     setAllSelected(selectedItems.length === rows.length);
@@ -232,7 +243,7 @@ const ProductsList = () => {
   }, [searchInput]);
 
   useEffect(() => {
-    if ( typeof setIsLoading === 'function' ) {
+    if (typeof setIsLoading === "function") {
       setIsLoading(loading || false);
     }
   }, [loading]);
@@ -246,24 +257,22 @@ const ProductsList = () => {
             onChange={onProductStatusSelect}
           />
         </div>
-        <div className="products-list__tab-options">
-          <WebsiteTabSelect
-            className="products-list__tab-select"
-            value={tab}
-            onChange={onWebsiteTabSelect}
-            label="Website Tab"
+        <div className="products-list__category-options">
+          <DealCategorySelect
+            className="products-list__category-select"
+            value={dealCategory}
+            onChange={onDealCategorySelect}
+            label="Deal Category"
           />
         </div>
-        {tab === "home" ? (
-          <div className="products-list__deal-type-options">
-            <DealTypeSelect
-              className="products-list__deal-type-select"
-              value={dealType || ''}
-              onChange={onDealTypeSelect}
-              label="Deal Type"
-            />
-          </div>
-        ): ""}
+        <div className="products-list__deal-type-options">
+          <DealTypeSelect
+            className="products-list__deal-type-select"
+            value={dealType || ""}
+            onChange={onDealTypeSelect}
+            label="Deal Type"
+          />
+        </div>
       </div>
       <div className="products-list__controls">
         <div className="products-list__bulk-controls">

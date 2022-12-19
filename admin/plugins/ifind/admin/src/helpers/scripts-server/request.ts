@@ -24,3 +24,18 @@ export const post = async <CustomResponseData>(
     }
   );
 };
+
+export const get = async <CustomResponseData>(
+  path: string = "/",
+  data: { [key: string]: any } = {}
+): Promise<CustomResponseData extends ResponseData ? any : any> => {
+  return axios.get(scriptsServerUrl(path), data).then(
+    (response) => {
+      console.log("response -->", response.data);
+      return response.data;
+    },
+    (error) => {
+      throw (error);
+    }
+  );
+};

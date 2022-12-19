@@ -44,6 +44,8 @@ export const getProductsByDeals = async (offer_id: string = "") =>
           type
           icon
         }
+        site
+        id
       }
       total_products
       products {
@@ -72,6 +74,7 @@ export const getProductsByDeals = async (offer_id: string = "") =>
           price_original
           discount_percent
           quantity_available_percent
+          merchant
         }
       }
     }

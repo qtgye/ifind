@@ -34,6 +34,9 @@
     },
     "quantity_available_percent": {
       "type": "decimal"
+    },
+    "merchant": {
+      "type": "string"
     }
   }
 }
