@@ -13,27 +13,7 @@ module.exports = {
     context.status = 200;
     context.body = stream;
 
-    // Disable prerendering service in development
-    // if (/dev|local/.test(env.ENV)) {
-    //   console.info(
-    //     "Prerendering endpoint is disabled in development enviroment."
-    //   );
-    //   return true;
-    // }
-
     await new Promise(async (resolve) => {
-      // let tries = 5;
-      // const interval = setInterval(() => {
-      //   stream.push(Date.now() + "");
-
-      //   console.log("message added");
-
-      //   if (-!--tries) {
-      //     clearInterval(interval);
-      //     resolve(null);
-      //   }
-      // }, 1000);
-
       switch (command) {
         case "start":
           /**@type {Prerenderer} */
@@ -48,8 +28,7 @@ module.exports = {
             console.error(message);
           });
 
-          prerenderer.on("exit", (exitCode) => {
-            console.log("prerenderer exits", exitCode);
+          prerenderer.on("exit", () => {
             responseData.success = true;
             resolve(null);
           });
@@ -61,9 +40,6 @@ module.exports = {
           resolve(null);
       }
     });
-
-    console.log("prerender promise resolved");
-    console.log(responseData);
 
     stream.push(JSON.stringify(responseData));
     stream.push(null);
