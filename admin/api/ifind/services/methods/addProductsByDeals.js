@@ -1,4 +1,4 @@
-require('colors');
+require("colors");
 const deleteProductsByDeals = require("./deleteProductsByDeals");
 
 /**

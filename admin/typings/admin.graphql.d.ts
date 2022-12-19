@@ -85,6 +85,8 @@ declare global {
     nav_icon?: DealTypeNavIcon;
     source?: Source;
     last_run?: string;
+    site?: string;
+    id?: string;
   }
   
   export interface ProductsByDeal {
@@ -4529,6 +4531,8 @@ declare global {
     nav_icon?: DealTypeToNav_iconResolver<TParent>;
     source?: DealTypeToSourceResolver<TParent>;
     last_run?: DealTypeToLast_runResolver<TParent>;
+    site?: DealTypeToSiteResolver<TParent>;
+    id?: DealTypeToIdResolver<TParent>;
   }
   
   export interface DealTypeToNameResolver<TParent = any, TResult = any> {
@@ -4552,6 +4556,14 @@ declare global {
   }
   
   export interface DealTypeToLast_runResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface DealTypeToSiteResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface DealTypeToIdResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   

@@ -16,6 +16,8 @@ module.exports = `
     nav_icon: DealTypeNavIcon
     source: Source
     last_run: String
+    site: String
+    id: String
   }
 
   type ProductsByDeal {

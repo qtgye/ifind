@@ -21,7 +21,7 @@ const post = async (path = "/", data = {}) => {
 
 const get = async (path = "/") => {
   return axios.get(scriptsServerUrl(path)).then(
-    ({ data }) => data,
+    ({ data }) => data.data,
     (error) => {
       throw error;
     }
