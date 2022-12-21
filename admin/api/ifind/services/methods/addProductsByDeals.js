@@ -13,22 +13,9 @@ module.exports = async ({ deal_type, products }) => {
   const productChunks = [];
   const newProducts = [];
 
-  products.forEach((product, index) => {
-    if (index % 10 === 0) {
-      productChunks.push([]);
-    }
-
-    productChunks[productChunks.length - 1].push(product);
-  });
-
-  for (productsGroup of productChunks) {
-    const addedProducts = await Promise.all(
-      productsGroup.map(
-        async (productData) => await strapi.services.product.create(productData)
-      )
-    );
-
-    newProducts.push(...addedProducts);
+  for (let product of products) {
+    const addedProduct = await strapi.services.product.create(product);
+    newProducts.push(addedProduct);
   }
 
   console.info(`Added ${newProducts.length} new products.`.bold.green);
