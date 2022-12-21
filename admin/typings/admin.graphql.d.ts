@@ -329,6 +329,7 @@ declare global {
     aliexpress = 'aliexpress',
     amazon = 'amazon',
     ebay = 'ebay',
+    notebooksbilliger = 'notebooksbilliger',
     microphone = 'microphone',
     monitor_screen = 'monitor_screen',
     motherboard = 'motherboard',
