@@ -14,15 +14,19 @@ const span = trace("next-export-cli");
 try {
   (async () => {
     // Ensure empty out dir
-    console.info('Cleaning up output directories.');
+    console.info("Cleaning up output directories.");
     fs.rmdirSync(OUT_DIR, { recursive: true, force: true });
 
+    // Copy icons
+    console.info("Copying icons");
+    require("./load-icons");
+
     // Run next build
-    console.info('Running NextJS build');
+    console.info("Running NextJS build");
     await nextBuild(PROJECT_ROOT, null, false, true, true);
 
     // Run next export
-    console.info('Running NextJS export');
+    console.info("Running NextJS export");
     await nextExport(
       PROJECT_ROOT,
       {
