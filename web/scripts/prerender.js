@@ -16,6 +16,9 @@ const ADMIN_HEALTHCHECK_MAX_TRIES = 60;
 // Source: next/dist/cli/next-export
 const span = trace("next-export-cli");
 
+// Disable certificate check
+process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = "0";
+
 const adminHealthCheck = () =>
   new Promise(async (resolve) => {
     let tries = ADMIN_HEALTHCHECK_MAX_TRIES;
