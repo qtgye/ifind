@@ -41,6 +41,10 @@ const adminHealthCheck = () =>
           }),
         });
 
+        if (response.status >= 500) {
+          throw new Error(`${response.status} ${response.statusText}`);
+        }
+
         const { data } = await response.json();
 
         if (data && data.products && data.products.length) {
