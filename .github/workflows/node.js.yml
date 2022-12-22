@@ -63,8 +63,7 @@ jobs:
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== BUILDING SITE ====/" && \
-          echo "Waiting for 2 minutes before proceeding to ensure admin is up..." && \
-          sleep 120s && \
+          echo "Running prerender..." && \
           node scripts/prerender.js
 
     # TO DO:
