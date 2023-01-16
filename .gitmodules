@@ -1,3 +1,6 @@
 [submodule "admin/ifind-utilities"]
 	path = admin/ifind-utilities
 	url = git@github.com:BigKuLaK/ifind-utilities.git
+  branch = main
+[submodule "ifind-utilities"]
+	branch = main
