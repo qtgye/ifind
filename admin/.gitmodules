@@ -1,3 +1,0 @@
-[submodule "ifind-utilities"]
-	branch = main
-	merge = rebase
