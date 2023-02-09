@@ -134,9 +134,6 @@
     },
     "deal_type": {
       "type": "string"
-    },
-    "website_tab": {
-      "type": "string"
     }
   }
 }
