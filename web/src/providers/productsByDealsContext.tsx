@@ -74,7 +74,6 @@ export const getProductsByDeals = async (offer_id: string = "") =>
           price_original
           discount_percent
           quantity_available_percent
-          merchant
         }
       }
     }
