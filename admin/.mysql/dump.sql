@@ -13946,7 +13946,6 @@ CREATE TABLE `products` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `title` varchar(255) NOT NULL,
-  `website_tab` varchar(255) NOT NULL,
   `position` int(11) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `clicks_count` int(11) DEFAULT NULL,
