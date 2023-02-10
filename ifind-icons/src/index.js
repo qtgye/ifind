@@ -2,6 +2,7 @@ require("colors");
 const fs = require("fs-extra");
 const path = require("path");
 const glob = require("glob");
+const IfindIcons = require("../ifind-utilities/airtable/models/ifind_icons");
 
 const MARKDOWN_TABLE_COLUMNS = 5;
 
@@ -52,7 +53,17 @@ Promise.all([
       resolveApp("README.md"),
       readMeTemplate.replace("{iconsTable}", iconsTableMd)
     ))(),
-]).then(() => {
+]).then(async () => {
+  console.log("Saving icon names to Airtable.");
+
+  // Match icons
+  const { deleted, added } = await IfindIcons.matchList(
+    iconsList.slice(1).map((id) => ({ id }))
+  );
+
+  console.log(`Deleted icons:`, deleted);
+  console.log(`Added icons:`, added);
+
   console.log("Generated icons:".green.bold);
   console.log(iconsList.slice(1).join(", ").green);
 });
