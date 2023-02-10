@@ -4,3 +4,9 @@
   branch = main
 	update = merge
 
+[submodule "admin/ifind-utilities"]
+	path = admin/ifind-utilities
+	url = https://github.com/BigKuLaK/ifind-utilities.git
+[submodule "ifind-icons/ifind-utilities"]
+	path = ifind-icons/ifind-utilities
+	url = https://github.com/BigKuLaK/ifind-utilities.git
