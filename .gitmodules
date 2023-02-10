@@ -1,5 +1,5 @@
 [submodule "ifind-utilities"]
-	path = admin/ifind-utilities
+	path = ifind-utilities
 	url = git@github.com:BigKuLaK/ifind-utilities.git
   branch = main
 	update = merge
