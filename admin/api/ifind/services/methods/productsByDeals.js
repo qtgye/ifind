@@ -51,7 +51,7 @@ module.exports = async ({ deal_type = "", start = 0, offer_category = "" }) => {
     ? dealCategories[offer_category]
     : dealCategories[defaultOffersCategory];
   const selectedDealTypes = offerCategory
-    ? offerCategory.dealTypes.reduce((dealTypesMap, dealTypeKey) => {
+    ? (offerCategory.dealTypes || []).reduce((dealTypesMap, dealTypeKey) => {
         if (!dealTypes[dealTypeKey].disabled) {
           dealTypesMap[dealTypeKey] = dealTypes[dealTypeKey];
         }
