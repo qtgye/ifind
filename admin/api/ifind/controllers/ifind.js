@@ -3,6 +3,13 @@ const Prerenderer = require("../../../prerenderer");
 
 module.exports = {
   async prerender(context) {
+    // Skip prerender on development
+    if (/dev/i.test(process.env.ENV)) {
+      console.info(`Skipping prerender on local environment.`.cyan);
+      context.status = 200;
+      return;
+    }
+
     const { command } = context.params;
     const stream = new Readable({ read() {} });
     const responseData = {

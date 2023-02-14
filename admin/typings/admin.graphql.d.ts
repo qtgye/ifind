@@ -334,6 +334,7 @@ declare global {
     ebay = 'ebay',
     mindfactory = 'mindfactory',
     notebooksbilliger = 'notebooksbilliger',
+    tom_tailor = 'tom_tailor',
     microphone = 'microphone',
     monitor_screen = 'monitor_screen',
     motherboard = 'motherboard',
