@@ -6,27 +6,14 @@ import React, {
   useCallback,
 } from "react";
 import { useParams } from "react-router-dom";
-import { useGQLFetch } from "../helpers/gqlFetch";
+import moment from "moment";
 import { post } from "../helpers/scripts-server/request";
 import { useScriptsServerUrl } from "../providers/scheduledTasksListProvider";
 import axios from "axios";
 
-const scheduledTaskQuery = `
-query GetScheduledTask ( $task: String! ) {
-  getTask(id: $task ) {
-    name
-    logs {
-      timestamp
-      date_time
-      type
-      message
-    }
-    canRun
-  }
-}
-`;
-
-export const ScheduledTaskContext = createContext<Partial<ScheduledTaskContextData>>({});
+export const ScheduledTaskContext = createContext<
+  Partial<ScheduledTaskContextData>
+>({});
 
 export const ScheduledTaskProvider = ({
   children,
@@ -34,16 +21,23 @@ export const ScheduledTaskProvider = ({
   const getScriptsServerUrl = useScriptsServerUrl();
   const { taskID } = useParams<ScheduledTaskRouteParams>();
   const [task, setTask] = useState<Task>();
+  const [serverTimeFormatted, setServerTimeFormatted] = useState("");
 
   const getTask = useCallback(async () => {
-    axios.get(await getScriptsServerUrl(`/task/logs?task=${taskID}&after=`)).then(
-      (response) => {
-        response && setTask(response.data.data);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+    axios
+      .get(await getScriptsServerUrl(`/task/logs?task=${taskID}&after=`))
+      .then(
+        (response) => {
+          response &&
+            setTask({
+              ...response.data.data,
+            });
+          setServerTimeFormatted(moment.utc().format("YYYY-MMM-DD HH:mm:ss"));
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }, []);
 
   const updateTask = useCallback(async (taskID, newData) => {
@@ -51,8 +45,8 @@ export const ScheduledTaskProvider = ({
   }, []);
 
   const updatePriority = useCallback(async (taskID, newPriority) => {
-    console.log('updating priority', taskID, newPriority);
-    await post(`/task/priority?task=${taskID}`, {priority: newPriority});
+    console.log("updating priority", taskID, newPriority);
+    await post(`/task/priority?task=${taskID}`, { priority: newPriority });
   }, []);
 
   const refetch = useCallback(() => {
@@ -66,7 +60,9 @@ export const ScheduledTaskProvider = ({
   }, [taskID]);
 
   return (
-    <ScheduledTaskContext.Provider value={{ task, updateTask, updatePriority, refetch }}>
+    <ScheduledTaskContext.Provider
+      value={{ task, serverTimeFormatted, updateTask, updatePriority, refetch }}
+    >
       {children}
     </ScheduledTaskContext.Provider>
   );

@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect } from "react";
 import { Header } from "@buffetjs/custom";
 
-import { useScheduledTask, ScheduledTaskProvider } from '../../providers/scheduledTaskProvider';
+import {
+  useScheduledTask,
+  ScheduledTaskProvider,
+} from "../../providers/scheduledTaskProvider";
 
 import LogsList from "../../components/LogsList";
 
@@ -12,8 +15,8 @@ export type statusLabelMapType = {
 };
 
 const ScheduledTask = (): JSX.Element => {
-  const { task, refetch }: ScheduledTaskContextData =
-  useScheduledTask();
+  const { task, serverTimeFormatted, refetch }: ScheduledTaskContextData =
+    useScheduledTask();
 
   const refetchData = useCallback(() => {
     refetch && refetch();
@@ -28,6 +31,16 @@ const ScheduledTask = (): JSX.Element => {
       <div className="row">
         <Header
           title={{ label: task?.name }}
+          actions={[
+            {
+              Component: () => (
+                <div className="scheduled-tasks__server-time">
+                  <strong>Server Time:&nbsp;</strong> {serverTimeFormatted}{" "}
+                  (UTC)
+                </div>
+              ),
+            },
+          ]}
         />
         <div className="background-process__logs">
           {task?.logs?.length && <LogsList logs={task.logs} />}
