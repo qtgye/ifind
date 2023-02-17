@@ -4,6 +4,7 @@ import formatGranularTime from "ifind-utilities/date-time/formatGranularTime";
 import PercentCircle from "components/PercentCircle";
 import RatingWarps from "components/RatingWarps";
 import RenderIf from "components/RenderIf";
+import IfindIcon from "components/IfindIcon";
 
 import { useProductsByDeals } from "providers/productsByDealsContext";
 
@@ -167,6 +168,7 @@ const ProductDealCard: ProductDealCardComponent = ({
             <RenderIf condition={deal_expiry}>
               <div className="product-deal-card__countdown">
                 {formatGranularTime(countdown)}
+                <IfindIcon icon={"countdown"} />
               </div>
             </RenderIf>
             <PercentCircle

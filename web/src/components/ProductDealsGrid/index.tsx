@@ -79,9 +79,11 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   }, [visibleProductsAmount, productsList]);
 
   useEffect(() => {
-    const [mostRecentProduct] = productsList.sort((productA, productB) =>
-      productA.created_at > productB.created_at ? -1 : 1
-    );
+    const [mostRecentProduct] = productsList
+      .slice()
+      .sort((productA, productB) =>
+        productA.created_at > productB.created_at ? -1 : 1
+      );
 
     if (mostRecentProduct) {
       setLastUpdated(dayjs.utc(mostRecentProduct.created_at).valueOf());
