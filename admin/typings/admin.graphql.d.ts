@@ -1614,9 +1614,9 @@ declare global {
     price_original?: number;
     scrape_batch_uid?: string;
     deal_quantity_available_percent?: number;
-    deal_merchant?: string;
     offer_category?: ENUM_PRODUCT_OFFER_CATEGORY;
     deal_type?: string;
+    deal_expiry?: Long;
     product_changes?: Array<ProductChange | null>;
     tags?: Array<Tag | null>;
   }
@@ -1709,9 +1709,9 @@ declare global {
     price_original?: Array<ProductConnectionPrice_original | null>;
     scrape_batch_uid?: Array<ProductConnectionScrape_batch_uid | null>;
     deal_quantity_available_percent?: Array<ProductConnectionDeal_quantity_available_percent | null>;
-    deal_merchant?: Array<ProductConnectionDeal_merchant | null>;
     offer_category?: Array<ProductConnectionOffer_category | null>;
     deal_type?: Array<ProductConnectionDeal_type | null>;
+    deal_expiry?: Array<ProductConnectionDeal_expiry | null>;
   }
   
   export interface ProductConnectionId {
@@ -1834,17 +1834,17 @@ declare global {
     connection?: ProductConnection;
   }
   
-  export interface ProductConnectionDeal_merchant {
-    key?: string;
-    connection?: ProductConnection;
-  }
-  
   export interface ProductConnectionOffer_category {
     key?: string;
     connection?: ProductConnection;
   }
   
   export interface ProductConnectionDeal_type {
+    key?: string;
+    connection?: ProductConnection;
+  }
+  
+  export interface ProductConnectionDeal_expiry {
     key?: string;
     connection?: ProductConnection;
   }
@@ -1875,9 +1875,9 @@ declare global {
     scrape_batch_uid?: string;
     tags?: Array<string | null>;
     deal_quantity_available_percent?: number;
-    deal_merchant?: string;
     offer_category?: ENUM_PRODUCT_OFFER_CATEGORY;
     deal_type?: string;
+    deal_expiry?: Long;
     created_by?: string;
     updated_by?: string;
   }
@@ -1908,9 +1908,9 @@ declare global {
     scrape_batch_uid?: string;
     tags?: Array<string | null>;
     deal_quantity_available_percent?: number;
-    deal_merchant?: string;
     offer_category?: ENUM_PRODUCT_OFFER_CATEGORY;
     deal_type?: string;
+    deal_expiry?: Long;
     created_by?: string;
     updated_by?: string;
   }
@@ -3184,9 +3184,9 @@ declare global {
   ProductConnectionPrice_original |
   ProductConnectionScrape_batch_uid |
   ProductConnectionDeal_quantity_available_percent |
-  ProductConnectionDeal_merchant |
   ProductConnectionOffer_category |
   ProductConnectionDeal_type |
+  ProductConnectionDeal_expiry |
   createProductPayload |
   updateProductPayload |
   deleteProductPayload |
@@ -3467,9 +3467,9 @@ declare global {
   'ProductConnectionPrice_original' |
   'ProductConnectionScrape_batch_uid' |
   'ProductConnectionDeal_quantity_available_percent' |
-  'ProductConnectionDeal_merchant' |
   'ProductConnectionOffer_category' |
   'ProductConnectionDeal_type' |
+  'ProductConnectionDeal_expiry' |
   'createProductPayload' |
   'updateProductPayload' |
   'deleteProductPayload' |
@@ -3750,9 +3750,9 @@ declare global {
     ProductConnectionPrice_original: ProductConnectionPrice_original;
     ProductConnectionScrape_batch_uid: ProductConnectionScrape_batch_uid;
     ProductConnectionDeal_quantity_available_percent: ProductConnectionDeal_quantity_available_percent;
-    ProductConnectionDeal_merchant: ProductConnectionDeal_merchant;
     ProductConnectionOffer_category: ProductConnectionOffer_category;
     ProductConnectionDeal_type: ProductConnectionDeal_type;
+    ProductConnectionDeal_expiry: ProductConnectionDeal_expiry;
     createProductPayload: createProductPayload;
     updateProductPayload: updateProductPayload;
     deleteProductPayload: deleteProductPayload;
@@ -4243,9 +4243,9 @@ declare global {
     ProductConnectionPrice_original?: ProductConnectionPrice_originalTypeResolver;
     ProductConnectionScrape_batch_uid?: ProductConnectionScrape_batch_uidTypeResolver;
     ProductConnectionDeal_quantity_available_percent?: ProductConnectionDeal_quantity_available_percentTypeResolver;
-    ProductConnectionDeal_merchant?: ProductConnectionDeal_merchantTypeResolver;
     ProductConnectionOffer_category?: ProductConnectionOffer_categoryTypeResolver;
     ProductConnectionDeal_type?: ProductConnectionDeal_typeTypeResolver;
+    ProductConnectionDeal_expiry?: ProductConnectionDeal_expiryTypeResolver;
     createProductPayload?: createProductPayloadTypeResolver;
     updateProductPayload?: updateProductPayloadTypeResolver;
     deleteProductPayload?: deleteProductPayloadTypeResolver;
@@ -6854,9 +6854,9 @@ declare global {
     price_original?: ProductToPrice_originalResolver<TParent>;
     scrape_batch_uid?: ProductToScrape_batch_uidResolver<TParent>;
     deal_quantity_available_percent?: ProductToDeal_quantity_available_percentResolver<TParent>;
-    deal_merchant?: ProductToDeal_merchantResolver<TParent>;
     offer_category?: ProductToOffer_categoryResolver<TParent>;
     deal_type?: ProductToDeal_typeResolver<TParent>;
+    deal_expiry?: ProductToDeal_expiryResolver<TParent>;
     product_changes?: ProductToProduct_changesResolver<TParent>;
     tags?: ProductToTagsResolver<TParent>;
   }
@@ -6965,15 +6965,15 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ProductToDeal_merchantResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
   export interface ProductToOffer_categoryResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface ProductToDeal_typeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductToDeal_expiryResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -7265,9 +7265,9 @@ declare global {
     price_original?: ProductGroupByToPrice_originalResolver<TParent>;
     scrape_batch_uid?: ProductGroupByToScrape_batch_uidResolver<TParent>;
     deal_quantity_available_percent?: ProductGroupByToDeal_quantity_available_percentResolver<TParent>;
-    deal_merchant?: ProductGroupByToDeal_merchantResolver<TParent>;
     offer_category?: ProductGroupByToOffer_categoryResolver<TParent>;
     deal_type?: ProductGroupByToDeal_typeResolver<TParent>;
+    deal_expiry?: ProductGroupByToDeal_expiryResolver<TParent>;
   }
   
   export interface ProductGroupByToIdResolver<TParent = any, TResult = any> {
@@ -7366,15 +7366,15 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ProductGroupByToDeal_merchantResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
   export interface ProductGroupByToOffer_categoryResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
   export interface ProductGroupByToDeal_typeResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductGroupByToDeal_expiryResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -7690,19 +7690,6 @@ declare global {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
-  export interface ProductConnectionDeal_merchantTypeResolver<TParent = any> {
-    key?: ProductConnectionDeal_merchantToKeyResolver<TParent>;
-    connection?: ProductConnectionDeal_merchantToConnectionResolver<TParent>;
-  }
-  
-  export interface ProductConnectionDeal_merchantToKeyResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
-  export interface ProductConnectionDeal_merchantToConnectionResolver<TParent = any, TResult = any> {
-    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
-  }
-  
   export interface ProductConnectionOffer_categoryTypeResolver<TParent = any> {
     key?: ProductConnectionOffer_categoryToKeyResolver<TParent>;
     connection?: ProductConnectionOffer_categoryToConnectionResolver<TParent>;
@@ -7726,6 +7713,19 @@ declare global {
   }
   
   export interface ProductConnectionDeal_typeToConnectionResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductConnectionDeal_expiryTypeResolver<TParent = any> {
+    key?: ProductConnectionDeal_expiryToKeyResolver<TParent>;
+    connection?: ProductConnectionDeal_expiryToConnectionResolver<TParent>;
+  }
+  
+  export interface ProductConnectionDeal_expiryToKeyResolver<TParent = any, TResult = any> {
+    (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
+  }
+  
+  export interface ProductConnectionDeal_expiryToConnectionResolver<TParent = any, TResult = any> {
     (parent: TParent, args: {}, context: any, info: GraphQLResolveInfo): TResult;
   }
   
@@ -9844,7 +9844,7 @@ declare global {
   }
   
   export interface MorphTypeResolver<TParent = any> {
-    (parent: TParent, context: any, info: GraphQLResolveInfo): 'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'CategoryWithChild' | 'DealTypeLabelTranslation' | 'DealTypeNavIcon' | 'DealType' | 'ProductsByDeal' | 'TaskLogEntry' | 'Task' | 'ScheduledTask' | 'ScheduledTaskPayload' | 'ScheduledTaskListPayload' | 'OffersCategoryLabelTranslation' | 'OffersCategory' | 'EnvType' | 'PageData' | 'ProductCategory' | 'ProductsListPayload' | 'NaturalList' | 'ProductClicksDetails' | 'FixedProductsPayload' | 'GiftIdeasPayload' | 'Category' | 'CategoryConnection' | 'CategoryAggregator' | 'CategoryAggregatorSum' | 'CategoryAggregatorAvg' | 'CategoryAggregatorMin' | 'CategoryAggregatorMax' | 'CategoryGroupBy' | 'CategoryConnectionId' | 'CategoryConnectionCreated_at' | 'CategoryConnectionUpdated_at' | 'CategoryConnectionSlug' | 'CategoryConnectionUrl' | 'CategoryConnectionParent' | 'CategoryConnectionLanguage' | 'CategoryConnectionIcon' | 'CategoryConnectionOrder' | 'CategoryConnectionLabel_preview' | 'CategoryConnectionRegion' | 'CategoryConnectionSource' | 'CategoryConnectionLabel_translations_json' | 'CategoryConnectionChildren_count' | 'CategoryConnectionProducts_count' | 'CategoryConnectionDeal_category' | 'createCategoryPayload' | 'updateCategoryPayload' | 'deleteCategoryPayload' | 'ContactDetails' | 'updateContactDetailPayload' | 'deleteContactDetailPayload' | 'Currency' | 'CurrencyConnection' | 'CurrencyAggregator' | 'CurrencyGroupBy' | 'CurrencyConnectionId' | 'CurrencyConnectionCreated_at' | 'CurrencyConnectionUpdated_at' | 'CurrencyConnectionName' | 'CurrencyConnectionCode' | 'CurrencyConnectionSymbol' | 'CurrencyConnectionLabel_preview' | 'createCurrencyPayload' | 'updateCurrencyPayload' | 'deleteCurrencyPayload' | 'FooterSettings' | 'updateFooterSettingPayload' | 'deleteFooterSettingPayload' | 'Language' | 'LanguageConnection' | 'LanguageAggregator' | 'LanguageGroupBy' | 'LanguageConnectionId' | 'LanguageConnectionCreated_at' | 'LanguageConnectionUpdated_at' | 'LanguageConnectionCode' | 'LanguageConnectionName' | 'LanguageConnectionCountry_flag' | 'createLanguagePayload' | 'updateLanguagePayload' | 'deleteLanguagePayload' | 'Page' | 'PageConnection' | 'PageAggregator' | 'PageGroupBy' | 'PageConnectionId' | 'PageConnectionCreated_at' | 'PageConnectionUpdated_at' | 'PageConnectionSlug' | 'PageConnectionLanguage' | 'PageConnectionPublished_at' | 'createPagePayload' | 'updatePagePayload' | 'deletePagePayload' | 'ProductAttribute' | 'ProductAttributeConnection' | 'ProductAttributeAggregator' | 'ProductAttributeGroupBy' | 'ProductAttributeConnectionId' | 'ProductAttributeConnectionCreated_at' | 'ProductAttributeConnectionUpdated_at' | 'ProductAttributeConnectionName' | 'ProductAttributeConnectionCode' | 'ProductAttributeConnectionIs_common' | 'ProductAttributeConnectionData_type' | 'ProductAttributeConnectionCustom_formula' | 'ProductAttributeConnectionDisable_min' | 'ProductAttributeConnectionDisable_max' | 'ProductAttributeConnectionMin_label' | 'ProductAttributeConnectionMax_label' | 'ProductAttributeConnectionProduct_prop' | 'createProductAttributePayload' | 'updateProductAttributePayload' | 'deleteProductAttributePayload' | 'ProductChange' | 'ProductChangeConnection' | 'ProductChangeAggregator' | 'ProductChangeGroupBy' | 'ProductChangeConnectionId' | 'ProductChangeConnectionCreated_at' | 'ProductChangeConnectionUpdated_at' | 'ProductChangeConnectionState' | 'ProductChangeConnectionAdmin_user' | 'ProductChangeConnectionDate_time' | 'ProductChangeConnectionProduct' | 'ProductChangeConnectionChange_type' | 'createProductChangePayload' | 'updateProductChangePayload' | 'deleteProductChangePayload' | 'Product' | 'ProductConnection' | 'ProductAggregator' | 'ProductAggregatorSum' | 'ProductAggregatorAvg' | 'ProductAggregatorMin' | 'ProductAggregatorMax' | 'ProductGroupBy' | 'ProductConnectionId' | 'ProductConnectionCreated_at' | 'ProductConnectionUpdated_at' | 'ProductConnectionTitle' | 'ProductConnectionPosition' | 'ProductConnectionPrice' | 'ProductConnectionClicks_count' | 'ProductConnectionImage' | 'ProductConnectionRegion' | 'ProductConnectionSource' | 'ProductConnectionDetails_html' | 'ProductConnectionFinal_rating' | 'ProductConnectionAmazon_url' | 'ProductConnectionRelease_date' | 'ProductConnectionAdmin_user' | 'ProductConnectionCategory_temp' | 'ProductConnectionCategory' | 'ProductConnectionStatus' | 'ProductConnectionProduct_issues' | 'ProductConnectionQuantity_available_percent' | 'ProductConnectionDiscount_percent' | 'ProductConnectionPrice_original' | 'ProductConnectionScrape_batch_uid' | 'ProductConnectionDeal_quantity_available_percent' | 'ProductConnectionDeal_merchant' | 'ProductConnectionOffer_category' | 'ProductConnectionDeal_type' | 'createProductPayload' | 'updateProductPayload' | 'deleteProductPayload' | 'Region' | 'RegionConnection' | 'RegionAggregator' | 'RegionGroupBy' | 'RegionConnectionId' | 'RegionConnectionCreated_at' | 'RegionConnectionUpdated_at' | 'RegionConnectionName' | 'RegionConnectionCode' | 'RegionConnectionCurrency' | 'createRegionPayload' | 'updateRegionPayload' | 'deleteRegionPayload' | 'SocialNetwork' | 'updateSocialNetworkPayload' | 'deleteSocialNetworkPayload' | 'Source' | 'SourceConnection' | 'SourceAggregator' | 'SourceGroupBy' | 'SourceConnectionId' | 'SourceConnectionCreated_at' | 'SourceConnectionUpdated_at' | 'SourceConnectionName' | 'SourceConnectionButton_logo' | 'createSourcePayload' | 'updateSourcePayload' | 'deleteSourcePayload' | 'Tag' | 'TagConnection' | 'TagAggregator' | 'TagGroupBy' | 'TagConnectionId' | 'TagConnectionCreated_at' | 'TagConnectionUpdated_at' | 'TagConnectionSlug' | 'TagConnectionLanguage' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionPhoto' | 'UsersPermissionsUserConnectionFirst_name' | 'UsersPermissionsUserConnectionLast_name' | 'UsersPermissionsUserConnectionNickname' | 'UsersPermissionsUserConnectionFull_name_preview' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentAtomsPageLink' | 'ComponentAtomsProductAttrRating' | 'ComponentAtomsProductAttr' | 'ComponentAtomsProductIssues' | 'ComponentAtomsSocialNetwork' | 'ComponentAtomsTranslateableLabel' | 'ComponentAtomsUrlWithType' | 'ComponentComponentsNaturalList' | 'ComponentEntryFieldsFooterFields' | 'ComponentEntryFieldsPageFields' | 'ComponentEntryFieldsSourceSelectors' | Promise<'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'CategoryWithChild' | 'DealTypeLabelTranslation' | 'DealTypeNavIcon' | 'DealType' | 'ProductsByDeal' | 'TaskLogEntry' | 'Task' | 'ScheduledTask' | 'ScheduledTaskPayload' | 'ScheduledTaskListPayload' | 'OffersCategoryLabelTranslation' | 'OffersCategory' | 'EnvType' | 'PageData' | 'ProductCategory' | 'ProductsListPayload' | 'NaturalList' | 'ProductClicksDetails' | 'FixedProductsPayload' | 'GiftIdeasPayload' | 'Category' | 'CategoryConnection' | 'CategoryAggregator' | 'CategoryAggregatorSum' | 'CategoryAggregatorAvg' | 'CategoryAggregatorMin' | 'CategoryAggregatorMax' | 'CategoryGroupBy' | 'CategoryConnectionId' | 'CategoryConnectionCreated_at' | 'CategoryConnectionUpdated_at' | 'CategoryConnectionSlug' | 'CategoryConnectionUrl' | 'CategoryConnectionParent' | 'CategoryConnectionLanguage' | 'CategoryConnectionIcon' | 'CategoryConnectionOrder' | 'CategoryConnectionLabel_preview' | 'CategoryConnectionRegion' | 'CategoryConnectionSource' | 'CategoryConnectionLabel_translations_json' | 'CategoryConnectionChildren_count' | 'CategoryConnectionProducts_count' | 'CategoryConnectionDeal_category' | 'createCategoryPayload' | 'updateCategoryPayload' | 'deleteCategoryPayload' | 'ContactDetails' | 'updateContactDetailPayload' | 'deleteContactDetailPayload' | 'Currency' | 'CurrencyConnection' | 'CurrencyAggregator' | 'CurrencyGroupBy' | 'CurrencyConnectionId' | 'CurrencyConnectionCreated_at' | 'CurrencyConnectionUpdated_at' | 'CurrencyConnectionName' | 'CurrencyConnectionCode' | 'CurrencyConnectionSymbol' | 'CurrencyConnectionLabel_preview' | 'createCurrencyPayload' | 'updateCurrencyPayload' | 'deleteCurrencyPayload' | 'FooterSettings' | 'updateFooterSettingPayload' | 'deleteFooterSettingPayload' | 'Language' | 'LanguageConnection' | 'LanguageAggregator' | 'LanguageGroupBy' | 'LanguageConnectionId' | 'LanguageConnectionCreated_at' | 'LanguageConnectionUpdated_at' | 'LanguageConnectionCode' | 'LanguageConnectionName' | 'LanguageConnectionCountry_flag' | 'createLanguagePayload' | 'updateLanguagePayload' | 'deleteLanguagePayload' | 'Page' | 'PageConnection' | 'PageAggregator' | 'PageGroupBy' | 'PageConnectionId' | 'PageConnectionCreated_at' | 'PageConnectionUpdated_at' | 'PageConnectionSlug' | 'PageConnectionLanguage' | 'PageConnectionPublished_at' | 'createPagePayload' | 'updatePagePayload' | 'deletePagePayload' | 'ProductAttribute' | 'ProductAttributeConnection' | 'ProductAttributeAggregator' | 'ProductAttributeGroupBy' | 'ProductAttributeConnectionId' | 'ProductAttributeConnectionCreated_at' | 'ProductAttributeConnectionUpdated_at' | 'ProductAttributeConnectionName' | 'ProductAttributeConnectionCode' | 'ProductAttributeConnectionIs_common' | 'ProductAttributeConnectionData_type' | 'ProductAttributeConnectionCustom_formula' | 'ProductAttributeConnectionDisable_min' | 'ProductAttributeConnectionDisable_max' | 'ProductAttributeConnectionMin_label' | 'ProductAttributeConnectionMax_label' | 'ProductAttributeConnectionProduct_prop' | 'createProductAttributePayload' | 'updateProductAttributePayload' | 'deleteProductAttributePayload' | 'ProductChange' | 'ProductChangeConnection' | 'ProductChangeAggregator' | 'ProductChangeGroupBy' | 'ProductChangeConnectionId' | 'ProductChangeConnectionCreated_at' | 'ProductChangeConnectionUpdated_at' | 'ProductChangeConnectionState' | 'ProductChangeConnectionAdmin_user' | 'ProductChangeConnectionDate_time' | 'ProductChangeConnectionProduct' | 'ProductChangeConnectionChange_type' | 'createProductChangePayload' | 'updateProductChangePayload' | 'deleteProductChangePayload' | 'Product' | 'ProductConnection' | 'ProductAggregator' | 'ProductAggregatorSum' | 'ProductAggregatorAvg' | 'ProductAggregatorMin' | 'ProductAggregatorMax' | 'ProductGroupBy' | 'ProductConnectionId' | 'ProductConnectionCreated_at' | 'ProductConnectionUpdated_at' | 'ProductConnectionTitle' | 'ProductConnectionPosition' | 'ProductConnectionPrice' | 'ProductConnectionClicks_count' | 'ProductConnectionImage' | 'ProductConnectionRegion' | 'ProductConnectionSource' | 'ProductConnectionDetails_html' | 'ProductConnectionFinal_rating' | 'ProductConnectionAmazon_url' | 'ProductConnectionRelease_date' | 'ProductConnectionAdmin_user' | 'ProductConnectionCategory_temp' | 'ProductConnectionCategory' | 'ProductConnectionStatus' | 'ProductConnectionProduct_issues' | 'ProductConnectionQuantity_available_percent' | 'ProductConnectionDiscount_percent' | 'ProductConnectionPrice_original' | 'ProductConnectionScrape_batch_uid' | 'ProductConnectionDeal_quantity_available_percent' | 'ProductConnectionDeal_merchant' | 'ProductConnectionOffer_category' | 'ProductConnectionDeal_type' | 'createProductPayload' | 'updateProductPayload' | 'deleteProductPayload' | 'Region' | 'RegionConnection' | 'RegionAggregator' | 'RegionGroupBy' | 'RegionConnectionId' | 'RegionConnectionCreated_at' | 'RegionConnectionUpdated_at' | 'RegionConnectionName' | 'RegionConnectionCode' | 'RegionConnectionCurrency' | 'createRegionPayload' | 'updateRegionPayload' | 'deleteRegionPayload' | 'SocialNetwork' | 'updateSocialNetworkPayload' | 'deleteSocialNetworkPayload' | 'Source' | 'SourceConnection' | 'SourceAggregator' | 'SourceGroupBy' | 'SourceConnectionId' | 'SourceConnectionCreated_at' | 'SourceConnectionUpdated_at' | 'SourceConnectionName' | 'SourceConnectionButton_logo' | 'createSourcePayload' | 'updateSourcePayload' | 'deleteSourcePayload' | 'Tag' | 'TagConnection' | 'TagAggregator' | 'TagGroupBy' | 'TagConnectionId' | 'TagConnectionCreated_at' | 'TagConnectionUpdated_at' | 'TagConnectionSlug' | 'TagConnectionLanguage' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionPhoto' | 'UsersPermissionsUserConnectionFirst_name' | 'UsersPermissionsUserConnectionLast_name' | 'UsersPermissionsUserConnectionNickname' | 'UsersPermissionsUserConnectionFull_name_preview' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentAtomsPageLink' | 'ComponentAtomsProductAttrRating' | 'ComponentAtomsProductAttr' | 'ComponentAtomsProductIssues' | 'ComponentAtomsSocialNetwork' | 'ComponentAtomsTranslateableLabel' | 'ComponentAtomsUrlWithType' | 'ComponentComponentsNaturalList' | 'ComponentEntryFieldsFooterFields' | 'ComponentEntryFieldsPageFields' | 'ComponentEntryFieldsSourceSelectors'>;
+    (parent: TParent, context: any, info: GraphQLResolveInfo): 'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'CategoryWithChild' | 'DealTypeLabelTranslation' | 'DealTypeNavIcon' | 'DealType' | 'ProductsByDeal' | 'TaskLogEntry' | 'Task' | 'ScheduledTask' | 'ScheduledTaskPayload' | 'ScheduledTaskListPayload' | 'OffersCategoryLabelTranslation' | 'OffersCategory' | 'EnvType' | 'PageData' | 'ProductCategory' | 'ProductsListPayload' | 'NaturalList' | 'ProductClicksDetails' | 'FixedProductsPayload' | 'GiftIdeasPayload' | 'Category' | 'CategoryConnection' | 'CategoryAggregator' | 'CategoryAggregatorSum' | 'CategoryAggregatorAvg' | 'CategoryAggregatorMin' | 'CategoryAggregatorMax' | 'CategoryGroupBy' | 'CategoryConnectionId' | 'CategoryConnectionCreated_at' | 'CategoryConnectionUpdated_at' | 'CategoryConnectionSlug' | 'CategoryConnectionUrl' | 'CategoryConnectionParent' | 'CategoryConnectionLanguage' | 'CategoryConnectionIcon' | 'CategoryConnectionOrder' | 'CategoryConnectionLabel_preview' | 'CategoryConnectionRegion' | 'CategoryConnectionSource' | 'CategoryConnectionLabel_translations_json' | 'CategoryConnectionChildren_count' | 'CategoryConnectionProducts_count' | 'CategoryConnectionDeal_category' | 'createCategoryPayload' | 'updateCategoryPayload' | 'deleteCategoryPayload' | 'ContactDetails' | 'updateContactDetailPayload' | 'deleteContactDetailPayload' | 'Currency' | 'CurrencyConnection' | 'CurrencyAggregator' | 'CurrencyGroupBy' | 'CurrencyConnectionId' | 'CurrencyConnectionCreated_at' | 'CurrencyConnectionUpdated_at' | 'CurrencyConnectionName' | 'CurrencyConnectionCode' | 'CurrencyConnectionSymbol' | 'CurrencyConnectionLabel_preview' | 'createCurrencyPayload' | 'updateCurrencyPayload' | 'deleteCurrencyPayload' | 'FooterSettings' | 'updateFooterSettingPayload' | 'deleteFooterSettingPayload' | 'Language' | 'LanguageConnection' | 'LanguageAggregator' | 'LanguageGroupBy' | 'LanguageConnectionId' | 'LanguageConnectionCreated_at' | 'LanguageConnectionUpdated_at' | 'LanguageConnectionCode' | 'LanguageConnectionName' | 'LanguageConnectionCountry_flag' | 'createLanguagePayload' | 'updateLanguagePayload' | 'deleteLanguagePayload' | 'Page' | 'PageConnection' | 'PageAggregator' | 'PageGroupBy' | 'PageConnectionId' | 'PageConnectionCreated_at' | 'PageConnectionUpdated_at' | 'PageConnectionSlug' | 'PageConnectionLanguage' | 'PageConnectionPublished_at' | 'createPagePayload' | 'updatePagePayload' | 'deletePagePayload' | 'ProductAttribute' | 'ProductAttributeConnection' | 'ProductAttributeAggregator' | 'ProductAttributeGroupBy' | 'ProductAttributeConnectionId' | 'ProductAttributeConnectionCreated_at' | 'ProductAttributeConnectionUpdated_at' | 'ProductAttributeConnectionName' | 'ProductAttributeConnectionCode' | 'ProductAttributeConnectionIs_common' | 'ProductAttributeConnectionData_type' | 'ProductAttributeConnectionCustom_formula' | 'ProductAttributeConnectionDisable_min' | 'ProductAttributeConnectionDisable_max' | 'ProductAttributeConnectionMin_label' | 'ProductAttributeConnectionMax_label' | 'ProductAttributeConnectionProduct_prop' | 'createProductAttributePayload' | 'updateProductAttributePayload' | 'deleteProductAttributePayload' | 'ProductChange' | 'ProductChangeConnection' | 'ProductChangeAggregator' | 'ProductChangeGroupBy' | 'ProductChangeConnectionId' | 'ProductChangeConnectionCreated_at' | 'ProductChangeConnectionUpdated_at' | 'ProductChangeConnectionState' | 'ProductChangeConnectionAdmin_user' | 'ProductChangeConnectionDate_time' | 'ProductChangeConnectionProduct' | 'ProductChangeConnectionChange_type' | 'createProductChangePayload' | 'updateProductChangePayload' | 'deleteProductChangePayload' | 'Product' | 'ProductConnection' | 'ProductAggregator' | 'ProductAggregatorSum' | 'ProductAggregatorAvg' | 'ProductAggregatorMin' | 'ProductAggregatorMax' | 'ProductGroupBy' | 'ProductConnectionId' | 'ProductConnectionCreated_at' | 'ProductConnectionUpdated_at' | 'ProductConnectionTitle' | 'ProductConnectionPosition' | 'ProductConnectionPrice' | 'ProductConnectionClicks_count' | 'ProductConnectionImage' | 'ProductConnectionRegion' | 'ProductConnectionSource' | 'ProductConnectionDetails_html' | 'ProductConnectionFinal_rating' | 'ProductConnectionAmazon_url' | 'ProductConnectionRelease_date' | 'ProductConnectionAdmin_user' | 'ProductConnectionCategory_temp' | 'ProductConnectionCategory' | 'ProductConnectionStatus' | 'ProductConnectionProduct_issues' | 'ProductConnectionQuantity_available_percent' | 'ProductConnectionDiscount_percent' | 'ProductConnectionPrice_original' | 'ProductConnectionScrape_batch_uid' | 'ProductConnectionDeal_quantity_available_percent' | 'ProductConnectionOffer_category' | 'ProductConnectionDeal_type' | 'ProductConnectionDeal_expiry' | 'createProductPayload' | 'updateProductPayload' | 'deleteProductPayload' | 'Region' | 'RegionConnection' | 'RegionAggregator' | 'RegionGroupBy' | 'RegionConnectionId' | 'RegionConnectionCreated_at' | 'RegionConnectionUpdated_at' | 'RegionConnectionName' | 'RegionConnectionCode' | 'RegionConnectionCurrency' | 'createRegionPayload' | 'updateRegionPayload' | 'deleteRegionPayload' | 'SocialNetwork' | 'updateSocialNetworkPayload' | 'deleteSocialNetworkPayload' | 'Source' | 'SourceConnection' | 'SourceAggregator' | 'SourceGroupBy' | 'SourceConnectionId' | 'SourceConnectionCreated_at' | 'SourceConnectionUpdated_at' | 'SourceConnectionName' | 'SourceConnectionButton_logo' | 'createSourcePayload' | 'updateSourcePayload' | 'deleteSourcePayload' | 'Tag' | 'TagConnection' | 'TagAggregator' | 'TagGroupBy' | 'TagConnectionId' | 'TagConnectionCreated_at' | 'TagConnectionUpdated_at' | 'TagConnectionSlug' | 'TagConnectionLanguage' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionPhoto' | 'UsersPermissionsUserConnectionFirst_name' | 'UsersPermissionsUserConnectionLast_name' | 'UsersPermissionsUserConnectionNickname' | 'UsersPermissionsUserConnectionFull_name_preview' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentAtomsPageLink' | 'ComponentAtomsProductAttrRating' | 'ComponentAtomsProductAttr' | 'ComponentAtomsProductIssues' | 'ComponentAtomsSocialNetwork' | 'ComponentAtomsTranslateableLabel' | 'ComponentAtomsUrlWithType' | 'ComponentComponentsNaturalList' | 'ComponentEntryFieldsFooterFields' | 'ComponentEntryFieldsPageFields' | 'ComponentEntryFieldsSourceSelectors' | Promise<'UsersPermissionsMe' | 'UsersPermissionsMeRole' | 'UsersPermissionsLoginPayload' | 'UserPermissionsPasswordPayload' | 'CategoryWithChild' | 'DealTypeLabelTranslation' | 'DealTypeNavIcon' | 'DealType' | 'ProductsByDeal' | 'TaskLogEntry' | 'Task' | 'ScheduledTask' | 'ScheduledTaskPayload' | 'ScheduledTaskListPayload' | 'OffersCategoryLabelTranslation' | 'OffersCategory' | 'EnvType' | 'PageData' | 'ProductCategory' | 'ProductsListPayload' | 'NaturalList' | 'ProductClicksDetails' | 'FixedProductsPayload' | 'GiftIdeasPayload' | 'Category' | 'CategoryConnection' | 'CategoryAggregator' | 'CategoryAggregatorSum' | 'CategoryAggregatorAvg' | 'CategoryAggregatorMin' | 'CategoryAggregatorMax' | 'CategoryGroupBy' | 'CategoryConnectionId' | 'CategoryConnectionCreated_at' | 'CategoryConnectionUpdated_at' | 'CategoryConnectionSlug' | 'CategoryConnectionUrl' | 'CategoryConnectionParent' | 'CategoryConnectionLanguage' | 'CategoryConnectionIcon' | 'CategoryConnectionOrder' | 'CategoryConnectionLabel_preview' | 'CategoryConnectionRegion' | 'CategoryConnectionSource' | 'CategoryConnectionLabel_translations_json' | 'CategoryConnectionChildren_count' | 'CategoryConnectionProducts_count' | 'CategoryConnectionDeal_category' | 'createCategoryPayload' | 'updateCategoryPayload' | 'deleteCategoryPayload' | 'ContactDetails' | 'updateContactDetailPayload' | 'deleteContactDetailPayload' | 'Currency' | 'CurrencyConnection' | 'CurrencyAggregator' | 'CurrencyGroupBy' | 'CurrencyConnectionId' | 'CurrencyConnectionCreated_at' | 'CurrencyConnectionUpdated_at' | 'CurrencyConnectionName' | 'CurrencyConnectionCode' | 'CurrencyConnectionSymbol' | 'CurrencyConnectionLabel_preview' | 'createCurrencyPayload' | 'updateCurrencyPayload' | 'deleteCurrencyPayload' | 'FooterSettings' | 'updateFooterSettingPayload' | 'deleteFooterSettingPayload' | 'Language' | 'LanguageConnection' | 'LanguageAggregator' | 'LanguageGroupBy' | 'LanguageConnectionId' | 'LanguageConnectionCreated_at' | 'LanguageConnectionUpdated_at' | 'LanguageConnectionCode' | 'LanguageConnectionName' | 'LanguageConnectionCountry_flag' | 'createLanguagePayload' | 'updateLanguagePayload' | 'deleteLanguagePayload' | 'Page' | 'PageConnection' | 'PageAggregator' | 'PageGroupBy' | 'PageConnectionId' | 'PageConnectionCreated_at' | 'PageConnectionUpdated_at' | 'PageConnectionSlug' | 'PageConnectionLanguage' | 'PageConnectionPublished_at' | 'createPagePayload' | 'updatePagePayload' | 'deletePagePayload' | 'ProductAttribute' | 'ProductAttributeConnection' | 'ProductAttributeAggregator' | 'ProductAttributeGroupBy' | 'ProductAttributeConnectionId' | 'ProductAttributeConnectionCreated_at' | 'ProductAttributeConnectionUpdated_at' | 'ProductAttributeConnectionName' | 'ProductAttributeConnectionCode' | 'ProductAttributeConnectionIs_common' | 'ProductAttributeConnectionData_type' | 'ProductAttributeConnectionCustom_formula' | 'ProductAttributeConnectionDisable_min' | 'ProductAttributeConnectionDisable_max' | 'ProductAttributeConnectionMin_label' | 'ProductAttributeConnectionMax_label' | 'ProductAttributeConnectionProduct_prop' | 'createProductAttributePayload' | 'updateProductAttributePayload' | 'deleteProductAttributePayload' | 'ProductChange' | 'ProductChangeConnection' | 'ProductChangeAggregator' | 'ProductChangeGroupBy' | 'ProductChangeConnectionId' | 'ProductChangeConnectionCreated_at' | 'ProductChangeConnectionUpdated_at' | 'ProductChangeConnectionState' | 'ProductChangeConnectionAdmin_user' | 'ProductChangeConnectionDate_time' | 'ProductChangeConnectionProduct' | 'ProductChangeConnectionChange_type' | 'createProductChangePayload' | 'updateProductChangePayload' | 'deleteProductChangePayload' | 'Product' | 'ProductConnection' | 'ProductAggregator' | 'ProductAggregatorSum' | 'ProductAggregatorAvg' | 'ProductAggregatorMin' | 'ProductAggregatorMax' | 'ProductGroupBy' | 'ProductConnectionId' | 'ProductConnectionCreated_at' | 'ProductConnectionUpdated_at' | 'ProductConnectionTitle' | 'ProductConnectionPosition' | 'ProductConnectionPrice' | 'ProductConnectionClicks_count' | 'ProductConnectionImage' | 'ProductConnectionRegion' | 'ProductConnectionSource' | 'ProductConnectionDetails_html' | 'ProductConnectionFinal_rating' | 'ProductConnectionAmazon_url' | 'ProductConnectionRelease_date' | 'ProductConnectionAdmin_user' | 'ProductConnectionCategory_temp' | 'ProductConnectionCategory' | 'ProductConnectionStatus' | 'ProductConnectionProduct_issues' | 'ProductConnectionQuantity_available_percent' | 'ProductConnectionDiscount_percent' | 'ProductConnectionPrice_original' | 'ProductConnectionScrape_batch_uid' | 'ProductConnectionDeal_quantity_available_percent' | 'ProductConnectionOffer_category' | 'ProductConnectionDeal_type' | 'ProductConnectionDeal_expiry' | 'createProductPayload' | 'updateProductPayload' | 'deleteProductPayload' | 'Region' | 'RegionConnection' | 'RegionAggregator' | 'RegionGroupBy' | 'RegionConnectionId' | 'RegionConnectionCreated_at' | 'RegionConnectionUpdated_at' | 'RegionConnectionName' | 'RegionConnectionCode' | 'RegionConnectionCurrency' | 'createRegionPayload' | 'updateRegionPayload' | 'deleteRegionPayload' | 'SocialNetwork' | 'updateSocialNetworkPayload' | 'deleteSocialNetworkPayload' | 'Source' | 'SourceConnection' | 'SourceAggregator' | 'SourceGroupBy' | 'SourceConnectionId' | 'SourceConnectionCreated_at' | 'SourceConnectionUpdated_at' | 'SourceConnectionName' | 'SourceConnectionButton_logo' | 'createSourcePayload' | 'updateSourcePayload' | 'deleteSourcePayload' | 'Tag' | 'TagConnection' | 'TagAggregator' | 'TagGroupBy' | 'TagConnectionId' | 'TagConnectionCreated_at' | 'TagConnectionUpdated_at' | 'TagConnectionSlug' | 'TagConnectionLanguage' | 'createTagPayload' | 'updateTagPayload' | 'deleteTagPayload' | 'UploadFile' | 'UploadFileConnection' | 'UploadFileAggregator' | 'UploadFileAggregatorSum' | 'UploadFileAggregatorAvg' | 'UploadFileAggregatorMin' | 'UploadFileAggregatorMax' | 'UploadFileGroupBy' | 'UploadFileConnectionId' | 'UploadFileConnectionCreated_at' | 'UploadFileConnectionUpdated_at' | 'UploadFileConnectionName' | 'UploadFileConnectionAlternativeText' | 'UploadFileConnectionCaption' | 'UploadFileConnectionWidth' | 'UploadFileConnectionHeight' | 'UploadFileConnectionFormats' | 'UploadFileConnectionHash' | 'UploadFileConnectionExt' | 'UploadFileConnectionMime' | 'UploadFileConnectionSize' | 'UploadFileConnectionUrl' | 'UploadFileConnectionPreviewUrl' | 'UploadFileConnectionProvider' | 'UploadFileConnectionProvider_metadata' | 'deleteFilePayload' | 'UsersPermissionsPermission' | 'UsersPermissionsRole' | 'UsersPermissionsRoleConnection' | 'UsersPermissionsRoleAggregator' | 'UsersPermissionsRoleGroupBy' | 'UsersPermissionsRoleConnectionId' | 'UsersPermissionsRoleConnectionName' | 'UsersPermissionsRoleConnectionDescription' | 'UsersPermissionsRoleConnectionType' | 'createRolePayload' | 'updateRolePayload' | 'deleteRolePayload' | 'UsersPermissionsUser' | 'UsersPermissionsUserConnection' | 'UsersPermissionsUserAggregator' | 'UsersPermissionsUserGroupBy' | 'UsersPermissionsUserConnectionId' | 'UsersPermissionsUserConnectionCreated_at' | 'UsersPermissionsUserConnectionUpdated_at' | 'UsersPermissionsUserConnectionUsername' | 'UsersPermissionsUserConnectionEmail' | 'UsersPermissionsUserConnectionProvider' | 'UsersPermissionsUserConnectionConfirmed' | 'UsersPermissionsUserConnectionBlocked' | 'UsersPermissionsUserConnectionRole' | 'UsersPermissionsUserConnectionPhoto' | 'UsersPermissionsUserConnectionFirst_name' | 'UsersPermissionsUserConnectionLast_name' | 'UsersPermissionsUserConnectionNickname' | 'UsersPermissionsUserConnectionFull_name_preview' | 'createUserPayload' | 'updateUserPayload' | 'deleteUserPayload' | 'ComponentAtomsPageLink' | 'ComponentAtomsProductAttrRating' | 'ComponentAtomsProductAttr' | 'ComponentAtomsProductIssues' | 'ComponentAtomsSocialNetwork' | 'ComponentAtomsTranslateableLabel' | 'ComponentAtomsUrlWithType' | 'ComponentComponentsNaturalList' | 'ComponentEntryFieldsFooterFields' | 'ComponentEntryFieldsPageFields' | 'ComponentEntryFieldsSourceSelectors'>;
   }
   export interface AdminUserTypeResolver<TParent = any> {
     id?: AdminUserToIdResolver<TParent>;
