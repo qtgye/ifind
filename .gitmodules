@@ -7,3 +7,6 @@
 [submodule "web/src/ifind-utilities"]
 	path = web/src/ifind-utilities
 	url = git@github.com:BigKuLaK/ifind-utilities.git
+[submodule "ifind-utilities"]
+	path = ifind-utilities
+	url = git@github.com:BigKuLaK/ifind-utilities.git
