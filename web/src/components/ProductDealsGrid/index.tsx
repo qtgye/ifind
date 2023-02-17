@@ -17,14 +17,24 @@ dayjs.extend(utc);
 const ProductDealsGrid: ProductDealsGridComponent = ({
   products,
   deal_type,
-  total_products = 0,
 }) => {
+  const now = Date.now();
   const translate = useTranslation();
   const { dealTypeName } = useGlobalState();
   const offersRef = useRef<HTMLDivElement | null>();
-  const [productsInView, setProductsInView] = useState<Product[]>(
-    products.slice(0, INITIAL_PRODUCTS_IN_VIEW)
+  const [visibleProductsAmount, setVisibleProductsAmount] = useState(
+    INITIAL_PRODUCTS_IN_VIEW
   );
+  const [productsList, setProductsList] = useState(
+    products.filter(({ deal_expiry }) =>
+      deal_expiry ? deal_expiry > now : true
+    )
+  );
+  const [totalProducts, setTotalProducts] = useState(productsList.length);
+  const [productsInView, setProductsInView] = useState<Product[]>(
+    productsList.slice(0, visibleProductsAmount)
+  );
+
   const [lastUpdated, setLastUpdated] = useState(0);
 
   const translationArrayToMap = useCallback(
@@ -47,25 +57,36 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
   const onLoadMoreClick = useCallback(
     (e: MouseEvent) => {
       e.preventDefault();
-
-      const productsInViewCount = productsInView.length;
-
-      setProductsInView(
-        products.slice(0, productsInViewCount + PRODUCTS_PER_LOAD)
-      );
+      setVisibleProductsAmount(visibleProductsAmount + PRODUCTS_PER_LOAD);
     },
-    [products, productsInView]
+    [visibleProductsAmount]
+  );
+
+  const onProductDealExpire = useCallback(
+    (productID: string) => {
+      const filteredProducts = productsList.filter(
+        ({ id }) => productID !== id
+      );
+
+      setProductsList(filteredProducts);
+      setTotalProducts(filteredProducts.length);
+    },
+    [productsList]
   );
 
   useEffect(() => {
-    const [mostRecentProduct] = products.sort((productA, productB) =>
+    setProductsInView(productsList.slice(0, visibleProductsAmount));
+  }, [visibleProductsAmount, productsList]);
+
+  useEffect(() => {
+    const [mostRecentProduct] = productsList.sort((productA, productB) =>
       productA.created_at > productB.created_at ? -1 : 1
     );
 
     if (mostRecentProduct) {
       setLastUpdated(dayjs.utc(mostRecentProduct.created_at).valueOf());
     }
-  }, [products]);
+  }, [productsList]);
 
   useEffect(() => {
     if (dealTypeName === "amazon_flash_offers") {
@@ -107,16 +128,20 @@ const ProductDealsGrid: ProductDealsGridComponent = ({
           </aside>
         </RenderIf>
       </div>
-      {products.length ? (
+      {productsList.length ? (
         <div className="product-deals-grid__items">
           {productsInView.map((product) => (
-            <ProductDealCard key={product.id} {...product} />
+            <ProductDealCard
+              key={product.id}
+              {...product}
+              onDealExpire={onProductDealExpire}
+            />
           ))}
         </div>
       ) : (
         <p className="product-deals-grid__empty">No products yet.</p>
       )}
-      <RenderIf condition={productsInView.length < total_products}>
+      <RenderIf condition={productsInView.length < totalProducts}>
         <div className="product-deals-grid__load-more">
           <button
             className="product-deals-grid__load-more-button"

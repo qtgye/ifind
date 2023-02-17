@@ -57,7 +57,7 @@ export const getProductsByDeals = async (offer_id: string = "") =>
         quantity_available_percent
         title
         deal_type
-        deal_merchant
+        deal_expiry
         deal_quantity_available_percent
         created_at
         image
