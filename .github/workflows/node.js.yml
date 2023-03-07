@@ -39,9 +39,10 @@ jobs:
 
     - name: Copy environment files
       run: |
-          sudo cp /root/env/admin/.env /var/www/source/admin
-          sudo cp /root/env/web/.env /var/www/source/web
-          sudo cp /root/env/ifind-icons/.env /var/www/source/ifind-icons
+          sudo ls /home/env
+          sudo cp /home/env/admin/.env /var/www/source/admin
+          sudo cp /home/env/web/.env /var/www/source/web
+          sudo cp /home/env/ifind-icons/.env /var/www/source/ifind-icons
 
     - name: Process icons
       run: |
