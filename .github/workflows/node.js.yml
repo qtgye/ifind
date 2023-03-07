@@ -26,7 +26,7 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: |
-          sudo mkdir -p /var/www/source && sudo rm -rf /var/www/source
+          mkdir -p /var/www/source && sudo rm -rf /var/www/source
 
     - uses: actions/checkout@v2
       with:
@@ -52,11 +52,11 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: |
-          echo "test"
-          sudo cp /home/env/admin/.env /var/www/source/admin
-          sudo cp /home/env/web/.env /var/www/source/web
-          echo "test"
-          sudo cp /home/env/ifind-icons/.env /var/www/source/ifind-icons
+          echo "test" && \
+          cp /home/env/admin/.env /var/www/source/admin && \
+          cp /home/env/web/.env /var/www/source/web && \
+          echo "test" && \
+          cp /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
           echo "test"
 
     - name: Process icons
@@ -67,9 +67,9 @@ jobs:
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         script: |
-          cd /var/www/source/ifind-icons
-          npm install
-          npm run build
+          cd /var/www/source/ifind-icons && \
+          npm install && \
+          npm run build && \
 
     - name: Process admin
       uses: appleboy/ssh-action@master
