@@ -17,9 +17,6 @@ jobs:
 
  # this will check connection and run a command to transfer the commited files
    steps:
-    - name: tests
-      run: |
-        sudo ls /root/env
 
     - uses: actions/checkout@v2
       with:
@@ -53,9 +50,9 @@ jobs:
 
           echo "/=============================/" && \
           echo "/== COPYING ENVIRONMENT VARIABLES ==/" && \
-          cp -f /home/env/admin/.env /var/www/source/admin && \
-          cp -f /home/env/web/.env /var/www/source/web && \
-          cp -f /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
+          cp -f /root/env/admin/.env /var/www/source/admin && \
+          cp -f /root/env/web/.env /var/www/source/web && \
+          cp -f /root/env/ifind-icons/.env /var/www/source/ifind-icons && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING ICONS ====/" && \
