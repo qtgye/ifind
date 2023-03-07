@@ -17,6 +17,10 @@ jobs:
 
  # this will check connection and run a command to transfer the commited files
    steps:
+    - name: tests
+      run: |
+        sudo ls /root/env
+
     - uses: actions/checkout@v2
       with:
         ref: main
