@@ -17,13 +17,13 @@ jobs:
 
    # this will check connection and run a command to transfer the commited files
    steps:
-    - name: test
-      run: sudo mkdir -p /home/test/test
-
-    - run: sudo mkdir -p /home/another-test
 
     - name: Clean up app folders
-      run: |
+      uses: appleboy/ssh-action@master
+      with:
+        PORT: ${{ secrets.SSH_PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        script: |
           sudo mkdir -p /var/www/source && sudo rm -rf /var/www/source
 
     - uses: actions/checkout@v2
@@ -45,38 +45,44 @@ jobs:
     - name: Copy environment files
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
-        command_timeout: 200m
         script: |
-          sudo ls /home
+          echo "test"
           sudo cp /home/env/admin/.env /var/www/source/admin
           sudo cp /home/env/web/.env /var/www/source/web
+          echo "test"
           sudo cp /home/env/ifind-icons/.env /var/www/source/ifind-icons
+          echo "test"
 
     - name: Process icons
-      run: |
+      uses: appleboy/ssh-action@master
+      with:
+        PORT: ${{ secrets.SSH_PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        script: |
           cd /var/www/source/ifind-icons
           npm install
           npm run build
 
-    - name: Executing remote command
+    - name: Process admin
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
         PORT: ${{ secrets.SSH_PORT }}
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
-          echo "/=============================/" && \
-          echo "/==== PROCESSING ADMIN ====/" && \
-          cd ../admin && \
+          cd /var/www/source/admin && \
           rm -rf node_modules && \
-          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
+          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js
 
+    - name: Executing remote command
+      uses: appleboy/ssh-action@master
+      with:
+        PORT: ${{ secrets.SSH_PORT }}
+        KEY: ${{ secrets.SSH_KEY }}
+        command_timeout: 200m
+        script: |
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd ../web && \
