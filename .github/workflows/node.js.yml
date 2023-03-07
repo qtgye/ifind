@@ -19,7 +19,7 @@ jobs:
    steps:
     - name: Clean up app folders
       run: |
-          mkdir -p /var/www/source && rm -rf /var/www/source
+          sudo mkdir -p /var/www/source && sudo rm -rf /var/www/source
 
     - uses: actions/checkout@v2
       with:
