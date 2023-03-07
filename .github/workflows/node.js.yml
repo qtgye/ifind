@@ -39,10 +39,15 @@ jobs:
 
     - name: Copy environment files
       run: |
-          cp /root/env/admin/.env /var/www/source/admin
-          cp /root/env/web/.env /var/www/source/web
-          cp /root/env/ifind-icons/.env /var/www/source/ifind-icons
+          sudo cp /root/env/admin/.env /var/www/source/admin
+          sudo cp /root/env/web/.env /var/www/source/web
+          sudo cp /root/env/ifind-icons/.env /var/www/source/ifind-icons
 
+    - name: Process icons
+      run: |
+          cd /var/www/source/ifind-icons
+          npm install
+          npm run build
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -53,16 +58,6 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
-          cd /var/www/source
-
-          git clean . -f
-          git clean . -f
-
-          echo "/=============================/" && \
-          echo "/==== PROCESSING ICONS ====/" && \
-          cd ifind-icons && \
-          npm install && npm run build && \
-
           echo "/=============================/" && \
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
