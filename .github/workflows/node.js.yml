@@ -20,6 +20,7 @@ jobs:
     - name: Clean up app folders
       run: |
           sudo mkdir -p /var/www/source && sudo rm -rf /var/www/source
+          sudo mkdir -p /home/test
 
     - uses: actions/checkout@v2
       with:
@@ -39,7 +40,7 @@ jobs:
 
     - name: Copy environment files
       run: |
-          sudo ls /home/env
+          sudo ls /home
           sudo cp /home/env/admin/.env /var/www/source/admin
           sudo cp /home/env/web/.env /var/www/source/web
           sudo cp /home/env/ifind-icons/.env /var/www/source/ifind-icons
