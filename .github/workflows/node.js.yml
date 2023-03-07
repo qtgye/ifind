@@ -15,19 +15,8 @@ jobs:
    # Add timeout
    timeout-minutes: 15
 
-   # this will check connection and run a command to transfer the commited files
+ # this will check connection and run a command to transfer the commited files
    steps:
-
-    - name: Clean up app folders
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        script: |
-          mkdir -p /var/www/source && sudo rm -rf /var/www/source
-
     - uses: actions/checkout@v2
       with:
         ref: main
@@ -44,46 +33,6 @@ jobs:
         source: "."
         target: "/var/www/source" # Directory of the app
 
-    - name: Copy environment files
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        script: |
-          echo "test" && \
-          cp /home/env/admin/.env /var/www/source/admin && \
-          cp /home/env/web/.env /var/www/source/web && \
-          echo "test" && \
-          cp /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
-          echo "test"
-
-    - name: Process icons
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        script: |
-          cd /var/www/source/ifind-icons && \
-          npm install && \
-          npm run build && \
-
-    - name: Process admin
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        command_timeout: 200m
-        script: |
-          cd /var/www/source/admin && \
-          rm -rf node_modules && \
-          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js
-
     - name: Executing remote command
       uses: appleboy/ssh-action@master
       with:
@@ -93,6 +42,28 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
+          cd /var/www/source
+
+          git clean . -f
+          git clean . -f
+
+          echo "/=============================/" && \
+          echo "/== COPYING ENVIRONMENT VARIABLES ==/" && \
+          cp /home/env/admin/.env /var/www/source/admin && \
+          cp /home/env/web/.env /var/www/source/web && \
+          cp /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
+
+          echo "/=============================/" && \
+          echo "/==== PROCESSING ICONS ====/" && \
+          cd ifind-icons && \
+          npm install && npm run build && \
+
+          echo "/=============================/" && \
+          echo "/==== PROCESSING ADMIN ====/" && \
+          cd ../admin && \
+          rm -rf node_modules && \
+          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
+
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
           cd ../web && \
