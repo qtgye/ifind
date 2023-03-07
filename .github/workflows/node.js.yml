@@ -49,9 +49,9 @@ jobs:
 
           echo "/=============================/" && \
           echo "/== COPYING ENVIRONMENT VARIABLES ==/" && \
-          cp /home/env/admin/.env /var/www/source/admin && \
-          cp /home/env/web/.env /var/www/source/web && \
-          cp /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
+          cp -f /home/env/admin/.env /var/www/source/admin && \
+          cp -f /home/env/web/.env /var/www/source/web && \
+          cp -f /home/env/ifind-icons/.env /var/www/source/ifind-icons && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING ICONS ====/" && \
