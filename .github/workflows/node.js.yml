@@ -15,17 +15,12 @@ jobs:
    # Add timeout
    timeout-minutes: 15
 
- # this will check connection and run a command to transfer the commited files
+   # this will check connection and run a command to transfer the commited files
    steps:
-      name: Clean up app folders
+    - name: Clean up app folders
       uses: appleboy/scp-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        command_timeout: 200m
-        script: |
+        run: |
           mkdir -p /var/www/source && rm -rf /var/www/source
 
     - uses: actions/checkout@v2
@@ -44,15 +39,10 @@ jobs:
         source: "."
         target: "/var/www/source" # Directory of the app
 
-      name: Copy environment files
+    - name: Copy environment files
       uses: appleboy/scp-action@master
       with:
-        host: ${{ secrets.SSH_HOST }}
-        USERNAME: ${{ secrets.SSH_USERNAME }}
-        PORT: ${{ secrets.SSH_PORT }}
-        KEY: ${{ secrets.SSH_KEY }}
-        command_timeout: 200m
-        script: |
+        run: |
           cp /root/env/admin/.env /var/www/source/admin
           cp /root/env/web/.env /var/www/source/web
           cp /root/env/ifind-icons/.env /var/www/source/ifind-icons
