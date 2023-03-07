@@ -43,7 +43,9 @@ jobs:
         target: "/var/www/source" # Directory of the app
 
     - name: Copy environment files
-      run: |
+      uses: appleboy/ssh-action@master
+      with:
+        script: |
           sudo ls /home
           sudo cp /home/env/admin/.env /var/www/source/admin
           sudo cp /home/env/web/.env /var/www/source/web
