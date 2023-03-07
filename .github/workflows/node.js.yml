@@ -17,10 +17,14 @@ jobs:
 
    # this will check connection and run a command to transfer the commited files
    steps:
+    - name: test
+      run: sudo mkdir -p /home/test/test
+
+    - run: sudo mkdir -p /home/another-test
+
     - name: Clean up app folders
       run: |
           sudo mkdir -p /var/www/source && sudo rm -rf /var/www/source
-          sudo mkdir -p /home/test
 
     - uses: actions/checkout@v2
       with:
