@@ -23,6 +23,8 @@ const adminHealthCheck = () =>
   new Promise(async (resolve) => {
     let tries = ADMIN_HEALTHCHECK_MAX_TRIES;
 
+    console.log({ NEXT_PUBLIC_ADMIN_API_ROOT });
+
     while (tries) {
       try {
         const response = await fetch(NEXT_PUBLIC_ADMIN_API_ROOT, {
@@ -42,6 +44,11 @@ const adminHealthCheck = () =>
         });
 
         if (response.status >= 500) {
+          throw new Error(`${response.status} ${response.statusText}`);
+        }
+
+        if (response.status >= 400) {
+          console.log(await response.text());
           throw new Error(`${response.status} ${response.statusText}`);
         }
 
