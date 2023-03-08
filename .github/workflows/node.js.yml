@@ -33,6 +33,7 @@ jobs:
       with:
         source: "."
         target: "/var/www/source" # Directory of the app
+        rm: true
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -43,6 +44,7 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
+          # https://stackoverflow.com/a/74414086
           export NVM_DIR=~/.nvm
           source ~/.nvm/nvm.sh
 
@@ -66,7 +68,7 @@ jobs:
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
           rm -rf node_modules && \
-          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
+          npm install && npm rebuild node-sass && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
