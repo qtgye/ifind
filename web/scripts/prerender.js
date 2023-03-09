@@ -23,8 +23,6 @@ const adminHealthCheck = () =>
   new Promise(async (resolve) => {
     let tries = ADMIN_HEALTHCHECK_MAX_TRIES;
 
-    console.log({ NEXT_PUBLIC_ADMIN_API_ROOT });
-
     while (tries) {
       try {
         const response = await fetch(NEXT_PUBLIC_ADMIN_API_ROOT, {
@@ -48,7 +46,7 @@ const adminHealthCheck = () =>
         }
 
         if (response.status >= 400) {
-          console.log(await response.text());
+          console.info(await response.text());
           throw new Error(`${response.status} ${response.statusText}`);
         }
 
@@ -59,10 +57,10 @@ const adminHealthCheck = () =>
           break;
         }
       } catch (err) {
-        console.log(` - Server response error: ${err.message}`);
+        console.info(` - Server response error: ${err.message}`);
       }
 
-      console.log(
+      console.info(
         ` - Rechecking after ${ADMIN_HEALTHCHECK_INTERVAL / 1000} seconds...`
       );
       await new Promise((res) => setTimeout(res, ADMIN_HEALTHCHECK_INTERVAL));
@@ -111,7 +109,7 @@ try {
     );
 
     // Move static site files
-    console.log("Static files generated. Moving to web root...");
+    console.info("Static files generated. Moving to web root...");
 
     if (OUT_DIR !== STATIC_WEB_ROOT) {
       fs.moveSync(OUT_DIR, STATIC_WEB_ROOT, { overwrite: true });

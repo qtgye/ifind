@@ -36,7 +36,7 @@ declare interface GlobalContextData {
   socialNetwork?: SocialNetwork;
   userLanguage?: string;
   // Initial  data
-  languages?: Language[];
+  languages?: IFINDLanguages.Language[];
   sources?: Source[];
   regions?: Region[];
 }
@@ -46,7 +46,7 @@ declare interface GetGlobalDataParams {
 }
 
 declare interface LanguagesPayload {
-  languages: Language[];
+  languages: IFINDLanguages.Language[];
 }
 
 declare interface GlobalContextProviderProps {
