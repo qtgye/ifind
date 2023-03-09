@@ -142,7 +142,9 @@ const ProductDealCard: ProductDealCardComponent = ({
     >
       <div className="product-deal-card__content">
         {discountPercent ? (
-          <div className="product-deal-card__discount">{`-${discountPercent}%`}</div>
+          <div className="product-deal-card__discount">{`-${Math.round(
+            discountPercent
+          )}%`}</div>
         ) : (
           ""
         )}
