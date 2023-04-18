@@ -11,10 +11,6 @@
     "draftAndPublish": false
   },
   "attributes": {
-    "title": {
-      "type": "string",
-      "required": true
-    },
     "position": {
       "type": "integer",
       "default": 0,
@@ -134,6 +130,9 @@
     },
     "deal_expiry": {
       "type": "biginteger"
+    },
+    "title": {
+      "type": "text"
     }
   }
 }
