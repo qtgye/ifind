@@ -27,15 +27,14 @@ jobs:
 
     - name: Copy repository contents via scp
       uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.SSH_HOST }} # IP Address of the server
-        USERNAME: ${{ secrets.SSH_USERNAME }} # username of the server
-        PORT: ${{ secrets.SSH_PORT }} #port of the server
-        KEY: ${{ secrets.SSH_KEY }} # SSH Key Generated from the server
       with:
         source: "."
         target: "/var/www/source" # Directory of the app
         rm: true
+        HOST: ${{ secrets.SSH_HOST }} # IP Address of the server
+        USERNAME: ${{ secrets.SSH_USERNAME }} # username of the server
+        PORT: ${{ secrets.SSH_PORT }} #port of the server
+        KEY: ${{ secrets.SSH_KEY }} # SSH Key Generated from the server
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
