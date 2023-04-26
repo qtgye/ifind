@@ -11,5 +11,5 @@ services:
     ports:
       - "6603:3306"
     volumes:
-      - ./.mysql/my.cnf:/etc/my.cnf
-      - ./.mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+      - ./admin/.mysql/my.cnf:/etc/my.cnf
+      - ./admin/.mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
