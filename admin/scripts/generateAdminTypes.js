@@ -40,14 +40,14 @@ module.exports = async () => {
     typePrefix: "",
   };
 
-  generateTypeScriptTypes(schemaContents, outputPath, options)
-    .then(() => {
-      console.log(
-        "Admin GraphQL Schema has been exported as TS Typed Definitions.".green
-      );
-    })
-    .catch((err) => {
-      console.error(err);
-      process.exit(1);
-    });
+  // generateTypeScriptTypes(schemaContents, outputPath, options)
+  //   .then(() => {
+  //     console.log(
+  //       "Admin GraphQL Schema has been exported as TS Typed Definitions.".green
+  //     );
+  //   })
+  //   .catch((err) => {
+  //     console.error(err);
+  //     process.exit(1);
+  //   });
 };

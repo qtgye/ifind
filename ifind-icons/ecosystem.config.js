@@ -1,15 +1,14 @@
 module.exports = {
   apps: [
     {
-      name: "ifind_admin",
+      name: "ifind_icons",
       script: "npm",
-      args: "run develop",
+      args: "run watch",
       watch: false,
       max_memory_restart: "200M",
-      cwd: "/admin",
+      cwd: "/ifind-icons",
       env: {
         ...process.env,
-        NODE_TLS_REJECT_UNAUTHORIZED: "0",
       },
     },
   ],
