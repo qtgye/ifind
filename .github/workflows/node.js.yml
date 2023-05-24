@@ -30,7 +30,7 @@ jobs:
       with:
         source: "."
         target: "/var/www/source" # Directory of the app
-        rm: true
+        overwrite: true
         HOST: ${{ secrets.SSH_HOST }} # IP Address of the server
         USERNAME: ${{ secrets.SSH_USERNAME }} # username of the server
         PORT: ${{ secrets.SSH_PORT }} #port of the server
