@@ -12,4 +12,4 @@ COPY ./docker.ecosystem.config.js /docker.ecosystem.config.js
 
 WORKDIR /
 
-CMD ["pm2-runtime", "docker.ecosystem.config.js"]
+CMD ["pm2-runtime", "start", "docker.ecosystem.config.js"]
