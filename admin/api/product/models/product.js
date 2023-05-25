@@ -15,12 +15,12 @@ module.exports = {
       await preProcessProductData(data, params.id);
     },
     async afterCreate(result) {
-      await applyProductCategoryUpdates(result.id);
-      await saveProductChange(result.id, "create");
+      // await applyProductCategoryUpdates(result.id);
+      // await saveProductChange(result.id, "create");
     },
     async afterUpdate(result) {
-      await applyProductCategoryUpdates(result.id);
-      await saveProductChange(result.id);
+      // await applyProductCategoryUpdates(result.id);
+      // await saveProductChange(result.id);
     },
   },
 };

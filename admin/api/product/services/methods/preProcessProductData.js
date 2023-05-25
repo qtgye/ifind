@@ -30,7 +30,7 @@ module.exports = async (data, id) => {
         : productChangeParams.change_type,
   });
 
-  const matchedProduct = (await strapi.services.product.findOne({ id })) || {};
+  // const matchedProduct = (await strapi.services.product.findOne({ id })) || {};
 
   // Set product update scope
   data.updateScope = {
@@ -44,36 +44,36 @@ module.exports = async (data, id) => {
     return data;
   }
 
-  const [productAttributes] = await Promise.all([
-    strapi.services["product-attribute"].find(),
-  ]);
+  // const [productAttributes] = await Promise.all([
+  //   strapi.services["product-attribute"].find(),
+  // ]);
 
   await Promise.all([
     // Add dynamic position if not yet given
-    (async () => {
-      if (!data.position) {
-        const productsWithPositions = await strapi.services.product.find({
-          position_gt: 0,
-          id_ne: id,
-          categories_contains:
-            Array.isArray(data.categories) && data.categories.length
-              ? data.categories[0]
-              : null,
-        });
+    // (async () => {
+    //   if (!data.position) {
+    //     const productsWithPositions = await strapi.services.product.find({
+    //       position_gt: 0,
+    //       id_ne: id,
+    //       categories_contains:
+    //         Array.isArray(data.categories) && data.categories.length
+    //           ? data.categories[0]
+    //           : null,
+    //     });
 
-        const takenPositions = productsWithPositions.map(
-          (data) => data.position
-        );
-        let positionToTake = 1;
+    //     const takenPositions = productsWithPositions.map(
+    //       (data) => data.position
+    //     );
+    //     let positionToTake = 1;
 
-        // Determine available position
-        while (takenPositions.includes(positionToTake)) {
-          positionToTake++;
-        }
+    //     // Determine available position
+    //     while (takenPositions.includes(positionToTake)) {
+    //       positionToTake++;
+    //     }
 
-        data.position = positionToTake;
-      }
-    })(),
+    //     data.position = positionToTake;
+    //   }
+    // })(),
 
     // Scrape other fields
     (async () => {
@@ -119,44 +119,44 @@ module.exports = async (data, id) => {
 
   // Recompute product attributes
   // Needs to come after the scraper in order to pickup the scraped data
-  if (data.attrs_rating && data.attrs_rating.length) {
-    data.attrs_rating = data.attrs_rating.map((attrRating) => {
-      const matchedProductAttribute = productAttributes.find(
-        ({ id }) => attrRating.product_attribute == id
-      );
+  // if (data.attrs_rating && data.attrs_rating.length) {
+  //   data.attrs_rating = data.attrs_rating.map((attrRating) => {
+  //     const matchedProductAttribute = productAttributes.find(
+  //       ({ id }) => attrRating.product_attribute == id
+  //     );
 
-      if (matchedProductAttribute) {
-        // Autofill release date if applicable
-        if (
-          /release/i.test(matchedProductAttribute.name) &&
-          data.release_date
-        ) {
-          attrRating.use_custom_formula = true;
-          attrRating.min = data.release_date;
-          attrRating.max = moment.utc().subtract(3, "years").toISOString();
-        }
+  //     if (matchedProductAttribute) {
+  //       // Autofill release date if applicable
+  //       if (
+  //         /release/i.test(matchedProductAttribute.name) &&
+  //         data.release_date
+  //       ) {
+  //         attrRating.use_custom_formula = true;
+  //         attrRating.min = data.release_date;
+  //         attrRating.max = moment.utc().subtract(3, "years").toISOString();
+  //       }
 
-        if (attrRating.use_custom_formula) {
-          attrRating.rating = applyCustomFormula(
-            attrRating,
-            matchedProductAttribute,
-            data
-          );
-        }
-      }
+  //       if (attrRating.use_custom_formula) {
+  //         attrRating.rating = applyCustomFormula(
+  //           attrRating,
+  //           matchedProductAttribute,
+  //           data
+  //         );
+  //       }
+  //     }
 
-      return attrRating;
-    });
-  }
+  //     return attrRating;
+  //   });
+  // }
 
   // Remove temporary data
   delete data.updateScope;
 
   // Extract only changed data
-  const changedData = compareProductChanges(matchedProduct, data);
+  // const changedData = compareProductChanges(matchedProduct, data);
 
   // Save temporary data for afterSave use
-  setProductChangeParams({ state: changedData });
+  // setProductChangeParams({ state: changedData });
 
   return data;
 };
