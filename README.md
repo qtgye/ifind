@@ -7,6 +7,18 @@
 1. Clone this repo and cd into the folder
 2. Run `git config core.hooksPath .githooks` to ensure our githooks will be picked up  
 3. Run `chmod -R +x .githooks` to ensure our githooks will execute
+4. Install node dependencies for each of the layers: `npm install`
+    - `./admin`
+    - `./ifind-icons`
+    - `./web`
+
+## Dev Workflow
+1. To start the Strapi CMS, Database, and Icons builder (Admin layer), run `docker compose up`.
+    - Intentionally leaving out detached argument (`-d`) in order to see the logs right away.
+2. To start the Web server (Web layer), which is optional based on the task at hand:
+    - Go to the `web` folder: `cd web`
+    - Run the server: `npm run dev`  
+    **Note** the Admin layer needs to be running whenever the Web layer is started.
 
 
 ## Site layers
