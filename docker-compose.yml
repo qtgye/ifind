@@ -13,3 +13,30 @@ services:
     volumes:
       - ./admin/.mysql/my.cnf:/etc/my.cnf
       - ./admin/.mysql/dump.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+  app:
+    build: .
+    container_name: ifind_app
+    restart: always
+    environment:
+      PORT: 1337
+      BROWSER: none
+      DATABASE_HOST: admin_db
+      DATABASE_PORT: 3306
+      DATABASE_NAME: ifind_admin
+      DATABASE_USERNAME: root
+      DATABASE_PASSWORD: root
+      SCRIPTS_SERVER_URL: http://localhost:3333
+      AIRTABLE_API_KEY: keyEA4usdufwK4na2 # Dev
+      AIRTABLE_BASE_SCHEDULED_TASKS: appNWlIhbI2h4pBGy # scheduled-tasks-dev base
+      ENV: development
+    ports:
+      - "1337:1337"
+    volumes:
+      - ./admin:/admin
+      - ./ifind-icons:/ifind-icons
+      - ./web:/app
+    depends_on:
+      - admin_db
+    # Required for WSL2 on Windows
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
