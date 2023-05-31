@@ -39,6 +39,10 @@ const HeaderSideNav = () => {
       if (onOffersClick) {
         onOffersClick(catName);
       }
+
+      if (window.innerWidth < 1024) {
+        setIsVisible(false);
+      }
     },
     [onOffersClick]
   );
