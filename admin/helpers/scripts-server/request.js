@@ -1,9 +1,17 @@
 const axios = require("axios");
 const ENV = process.env;
 
+const SCRIPTS_SERVER_URL =
+  ENV.NODE_ENV === "development"
+    ? (ENV.SCRIPTS_SERVER_URL || "").replace(
+        /localhost/,
+        "host.docker.internal"
+      )
+    : ENV.SCRIPTS_SERVER_URL;
+
 const scriptsServerUrl = (path = "/") =>
   [
-    (ENV.SCRIPTS_SERVER_URL || "").replace(/\/+$/, ""),
+    (SCRIPTS_SERVER_URL || "").replace(/\/+$/, ""),
     path.replace(/^\/+/, ""),
   ].join("/");
 
