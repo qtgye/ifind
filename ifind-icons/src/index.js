@@ -73,3 +73,7 @@ const build = async () => {
 };
 
 module.exports = { build };
+
+if (process.argv.includes("build")) {
+  build();
+}
