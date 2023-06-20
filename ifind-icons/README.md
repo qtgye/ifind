@@ -60,17 +60,17 @@ Here's a list of all the available icon names in the latest build. This package 
 | askari | bonprix | docmorris | ebay | fachversand-stollenwerk |  
 | fressnapf | joop | lidl | medikamente-per-click | mindfactory |  
 | mmse | nike | notebooksbilliger | otto | pro-fishing |  
-| puma | saturn | shop-apotheke | takko-fashion | tom-tailor |  
-| zooroyal | microphone | monitor-screen | motherboard | mouse |  
-| music-instruments | necklace-display | non-alcoholic-drink | note | outdoor-activities |  
-| oven | ovens | paint-roller | party-props | paw-circle |  
-| pc-accessories | pc-fan | pc-monitor | pc-parts | pc |  
-| pen-ruler | perfume-spray | phone | pillars | pizza-with-drink |  
-| play-tv | play | pressure-cooker | ram-stick | refrigerator |  
-| rice-cooker | rope-loop | rum | running | sale-tag |  
-| security | shirt | shoes | showbiz-mask | sink |  
-| soccer-ball | social-icons | speakers | spray-bucket | swimming |  
-| table-tennis-racket | table-with-chair | table | tablet | tennis |  
-| tent-soccer | tv | unknown | vacumm-cleaner | volleyball |  
-| vr | warp | washer | washing-machine | watch |  
-| well-chair | xbox |
+| puma | sanicare | saturn | shop-apotheke | takko-fashion |  
+| tom-tailor | zooroyal | microphone | monitor-screen | motherboard |  
+| mouse | music-instruments | necklace-display | non-alcoholic-drink | note |  
+| outdoor-activities | oven | ovens | paint-roller | party-props |  
+| paw-circle | pc-accessories | pc-fan | pc-monitor | pc-parts |  
+| pc | pen-ruler | perfume-spray | phone | pillars |  
+| pizza-with-drink | play-tv | play | pressure-cooker | ram-stick |  
+| refrigerator | rice-cooker | rope-loop | rum | running |  
+| sale-tag | security | shirt | shoes | showbiz-mask |  
+| sink | soccer-ball | social-icons | speakers | spray-bucket |  
+| swimming | table-tennis-racket | table-with-chair | table | tablet |  
+| tennis | tent-soccer | tv | unknown | vacumm-cleaner |  
+| volleyball | vr | warp | washer | washing-machine |  
+| watch | well-chair | xbox |
