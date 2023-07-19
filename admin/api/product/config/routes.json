@@ -2,7 +2,7 @@
   "routes": [
     {
       "method": "GET",
-      "path": "/products",
+      "path": "/api/products",
       "handler": "product.find",
       "config": {
         "policies": []
