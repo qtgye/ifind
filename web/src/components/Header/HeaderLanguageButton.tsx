@@ -59,7 +59,7 @@ const HeaderLanguageButton = () => {
         languages.reduce(
           (
             all: { [key: string]: string },
-            { country_flag, name }: LanguageWithFlag
+            { country_flag, name }: IFINDLanguages.Language
           ) => {
             // Get matching country code for language
             const matchedCountry = countriesConfig.find(

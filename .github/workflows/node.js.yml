@@ -15,22 +15,26 @@ jobs:
    # Add timeout
    timeout-minutes: 15
 
- # this will check connection and run a command to transfer the commited files
+   environment: main
+
+   # this will check connection and run a command to transfer the commited files
    steps:
+
     - uses: actions/checkout@v2
       with:
         ref: main
+        submodules: recursive
 
     - name: Copy repository contents via scp
       uses: appleboy/scp-action@master
-      env:
+      with:
+        source: "."
+        target: "/var/www/source" # Directory of the app
+        overwrite: true
         HOST: ${{ secrets.SSH_HOST }} # IP Address of the server
         USERNAME: ${{ secrets.SSH_USERNAME }} # username of the server
         PORT: ${{ secrets.SSH_PORT }} #port of the server
         KEY: ${{ secrets.SSH_KEY }} # SSH Key Generated from the server
-      with:
-        source: "."
-        target: "/var/www/source" # Directory of the app
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -41,10 +45,20 @@ jobs:
         KEY: ${{ secrets.SSH_KEY }}
         command_timeout: 200m
         script: |
+          # https://stackoverflow.com/a/74414086
+          export NVM_DIR=~/.nvm
+          source ~/.nvm/nvm.sh
+
           cd /var/www/source
 
           git clean . -f
           git clean . -f
+
+          echo "/=============================/" && \
+          echo "/== COPYING ENVIRONMENT VARIABLES ==/" && \
+          cp -f /root/env/admin/.env /var/www/source/admin && \
+          cp -f /root/env/web/.env /var/www/source/web && \
+          cp -f /root/env/ifind-icons/.env /var/www/source/ifind-icons && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING ICONS ====/" && \
@@ -55,7 +69,7 @@ jobs:
           echo "/==== PROCESSING ADMIN ====/" && \
           cd ../admin && \
           rm -rf node_modules && \
-          npm install && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
+          npm install && npm rebuild node-sass && npm run config:import && npm run currencies:import && pm2 restart ecosystem.config.js && \
 
           echo "/=============================/" && \
           echo "/==== PROCESSING FRONT-END ====/" && \
@@ -63,8 +77,7 @@ jobs:
           echo "/==== INSTALLING PACKAGES ====/" && \
           npm install && \
           echo "/==== BUILDING SITE ====/" && \
-          echo "Waiting for 2 minutes before proceeding to ensure admin is up..." && \
-          sleep 120s && \
+          echo "Running prerender..." && \
           node scripts/prerender.js
 
     # TO DO:

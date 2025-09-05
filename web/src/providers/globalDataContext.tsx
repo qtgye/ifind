@@ -1,28 +1,13 @@
-import {
-  createContext,
-  useContext,
-  useCallback,
-  useState,
-  ReactNode,
-} from "react";
-import type { PropsWithChildren } from "react";
+import { createContext, useContext, useState } from "react";
 import { useRouter } from "next/router";
+import { languages } from "../ifind-utilities/locale/languages";
 
 import gqlFetch from "utilities/gqlFetch";
-// import { getLanguages } from "./languagesContext";
-// import { getSourcesRegions } from "./sourceRegionContext";
 
 // TODO: Move this to languages provider
-export const getLanguages = async () =>
-  gqlFetch<LanguagesPayload>(`
-    query Languages {
-      languages {
-        code
-        name
-        country_flag
-      }
-    }
-  `);
+export const getLanguages = async (): Promise<{
+  languages: IFINDLanguages.Language[];
+}> => ({ languages });
 
 // TODO: Move this to sourcesRegions provider
 export const getSourcesRegions = async () =>

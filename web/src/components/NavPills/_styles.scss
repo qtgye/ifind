@@ -13,6 +13,12 @@
     column-gap: 20px;
     overflow: auto;
     z-index: 1;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar,
+    &::-webkit-scrollbar-thumb {
+      display: none;
+    }
 
     &--scroll-left {
       mask-image: linear-gradient(to right, transparent 30px, white 60px);

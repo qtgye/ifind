@@ -1,8 +1,10 @@
 import { useEffect, useState, useCallback, MouseEvent } from "react";
-import dealTypes from "config/deal-types";
+import formatGranularTime from "ifind-utilities/date-time/formatGranularTime";
 
 import PercentCircle from "components/PercentCircle";
 import RatingWarps from "components/RatingWarps";
+import RenderIf from "components/RenderIf";
+import IfindIcon from "components/IfindIcon";
 
 import { useProductsByDeals } from "providers/productsByDealsContext";
 
@@ -11,7 +13,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   title,
   image,
   deal_type,
-  deal_merchant,
+  deal_expiry,
   amazon_url,
   url_list,
   price,
@@ -21,6 +23,7 @@ const ProductDealCard: ProductDealCardComponent = ({
   final_rating,
   onClick,
   additional_info = "stocks_available",
+  onDealExpire,
 }) => {
   const { productsByDeals = [] } = useProductsByDeals();
   const [dealTypeData, setDealTypeData] = useState<DealType>();
@@ -29,14 +32,11 @@ const ProductDealCard: ProductDealCardComponent = ({
   const [originalPrice, setOriginalPrice] = useState<number>();
   const [discountPercent, setDiscountPercent] = useState<number>();
   const [stockPercent, setStockPercent] = useState<number>();
+  const [countdown, setCountdown] = useState<number>(0);
 
   const getProductDetails = useCallback(() => {
     // Use default product details if deal_merchant/deal_type is amazon, mydealz, or none
-    if (
-      !deal_type ||
-      /amazon|none/.test(deal_merchant as string) ||
-      /amazon|none/.test(deal_type as string)
-    ) {
+    if (!deal_type || /amazon|none/.test(deal_type as string)) {
       setProductURL(amazon_url || "");
       setProductPrice(String(price));
       setOriginalPrice(price_original);
@@ -62,7 +62,7 @@ const ProductDealCard: ProductDealCardComponent = ({
     }
   }, [
     deal_type,
-    deal_merchant,
+    deal_expiry,
     amazon_url,
     url_list,
     price,
@@ -90,6 +90,12 @@ const ProductDealCard: ProductDealCardComponent = ({
     [onClick, id, title, image, amazon_url, url_list, price]
   );
 
+  const onCountdownDone = useCallback(() => {
+    if (typeof onDealExpire === "function") {
+      onDealExpire(id as string);
+    }
+  }, [id, onDealExpire]);
+
   useEffect(() => {
     if (dealTypeData) {
       getProductDetails();
@@ -109,6 +115,23 @@ const ProductDealCard: ProductDealCardComponent = ({
     }
   }, [productsByDeals, deal_type]);
 
+  useEffect(() => {
+    if (deal_expiry && Date.now() < deal_expiry) {
+      const interval = setInterval(() => {
+        const remaining = Math.max(deal_expiry - Date.now(), 0);
+
+        if (remaining) {
+          setCountdown(remaining);
+        } else {
+          clearInterval(interval);
+          onCountdownDone();
+        }
+      }, 1000);
+
+      return () => clearInterval(interval);
+    }
+  }, [deal_expiry, onCountdownDone, id]);
+
   return (
     <a
       className="product-deal-card"
@@ -119,7 +142,9 @@ const ProductDealCard: ProductDealCardComponent = ({
     >
       <div className="product-deal-card__content">
         {discountPercent ? (
-          <div className="product-deal-card__discount">{`-${discountPercent}%`}</div>
+          <div className="product-deal-card__discount">{`-${Math.round(
+            discountPercent
+          )}%`}</div>
         ) : (
           ""
         )}
@@ -142,8 +167,18 @@ const ProductDealCard: ProductDealCardComponent = ({
                 €{productPrice}
               </strong>
             </div>
+            <RenderIf condition={deal_expiry}>
+              <div className="product-deal-card__countdown">
+                {formatGranularTime(countdown)}
+                <IfindIcon icon={"countdown"} />
+              </div>
+            </RenderIf>
             <PercentCircle
-              renderIf={additional_info === "stocks_available"}
+              renderIf={Boolean(
+                additional_info === "stocks_available" &&
+                  stockPercent &&
+                  !deal_expiry
+              )}
               percent={stockPercent === null ? null : stockPercent || null}
             />
             <RatingWarps

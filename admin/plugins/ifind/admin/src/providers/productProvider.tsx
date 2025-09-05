@@ -20,7 +20,6 @@ fragment ProductDataFragment on Product {
   image
   position
   clicks_count
-  website_tab
   deal_type
   amazon_url
   price
@@ -35,13 +34,6 @@ fragment ProductDataFragment on Product {
     idealo_link_invalid
   }
   url_list {
-    source {
-      id
-      button_logo {
-        url
-      }
-    }
-    region { id }
     url
     price
     price_original

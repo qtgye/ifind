@@ -56,19 +56,6 @@ const EditView = ({ onSave, onCancel, max, priority }: EditViewProps) => {
         min={1}
         size={3}
       />
-      {prio !== priority ? (
-        <Button onClick={onClick} className="task-priority__apply">
-          <FontAwesomeIcon icon={"check"} />
-        </Button>
-      ) : (
-        <Button
-          onClick={_onCancel}
-          color={"secondary"}
-          className="task-priority__cancel"
-        >
-          <FontAwesomeIcon icon="times" />
-        </Button>
-      )}
     </div>
   );
 };
@@ -81,14 +68,14 @@ const PriorityView = ({
   return (
     <div className="task-priority__counter-view">
       {priority}
-      <Button
+      {/* <Button
         onClick={onButtonClick}
         color="secondary"
         className="task-priority__edit"
         title="Adjust priority"
       >
         <FontAwesomeIcon icon={isBusy ? "spinner" : "pen"} pulse={isBusy} />
-      </Button>
+      </Button> */}
     </div>
   );
 };

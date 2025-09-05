@@ -38,10 +38,8 @@ function Offer() {
       <Head>
         <title>
           {translate(
-            offersCategoryTranslationArrayToMap(
-              activeOffer?.label || []
-            )
-          ) + ' - Offers'}
+            offersCategoryTranslationArrayToMap(activeOffer?.label || [])
+          ) + " - Offers"}
         </title>
       </Head>
       <div className="offers">

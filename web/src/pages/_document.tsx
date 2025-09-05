@@ -10,10 +10,11 @@ export default function Document() {
         <meta name="admin_api_root" content={process.env.NEXT_PUBLIC_ADMIN_API_ROOT} />
         <meta name="environment" content={process.env.NEXT_PUBLIC_ENV} />
 
+
         {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
         <script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=UA-204521375-1"
+          src="https://www.googletagmanager.com/gtag/js?id=G-FNKC648WVR"
         ></script>
         <script
           dangerouslySetInnerHTML={{
@@ -22,7 +23,7 @@ export default function Document() {
           function gtag() { dataLayer.push(arguments); }
           gtag('js', new Date());
 
-          gtag('config', 'UA-204521375-1', { 'anonymize_ip': true });
+          gtag('config', 'G-FNKC648WVR', { 'anonymize_ip': true });
           gtag('event', 'environment', {
             'event_category': 'PageEvent',
             'event_label': 'Page Loaded At Environment',
@@ -32,12 +33,6 @@ export default function Document() {
           }}
         />
         {/* <!-- End Google Analytics --> */}
-
-        {/* <!-- Global site tag (gtag.js) - Google Analytics --> */}
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-SKT6JF4VR9"
-        ></script>
 
         <meta
           name="description"

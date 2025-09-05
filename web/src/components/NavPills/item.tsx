@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useTranslation } from "translations/index";
 import { useCallback } from "react";
 
@@ -15,14 +16,15 @@ const NavPillItem = ({ href, label, active = false }: NavPillItemProps) => {
 
   return (
     <li>
-      <a
-        className={["navpills__item", active && "navpills__item--active"]
-          .filter(Boolean)
-          .join(" ")}
-        href={href}
-      >
-        <span>{translate(toTranslationMap(label))}</span>
-      </a>
+      <Link href={href}>
+        <a
+          className={["navpills__item", active && "navpills__item--active"]
+            .filter(Boolean)
+            .join(" ")}
+        >
+          <span>{translate(toTranslationMap(label))}</span>
+        </a>
+      </Link>
     </li>
   );
 };

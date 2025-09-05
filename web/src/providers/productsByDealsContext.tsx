@@ -7,10 +7,61 @@ export const ProductsByDealsContextProvider = ({
   children,
   productsByDeals = [],
 }: ProductsByDealsContextProviderProps) => {
+  // Sort products by:
+  // 1. availability (asc), then
+  // 2. discount (desc)
+  const proccesedProductsByDeals = productsByDeals.map((productsByDeal) => {
+    const productsByAvailability: Record<string, Product[]> = {};
+
+    // Sort products by discount first
+    productsByDeal.products.sort((productA, productB) => {
+      const productAdiscount = productA.url_list?.length
+        ? productA.url_list[0]?.discount_percent ||
+          productA.discount_percent ||
+          0
+        : 0;
+      const productBdiscount = productB.url_list?.length
+        ? productB.url_list[0]?.discount_percent ||
+          productB.discount_percent ||
+          0
+        : 0;
+      return productAdiscount > productBdiscount ? -1 : 1;
+    });
+
+    // Group products by availability
+    productsByDeal.products.forEach((product) => {
+      const availability = String(
+        product.url_list?.length &&
+          product.url_list[0]?.quantity_available_percent
+          ? product.url_list[0].quantity_available_percent
+          : product.deal_quantity_available_percent ||
+              product.quantity_available_percent ||
+              100
+      );
+
+      productsByAvailability[availability] =
+        productsByAvailability[availability] || [];
+      productsByAvailability[availability].push(product);
+    });
+
+    // Sort products per availability
+    const availabilities = Object.keys(productsByAvailability);
+    availabilities.sort((a, b) => (Number(a) > Number(b) ? 1 : -1));
+    productsByDeal.products = availabilities.reduce(
+      (sortedProducts: Product[], availability) => {
+        sortedProducts.push(...productsByAvailability[availability]);
+        return sortedProducts;
+      },
+      []
+    );
+
+    return productsByDeal;
+  });
+
   return (
     <ProductsByDealsContext.Provider
       value={{
-        productsByDeals,
+        productsByDeals: proccesedProductsByDeals,
       }}
     >
       {children}
@@ -57,7 +108,7 @@ export const getProductsByDeals = async (offer_id: string = "") =>
         quantity_available_percent
         title
         deal_type
-        deal_merchant
+        deal_expiry
         deal_quantity_available_percent
         created_at
         image
@@ -74,7 +125,6 @@ export const getProductsByDeals = async (offer_id: string = "") =>
           price_original
           discount_percent
           quantity_available_percent
-          merchant
         }
       }
     }

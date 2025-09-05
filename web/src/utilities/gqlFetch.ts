@@ -14,8 +14,9 @@ const gqlFetch: gqlFetchType = async (query, variables = {}) => {
       variables: variables || {},
     }),
   })
-    .then((res) => {
+    .then(async (res) => {
       if (res.status >= 400) {
+        console.error(await res.json());
         throw `${res.status} ${res.statusText}`;
       }
 
